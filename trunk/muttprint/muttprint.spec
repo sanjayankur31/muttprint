@@ -36,13 +36,11 @@ Author: Bernhard Walle <Bernhard.Walle@gmx.de>
 
 
 %description -l de
-Muttprint erzeugt einen schönen Ausdruck für Mutt (und andere Mailprogramme).
-iuttprinst ein Hilfsprogramm, das den Ausdruck von Mutt und anderen
+Muttprint ist ein Hilfsprogramm, das den Ausdruck von Mutt und anderen
 Mailprogrammen wie XFMail oder PINE so konvertiert, dass er wie der Ausdruck
 von Netscape Messenger oder KMail aussieht. Es kann einen kleinen Pinguin auf
 die erste Seite sowie eine Kopfzeile auf jede Seite drucken.  Außerdem druckt
-es nur die wichtigen Header und nicht alle.t erzeugt einen schönen Ausdruck für
-Mutt (und andere Mailprogramme).
+es nur die wichtigen Header und nicht alle. 
 
 Autor: Bernhard Walle <Bernhard.Walle@gmx.de>
 
