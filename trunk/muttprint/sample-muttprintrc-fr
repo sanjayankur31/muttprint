@@ -9,6 +9,11 @@
 PRINTER="lp"
 
 #
+# Vous pouvez spécifier la commande à utiliser pour l'impression
+# où $PRINTER est remplacée par la variable PRINTER
+PRINT_COMMAND="lpr -P$PRINTER"
+
+#
 # Indiquez ici le chemin vers l'image du pingouin
 PENGUIN="off"
 
@@ -27,6 +32,8 @@ DUPLEX="off"
 #
 # Ici, vous pouvez activer ou désactiver le mode d'économie de papier
 # (impression de 2 pages sur une seule)
+# Utilisez 'optional' si vous voulez utiliser le mode d'économie de papier
+# uniquement si plus d'une page doit être imprimée
 PAPERSAVE="off"
 
 #
