@@ -44,9 +44,9 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 	   
 -S Stil | --frontstyle Stil
        Stil für den Druck der Mailheader auf der ersten Seite:
-	   plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
-	   grey, greybox. 
-	   Für eine Beschreibung der Werte siehe Handbuch.
+       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       grey, greybox. 
+       Für eine Beschreibung der Werte siehe Handbuch.
 
 -a [Header], --printed-headers [Header]
        Mailheader die gedruckt werden sollen. Siehe Manpage/Handbuch für Details.
