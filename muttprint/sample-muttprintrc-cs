@@ -76,6 +76,14 @@ REM_SIG="off"
 # Odstranit citace pùvodní zprávy
 REM_QUOTE="off"
 
+#
+# Vyber ti¹tìnou hlavièku, oddìlenou s "_"
+# /Header/ : ti¹tìno italikou
+# *Header* : ti¹tìno tuènì
+# Kdy¾ tato definice hlavièky neexistuje, netiskne se.
+PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
+
+
 # 
 # Tisk chybových hlá¹ení LaTeXu a dvips do /tmp/muttprint.log
 DEBUG="0"
