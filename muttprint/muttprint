@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # Hinweis: Tabulatorbreite auf 4 Zeichen einstellen, um die
 #          Datei sinnvoll zu betrachten
@@ -32,15 +32,17 @@
 
 # Deklaration erzwingen
 use strict;
-# for developing and testing only
-use warnings;
-
+use MIME::WordDecoder;
+use MIME::Parser;
+use Mail::Address;
+use constant true => 1;
+use constant false => 0;
 
 
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.60";
+our $VERSION = "0.60-p1";
 my $PACKAGE = "Muttprint";
 
 
@@ -115,7 +117,7 @@ my $MaxLaenge = "0";						# die länste Zeile
 my $QP = 0;									# quoted printable encoded body
 my @LastHeader = ("", 0);					# letzter gefundener Header
 											# (Header, Zeilen#)
-my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für 
+my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für
 											# Pinguin + Übersetzungen!
 my $lib_dir = FindCommonDir('lib');
 my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
@@ -146,7 +148,7 @@ ReadConfig ();
 @print = ReadOpts ();
 
 if ($Config{'PENGUIN'} eq "on") {
-	$Config{'PENGUIN'} = 
+	$Config{'PENGUIN'} =
 			-r "$share_dir/penguin.eps"
 			? "$share_dir/penguin.eps" : "off";
 }
@@ -158,7 +160,7 @@ if (0) {
 		print STDERR "$_  \t\t => \t $Config{$_} \n";
 	}
 }
-  
+
 
 
 ################ MULIT LANGUAGE SUPPORT #######################################
@@ -193,97 +195,72 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	my $unformated = $_;
 	my $formats = "";
 	$unformated =~ s/[\*\/]//g;
-	
+
 	$formats .= '\\bfseries' if /\*.*\*/;
 	$formats .= '\\itshape' if /\/.*\//;
-	
+
 	$HeaderFormatAttr{$unformated} = $formats;
 	push @headers, $unformated;
 }
 
 
 {
-	my @KompletteMail = <>;
-	my $Content;
+    my($parser, $decoder, $wordDecoder, $message, $io, @lines, $Content);
 
-	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
-	
-		$. = $i;
-	
-		#
-		# Should the signature be printed?
-		last if (/^-- $/ && ($Config{'REM_SIG'} eq "on"));
-	
-		#
-		# and what's about Quoting?
-		next if (($Config{'REM_QUOTE'} eq "on") && (/^([\t]*[|>:}#])+/));
-	
-	
-		#
-		# Do sth with the header
-		if (my $x = 0 ... /^$/) {
-	
-			my $aktHeader;
-		
-			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
-			foreach $aktHeader (@headers) {
-			
-				if (/^${aktHeader}:[\t ]+/i) {
-					@LastHeader = ($aktHeader, $.);
-					chomp($Header{$aktHeader} = $');
-				} 
-				elsif (/^[\t ]+/i && ($LastHeader[1] + 1 == $.)) {
-					chomp($Header{"$LastHeader[0]"} .= " $'");
-					$LastHeader[1] ++;
-				}
-			}
-		}
-	
-	
-		#
-		# ... and do sth with the body
-		else {
-	
-			$Content .= $_;
-				
-			$Laenge = length($_);
-			$MaxLaenge = $Laenge if ($Laenge > $MaxLaenge);
-		
-		}
-	}
+    # Parser erzeugen
+    $parser = new MIME::Parser;
+    $parser->output_to_core(true);
+    $parser->tmp_to_core(true);
+
+    # Nachricht einlesen
+    $message = $parser->parse(\*STDIN);
+
+    # Signature loeschen
+    if ($Config{'REM_SIG'} eq "on") {
+        $message->remove_sig();
+    }
+
+    # Attachments gehen nicht.
+    if($message->is_multipart) {
+        die "Can't process multipart message..\n";
+    }
+
+    # Quoting loeschen, Laengste Zeile ermitteln
+    $io = $message->bodyhandle()->open("r");
+    $Content = join('', map {
+        if(length($_) > $MaxLaenge) {
+            $MaxLaenge = length($_);
+        }
+        $_; } grep({$Config{'REM_QUOTE'} eq "off" ? true : !/^\s*[>:| ]+/} $io->getlines()));
+    $io->close();
+
+    # Header dekodieren
+    if($charset =~ /^latin(\d)$/i) {
+        $wordDecoder = MIME::WordDecoder->supported("ISO-8859-$1");
+    } else {
+        warn "No Decoder found for Charset $charset!\n";
+    }
+    %Header = ( map {($_,  $wordDecoder->decode($message->head->get($_))) }
+                grep $message->head->get($_), @headers );
 
 
-	# ab in den Hintergrund 
+    # ab in den Hintergrund
+    fork && exit;
 
-	fork && exit;
-	# if ($^V ge v5.6);
-
-	#
-	# wenn die Header nicht ausgelesen werden können: so drucken!		
-	unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) { 
-	
-		open (PRINTER, "| lpr -P$Config{'PRINTER'}") 
-			|| die "unable to print with lpr: $!";
-		print PRINTER @KompletteMail;
-		close PRINTER;
-		exit;
-	
-	}
-
+    #
+    # wenn die Header nicht ausgelesen werden können, abbrechen
+    unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) {
+        die "Can't parse input.\n";
+    }
 
 	# formatieren
-	
-	# Body dekodieren
-	if ($QP) {
-		$Content =~ s/=([A-Fa-f0-9]{2})/chr(hex($1))/eg;
-	}
 
 	CreateTemp();
 	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
 
 	if ($MaxLaenge > 80) {
 		WriteFormated(SubstituteVerbatim($Content), \*CONTENT);
-	
+
 	} else {
 		print CONTENT SubstituteVerbatim($Content);
 	}
@@ -295,20 +272,17 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 
 # Realname
-$Header{'ShortFrom'} = GetRealname ($Header{'From'}, $Header{'To'});
+$Header{'ShortFrom'} = (Mail::Address->parse($Header{'From'}))[0]->name;
 
 
 foreach (@headers) {
-	
+
 	if (defined $Header{$_}) {
-		
+
 		if ($_ eq "Date") {
 			$Header{$_} =~ s/-/--/;
 		} else {
 			for ($Header{$_}) {
-				
-				DecodeHeader();  # for notes, see the Subroutine!!
-				
 				s/\\/\\textbackslash\{\}/g;
 				s/\"/\\textquotedbl\{\}/g;
 				s/>,/>, \\newline /g;
@@ -318,18 +292,18 @@ foreach (@headers) {
 				s/\&/\\&/g;
 				s/_/\\_/g;
 				s/%/\\%/g;
-				
-				
+
+
 			}
 		}
-		
+
 		unless (defined $String{$_}) {
 			$String{$_} = $_.":";
 		}
-		
+
 		push @PrintedMailheaders,
 			"{ $HeaderFormatAttr{$_} $String{$_}} \& { $HeaderFormatAttr{$_} $Header{$_} } & \\\\";
-				
+
 	}
 }
 
@@ -338,16 +312,16 @@ foreach (@headers) {
 # Papierformat
 
 if ($Config{'PAPER'} eq "A4") {
-		
+
 	$PaperPS = "a4";
 	$PaperTex = "a4paper";
-	
+
 } elsif ($Config{'PAPER'} eq "letter") {
 
 	$PaperPS = "letter";
 	$PaperTex = "letterpaper";
 
-} 
+}
 
 #
 # Fontpaket
@@ -387,10 +361,10 @@ foreach (qw(1 2)) {
 }
 
 unless (-e $Temp{'dvi'}) {
-	
+
 	DeleteTemp() if $Config{'DEBUG'} != 1;
 	die "Latex didn't work.";
-	
+
 }
 
 
@@ -402,20 +376,20 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 	$File = $Config{'PRINTER'};
 	$File =~ s/(TO_FILE|file)://;
 
-	
+
 	$DVIopts[0] = "-o $File -t $PaperPS";
 	$DVIopts[1] = "-o ${File}2 -t $PaperPS";
-	
+
 	$Config{'SPEED'} = 0;
 	$Config{'WAIT'} = 0;
-	
+
 	$Command[0] = "> $File";
 	$Command[1] = "> ${File}2";
-	
+
 } elsif ($Config{'PRINTER'} =~ /^((TO_FILE|file):-?|-)$/i) {
-	
+
 	$Config{'DUPLEX'} = "off";
-	
+
 	$DVIopts[0] = "-f -t $PaperPS";
 	$DVIopts[1] = $DVIopts[0];
 
@@ -424,13 +398,13 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 
 
 } else {
-	
+
 	$DVIopts[0] = "-P $Config{'PRINTER'} -t $PaperPS";
 	$DVIopts[1] = $DVIopts[0];
-		
+
 	$Command[0] = "| lpr -P$Config{'PRINTER'}";
 	$Command[1] = $Command[0];
-	
+
 
 }
 
@@ -443,10 +417,10 @@ if (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "off")) {
 #
 # zweiter Fall: nur Duplexdruck
 elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
-	
+
 	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") == 1) {
 		PrintNormal($DVIopts[0]);
-	
+
 	} else {
 
 		if (!defined($child_pid = fork())) {
@@ -455,7 +429,7 @@ elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
 			system ("dvips -A $DVIopts[0] $Temp{'dvi'}  2>> $Umleitung");
 		} else {
 			sleep ($Config{'SPEED'} * $Seitenzahl / 2 + $Config{'WAIT'});
-			system ("dvips -B $DVIopts[1] $Temp{'dvi'}  2>> $Umleitung");	
+			system ("dvips -B $DVIopts[1] $Temp{'dvi'}  2>> $Umleitung");
 			DeleteTemp();
 			exit;
 		}
@@ -474,22 +448,22 @@ elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
 	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") <= 2) {
 		PrintPaperSave($Command[0]);
 
-	
+
 	} else {
 
 		# erst in PS-Datei drucken
 		system ("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung "
 			." | psnup -2 -q > $Temp{'ps'} 2>>$Umleitung");
-		
+
 		# dann auswählen
 		if (!defined($child_pid = fork())) {
 			die "kann fork nicht ausführen: $!";
 		} elsif ($child_pid) {
 			system ("psselect -q -o $Temp{'ps'} $Command[0] 2>>$Umleitung");
-		
+
 		} else {
 			sleep ($Config{'SPEED'} * $Seitenzahl / 4 + $Config{'WAIT'});
-			system ("psselect -q -e $Temp{'ps'} $Command[1] 2>>$Umleitung");	
+			system ("psselect -q -e $Temp{'ps'} $Command[1] 2>>$Umleitung");
 			DeleteTemp();
 			exit;
 		}
@@ -501,7 +475,7 @@ elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
 elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "off")) {
 
 	PrintNormal("-o mail.ps -t $PaperPS");
-	
+
 	ModifyPS("portrait");
 	system "cat $Temp{'ps'} $Command[0]";
 
@@ -513,7 +487,7 @@ elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
 
 	ModifyPS("landscape");
 	system "cat $Temp{'ps'} $Command[0]";
-	
+
 }
 
 
@@ -534,48 +508,44 @@ unless ($child_pid) {
 
 sub ReadConfig () {
 
-	my $Variable;
-	my $Wert;
 	my @Dateien;
-	
+
 	@Dateien = ("/etc/Muttprintrc", "$ENV{'HOME'}/.muttprintrc");
-	
-	
+
+
 	foreach (@Dateien) {
-	
+
 		if (-r $_) {
-	
+
 			open (RCFILE, $_);
 
 			while (<RCFILE>) {
-				
-				if (/=/ && ! /#/) {				
-					($Variable, undef, $Wert) = /^(\S+)=(['"]?)(\S+?)\2$/;
-					$Config{$Variable} = $Wert;
-				}
+
+				if (/^([^=#]+)=['"]?(.+?)["']?$/) { # ]
+                                        $Config{$1} = $2;
+                                    }
 			}
-			
-			close RCFILE;
-		}
-	}
+                        close RCFILE;
+                    }
+        }
 }
 
 
 sub ReadOpts () {
 
 	# wird für die Optionen benötigt (gehört zum Standardumfang von Perl 5)
-	use Getopt::Long; 
+	use Getopt::Long;
 	Getopt::Long::Configure ("no_ignore_case");
 
-	
-	my %opt;									# Aufrufoptionen	
+
+	my %opt;									# Aufrufoptionen
 	my $error = 0;								# Beenden mit Fehler
-	
+
 	#
 	# Optionen einlesen und der zugehörigen Variablen zuordnen
-	
+
 	GetOptions (
-	
+
 		'h|help' 			=> 	\$opt{'help'},
 		'v|version'			=>	\$opt{'version'},
 
@@ -597,15 +567,15 @@ sub ReadOpts () {
 		'2'					=>	\$opt{'paper2'},
 		's|rem_sig!'		=>	\$opt{'REM_SIG'},
 		'q|rem_quote!'		=>	\$opt{'REM_QUOTE'},
-		
+
 		'f|file=s'			=>	\$opt{'file'},
-		
+
 	) or $error = 1;
-	
-	
+
+
 	#
 	# Logische Optionen => on/off
-	
+
 	foreach ("DUPLEX", "REM_SIG", "REM_QUOTE", "HEADRULE", "FOOTFULE") {
 		if (defined $opt{$_}) {
 			if ($opt{$_}) {
@@ -615,10 +585,10 @@ sub ReadOpts () {
 			}
 		}
 	}
-	
+
 	#
 	# Papiersparmodus
-	
+
 	$Config{'PAPERSAVE'} 	= "off"			if $opt{'paper1'};
 	$Config{'PAPERSAVE'}	= "on"			if $opt{'paper2'};
 
@@ -633,18 +603,18 @@ sub ReadOpts () {
 			@ARGV = "-";
 		}
 		else {
-			unless (-e $opt{'file'}) {		
+			unless (-e $opt{'file'}) {
 				die "Could not open $opt{'file'}. Maybe the file does not exist.\n";
 			}
 			@ARGV = $opt{'file'};
-		}			
+		}
 	}
 	else {
 		@ARGV = "-";
 	}
-	
-	
-	# Rückgabe: Wahrheitswerte für 
+
+
+	# Rückgabe: Wahrheitswerte für
 	# I Hilfe, II Version
 
 	return ($opt{'help'}, $opt{'version'}, $error);
@@ -692,19 +662,19 @@ sub FindCommonDir ($) {
 	my $sort = shift;
 	my $common_dir;
 	my ($prefix) = $0 =~ m#(.*)/bin/muttprint#;
-	
+
 	foreach ($prefix, "/usr/", "/usr/local") {
-	
+
 		$common_dir = "$_/$sort/muttprint/";
 		return $common_dir if (-d $common_dir);
-	
+
 	}
 
 }
 
 
 sub SubstituteVerbatim ($) {
-	
+
 	my %SubstituteText = (
 		"¤"			=>		"EUR",
 		"×"			=>		"x",
@@ -753,11 +723,11 @@ sub SubstituteVerbatim ($) {
 		"µ"			=>		"Mikro-",
 		"¢"			=>		"ct",
 		"¥"			=>		"YEN",
-		"¦"			=>		"|",		
+		"¦"			=>		"|",
 	);
 
 	my $Line = shift;
-	
+
 	foreach (keys(%SubstituteText)) {
 			$Line =~ s/$_/$SubstituteText{$_}/g;
 	}
@@ -770,7 +740,7 @@ sub SubstituteVerbatim ($) {
 
 	return $Line;
 }
-		
+
 ##############################################################################
 
 sub CreateLatex () {
@@ -799,16 +769,16 @@ sub CreateLatex () {
 EOF
 		$PengTab="115 mm";
 	}
-	
-	
+
+
 	#
 	# Frontstyle:
 	for ($Config{'FRONTSTYLE'}) {
-		/^plain$/i 			&& do {		
+		/^plain$/i 			&& do {
 			$BeforeHeader = "";
-			$AfterHeader = "\\vspace{8mm}";				
+			$AfterHeader = "\\vspace{8mm}";
 		last; };
-			
+
 		/^fbox$/i 			&& do {
 			$BeforeHeader = '\\fbox{';
 			$AfterHeader = '} \\vspace{5mm}';
@@ -843,25 +813,25 @@ EOF
 			$BeforeHeader = '\\definecolor{light}{gray}{0.85} \\fcolorbox{black}{light}{';
 			$AfterHeader = '} \\vspace{6mm}';
 		last; };
-	
+
 
 			$BeforeHeader = "";
-			$AfterHeader = '\\vspace{5mm} \\hrule \\vspace{5mm}';	
+			$AfterHeader = '\\vspace{5mm} \\hrule \\vspace{5mm}';
 	}
-	
+
 	#
 	# Headerrule
 	if ($Config{'HEADRULE'} eq "on") {
 		$headerrule_other = '\\renewcommand{\\headrulewidth}{0.5pt}';
 	}
-	
+
 	#
 	# Footerrule
 	if ($Config{'FOOTRULE'} eq "on") {
 		$footerrule = '\\renewcommand{\\footrulewidth}{0.5pt}';
 	}
-	
-	
+
+
 	# if there's no subject:
 	$Header{'Subject'} ||= "(no subject)";
 
@@ -892,7 +862,7 @@ $headerrule_other
 $footerrule
 \\fancypagestyle{plain}{%
 $headerrule_first
-\\fancyhf{} 
+\\fancyhf{}
 \\lfoot{\\today}
 \\setlength{\\headsep}{1mm}
 \\addtolength{\\footskip}{4mm}
@@ -917,56 +887,23 @@ EOF
 
 ##############################################################################
 
-sub GetRealname ($$) {
-
-	my $Header;
-	my $kind_of_Header;
-	my $Realname;
-	
-	if ($Header = shift) {
-		$kind_of_Header = $String{'From'};		
-	} 
-	elsif ($Header = shift) {
-		$kind_of_Header = $String{'To'};
-	}
-	else {
-		return ""; 
-	}
-	
-	
-	for ($Header) {
-		
-		/^"*(.*?)"* <.*\@.*>.*$/ || /^.*\@.* \((.*)\)$/ || /<(.*\@.*)>/;
-
-		if ($1) {
-			return "$kind_of_Header $1";
-		}
-		else {
-			return $kind_of_Header . (split /,\s/, $Header)[0];
-		}
-	}
-}
-
-
-##############################################################################
-
 sub GetSeitenzahl ($) {
 
 	open (AUX, "$_[0]");
-	
+
 	while (<AUX>) {
 		($Seitenzahl) = /\\newlabel{LastPage}{{}{(\d+)}}/;
 	}
-	
+
 	close AUX;
-	
+
 	return $Seitenzahl;
 }
 
 ##############################################################################
 
 sub PrintNormal ($) {
-	
+
 	system ("dvips $_[0] $Temp{'dvi'} 2>> $Umleitung")
 	&& die "Unable to print: $!";
 
@@ -982,35 +919,6 @@ sub PrintPaperSave ($) {
 
 ##############################################################################
 
-#
-# Here we decode HEADER
-# This is useful for printing raw mails / usenet articles
-# See RFC 2047 for MIME encoding. I would not say that this code decodes
-# all correct, but when I tested it, it worked :)
-#
-# Tipp:
-# For printing with KNode (KDE newsreader) save the article to a file and
-# execute   muttprint -f /tmp/some_file.txt
-# [This decoding stuff was done for KNode ;)]
-
-sub DecodeHeader () {
-	
-	my $EncPart;
-	
-	foreach $EncPart ($_ =~ /=\?ISO-8859-[0-9]+\?Q\?(.*?)\?=/gi) {		
-		
- 		$EncPart =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
- 		$EncPart =~ s/_/ /g;
-		
-		s/=\?ISO-8859-[0-9]+\?Q\?.*?\?=/$EncPart/;
-		
-	}
-}
-
-##############################################################################
-
-
-
 
 #
 # Because lots of mail clients do not break the lines, we must do it here.
@@ -1024,52 +932,52 @@ sub WriteFormated ($*) {
 	$^L = "";
 	my $oldfh = select $fh;
 	$~ = "CONTENT";
-	
+
 format CONTENT =
 ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
 $_
 .
-	
+
 	#
 	# at first, we split each paragraph
-	
+
 	for (split /(?:\s*\n\s*){2,}/) {
-	
+
 		#
 		# then, we look if *every* line is too long
 		if ((() = /^.{80,}$/gm) == tr/\n//) {
-		
+
 			#
 			# if so, we fill it! (as a normal fmt does)
-			
+
 			s/\s*\n\s*/ /g;
 			write;
-		} 
+		}
 		else {
-		
+
 			#
 			# and if not, we break every line separately
 			# (as fmt -s does)
-			
+
 			for (split /\n/) {
-				
+
 				if (/^.{80,}$/) {
 					write;
-				} 
+				}
 				else {
 					print $_, "\n";
 				}
-			
+
 			}
 		}
-		
+
 		#
 		# finally, we print a Newline on the end of each
 		# paragraph
-		
-		print "\n";		
+
+		print "\n";
 	}
-	
+
 	$| = 1;
 	select $oldfh;
 }
@@ -1083,8 +991,8 @@ sub ModifyPS ($) {
 	my $Tumble;
 	my $Postscript;
 	my $DuplexCommand;
-	
-	# 
+
+	#
 	# /Tumble true will use a short edge binding while false will use a long
 	# ledge binding.
 	# long edge binding makes a duplex printing looks right for portrait page.
@@ -1092,14 +1000,14 @@ sub ModifyPS ($) {
 	# page.
 	#
 
-	
+
 	if ($_[0] eq "portrait") {
-		$Tumble = "false";	
+		$Tumble = "false";
 	}
 	elsif ($_[0] eq "landscape") {
 		$Tumble = "true";
 	}
-	
+
 	$DuplexCommand = <<EOF;
 %%BeginFeature: *Duplex DuplexTumble
 
@@ -1107,17 +1015,17 @@ sub ModifyPS ($) {
 
 %%EndFeature
 EOF
-	
-	
+
+
 	open(READ_PSFILE, "$Temp{'ps'}") || die "$!";
-	$Postscript = join("", (<READ_PSFILE>));	
+	$Postscript = join("", (<READ_PSFILE>));
 	close READ_PSFILE;
-	
+
 	#
 	# notwendige Kommentare hinzufügen!
-	
+
 	$Postscript =~ s#\%\%EndComments#$DuplexCommand#;
-	
+
 	open(WRITE_PSFILE, "> $Temp{'ps'}") || die "$!";
 	print WRITE_PSFILE $Postscript;
 	close WRITE_PSFILE;
@@ -1140,7 +1048,7 @@ sub SIGINT_handler () {
 
 	DeleteTemp();
 	exit;
-	
+
 }
 
 
@@ -1150,24 +1058,24 @@ sub Setze_String () {
 
 for ($Lang) {
 
-	/^(\w{2})/i	
-	
-		and do { 
-		
+	/^(\w{2})/i
+
+		and do {
+
 			if (-r "$lib_dir/translation-$1.pl") {
-				do("$lib_dir/translation-$1.pl"); 
+				do("$lib_dir/translation-$1.pl");
 				last;
 			}
 		};
-				
+
 
 $String{"Benutzung"} = <<EOF;
 
 Usage:   muttprint [option]... [-f file]
- 
+
 Options:
 
-PLEASE NOTICE: This options override the corresponding settings in 
+PLEASE NOTICE: This options override the corresponding settings in
 ~/.muttprintrc and /etc/Muttprintrc.
 
 -h, --help
@@ -1183,30 +1091,30 @@ PLEASE NOTICE: This options override the corresponding settings in
        Uses a specific printer.
        "-" stands for STDOUT
        For printing in a file use TO_FILE:/path/to/file
-	   
+
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
 
 -t [number], --speed [number]
        Time in seconds which the printer needs for one page.
-		   
+
 -w [number], --wait [number]
        Time between printing odd and even pages for duplex printing.
 
 -F [fontname], --font [fontname]
        Font family for printing. Possible values are:
        Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
-	   
+
 -H, --headrule | -noH, --noheadrule
        Turn printing of the headrule on or off.
-	   
+
 -b, --footrule | -nob, --nofootrule
        Turn printing of the footrule on or off.
-	   
+
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
 	   plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
-	   grey, greybox. 
+	   grey, greybox.
 	   Read the manual for a detailled description of this values.
 
 -P [paperformat], --paper [paperformat]
@@ -1220,7 +1128,7 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
-	   
+
 -2 | -1
        Prints two pages on one sheet. Corresponds to "papersave mode".
 
@@ -1229,7 +1137,7 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.
-	   
+
 EOF
 
 $String{"Lizenz"} = "This program is distributed unter the terms of the
@@ -1249,7 +1157,7 @@ $charset = "latin1";
 
 # Rückwärtskompatiblität
 # wird irgendwann entfernt!!
-$Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'} 
+$Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'}
 			if defined $Config{'NEWSGROUP_STRING'};
 
 	foreach ("From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups") {
