@@ -2,81 +2,134 @@ use bytes;
 
 # czech translations by: Dominik Formánek <dominik@formanek.cz>
 
-
-
 $String{"Benutzung"} = <<EOF;
 
-Pou¾ití:   muttprint [volby]... [-f soubor]
+Usage:   muttprint [option]... [-f file]
  
-Volby:
+Options:
 
-UPOZORNÌNÍ: Tyto parametry pøenastavují odpovídající nastavení 
-v ~/.muttprintrc a /etc/Muttprintrc.
+PLEASE NOTICE: These options override the corresponding settings in 
+~/.muttprintrc and /etc/Muttprintrc.
 
 -h, --help
-       Tato pomoc.
+       This help.
 
 -v, --version
-       Tiskne souèasnou verzi programu Muttprint.
+       Prints the current version of Muttprint.
 
--f [soubor], --file [soubor]
-       Ète ze souboru místo ze STDIN.
+-f [file], --file [file]
+       Reads from file instad of STDIN.
 
--p [jméno_tiskárny], --printer [jméno_tiskárny]
-       U¾ívá specifickou tiskárnu.
-       "-" znamená výstup do STDOUT
-       Pro tisk do souboru pou¾ij TO_FILE:/cesta/k/souboru
-	   
--i [soubor], --penguin [soubor]
-       Nastavuje obrázek ti¹tìný na první stranì.
+-p [printername], --printer [printername]
+       Uses a specific printer.
+       "-" stands for STDOUT
+       For printing to a file use TO_FILE:/path/to/file
+
+-C [print command], --printcommand [print command]
+       Sets the printing command. "\$PRINTER" is substituted by the
+       printer name.
+       CUPS support is turned on by "CUPS" (or set it to any command
+       which containes the string "\$CUPS_OPTIONS").
+	 
+-i [file], --penguin [file]
+       Sets the picture printed on the first page.
 
 -x, --x-face | -nox, --nox-face
-       Zapíná/vypíná tisk X-Face.
+       Turn printing of X-Faces on/off.
 
--t [èíslo], --speed [èíslo]
-       Èas v sekundách, který potøebuje tiskárna na vyti¹tìní jedné stránky.
+-t [number], --speed [number]
+       Time in seconds which the printer needs for one page.
 		   
--w [èíslo], --wait [èíslo]
-       Èas mezi tiskem sudých a lichých stran pøi duplexním tisku.
+-w [number], --wait [number]
+       Time between printing odd and even pages for duplex printing.
 
--F [jméno_fontu], --font [jméno_fontu]
-       Jméno fontu pro tisk. Mo¾né hodnoty jsou:
-       Latex, Latex-bright, Times, Utopia, Palatino, Charter a Bookman
+-F [fontname], --font [fontname]
+       Font family for printing. Possible values are:
+       Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
 	   
 -H, --headrule | -noH, --noheadrule
-       Zapíná nebo vypíná tisk oddìlovací èáry v hlavièce stránky.
+       Turn printing of the headrule on or off.
 	   
 -b, --footrule | -nob, --nofootrule
-       Zapíná nebo vypíná tisk oddìlovací èáry v patièce stránky.
+       Turn printing of the footrule on or off.
 	   
--S Styl | --frontstyle Styl
-       Vybírá styl hlavièky na první stranì:
-	   plain, boder (implicitní), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
-	   grey, greybox. 
-	   Detailní popis tìchto hodnot si pøeète¹ v manuálu.
+-S Style | --frontstyle Style
+       Choose a style for the headers on the first page:
+       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       grey, greybox. 
+       Read the manual for a detailed description of this values.
 
--P [formát_papíru], --paper [formát_papíru]
-       Formát papíru: "letter" (US) nebo "A4" (Evropa).
+-a [headers], --printed-headers [headers]
+       Headers that should be printed. See manpage/manual for details.
+       Example: /Date/_To_From_*Subject*
 
--l [jazyk], --lang [jazyk]
-       Jazyk pro zprávy a tisk.
+-P [paperformat], --paper [paperformat]
+       Paper format: "letter" (US) or "A4" (Europe).
+
+-l [language], --lang [language]
+       Language for messages and printing.
+
+-c [charset], --charset [charset]
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r,
+       utf8, auto (read the manual before you use "auto" or "utf8").
+
+-e [string], --date [string]
+       original: prints the date as it is in the header
+       local:    converts to local time zone and language
+
+-E [string], --date-format [string]
+       date format string; see strftime(3) for details
+
+-A [string], --addressformat [string]
+       Specifies the format of the mail address in the header,
+       see manpage or documentation for details.
+
+-n [string], --verbatimnormal [string]
+       Is used for setting the formating of the normal mail text. Read
+       the user's guide and the manpage for details.
+
+-V [string], --verbatimsig [string]
+       Same as --verabtimnormal, but this sets the formating
+       of the signature.
 
 -D, --debug | -noD, --nodebug
-       Tiskne u¾iteèné informace do logovacího souboru /tmp/muttprint.log.
+       Writes useful information to a logfile /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
-       Povoluje nebo zakazuje duplexní tisk.
-	   
+       Enables or disables duplex printing.
+
+-g [number], --topmargin [number]
+       Top margin in millimeter
+
+-G [number], --bottommargin [number]
+       Bottom margin in millimeter
+
+-j [number], --leftmargin [number]
+       Left margin in millimeter
+
+-J [number], --rightmargin [number]
+       Right margin in millimeter
+
 -2 | -1
-       Tiskne dvì strany na jeden list. Koresponduje s "papersave mode".
+       Prints two pages on one sheet. Corresponds to "papersave mode".
 
 -s, --rem_sig | -nos, --norem_sig
-       Odstraní podpis (oddìlený "-- ") z tisku.
+       Removes the signature (separated by "-- ") in the printing.
 
 -q, --rem_quote | -noq, --norem_quote
-       Odstraní odstavce s citacemi z tisku.
+       Remove the quoted paragraph from the printing.
+
+-z [size], --fontsize [size]
+       Font size: 10pt, 11pt, 12pt (only this values)
+
+-W [number], --wrapmargin [number]
+       Specifies how long lines could be.
 	   
+-r [file], --rcfile [file]
+       Specifies a additional configuration file.
+
 EOF
+
 
 $String{"Lizenz"} = "Tento program je distribuován pod podmínkami GPL
  a mù¾e být volnì kopírován.

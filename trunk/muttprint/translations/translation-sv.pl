@@ -4,81 +4,130 @@ use bytes;
 
 $String{"Benutzung"} = <<EOF;
 
-Användning:   muttprint [flagga]... [-f fil]
+Usage:   muttprint [option]... [-f file]
  
-Flaggor:
+Options:
 
-OBSERVERA: Följande flaggor ersätter värden i ~/.muttprintrc och
-/etc/Muttprintrc.
+PLEASE NOTICE: These options override the corresponding settings in 
+~/.muttprintrc and /etc/Muttprintrc.
 
 -h, --help
-       Denna hjälptext.
+       This help.
 
 -v, --version
-       Visa versionsinformation.
+       Prints the current version of Muttprint.
 
--f [fil], --file [fil]
-       Läs från angiven fil istället för STDIN.
+-f [file], --file [file]
+       Reads from file instad of STDIN.
 
--p [skrivarnamn], --printer [skrivarnamn]
-       Använd angiven skrivare.
-       "-" betyder STDOUT
-       För att skriva ut till en fil använd TO_FILE:/sökväg/till/fil
-	   
--i [fil], --penguin [fil]
-       Peka ut bilden som skrivs ut på första sidan.
+-p [printername], --printer [printername]
+       Uses a specific printer.
+       "-" stands for STDOUT
+       For printing to a file use TO_FILE:/path/to/file
+
+-C [print command], --printcommand [print command]
+       Sets the printing command. "\$PRINTER" is substituted by the
+       printer name.
+       CUPS support is turned on by "CUPS" (or set it to any command
+       which containes the string "\$CUPS_OPTIONS").
+	 
+-i [file], --penguin [file]
+       Sets the picture printed on the first page.
 
 -x, --x-face | -nox, --nox-face
-       Slå av/på utskrivning av X-Face.
+       Turn printing of X-Faces on/off.
 
--t [nummer], --speed [nummer]
-       Tid i sekunder skrivaren tar på sig för en sida.
+-t [number], --speed [number]
+       Time in seconds which the printer needs for one page.
 		   
--w [nummer], --wait [nummer]
-       Tid i sekunder mellan utskrift av udda och jämn sida vid
-       duppelsidig utskrift.
+-w [number], --wait [number]
+       Time between printing odd and even pages for duplex printing.
 
--F [fontnamn], --font [fontnamn]
-       Fontfamilj för utskrifter.  Möjliga värden är:
+-F [fontname], --font [fontname]
+       Font family for printing. Possible values are:
        Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
 	   
 -H, --headrule | -noH, --noheadrule
-       Slå av/på utskrivning av streckad linje i huvudet.
+       Turn printing of the headrule on or off.
 	   
 -b, --footrule | -nob, --nofootrule
-       Slå av/på utskrivning av strecjkad linje i foten.
+       Turn printing of the footrule on or off.
 	   
 -S Style | --frontstyle Style
-       Välj en stil för fälten på förstasidan, möjliga värden är:
-       plain, boder (normal), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       Choose a style for the headers on the first page:
+       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
-       Läs manualen för en detaljerad beskrivning av dessa värden.
+       Read the manual for a detailed description of this values.
 
--a [fält], --printed-headers [fält]
-       Ange fält som ska skrivas ut.  Se manbladet/manualen för detaljer.
-       Exampel: /Date/_To_From_*Subject*
+-a [headers], --printed-headers [headers]
+       Headers that should be printed. See manpage/manual for details.
+       Example: /Date/_To_From_*Subject*
 
--P [papersformat], --paper [papersformat]
-       Ange papersformat: "letter" (USA) eller "A4" (Europa).
+-P [paperformat], --paper [paperformat]
+       Paper format: "letter" (US) or "A4" (Europe).
 
--l [språk], --lang [språk]
-       Ange språk för meddelanden och utskrift.
+-l [language], --lang [language]
+       Language for messages and printing.
+
+-c [charset], --charset [charset]
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r,
+       utf8, auto (read the manual before you use "auto" or "utf8").
+
+-e [string], --date [string]
+       original: prints the date as it is in the header
+       local:    converts to local time zone and language
+
+-E [string], --date-format [string]
+       date format string; see strftime(3) for details
+
+-A [string], --addressformat [string]
+       Specifies the format of the mail address in the header,
+       see manpage or documentation for details.
+
+-n [string], --verbatimnormal [string]
+       Is used for setting the formating of the normal mail text. Read
+       the user's guide and the manpage for details.
+
+-V [string], --verbatimsig [string]
+       Same as --verabtimnormal, but this sets the formating
+       of the signature.
 
 -D, --debug | -noD, --nodebug
-       Skriv ut debuginformation till loggfilen /tmp/muttprint.log.
+       Writes useful information to a logfile /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
-       Slå av/på dubbelsidig utskrift.
-	   
+       Enables or disables duplex printing.
+
+-g [number], --topmargin [number]
+       Top margin in millimeter
+
+-G [number], --bottommargin [number]
+       Bottom margin in millimeter
+
+-j [number], --leftmargin [number]
+       Left margin in millimeter
+
+-J [number], --rightmargin [number]
+       Right margin in millimeter
+
 -2 | -1
-       Skriv ut två sidor på ett papper. Detsamma som "papersave".
+       Prints two pages on one sheet. Corresponds to "papersave mode".
 
 -s, --rem_sig | -nos, --norem_sig
-       Ta bort signaturen (separerad med "-- ") ur utskriften.
+       Removes the signature (separated by "-- ") in the printing.
 
 -q, --rem_quote | -noq, --norem_quote
-       Ta bort citerad text ur utskriften.
+       Remove the quoted paragraph from the printing.
+
+-z [size], --fontsize [size]
+       Font size: 10pt, 11pt, 12pt (only this values)
+
+-W [number], --wrapmargin [number]
+       Specifies how long lines could be.
 	   
+-r [file], --rcfile [file]
+       Specifies a additional configuration file.
+
 EOF
 
 $String{"Lizenz"} = "Det här programmet är fri programvara och
