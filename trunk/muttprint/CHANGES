@@ -149,4 +149,5 @@ CHANGES
 0.63    - new options VERBATIMNORMAL and VERBATIMSIG for changing the
           formating of text and signature
         - new option PAPERSAVE="optional"
+        - new variable PRINT_COMMAND to change the print command
 
