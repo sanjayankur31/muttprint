@@ -2,13 +2,14 @@
 # Makefile by B. Walle
 
 
-VERSION = 0.70
+VERSION = 0.71
 POD2MAN = pod2man --section=1 --release=$(VERSION)
 prefix = /usr
 bindir = $(prefix)/bin
 tempdir = /tmp
 sysconfdir = /etc
 docdir = /usr/share/doc/packages
+docdirname = muttprint
 sharedir = $(prefix)/share
 libdir = $(prefix)/lib
 mandir = $(prefix)/share/man

@@ -26,6 +26,7 @@ tempdir = /tmp
 bindir = $(prefix)/bin
 libdir = $(prefix)/lib
 docdir = $(prefix)/share/doc/packages
+docdirname = muttprint
 INSTALL = install -m 0644
 INSTALLDIR = install -d
 
@@ -84,9 +85,9 @@ validate:
 # alte Zeile war:
 ##install: manual-$(lang).pdf manual-$(lang)/muttprint.html
 install: 
-	$(INSTALL) *.pdf $(docdir)/muttprint
-	mkdir -p $(docdir)/muttprint/manual-$(lang)
-	$(INSTALL) manual-$(lang)/* $(docdir)/muttprint/manual-$(lang)/
+	$(INSTALL) *.pdf $(docdir)/$(docdirname)
+	mkdir -p $(docdir)/$(docdirname)/manual-$(lang)
+	$(INSTALL) manual-$(lang)/* $(docdir)/$(docdirname)/manual-$(lang)/
 
 gzip:
 	$(gzip) *.ps *.txt

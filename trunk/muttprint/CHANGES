@@ -7,6 +7,12 @@ CHANGES
         - new configuration option SIG_REGEXP which specifies the
           regular expression used to recognize the signature
         - translated `Organization:' header
+        - added Gentoo pictures
+        - added `docdirname' variable in Makefiles which specifies the
+          name of the directory created in `docdir'. The naming scheme
+          is a bit confusing but I didn't want to break compatibility.
+        - no translation adaptions because changes are small and I
+          wanted to release it quickly because of Gentoo
 
 0.70    - changed fontpackage for Times to `mathptm' and the package
           for Palatino to `mathpazo' because `times' and `palatino' are
