@@ -1859,7 +1859,6 @@ sub fatalError ($) {
 			close WRITE;
 			return join "", <READ>;
 		} else {
-			printLog("Converting ". $string . "\n\n");
 			return $utf2native->convert($string);
 		}
 	}
