@@ -1373,7 +1373,7 @@ EOF
 output \*LATEX, "
 \\documentclass[compat2,$Config{FONTSIZE}]{article}
 $fontencString
-\\renewcommand{\\tt}{\\rm}
+\\renewcommand{\\ttfamily}{\\rmfamily}
 \\usepackage[$babellanguage]{babel}
 \\usepackage[$inputcharset]{inputenc}
 \\usepackage{$LatexPackages}

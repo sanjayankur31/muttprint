@@ -16,6 +16,8 @@ CHANGES
         - changed translation "API" to English names (changed all
           distributed translations so there sould be no problem)
         - improved layout
+        - Replaced \renewcommand{\tt}{\rm} by 
+          \renewcommand{\ttfamily}{\rmfamily} (Fixed #892382)
 
 0.71	- changed shebang line to #!/usr/bin/env perl because it works
           on all system regardless where perl is installed (only in
