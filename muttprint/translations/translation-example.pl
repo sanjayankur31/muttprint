@@ -79,6 +79,10 @@ PLEASE NOTICE: This options override the corresponding settings in
 -E [string], --date-format [string]
        date format string; see strftime(3) for details
 
+-A [Zeichenkette], --addressformat [Zeichenkette]
+       Gibt das Format für die Mailadresse im Kopf an, siehe
+	   die Manpage oder Dokumentation für Details.
+	   
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 
@@ -100,6 +104,9 @@ PLEASE NOTICE: This options override the corresponding settings in
 -W [number], --wrapmargin [number]
        Specifies how long lines could be.
 	   
+-r [file], --rcfile [file]
+       Specifies a additional configuration file.
+
 EOF
 
 $String{"Lizenz"} = "This program is distributed under the terms of the

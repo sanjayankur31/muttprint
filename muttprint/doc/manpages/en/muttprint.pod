@@ -56,7 +56,7 @@ work, and you have to set the Cups printer name instead
 (e. g. I<LaserJet>), which you can easily check by typing I<lpq>
 on the commandline.
 
-
+aufgebrochen
 =head1 OPTIONS
 
 B<PLEASE NOTICE:> This options override the corresponding
@@ -223,6 +223,28 @@ according to strftime(3), e. g.:
         "%Y-%m-%d %H:%M:%S"      (ISO format)
 
 
+
+=item B<-A> I<String>B<, --addressformat> I<String>
+
+With this option you can set how mail adresses are printed. The value
+I<original> does not change the header. Otherwise you have to specify
+a format string; following substitutions are done:
+
+	%r		name ("real name")
+	%a		mail address
+	\n		newline
+
+The default setting is I<%r E<lt>%aE<gt>,\n>. Moreover, you can emphasize
+some parts with bold or italic printing. You have to enclose these parts
+with stars (C<*>) for bold or with slashes (C</>) for italics.
+
+Example:
+
+	"/%r/ (%a),"
+
+The quotes are necessary because the string contains spaces. Otherwise the shell
+splits the string into two parts.
+
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Choose whether B<Muttprint> writes to a logfile F</tmp/muttprint.log>.
@@ -278,6 +300,15 @@ and I<12pt>.
 
 Controls how long the longest line could be. Longer lines
 are wraped automatically and the paragraph will be reformated.
+
+
+=item B<-r> I<file>B<, --rcfile> I<file>
+
+Specifies another configuration file, which is read additionally to F</etc/Muttprintrc>
+and F<~/.muttprintrc>. This file overwrites all other settings, including this one
+which are done by command line parameters. (It makes no sense to include other
+options despite I<-f> if you use this option.)
+
 
 =back
 
