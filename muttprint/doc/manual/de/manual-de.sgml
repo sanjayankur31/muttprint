@@ -14,7 +14,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2003-05-01</pubdate>
+	<pubdate>2003-04-26</pubdate>
 	
 	<releaseinfo>Version 0.70</releaseinfo>   
 	
@@ -486,7 +486,7 @@ set printer_name "muttprint"
 				Drucker ersetzt. Der Standard lautet <literal>lpr -P$PRINTER</literal>.
 			</para>
 
-			<para>Seit der Version 0.65 bietet Muttprint auch eine direkte
+			<para>Seit der Version 0.70 bietet Muttprint auch eine direkte
 				Unterst&uuml;tzung des neuen Drucksystems CUPS. Diese wird eingeschaltet
 				indem <literal>PRINT_COMMAND</literal> auf den Wert
 				<literal>CUPS</literal> gesetzt wird. Alternativ ist es m&ouml;glich,
@@ -1209,7 +1209,7 @@ set printer_name "muttprint"
 				deklariert.  Muttprint druckt die Mail trotzdem korrekt, vorausgesetzt
 				der Mailclient &uuml;bergibt die Mail unver&auml;ndert.</para>
 
-			<para>Seit Version 0.65 unterstützt Muttprint auch den Druck von
+			<para>Seit Version 0.70 unterstützt Muttprint auch den Druck von
 				Mails mit kyrillischen Schriftzeichen -- in diesem Fall lautet der
 				Zeichensatz <literal>koi8-r</literal>. Bitte beachten Sie dass dies
 				nicht mit allen LaTeX-Systemen funktioniert, empfohlen wird teTeX

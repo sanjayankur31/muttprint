@@ -1,14 +1,13 @@
 Muttprint - Translation
-===========================================================================
+==============================================================================
 
 
 Some things in Muttprint are translated into different languages.
 This are:
 
-
----------------------------------------------------------------------------
+------------------------------------------------------------------------------
 Files                 Content/Description
----------------------------------------------------------------------------
+------------------------------------------------------------------------------
 translation/*.pl      - Output strings
                       - Printed Header
                       - LaTeX-package for the printing ($LPack)
@@ -19,66 +18,61 @@ sample-muttprintrc-** - sample configuration file with comments
 doc/manpage/*         - manpage
 
 doc/manual/*          - User's guide
----------------------------------------------------------------------------
-
+------------------------------------------------------------------------------
 
 
 The languages are:
 
+------------------------------------------------------------------------------
+ISO     Language        State                        Translator
+------------------------------------------------------------------------------
+en      English         Complete.                    Bernhard Walle
+                        -- up to date --             <bernhard.walle@gmx.de>
 
----------------------------------------------------------------------------
-ISO     Language        State                           Translator [1]
----------------------------------------------------------------------------
-en      English         Complete.                       Bernhard Walle
-                        -- up to date --
-
-de      German          Manpage, User's guide,          Bernhard Walle
-                        translation file,
+de      German          Manpage, User's guide,       Bernhard Walle
+                        translation file,            <bernhard.walle@gmx.de>
 			            sample-muttprintrc
                         -- up to date --
                         
-it      Italian         Manpage, User's guide,          Roberto Vallone
-                        translation file
+it      Italian         Manpage, User's guide,       Roberto Vallone
+                        translation file             <roberto.vallone@gmx.net>
                         -- up to date --
 
-es      Spanish         Manpage, User's guide           Fernando Pereda
-                        translation file,
+es      Spanish         Manpage, User's guide        Fernando Pereda
+                        translation file,            <ferdy@ferdyx.org>
                         sample-muttprintrc,
                         README, INSTALL
                         -- up to date --
                         
-sl      Slovenian       User's guide, translation       Bo¨tjan Müller
-                        file, sample-muttprintrc
+sl      Slovenian       User's guide, translation    Bo¨tjan Müller
+                        file, sample-muttprintrc     <neonatus@neonatus.net>
                         -- up to date --
         NOTE: In earlier releases the translation was named 'si' but this
               is wrong because we need the language code (ISO 639-1) and not
               the country code (ISO 3166-1)
 
-ru      Russian         translation file                Alex Semenyaka
+ru      Russian         translation file             Alex Semenyaka
+                        -- up to date --             <alexs@ratmir.ru>
+
+fr      French          translation file,            Vincent Bernat
+                        sample-muttprintrc           <bernat@free.fr>
                         -- up to date --
 
-fr      French          translation file,               Vincent Bernat
-                        sample-muttprintrc
-                        -- up to date --
+cs      Czech           translation file (not help)  Dominik Formánek
+                        -- version 0.61 --           <dominik@formanek.cz>
 
-cs      Czech           translation file (not help)     Dominik Formánek
-                        -- version 0.61 --
+pl      Polish          translation file (not help)  Radek Kaczorowski 
+                        -- version 0.61 --           <kaczor@mail.desy.de>
 
-pl      Polish          translation file (not help)     Radek Kaczorowski 
-                        -- version 0.61 --
-
-sv      Swedish         translation file (not help)     Simon Josefsson
-                        -- version 0.61 --
----------------------------------------------------------------------------
-
+sv      Swedish         translation file (not help)  Simon Josefsson
+                        -- version 0.61 --           <simon@josefsson.org>
+------------------------------------------------------------------------------
 
 
 Some notes to the translations:
 
-
 English:
 ~~~~~~~~
-
 Because my native language is German, the English is not perfect. But there
 was no way to avoid this because the other translators need the English
 files to translate. And if you release a German-only software, you have a
@@ -87,14 +81,12 @@ very small audience. I hope you understand it :)
 
 Czech/Polish:
 ~~~~~~~~~~~~~
-
 This translation files changes the charset to ISO-8859-2 as used in Eastern
 Europe. For details to this topic, read the User's guide, section 3.3.
 
 
 Russian:
 ~~~~~~~~
-
 This translation files changes the charset to KOI8-R. This is not supported
 by all LaTeX systems, please use teTeX 2.0 if you have any problems. Also,
 not all fonts contains the required characters, so you may have to use
@@ -105,24 +97,4 @@ section 3.3.
 Finally, I would like to thank _all_ translators for their provided work.
 Translations are very important for OpenSource! But the price is that all
 developers must speek (and write) English well.
-
-
-
----------------------------------------------------------------------------
-
-
-Footnotes:
-~~~~~~~~~~
-
-[1]     For comments to the translations, please mail to:
-
-        * Alex Semenyaka        <alexs@ratmir.ru>
-        * Bernhard Walle        <bernhard.walle@gmx.de>
-        * Bo¨tjan Müller        <neonatus@neonatus.net>
-        * Dominik Formánek      <dominik@formanek.cz>
-        * Fernando Pereda       <ferdy@ferdyx.org>
-        * Radek Kaczorowski     <kaczor@mail.desy.de>
-        * Roberto Vallone       <roberto.vallone@gmx.net>
-        * Simon Josefsson       <simon@josefsson.org>
-        * Vincent Bernat        <bernat@free.fr>
 
