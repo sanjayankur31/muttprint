@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2001-12-15</pubdate>
+	<pubdate>2002-01-20</pubdate>
 	
-	<releaseinfo>Version 0.61</releaseinfo>   
+	<releaseinfo>Version 0.62</releaseinfo>   
 	
 		
 	
@@ -398,6 +398,14 @@ set printer_name "muttprint"
 			<Filename>$HOME/.muttprintrc</Filename> oder systemweit
 			<filename>/etc/Muttprintrc</filename>. Benutzereinstellungen
 			&uuml;berschreiben systemweite Einstellungen.</para>
+			
+		<para>Zus&auml;tzlich kann mit der Option 
+			<option>-r <replaceable>filename</replaceable></option> eine weitere 
+			Konfigurationsdatei angegeben werden, die dann als letztes eingelesen wird
+			und auch Kommandozeilenparameter &uuml;berschreibt. Dies eignet sich
+			insbesondere zum Verwenden mehrerer Konfigurationsdateien und l&auml;sst
+			sich z.&nbsp;B. gut mit irgendwelchen <emphasis>Hooks</emphasis>
+			kombinieren.</para>
 
 		<para>Die Konfigurationsdatei ist so aufgebaut, dass verschiedenen
 			Variablen  Werte zugewiesen werden -- etwas anders als bei der
@@ -738,6 +746,49 @@ set printer_name "muttprint"
 				Details dar&uuml;ber.</para>
 
 		</sect3>
+		<sect3>
+			<title>Format der gedruckten Mailadressen</title>
+
+			<para>Es existieren verschiedene Schreibweisen, wie Mailadressen
+				und Name im Mailheader auftauchen. Hier einige Beispiele:</para>
+		
+			<ItemizedList spacing="compact">
+				<ListItem><para><literal>Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+						</literal></para></ListItem>
+				<ListItem><para><literal>"Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+						</literal></para></ListItem>
+				<ListItem><para><literal>Bernhard.Walle@gmx.de (Bernhard Walle)
+						</literal></para></ListItem>
+			</ItemizedList>
+
+			<para>Die verwendete Formatierung h&auml;ngt vom Mailclient des
+				Absenders ab; alle drei sind korrekt. Wird die Variable 
+				<literal>ADDRESSFORMAT</literal> auf den Wert
+				<literal>original</literal> gesetzt, werden die Adressen
+				unver&auml;ndert gedruckt.</para>
+
+			<para>Sollen sie hingegen einheitlich erscheinen, so kann diese Variable
+				einen Formatstring enthalten. Die Voreinstellung ist <literal>"%r
+				&lt;%a&gt;,\n"</literal>. Als Formatstring k&ouml;nnen beliebige Zeichen
+				verwendet werden, <literal>%r</literal> wird durch den Namen ersetzt
+				(<quote>Realname</quote>), <literal>%a</literal> durch die Mailadresse
+				und <literal>\n</literal> gibt einen Newline aus.  Die
+				umschlie&szlig;enden Anf&uuml;hrungszeichen sind wegen der enthaltenen
+				Leerzeichen n&ouml;tig.  Ein Zeilenumbruch am Ende bedeutet, dass bei
+				mehreren Adressen jede in einer eigenen Zeile steht. Bei der letzten
+				Adresse werden auftretende Newlines und Kommata automatisch
+				entfernt.</para>
+
+			<para>Zus&auml;tzlich k&ouml;nnen einzelne Bestandteile durch Fett- oder
+				Kursivdruck hervorgehoben werden. Wird ein Bestandteil in Sternchen
+				eingeschlossen (<literal>*</literal>), wird der innere Teil fett
+				gedruckt; Schr&auml;gstriche <literal>/</literal> stehen f&uuml;r
+				Kursivdruck; Schachtelung ist m&ouml;glich.</para>
+
+			<para>Abschlie&szlig;end ein weiteres Beispiel, wie ich meine Mails
+				ausdrucke: <literal>"/%r/ (%a),"</literal>.</para>
+
+		</sect3>	
 		<sect3>
 			<title>Signatur abschneiden</title>
 			

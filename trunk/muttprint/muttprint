@@ -60,12 +60,13 @@ $charset = "latin1";						# Zeichensatz für LaTeX
 
 
 ######## Subroutinen mit Prototypes
-sub ReadConfig ();
+sub ReadConfig (@);
 sub ReadOpts ();
 sub ReadPaperConfig ();
 sub FindCommonDir ($);
 sub CreateLatex ();
-sub GetRealname ($$);
+sub GetRealname ($);
+sub GetShortFrom($$);
 sub GetSeitenzahl ($);
 sub PrintNormal ($);
 sub PrintPaperSave ($);
@@ -102,6 +103,8 @@ my %Config = (
 	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
 	FONTSIZE		=>	'10pt',
 	WRAPMARGIN		=>	80,
+	RCFILE			=>	'',
+	ADDRESSFORMAT	=>	'%r <%a>,\n',
 );
 my %Fontpackage = (
 	'Latex'    		=>		'',
@@ -171,7 +174,7 @@ $Config{'PRINTER'} = $ENV{'PRINTER'} if defined $ENV{'PRINTER'};
 $Config{'PRINTER'} = GetDefaultPrinterCDE if GetDefaultPrinterCDE;
 
 ReadPaperConfig ();
-ReadConfig ();
+ReadConfig ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc");
 
 
 @print = ReadOpts ();
@@ -181,6 +184,8 @@ if ($Config{'PENGUIN'} eq "on") {
 			-r "$share_dir/penguin.eps"
 			? "$share_dir/penguin.eps" : "off";
 }
+
+ReadConfig ($Config{RCFILE});
 
 
 # USE FOR DEBUG ONLY
@@ -346,7 +351,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 
 # Realname
-$Header{'ShortFrom'} = GetRealname ($Header{'From'}, $Header{'To'});
+$Header{'ShortFrom'} = GetShortFrom ($Header{'From'}, $Header{'To'});
 
 #
 # Fontpaket
@@ -359,13 +364,13 @@ if (exists $Config{FONT} and exists $EuroSign{$Config{FONT}}) {
 }
 
 
-
-foreach (@headers) {
+my $type;
+foreach $type (@headers) {
 	
-	if (defined $Header{$_}) {
+	if (defined $Header{$type}) {
 		
-		if ($_ eq "Date") {
-			$Header{$_} =~ s/-/--/;
+		if ($type =~ /^Date/i) {
+			$Header{$type} =~ s/-/--/;
 
 			#
 			# Datum konvertieren
@@ -374,15 +379,50 @@ foreach (@headers) {
 			}
 		}
 		else {
-			for ($Header{$_}) {
+			for ($Header{$type}) {
 				
 				DecodeHeader();  # for notes, see the Subroutine!!
 				
-				s/\\/\\textbackslash\{\}/g;
-				s/\{/\\\{/g;
-				s/\}/\\\}/g;
+				#
+				# Header formatieren nach ADDRESSFORMAT
+				if ($type =~ /^(To|From|CC)/i && $Config{ADDRESSFORMAT} ne "original") {
+					# Adressen 'einrahmen'
+					s/(\S+\@[^\s,]+)/<$1>/g;
+					s/<+/</g;
+					s/>+/>/g;
+					
+					my $spezheader;
+					my $newheader;
+					foreach $spezheader (split /(?<=>),/, $_) {
+						my $realname = GetRealname($spezheader) || "";
+						my $format = $Config{ADDRESSFORMAT} || "%r <%a>\n";
+						my $address = ($spezheader =~ /(?<=<)(\S+\@\S+)(?=>)/)[0] || "";
+
+						if ($realname) {
+							$format =~ s/\*(.+)?\*/\0\\textbf{$1}/g;
+							$format =~ s/\/(.+)?\//\0\\textit{$1}/g;
+							$format =~ s/%r/$realname/g;
+							$format =~ s/%a/$address/g;
+							$format =~ s/\\n/\n/g;
+							$newheader .= $format;
+						}
+						else {
+							$newheader .= $format =~ /\n$/ ? "$address,\n" : "$address,";
+						}
+						$newheader .= " ";
+						
+					}
+
+					$newheader =~ s/[\s,\n]+$//g;
+					$_ = $newheader;
+
+				}
+					
+				s/(:!\0)\\/\\textbackslash\{\}/g;
+				s/\n/\\newline/g;
+				s/(:!\0)\{/\\\{/g;
+				s/(:!\0)\}/\\\}/g;
 				s/\"/\\textquotedbl\{\}/g;
-				s/>,/>, \\newline /g;
 				s/>/\\textgreater\{\}/g;
 				s/</\\textless\{\}/g;
 				s/\#/\\\#/g;
@@ -404,12 +444,12 @@ foreach (@headers) {
 			}
 		}
 		
-		unless (defined $String{$_}) {
-			$String{$_} = $_.":";
+		unless (defined $String{"\L\u$type"}) {
+			$String{"\L\u$type"} = "\L\u$type:";
 		}
 		
 		push @PrintedMailheaders,
-			"{ $HeaderFormatAttr{$_} $String{$_}} \& \\raggedright { $HeaderFormatAttr{$_} $Header{$_} } & \\\\";
+			"{ $HeaderFormatAttr{$type} $String{\"\L\u$type\"}} \& \\raggedright { $HeaderFormatAttr{$type} $Header{$type} } & \\\\";
 				
 	}
 }
@@ -606,11 +646,12 @@ elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
 #
 # Liest die Konfigurationsdatei ein
 
-sub ReadConfig () {
+sub ReadConfig (@) {
 
+	my @rcfiles = @_;
 	my $rcfile;
 	
-	foreach $rcfile ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc") {
+	foreach $rcfile (@rcfiles) {
 
 		next unless (-r $rcfile);
 	
@@ -663,6 +704,8 @@ sub ReadOpts () {
 		'D|debug!'				=>	\$Config{DEBUG},
 		'e|date=s'				=>	\$Config{DATE},
 		'E|date-format=s'		=>	\$Config{DATE_FORMAT},
+		'r|rcfile=s'			=>	\$Config{RCFILE},
+		'A|addressformat=s'		=>	\$Config{ADDRESSFORMAT},
 
 
 		'l|lang=s'				=>	\$opt{LANG},
@@ -1093,8 +1136,7 @@ EOF
 
 ###################################################################################
 
-sub GetRealname ($$) {
-
+sub GetShortFrom ($$) {
 	my $Header;
 	my $kind_of_Header;
 	my $Realname;
@@ -1108,18 +1150,28 @@ sub GetRealname ($$) {
 	else {
 		return ""; 
 	}
+
+	$Realname = GetRealname($Header);
 	
+	if ($Realname) {
+		return "$kind_of_Header $Realname";
+	}
+	else {
+		return $kind_of_Header . (split /,\s/, $Header)[0];
+	}
+}
+	
+
+sub GetRealname ($) {
+	my $Header = shift;
 	
 	for ($Header) {
-		
-		/^"*(.*?)"* <.*\@.*>.*$/ || /^.*\@.* \((.*)\)$/ || /<(.*\@.*)>/;
 
-		if ($1) {
-			return "$kind_of_Header $1";
+		if (/^\s*["']*(.+?)["']* <.+\@.+>/ || /^.+\@.+ \((.+)\)$/) {
+			return $1;
 		}
-		else {
-			return $kind_of_Header . (split /,\s/, $Header)[0];
-		}
+
+		return undef;
 	}
 }
 
@@ -1427,10 +1479,19 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -c [charset], --charset [charset]
        Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
-	   auto (read the manual before you use "auto").
+       auto (read the manual before you use "auto").
 
--e
-	   
+-e [string], --date [string]
+       original: prints the date as it is in the header
+       local:    converts to local time zone and language
+
+-E [string], --date-format [string]
+       date format string; see strftime(3) for details
+
+-A [string], --addressformat [string]
+       Specifies the format of the mail address in the header,
+       see manpage or documentation for details.
+
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 
@@ -1451,6 +1512,9 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -W [number], --wrapmargin [number]
        Specifies how long lines could be.
+	   
+-r [file], --rcfile [file]
+       Specifies a additional configuration file.
 
 EOF
 

@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2001-12-15</pubdate>
+	<pubdate>2002-01-20</pubdate>
 	
-	<releaseinfo>Version 0.61</releaseinfo>   
+	<releaseinfo>Version 0.62</releaseinfo>   
 	
 		
 	
@@ -378,6 +378,13 @@ set printer_name "muttprint"
 			(only for the current user) or <filename>/etc/Muttprintrc</filename>
 			(global for all users). User settings override global settings.</para>
 			
+		<para>You can also specify an additional configuration file with the
+			<option>-r <replaceable>filename</replaceable></option> option. This file
+			is read finally and overwrites command line settings, too. This additional
+			configuration file is useful for using more than one configurations
+			and you can combine it with some <emphasis>Hooks</emphasis> of
+			Mutt.</para>
+			
 		<para>The configuration file is structured in a way that values are
 			assigned to different variables -- this is different from
 			<filename>.muttrc</filename>. The name of the variable stands
@@ -546,6 +553,47 @@ set printer_name "muttprint"
 				details about it.</para>
 
 		</sect3>
+
+	<sect3>
+			<title>Format of printed mail addresses</title>
+
+			<para>There are different ways of writing mail address and realname
+				together in the mailheader. Here're some examples:</para>
+		
+			<ItemizedList spacing="compact">
+				<ListItem><para><literal>Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+						</literal></para></ListItem>
+				<ListItem><para><literal>"Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+						</literal></para></ListItem>
+				<ListItem><para><literal>Bernhard.Walle@gmx.de (Bernhard Walle)
+						</literal></para></ListItem>
+			</ItemizedList>
+
+			<para>The used format depends of the mail program of the sender; all three
+				are correct. If the variable <literal>ADDRESSFORMAT</literal> is set to
+				the value <literal>original</literal>, the addresses are printed
+				unchanged.</para>
+
+			<para>If you would like uniform mail heaers, you can assign a format
+				string to this variable. The default setting is <literal>"%r
+				&lt;%a&gt;,\n"</literal>. You can use all characters as format string,
+				<literal>%r</literal> is substituted by the name (<quote>real
+				name</quote>), <literal>%a</literal> by the mail address and
+				<literal>\n</literal> prints a newline. The paling quotes are necessary
+				because of the spaces. A newline at the end means that every address is
+				printed in a seperate line if more than one address is given. Muttprint
+				removes newlines and commas after the last address automatically.</para>
+
+			<para>Additionally, particular parts could be printed bold or italic. If a
+				part is embedded in stars (<literal>*</literal>), the text is bold;
+				slashes (<literal>/</literal>) means italic printing; nesting is
+				possible.</para>
+		
+
+			<para>Here is just another example for a format string (this is the one
+				that I use): <literal>"/%r/ (%a),"</literal>.</para>
+
+		</sect3>	
 		<sect3 id="speed">
 			<title>Printing speed</title>
 			

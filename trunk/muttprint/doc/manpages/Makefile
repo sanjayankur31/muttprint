@@ -2,7 +2,7 @@
 # Makefile by B. Walle
 
 
-VERSION = 0.61
+VERSION = 0.62
 POD2MAN = pod2man --section=1 --release=$(VERSION)
 prefix = /usr
 mandir = $(prefix)/share/man

@@ -72,6 +72,10 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -E [Zeichenkette], --date-format [Zeichenkette]
        Datumformatstring; siehe strftime(3) für Details
 
+-A [Zeichenkette], --addressformat [Zeichenkette]
+       Gibt das Format für die Mailadresse im Kopf an, siehe
+	   die Manpage oder Dokumentation für Details.
+  
 -D, --debug | -noD, --nodebug
        Schreibt nützliche Informationen in eine Logdatei /tmp/muttprint.log.
 
@@ -93,6 +97,8 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -W [Zahl], --wrapmargin [Zahl]
        Gibt die maximale Zeilenlänge an.
  
+-r [Datei], --rcfile [Datei]
+       Einlesen einer zusätzliche Konfigurationsdatei.
 
 EOF
 

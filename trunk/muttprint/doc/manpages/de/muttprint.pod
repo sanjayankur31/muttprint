@@ -217,6 +217,28 @@ nach strftime(3) akzeptiert, z. B.
 	"%Y-%m-%d %H:%M:%S"      (nach ISO)
 
 
+=item B<-A> I<Zeichenkette>B<, --addressformat> I<Zeichenkette>
+
+Hiermit lässt sich einstellen, wie Mailadressen gedruckt werden. Der Wert 
+I<original> lässt die Header unverändert. Andernfalls ist dieser Option
+ein Formatstring zu übergeben, wobei folgende Ersetzungen vorgenommen werden:
+
+	%r		Name ("Realname")
+	%a		Mailadresse
+	\n		Zeilenumbruch
+
+Die Voreinstellung ist I<%r E<lt>%aE<gt>,\n>. Zusätzlich können einzelne Bestandteile
+in Sternchen (C<*>) für Fettdruck oder in Schrägstriche (C</>) für Kursivdruck
+eingeschlossen werden.
+
+Beispiel:
+
+	"/%r/ (%a),"
+
+Die Anführungszeichen sind notwendig, damit die Zeichenkette nicht von der
+Shell in mehrere Bestandteile aufgebrochen wird.
+
+
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Wählen Sie, ob B<Muttprint> in eine Logdatei F</tmp/muttprint.log> schreiben
@@ -274,6 +296,12 @@ Einstellung der maximalen Zeilenlänge. Längere Zeilen werden automatisch
 umgebrochen und der Absatz wird neu formatiert. 
 
 
+=item B<-r> I<Datei>B<, --rcfile> I<Datei>
+
+Gibt eine weitere Konfigurationsdatei an, die zusätzlich zur F</etc/Muttprintrc> und
+F<~/.muttprintrc> gelesen wird. Diese Datei überschreibt alle anderen Einstellungen,
+auch Kommandozeilenparameter. (Es hat also wenig Sinn, zusätzlich noch weitere 
+Optionen außer I<-f> anzugeben.)
 
 =back
 
