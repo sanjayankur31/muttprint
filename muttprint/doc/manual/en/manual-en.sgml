@@ -15,7 +15,7 @@
 
 	<pubdate>2001-09-02</pubdate>
 	
-	<releaseinfo>Version 0.60</releaseinfo>   
+	<releaseinfo>Version 0.61</releaseinfo>   
 	
 		
 	
@@ -63,7 +63,8 @@
 		<para>Make sure that a LaTeX distribution (I recommend teTeX higher
 			than version 1.0) plus the programs <emphasis>psselect</emphasis> 
 			and <emphasis>psnup</emphasis> from the <emphasis>PS-Utils</emphasis>
-			are available on your system.</para>
+			are available on your system. The last are only necessary if you
+			want to use paper save mode and/or duplex printing.</para>
 
 	</sect2>
 	<sect2>
@@ -291,7 +292,8 @@ set print_split
 				
 			<ItemizedList spacing="compact">
 				<listitem>	
-					<Para>The output must be plain ASCII text (or ISO Latin 1).</Para>
+					<Para>The output must be plain ASCII text without any
+					  formattings.</Para>
 				</listitem>
 				<listitem>
 					<Para>You must be able to choose the printing command freely.</Para>
@@ -313,7 +315,7 @@ set print_split
 </sect1>
 
 <sect1 id="config">
-	<title>Konfiguration</title>
+	<title>Configuration</title>
 		
 	<sect2>
 		<title>The configuration file</title>
@@ -378,6 +380,10 @@ set print_split
 				find out the location of the penguin file. (Read the source
 				code to find out, where Muttprint searches.) This is the
 				default setting.</para>
+				
+			<para>Additionally, Muttprint comes with some example pictures that 
+				are already converted into the EPS format. After the installation,
+				you'll find this in <filename>/usr/share/muttprint</filename>.</para>
 				
 			<para>If the printing of the graphic should turned off,
 				set <literal>PENGUIN</literal> to the value <literal>off</literal>.
@@ -522,17 +528,18 @@ set print_split
 				from the table above.</para>
 			
 		</sect3>
-		
-		
-		
-		
 		<sect3>
 			<title>Paper format</title>
 			
 			<para>To set the paper format, set <literal>PAPER</literal> to the right
-				value. Possible are only <literal>A4</literal> and <literal>letter</literal>.
-				</para>
+				value. Possible are only <literal>A4</literal> and
+				<literal>letter</literal>.</para>
 				
+			<para>If there exists a file <filename>/etc/papersize</filename> as
+				usually on Debian systems, it is evaluated, too. Own settings overwrite
+				this system settings.</para>
+
+
 		</sect3>
 		<sect3>
 			<title>Cut signature</title>
@@ -564,6 +571,29 @@ set print_split
 				quote</emphasis> funktion 
 				(<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>)
 				on screen.</para>
+		</sect3>
+		<sect3 id="printedheaders">
+			<title>Printed headers</title>
+			
+			<para>Normally only the interesting headers are printed. You
+				could change this settings with the variable 
+				<literal>PRINTED_HEADERS</literal>. Specify each header
+				separated with a underline (<literal>_</literal>).</para>
+		
+			<para>The order is important for the printing. The evaluation
+				is case-insensitive. Headers that doesn't exist are ignored.
+				For bold printing embed the name of the header in
+				stars (<literal>*</literal>), for italic printing do the
+				same with slashes (<literal>/</literal>).</para>
+
+			<para>The default setting is:</para>
+			
+			<programlisting>PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"</programlisting>
+			
+			<para>One more example for a sensible setting:</para>
+			
+			<programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
+
 		</sect3>
 		<sect3>
 			<title>Error messages</title>
@@ -640,7 +670,45 @@ set print_split
 				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
 				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
 			</ItemizedList>
+			
+			<para>Additional headers that are configured for printing (see
+				<xref linkend="printedheaders">) could not be translated.</para>
 		
+		</sect3>
+		<sect3>
+			<title>Charsets</title>
+			
+			<para>Different languages require different charsets. The default charset
+			 of Muttprint is <emphasis>ISO-8859-1</emphasis> (same as ISO Latin 1).
+			 Therewith the languages Afrikaans, Basque, Catalan, Danish, Dutch,
+			 English, Faeroese, Finnish,  French, Galician, German, Icelandic, Irish,
+			 Italian, Norwegian, Portuguese, Scottish, Spanish and Swedish are
+			 covered. Additionally, Muttprint replaces the characters 128 to 159 of
+			 the charset <emphasis>cp1252</emphasis> (Microsoft Windows) with
+			 sensible ASCII characters.</para>
+			 
+			<para>Support for <emphasis>ISO-8859-15</emphasis> (also ISO Latin 9)
+				is not possible because it is missing in the LaTeX packages that are
+				needed. That's why the Euro currency sign (character 164) is replaced by
+				the string <literal>EUR</literal>.</para>
+
+			<para>For Czech support the character set <emphasis>ISO-8859-2</emphasis>
+			(ISO Latin 2) has become necessary. This is set automatically in a Czech
+			environment. Otherwise you could set the variable
+			<literal>charset</literal> to <literal>latin1</literal> or
+			<literal>latin2</literal>.</para>
+			
+			<para>ISO Latin 2 supports the languages Albanian, Bosnian, Croatian,  
+			 Czech, English, Finnish, German, Hungarian, Irish, Polish, Romanian,
+			 Slovak, Slovenian and Sorbian. (Because the German umlauts are on the
+			 same place in Latin 1 and 2, you could use both for printing German
+			 mails.) Moreover the Cyrillic-based languages Macedonian and
+       Serbian have one-to-one transliterations to Latin 2.</para>
+			 
+			<para>It is not possible to print characters from both charsets in
+				one mail. To do this, Unicode is needed -- but there's no Unicode
+				support for LaTeX as far as I know.</para>
+				
 		</sect3>
 		<sect3>
 			<title>Translation file</title>
@@ -686,7 +754,10 @@ set print_split
 			
 		<para>Please send notes, comments, improvement proposals etc. via
 			e-mail to me.</para>
-
+			
+		<para>The translations are copyrighted by the respective
+			translators. Read <filename>README.translations</filename> for
+			the names of the translator.</para>
 	</sect2>
 	<sect2>
 		<title>Download</title>
@@ -700,13 +771,50 @@ set print_split
 
 	</sect2>
 	<sect2>
+		<title>Printing of attachments</title>
+		
+		<para>Muttprint is not able to print mail attachments. To reach this,
+			Muttprint would have to parse the raw MIME message and decode it.
+			This is quite difficult. For example Muttprint would have to decrypt
+			PGP-encrypted messages, choose the right alternative in 
+			<literal>multipart/alternative</literal> messages and work recursive
+			for <literal>message/*</literal> -- this are only a few things.
+			Short: Essential parts of a mail client must be integrated and lots of
+			settings (like for PGP) must be done. Moreover, not all mail clients
+			support outputting the raw message for printing.</para>
+			
+		<para>But Mutt has itself a comfortable function to print attachments. You
+			can choose a separate printing command for each MIME type. This could be
+			set in <filename>~/.mailcap</filename>. Read further information
+			in the Mutt manual, section 5.3.3.1.</para>
+
+		<para>I've written a very small script named <literal>imageprint</literal>
+			for printing images (almost every format is supported). You could use it
+			as template for own scripts. Here it is:</para>			
+
+		<programlisting>
+#!/bin/sh
+target=/tmp/imageprint-$$.ps
+convert -page A4 $1 $target
+lpr $target
+rm $target</programlisting>
+		
+		<para>Just press the <keycap>p</keycap>-key in the attachment menu of
+			Mutt.</para>
+		
+		<para>Users of other mail clients should read the documentation for
+			information about how to print attachments.</para>
+
+	</sect2>
+	<sect2>
 		<title>Thanks</title>
 		
 		<para>to all who helped me with their bug reports to improve and
 			enhance Muttprint. Especially I want to thank Roman Beigelbeck for
 			providing additional pictures, Roberto Vallone for the Italian
 			transation, Vincent Bernat for the French translation, Marcelo
-			Ramos for the Spanish tranlation and the Debian maintainers Dr.
+			Ramos for the Spanish tranlation, Dominik Form&aacute;nek for
+			the Czech translation and the Debian maintainers Dr.
 			Guenter Bechly and Chanop Silpa-Anan.</para>
 
 		<para>Finally I would like to thank all people who contributed
