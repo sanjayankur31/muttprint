@@ -83,7 +83,7 @@ PLEASE NOTICE: This options override the corresponding settings in
 EOF
 
 $String{"Lizenz"} = "This program is distributed under the terms of the
-GPL und can be freely copied.
+GPL and can be freely copied.
 ";
 
 $String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
