@@ -1,3 +1,5 @@
+use bytes;
+
 # Polish translation by Radek Kaczorowski <kaczor@mail.desy.de>
 #
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>

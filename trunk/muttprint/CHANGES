@@ -163,3 +163,19 @@ CHANGES
         - fixed bug with '_' in e-mail address in the headline
         - limited size of subject in the headline to 60 chars
 
+0.65    - changed fontpackage for Times to `mathptm' and the package
+          for Palatino to `mathpazo' because `times' and `palatino' are
+          obsolte (according to de.comp.text.tex)
+        - added font options `AvantGarde', `CentSchool', `Chancery' and
+          `Helvetica'
+        - code cleanup
+        - complete rewrite of printing code
+        - supporting the CUPS printing system (set PRINT_COMMAND to `CUPS'),
+          i.e. when using this setting the `psnup' and `psselect' programs
+          are not needed and when setting DUPLEX to `printer' CUPS is
+          responsible for duplex printing
+        - removed detection of geometry.sty version by making `compat2' to
+          a global option [closes Debian-Bug #180615]
+        - added UTF-8 support (experimental)
+        
+          

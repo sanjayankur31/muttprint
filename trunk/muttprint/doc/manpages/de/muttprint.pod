@@ -46,10 +46,7 @@ Wenn B<Muttprint> mit der Fehlermeldung C<lpr: unable to print file: ...>,
 abbrechen sollte, können Sie einen anderen Druckernamen als I<lp> probieren, z.
 B. I<lp5> oder I<tp0> (wenn Sie TurboPrint verwenden).
 
-B<CUPS-NUTZER BEACHTEN:> Die Einstellung C<PRINTER="lp"> funktioniert nicht.
-Sie müssen stattdessen den Cups-Druckernamen (z. B. I<LaserJet>) verwenden, der
-einfach durch den Befehl I<lpq> auf der Kommandozeile herausgefunden werden
-kann.
+
 
 
 =head1 OPTIONEN
@@ -82,11 +79,18 @@ I<XFMail>. Wenn I<Datei> auf I<-> gesetzt ist liest B<Muttprint> von STDIN.
 
 =item B<-p> I<Druckername>B<, --printer> I<Druckername>
 
-Verwendet einen anderen Drucker wie die Vorteinstellung I<lp> oder wie die
+Verwendet einen anderen Drucker wie die Vorteinstellung oder wie die
 Einstellung in der RC-Datei. Sie können auch B<in Datei drucken>, wenn Sie als
 Druckername F<TO_FILE:/Pfad/zu/Datei> eintragen. Wenn Sie den Ausdruck nach
 B<STDOUT> haben möchten, müssen Sie als Druckernamen I<-> angeben.
 
+=item B<-C> I<Druckbefehl>B<, --printcommand> I<Druckbefehl>
+
+Setzt den zum Drucken verwendeten Befehl auf I<Druckbefehl>. Dabei wird
+der String I<$PRINTER> durch den angegebenen Druckernamen ersetzt.
+CUPS-Unterstützung kann mit I<CUPS> aktiviert werden; alternativ können
+Sie jedes beliebige Kommando angeben, der den String I<$CUPS_OPTIONS>
+enthält, welcher dann durch die Optionen für CUPS ersetzt wird.
 
 =item B<-i> I<Datei>B<, --penguin> I<Datei>
 
@@ -116,10 +120,10 @@ ungeraden Seiten warten soll.
 =item B<-F> I<Schriftname>B<, --font> I<Schriftname>
 
 Hier können Sie eine schöne Schriftfamlilie für den Ausdruck auswählen. Möglich
-sind:
-I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> und
-I<Bookman>. Ob alle Schriften verfügbar sind hängt von Ihrer LaTeX-Installation
-ab. Voreinstellung ist I<Latex>.
+sind: I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter>
+und I<Bookman>, I<CentSchool>, I<Chancery>, I<Helvetica> und I<AvantGarde>. Ob
+alle Schriften verfügbar sind hängt von Ihrer LaTeX-Installation ab.
+Voreinstellung ist I<Latex>.
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
 
@@ -170,23 +174,26 @@ Englisch benutzt.
 
 Diese Option legt den Eingabezeichensatz fest:
 
-	Zeichensatz	Muttprint-Option
+	Zeichensatz     Muttprint-Option
 	--------------------------------
-	ISO-8859-1	latin1
-	ISO-8859-2	latin2
-	ISO-8859-3	latin3
-	ISO-8859-4	latin4
-	ISO-8859-9	latin5
-	ISO-8859-15	latin9
-	Windows-1252	latin1
-	Windows-1250	latin2
-			auto
+	ISO-8859-1      latin1
+	ISO-8859-2      latin2
+	ISO-8859-3      latin3
+	ISO-8859-4      latin4
+	ISO-8859-9      latin5
+	ISO-8859-15     latin9
+	Windows-1252    latin1
+	Windows-1250    latin2
+	UTF-8*          utf8
+	                auto
 	---------------------------------
 
 Die I<auto>-Einstellung versucht, einen entsprechenden Mailheader
 zu finden, der den Zeichensatz enthält. Dies funktioniert nur
 unter bestimmten Umständen korrekt und sollte mit Vorbehalt benutzt
 werden.
+
+*nur wenn von LaTeX unterstützt, siehe Benutzeranleitung.
 
 
 =item B<-e> I<Zeichenkette>B<, --date> I<Zeichenkette>
@@ -366,7 +373,7 @@ Temporäre Datei, die von B<Muttprint> erstellt wurde.
 
 =item F<##DOCDIR##/muttprint/>
 
-B<Muttprint>-Hilfedateien in verschiedenen Sprachen und Formaten.
+Dokumentation in verschiedenen Sprachen und Formaten.
 
 
 =item F<##SHAREDIR##/muttprint/>
@@ -374,7 +381,7 @@ B<Muttprint>-Hilfedateien in verschiedenen Sprachen und Formaten.
 Einige Bilder, die für den Druck auf der erste Seite der Mail verwendet werden
 können.
 
-=item F<##LIBDIR##/muttprint/>
+=item F<##SHAREDIR##/muttprint/translations>
 
 Die Übersetzungsdateien.
 
@@ -386,12 +393,12 @@ Die Übersetzungsdateien.
 
 mutt(1)
 
-Homepage: I<http://muttprint.sourceforge.net>
+Homepage: I<http://muttprint.sf.net>
 
 
 =head1 COPYRIGHT
 
-(c) 2000-2001 Bernhard Walle
+© 2000-03 Bernhard Walle
 
 
 Dies ist freie Software; im Quellcode finden Sie Details über die Kopierbedingungen.

@@ -42,22 +42,20 @@ nothing:
 
 
 install: 
-	mkdir -p $(docdir)/muttprint $(bindir) $(sharedir)/muttprint $(mandir)/man1 \
-		$(mandir)/de/man1 $(mandir)/es/man1 \
-		$(mandir)/cs/man1 $(mandir)/it/man1 \
-		$(libdir)/muttprint
+	mkdir -p $(docdir)/muttprint $(bindir) $(sharedir)/muttprint/translations \
+		$(mandir)/man1 $(mandir)/de/man1 $(mandir)/es/man1 \
+		$(mandir)/cs/man1 $(mandir)/it/man1 
 	$(INSTALLBIN) muttprint $(bindir)/
 	$(INSTALL) CHANGES COPYING INSTALL README* sample-muttprintrc-* \
 		$(docdir)/muttprint/
 	$(INSTALL) `find pics -type f -print` $(sharedir)/muttprint/
-	$(INSTALL) `find translations -type f -print` $(libdir)/muttprint/
+	$(INSTALL) `find translations -type f -print` $(sharedir)/muttprint/translations
 	$(MAKE) -C doc/manual docdir=$(docdir) install
 	$(MAKE) -C doc/manpages mandir=$(mandir) install
 
 uninstall:
 	rm $(bindir)/muttprint
 	rm -r $(sharedir)/muttprint/
-	rm -r $(libdir)/muttprint/
 	rm $(mandir)/man1/muttprint*
 	rm $(mandir)/de/man1/muttprint*
 	rm $(mandir)/es/man1/muttprint*

@@ -47,12 +47,7 @@ C<lpr: unable to print file: ...>, you should try to use
 another printer than I<lp>, e. g. I<lp5> or I<tp0> (if you
 use TurboPrint).
 
-B<CUPS USERS NOTE:> The setting C<PRINTER="lp"> will not
-work, and you have to set the Cups printer name instead
-(e. g. I<LaserJet>), which you can easily check by typing I<lpq>
-on the commandline.
 
-aufgebrochen
 =head1 OPTIONS
 
 B<PLEASE NOTICE:> This options override the corresponding
@@ -82,11 +77,18 @@ If I<file> is I<->, B<Muttprint> reads from STDIN.
 
 =item B<-p> I<printername>B<, --printer> I<printername>
 
-Uses another printer than the default I<lp> or the setting in the rcfile.
+Uses another printer than the default printer or the setting in the rcfile.
 You can also B<print in file> using F<TO_FILE:/path/to/file> as printer 
 name. If you would like to have the result in B<STDOUT>, set
 the printer name to I<->.
 
+=item B<-C> I<print command>B<, --printcommand> I<print command>
+
+Sets the command which is used for printing to I<print command>. Thereby
+the string I<$PRINTER> is replaced by the specified printer name. 
+CUPS support could be activated by I<CUPS>; alternatively you can
+specify any command that contains the string I<$CUPS_OPTIONS> which
+is replaced by the options used for CUPS.
 
 =item B<-i> I<file>B<, --penguin> I<file>
 
@@ -117,9 +119,10 @@ printing odd and even pages for duplex printing.
 =item B<-F> I<fontname>B<, --font> I<fontname>
 
 Here you can choose a nice font family for your printing. Possible are:
-I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> and
-I<Bookman>. If all fonts are available on your system depends of
-your installed LaTeX-system. Default is I<Latex>.
+I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter>, 
+I<Bookman>, I<CentSchool>, I<Chancery>, I<Helvetica> and I<AvantGarde>.
+If all fonts are available on your system depends of your installed
+LaTeX-system. Default is I<Latex>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
@@ -175,21 +178,23 @@ This option sets the input charset:
 
 	charset		Muttprint option
 	--------------------------------
-	ISO-8859-1	latin1
-	ISO-8859-2	latin2
-	ISO-8859-3	latin3
-	ISO-8859-4	latin4
-	ISO-8859-9	latin5
-	ISO-8859-15	latin9
-	Windows-1252	latin1
-	Windows-1250	latin2
-			auto
+	ISO-8859-1      latin1
+	ISO-8859-2      latin2
+	ISO-8859-3      latin3
+	ISO-8859-4      latin4
+	ISO-8859-9      latin5
+	ISO-8859-15     latin9
+	Windows-1252    latin1
+	Windows-1250    latin2
+	UTF-8*          utf8
+	                auto
 	---------------------------------
 
 The I<auto> setting tries to find a mailheader that contains
 the charset of the mail. This works only under specific
 circumstances, so use this carefully.
 
+*only if supported by LaTeX, see the User's guide.
 
 =item B<-e> I<String>B<, --date> I<String>
 
@@ -381,7 +386,7 @@ B<Muttprint> manual files in different languages and formats.
 Some pictures which can be used for printing on the
 first page of your mail.
 
-=item F<##LIBDIR##/muttprint>
+=item F<##SHAREDIR##/muttprint/translations>
 
 Translation files.
 
@@ -392,13 +397,13 @@ Translation files.
 
 mutt(1)
 
-Homepage: I<http://muttprint.sourceforge.net>
+Homepage: I<http://muttprint.sf.net>
 
 
 
 =head1 COPYRIGHT
 
-(c) 2000-2001 Bernhard Walle
+© 2000-03 Bernhard Walle
 
 
 This is free software; see the source for  copying  conditions.

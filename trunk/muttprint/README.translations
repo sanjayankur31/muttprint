@@ -55,13 +55,13 @@ es      Spanish         Manpage, User's guide           Marcelo Ramos
                         README, INSTALL
                         -- version 0.62 --
 
-cs      Czech           Manpage, translation file       Dominik Formánek
+cs      Czech           translation file (not help)     Dominik Formánek
                         -- version 0.61 --
 
-pl      Polish          translation file                Radek Kaczorowski 
+pl      Polish          translation file (not help)     Radek Kaczorowski 
                         -- version 0.61 --
 
-sv      Swedish         translation file                Simon Josefsson
+sv      Swedish         translation file (not help)     Simon Josefsson
                         -- version 0.61 --
 ---------------------------------------------------------------------------
 

@@ -5,24 +5,29 @@ Following LaTeX packages are needed
 
 This packages are needed for Muttprint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-· inputenc.sty
-· fontenc.sty
+· array.sty
 · babel.sty
+· fancyhdr.sty
 · fancyvrb.sty
+· fontenc.sty
 · graphicx.sty
+· inputenc.sty
+· lastpage.sty
 · marvosym.sty
 · textcomp.sty
-· array.sty
-· fancyhdr.sty
-· lastpage.sty
 
 
 This are only needed if you use a specific font setting
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-· cmbright.sty (Computer Modern Bright)
-· times.sty (Times)
-· charter.sty (Charter)
-· utopia.sty (Utopia)
-· palatino.sty (Palatino)
-· bookman.sty (Bookman)
+· avant.sty     (Avant Garde)
+· bookman.sty   (Bookman)
+· chancery.sty  (Chancery)
+· charter.sty   (Charter)
+· cmbright.sty  (Computer Modern Bright)
+· courier.sty   (Courier)
+· helvet.sty    (Helvetica)
+· mathpple.sty  (Palatino)
+· mathptmx.sty  (Times)
+· newcent.sty   (New Century Schoolbook)
+· utopia.sty    (Utopia)
 

@@ -1,3 +1,5 @@
+use bytes;
+
 # This translation file is the English "translation".
 # It is *not* needed for running Muttprint because it has the English strings
 # built in. It is for others who want to create their own translation file.
@@ -29,7 +31,13 @@ PLEASE NOTICE: These options override the corresponding settings in
        Uses a specific printer.
        "-" stands for STDOUT
        For printing to a file use TO_FILE:/path/to/file
-	   
+
+-C [print command], --printcommand [print command]
+       Sets the printing command. "\$PRINTER" is substituted by the
+       printer name.
+       CUPS support is turned on by "CUPS" (or set it to any command
+       which containes the string "\$CUPS_OPTIONS").
+	 
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
 
@@ -70,7 +78,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -c [charset], --charset [charset]
        Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
-       auto (read the manual before you use "auto").
+       utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
        original: prints the date as it is in the header
