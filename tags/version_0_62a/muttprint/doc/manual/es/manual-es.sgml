@@ -1,0 +1,800 @@
+<!DOCTYPE ARTICLE PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article lang="es" id="index">
+	
+<articleinfo>
+	<title>Muttprint -- Manual del usuario</title>
+	
+	<author>
+		<firstname>Marcelo</firstname>
+		<surname>Ramos</surname>
+		<affiliation>
+			<address><email>mramos@adinet.com.uy</email></address>
+		</affiliation>
+	</author>
+
+	<pubdate>2001-09-15</pubdate>
+	
+	<releaseinfo>Versión 0.60</releaseinfo>   
+	
+		
+	
+	<copyright>
+		<year>2001</year>
+		<holder role="mailto:mramos@adinet.com.uy">Marcelo Ramos</holder>
+	</copyright>
+
+</articleinfo>
+
+
+
+<sect1 id="about">
+	<title>Acerca de Muttprint</title>
+
+	<para>La impresión de mensajes de correo desde Mutt (y muchos otros
+        clientes de correo es realizada como ``texto plano''. En general ésto
+        es suficiente, pero en mi opinión no es tan bonita como una impresión
+        con formato, como por ejemplo desde <application>Netscape</application>.
+        </para>
+
+	<para>Otro hecho que me molestó: La impresión muestra todas las
+        cabeceras. He configurado Mutt para que muestre cosas como <quote>X-Mailer</quote>,
+        pero no quiero imprimir éso. <application>XFMail</application> es
+        bastante peor: Imprime toda las cabeceras, así que la impresión es en
+        mi opinión inutilizable.
+        </para>
+
+	<para>Una vez tuve la idea de escribir un script yo mismo, que creara
+        una bonita impresión. Y aquí está el resultado. Pienso que luce
+        bastante mejor que el texto plano ASCII y es comparable con la
+        impresión desde clientes de correo bien conocidos bajo Microsoft
+        Windows.
+        </para>
+
+		
+</sect1>
+<sect1 id="installation">
+	<title>Instalación</title>
+	
+	<sect2>
+		<title>Requerimientos del sistema</title>
+	
+		<para>Muttprint fué realizado con el lenguaje de programación
+		<emphasis>Perl</emphasis> el cual requiere un intérprete de
+                Perl 5 funcional. Ésto debería ser cierto en cualquier sistema
+                Linux por defecto.
+		</para>
+
+		<para>Asegúrate de que estén disponibles en tu sistema una
+                distribución LaTeX (recomiendo teTeX versión superior a 1.0)
+                así como los programas <emphasis>psselect</emphasis> y <emphasis>psnup</emphasis>
+                del paquete <emphasis>PS-Utils</emphasis>.
+                .</para>
+
+	</sect2>
+	<sect2>
+		<title>Instalación de losa archivos en tu computadora</title>
+		
+		<sect3>
+			<title>Instalación manual</title>
+			
+			<para>Primero tienes que desempaquetar el archivo.
+                        Ésto puede hacerse con el comando
+		        </para>
+			
+			<para>
+				<prompt>$  </prompt>
+				<UserInput>tar xvfz 
+					muttprint-<replaceable>Versión</replaceable>.tar.gz</UserInput>
+			</para>
+			
+			<para>Ingresa al directorio que fué creado:</para>
+			
+			<para>
+				<prompt>$  </prompt>
+				<UserInput>cd muttprint-<Replaceable>Versión</Replaceable></UserInput>
+			</para>
+			
+			<para>Un archivo <Filename>Makefile</Filename> es
+                        distribuído con Muttprint. Para ajustar las rutas en
+                        tu sistema, edita el Makefile con tu editor favorito.
+		        </para>
+
+			<para>Necesitas privilegios de root para instalar el
+                        programa. Después que hallas cambiado al usuario root
+                        con el comando <command>su</command>, realiza la
+                        instalación con
+                        </para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>make install</UserInput>
+			</para>
+			
+			<para>El script debería funcionar ahora.
+                        </para>
+
+			<para>Si quieres desinstalar Muttprint
+                        más tarde y todos los archivos están todavía en
+                        la misma ubicación, ejecuta simplemente
+		        </para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>make uninstall</UserInput>
+			</para>
+						
+			<para>como root.</para>
+			
+		</sect3>
+		
+		<sect3>
+			<title>Instalación de los paquetes</title>
+			
+			<para>Si tu distribución utiliza un sistema de
+                        administración de paquetes tal como RPM o DPKG, es
+                        buena idea utilizar los paquetes correspondientes. La
+                        mayor ventaja es la fácil desinstalación.
+		        </para>
+
+			<para>La mayoría de las distribuciones utilizan el
+                        sistema de administración de paquetes RPM. La forma
+                        más fácil de installar el paquetes es con el comando
+			</para>
+
+			<para>
+				<prompt>#  </prompt>
+				<userinput>rpm -Uvh 
+muttprint-<replaceable>Versión</replaceable>-<replaceable>Release</replaceable>.noarch.rpm
+				</userinput>
+			</para>
+			
+			<para>Todos los paquetes son firmados con mi
+                        clave-GnuPG (ID DDAF6454). Obtendrás más información
+                        detallada sobre RPM y la verificación de firmas en
+                        <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum RPM</ULink>.
+                        </para>
+
+			<para>Los paquetes Debian son creados por Chanop Silpa-Anan 
+				<email>chanop@debian.org</email> y están
+                                dipsonibles en general unos pocos días
+                                después del lanzamiento de una nueva versión
+                                de Muttprint. Pueden instalarse con
+				</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>dpkg -i muttprint_[versión]-[release]_noarch.deb</UserInput>
+			</para>
+			
+			<para>Consulta <ulink
+				url="http://www.debian.org/devel/">Debian  <quote>Developer's
+				Corner</quote></ulink> por más información
+                                respecto a los paquetes Debian.
+				</para>
+
+			<para>Otra posibilidad para instalar paquetes Debian
+                        es el comando <command>apt-get</command>.
+                        </para>
+			
+		</sect3>
+		
+	</sect2>
+		
+	<sect2>
+	
+		<title>Integración de Muttprint con los clientes de correo</title>
+
+		<para>Muttprint fué originalmente desarrollado para ser
+                utilizada sólo con Mutt. Sin embargo puede ser integrado con
+                los siguientes programas de correo sin problemas. Muttprint
+                será desarrollado independientemente de Mutt en el futuro.
+                </para>
+		
+		
+		<sect3>
+			<title>Mutt</title>
+		
+			<para>Tienes que añadir o modificar la siguiente línea
+                        en el archivo <Filename>$HOME/.muttrc</Filename> o a
+                        nivel de todo el sistema en <FileName>/etc/Muttrc</FileName>:</para>
+
+			<ProgramListing>set print_command="muttprint"</ProgramListing>
+
+			<para>Además debes asegurarte de que las siguientes
+                        cabeceras aparecen en la pantalla y son enviadas a
+                        Muttprint:
+				<ComputerOutput>From:</ComputerOutput>, 
+				<ComputerOutput>Date:</ComputerOutput>,
+				<ComputerOutput>To:</ComputerOutput>, 
+				<ComputerOutput>CC:</ComputerOutput> und
+				<ComputerOutput>Subject:</ComputerOutput>.
+                                Ésta es la única forma de que Muttprint
+                                pueda obtener la información e imprima
+                                correctamente. El orden no es importante y
+                                otras cabeceras también son permitidas.
+				</para>
+
+
+			<para>Una configuración adecuada extraída de mi <filename>~/.muttrc</filename> 
+			      podría ser:</para>
+
+			<ProgramListing>
+# Ignorar todas las cabeceras ...
+ignore * 
+
+# ... excepto estas
+unignore        from: subject to cc date
+			</ProgramListing>
+			
+			<para>Para imprimir más de un mensaje, deberías añadir
+                        la siguiente entrada:
+		        </para>
+                        
+			<ProgramListing>
+# Separar los mensajes para ser impresos
+set print_split
+			</ProgramListing>
+
+			<para>Encontrarás más información en la documentación
+                        de Mutt (<Filename>/usr/share/doc/packages/mutt/manual.txt</Filename>).
+                        </para>
+
+		</sect3>
+
+		<sect3>
+			<title>XFMail</title>
+
+			<para>En el diálogo <GUImenu>Misc</GUImenu>, <GUImenuItem>Config
+				Misc</GUImenuItem> tienes que ingresar en <GUIlabel>Print
+				Command</GUIlabel>:
+				<literal>/usr/bin/muttprint -f $f</literal>.</para>
+
+			
+			<Note>				
+				<para>Con algunas versiones de  <Application>XFMail</Application>,
+				      se han reportado problemas a causa de
+                                      que XFMail no añade las cabeceras en la
+                                      impresión. No es un problema de
+                                      Muttprint. Para resolver el problema
+                                      puedes buscar una versión más reciente
+                                      de XFMail que no tenga éste bug.
+			              </para>
+					
+				<para>Consulta también el <ulink
+					url="http://slappy.org/listarchives/xfmail/2001-June/002398.html">
+					archivo de la lista de correo de
+                                        desarrolladores de XFMail</ulink> por
+                                        una solución.</para>
+			</Note> 
+		</sect3>
+
+		<sect3>
+			<title>Pine</title>
+			
+			<para>Ingresa el comando de impresión
+                        <literal>muttprint</literal> en <GUIlabel>Setup</GUIlabel>, <GUIlabel>Printer</GUIlabel>,
+				<GUIlabel>Personally select print
+                                command</GUIlabel>. Guarda los cambios.
+				</para>				
+		</sect3>
+		
+		<sect3>
+			<title>Sylpheed</title>
+			
+			<para>Para utilizar Muttprint permanentemente como
+                        programa de impresión, entra a <GUImenu>Configuration</GUImenu>, <GUImenuItem>Common
+				preferences</GUImenuItem>, <GUIlabel>Other</GUIlabel>,
+				<GUIlabel>Printing</GUIlabel> e ingresa <literal>muttprint -f
+				%s</literal>.
+                                </para>
+		</sect3>
+		
+		<sect3>
+			<title>Gnus</title>
+
+
+			<para>Muttprint puede también ser integrado en<application>Gnus</application>
+                              Un usuario me ha proporcionado un código Lisp
+                              que realiza la integración. Por favor no me
+                              preguntes al respecto ya que no conozco Lisp y
+                              no utilizo <application>(X)Emacs</application>
+                              personalmente.
+                              </para>
+				
+			<para>Encontrarás el código en
+                        <filename>README.Gnus</filename> y me gustaría que
+                        consultaras ése archivo. Si utilizas paquetes para la
+                        instalación deberías encontrar ése archivo en el
+                        directorio
+                        <filename>/usr/share/doc/packages/muttprint/</filename>.
+			</para>
+		</sect3>
+
+		<sect3>
+			<title>Exmh</title>
+			
+			<para>Primero elije <GUIlabel>Preferences</GUIlabel>,
+                        luego <GUIlabel>Text Print Command</GUIlabel> y define <GUIlabel>Text
+				Print Command</GUIlabel> como  <literal>muttprint -f
+				$file</literal>.
+                                </para>
+
+		</sect3>
+		
+		<sect3>
+			<title>Otros clientes de correo</title>
+			
+			<para>Muttprint funciona teóricamente con todos los
+                        clientes de correo si ellos cumplen las siguientes
+                        condiciones:</para>
+				
+			<ItemizedList spacing="compact">
+				<listitem>	
+					<Para>La salida debe ser texto plano
+                                        ASCII (o ISO Latin 1).</Para>
+				</listitem>
+				<listitem>
+					<Para>Debe ser posible elegir
+                                        libremente el comando de impresión..</Para>
+				</listitem>
+			</ItemizedList>
+	
+			<para>Los lectores de news también son soportados ya
+                        que la cabecera	<ComputerOutput>To</ComputerOutput> es
+                        opcional y la cabecera <ComputerOutput>Newsgroups</ComputerOutput> 
+                        también en es evaluada.
+                        </para>
+			
+			<para>Si utilizas Muttprit con otras programas no
+                        mencionados aquí, por favor envíame un mensaje corto
+                        en el cual describas como configuraste el programa.
+                        Así podré añadir la descripción aquí.
+		       </para>
+
+		</sect3>
+	</sect2>
+</sect1>
+
+<sect1 id="config">
+	<title>Configuración</title>
+		
+	<sect2>
+		<title>El archivo de configuración</title>
+		
+		<para>Algunas cosas pueden ser configuradas en Muttprint. Ésto
+                es realizado de forma permanente en los archivos de
+                configuración <filename>$HOME/.muttprintrc</filename> (sólo
+                para el usuario actual) o
+                <filename>/etc/Muttprintrc</filename> (global para todos los
+                usuarios). La configuración de cada usuario tienen prioridad
+                sobre la configuración global.</para>
+			
+		<para>El archivo de configuración está estructurado de forma
+                que valores son asignados a diferentes variables -- ésto es
+                diferente del archivo <filename>.muttrc</filename>. El nombre
+                de la variable va primero, y se distingue entre mayúsculas y
+                minúsculas; úsalas exactamente. Luego sigue un signo de igual 
+                (<literal>=</literal>) sin ningún espacio en blanco.
+                Por último, va el valor. Comillas simples
+                (<literal>'</literal> o comillas dobles	<literal>"</literal>)
+                son opcionales.</para>
+		
+		<para>Un ejemplo de un archivo de configuración es distribuído
+                con Muttprint (<filename>sample-muttprintrc</filename>). Si
+                has instalado desde un RPM o un paquete Debian, lo encontrarás
+                en <filename>/usr/share/doc/packages/muttprint/</filename>.</para>
+			
+		<para>Ejemplo de una asignación correcta:</para>
+		
+		<ProgramListing>VARIABLE=valor</ProgramListing>
+		
+		<para>En general el script funciona sin ninguna modificación.
+                Pero es recomendable informar sobre las posibilidades que
+                tienes a tu disposición.</para>
+
+		
+		<sect3>
+			<title>Impresora</title>
+			
+			<para>Si no quieres que Muttprint imprima a
+                        <emphasis>lp</emphasis>, puedes cambiarla asignando a <literal>PRINTER</literal>
+                        el valor correcto.</para>
+				
+			<para>Para imprimir en un archvo, puedes utilizar la
+                        siguiente sintaxis, el nombre (y ubicación) del
+                        archivo son a tu elección:</para>
+
+			<ProgramListing>PRINTER="TO_FILE:/foo/bar/prueba.ps"</ProgramListing>
+			
+			<para>Si la impresión dúplex está activada, Muttprint
+                        crea un segundo archivo con prefijo
+                        <filename>2</filename>; por ejemplo <filename>preuba.ps2</filename>.</para>
+				
+		</sect3>
+		<sect3>
+			<title>Pingüino</title>
+			
+			<para>Por defecto será impreso un pequeño pingüino en
+                        la esquina superior derecha de la página. Si prefieres
+                        otra imágen o si el pingüino tiene otra ubicación
+                        diferente de la que Muttprint asume, puedes
+                        configurarla definiendo la variable <literal>PENGUIN</literal>
+                        con el valor correcto. La imágen deber estar en el
+                        formato Encapsulated PostScript (podrías usar <command>convert</command>
+                        del paquete <application>Image Magick</application>
+                        para convertir tu imágen favorita a EPS) y es
+                        redimensionada a una altura de 2&nbsp;cm (5.08 in). El
+                        logo no debe ser más ancho que alto.</para>
+				
+			<para>Si <literal>PENGUIN=on</literal>, Muttprint trata de 
+                        averiguar la ubicación del archivo pingüino. (Lee el
+                        código fuente para averiguar donde busca Muttprint.)
+                        Ésta es el valor por defecto.</para>
+				
+			<para>Si quieres la impresión de la imágen
+                        desactivada, define <literal>PENGUIN</literal> con el valor
+                        <literal>off</literal>.</para>
+			
+		</sect3>
+
+		<sect3>
+			<title>Impresión Dúplex</title>
+			
+			<para>Muttprint permite la impresión manual dúplex.
+                        Imprime las páginas impares primero, espera un momento
+                        e imprime luego las páginas pares.</para>
+				
+			<para>Muttprint necesita saber la velocidad de tu
+                        impresora para calcular el momento en el cual empezar la
+                        impresión de las páginas pares, consulta <xref linkend="speed">.</para>
+				
+			<para>Para activar la impresión dúplex, define <literal>DUPLEX</literal>
+                        con el valor <literal>on</literal>.</para>
+				
+			<para>Si posees una verdadera impresora Postscript y
+                        ésa impresora tiene la capacidad de impresión dúplex,
+                        deberías definir <literal>DUPLEX</literal> con el
+                        valor <literal>printer</literal>. Ésto modifica el
+                        código Postscript de forma que le dice a tu impresora
+                        que habilite la impresión dúplex automática.</para>				
+		</sect3>
+		
+		<sect3>
+			<title>Modo ahorro de papel</title>
+			
+			<para>Es posible imprimir dos páginas en una carilla
+                        de la hora en modo apaisado (landscape). Ésto te
+                        permitirá ahorrar papel y tinta e incrementa la
+                        velocidad de impresión. Ésto tiene sentido sólo con el
+                        formato de papel DIN A4 ya que dos páginas reducidas
+                        encajan exactamente en una carilla.</para>
+			
+			<para>Para habilita éste modo, define <literal>PAPERSAVE</literal> a
+			<literal>on</literal>.</para>				
+		</sect3>
+		
+		<sect3 id="speed">
+			<title>Velocidad de impresión</title>
+			
+			<para>Como fué mencionado anteriormente, Muttprint
+                        requiere del intervalo de tiempo que tu impresora
+                        necesita para imprimir una página. Puedes decirle a
+                        Muttprint ése intervalo definiendo la variable <literal>SPEED</literal>
+                        con el valor en segundos (sólo se permiten enteros).
+                        El valor por defecto es 30&nbsp;segundos (<literal>SPEED=30</literal>).</para>
+		</sect3>
+		<sect3>
+			<title>Fuente</title>
+			
+			<para>Puedes usar diferentes fuentes para la
+                        impresión. La variable correspondiente se llama <literal>FONT</literal>.
+				<literal>Latex</literal> significa la fuente estándar
+                                LaTeX de la familia EC. <literal>Latex-bright</literal>
+				(estándar) usa la fuente <emphasis>Computer Modern Bright</emphasis>.
+				</para>
+			
+			<para>Existen muchas otras fuentes Postscript posibles aquí: 
+				<literal>Times</literal>, <literal>Palatino</literal>,
+				<literal>Utopia</literal>, <literal>Charter</literal> y
+				<literal>Bookman</literal>.</para>
+
+			<para>Por supuesto, las fuentes tienen que estar
+                        instaladas en tu sistema. Ya que la distribución LaTeX
+                        <emphasis>teTeX</emphasis> es estándar en los sistemas
+                        Linux ésto no debería ser un problema.</para>
+
+		</sect3>		
+		<sect3>
+			<title>Líneas sobre/por debajo la cabecera y el pie de
+                        página</title>
+			
+			<para>Se puede imprimir un línea por debajo de la
+                        cabecera y/o sobre el pie de página. Por defecto no
+                        son impresas.</para>
+				
+			<para>Define las variables <literal>HEADRULE</literal>
+			o <literal>FOOTRULE</literal> con el valor <literal>on</literal>
+                        u <literal>off</literal>.</para>
+		</sect3>
+		<sect3>
+			<title>Diseño de la primera página</title>
+			
+			<para>Existen diferentes posibilidades para realzar
+                        las cabeceras del mensaje de correo en la primera
+                        página. Un listado de ellas:</para>
+			
+			<informaltable frame="topbot">
+				<tgroup cols=2 align=left>
+				<colspec colnum="1" colwidth="1.5in"> 
+				<thead>
+				<row>
+					<entry>Estilo</entry>
+					<entry>Descripción</entry>
+				</row>
+				</thead>
+				<tbody>
+				<row>
+					<entry><literal>plain</literal></entry>
+					<entry><para>sin líneas</para></entry>
+				</row>
+				<row>
+					<entry><literal>border</literal></entry>
+					<entry><para>una línea después de las
+                                        cabeceras 
+					(<emphasis>por defecto</emphasis>)
+					</para></entry>
+				</row>
+				<row>
+					<entry><literal>fbox</literal></entry>
+					<entry><para>caja simple alrededor de las cabeceras</para></entry>
+				</row>
+				<row>
+					<entry><literal>shadowbox</literal></entry>
+					<entry><para>caja sombreada alrededor de las cabecera</para></entry>
+				</row>
+				<row>
+					<entry><literal>ovalbox</literal></entry>
+					<entry><para>caja con esquinas redondeadas alrededor de las cabecera 
+						(líneas delgadas)</para></entry>
+				</row>
+				<row>
+					<entry><literal>Ovalbox</literal></entry>
+					<entry><para>idéntico a <literal>ovalbox</literal> pero con líneas
+                                                más gruesas</para></entry>
+				</row>
+				<row>
+					<entry><literal>doublebox</literal></entry>
+					<entry><para>caja con dos líneas alrededor de las cabeceras</para></entry>
+				</row>
+				<row>
+					<entry><literal>grey</literal></entry>
+					<entry><para>fondo gris debajo de las cabeceras</para></entry>
+				</row>
+				<row>
+					<entry><literal>greybox</literal></entry>
+					<entry><para>idéntico a <literal>grey</literal> pero con una caja de borde negro </para></entry>
+				</row>
+				</tbody>
+				</tgroup>
+			</informaltable>
+				
+		</sect3>
+		
+		
+		
+		
+		<sect3>
+			<title>Formato del papel</title>
+			
+			<para>Para definir el formato del papel, define <literal>PAPER</literal> 
+                        con el valor correcto. Los únicos valores posibles son 
+                        <literal>A4</literal> y <literal>letter</literal>.
+				</para>
+				
+		</sect3>
+		<sect3>
+			<title>Eliminación de la firma</title>
+			
+			<para>A menudo la firma contiene información inútil o
+                        publicidad, por lo tanto no debería ser impresa.
+                        Muttprint es capaz de eliminar la firma, si ésta fue
+                        separada del resto del mensaje utilizando
+                        <quote><literal>&ndash;&ndash; </literal></quote> -- 
+                        observa el espacio en blanco (algunos clientes de
+                        correo no generan un separador correcto).</para>
+				
+			<para>Para hacerlo ésto tienes que definir <literal>REM_SIG</literal>
+                        (ésto significa <quote>eliminar firma</quote> con el valor
+                        <literal>on</literal>.</para>
+		</sect3>
+		<sect3>
+			<title>Omitir el texto citado</title>
+			
+			<para>A menudo el autor del correo no cita
+                        sensatamente sino que adjunta el correo entero de
+                        forma que la impresión se hace muy larga y confusa.</para>
+
+			<para>Si <literal>REM_QUOTE</literal> está definida
+                        con el valor <literal>on</literal>, el texto citado no
+                        será impreso. Muttprint detecta el texto citado
+                        utilizando la misma expresión regular que Mutt
+                        utiliza en su configuración estándar. Entonces el
+                        texto que está enfatizado con color en Mutt deberá ser
+                        omitido en la impresión. Esto corresponde a la función
+                        <emphasis>toggle quote</emphasis> 
+                        (<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>) 
+                        en pantalla.</para>
+		</sect3>
+		<sect3>
+			<title>Mensajes de error</title>
+			
+			<para>Las salidas de <command>latex</command> y <command>dvips</command>
+                        no son mostrados. Si hubiera algún problema sería útil
+                        leer ésas salidas. Por lo tanto deberías definir <literal>DEBUG</literal>
+                        con el valor <literal>1</literal> en tu <filename>.muttprintrc</filename>.
+                        Ahora Muttprint creará un archivo log llamado
+                        <filename>/tmp/muttprint.log</filename> en la
+                        siguiente ejecución de forma que puedas mirar los
+                        mensajes de error. Esto puede ser útil para todos los
+                        reportes de fallos también.</para>
+		</sect3>
+	</sect2>
+	<sect2>
+		<title>Opciones de línea de comando</title>
+		
+		<para>La mayoría de las posibilidades de configuración pueden
+                realizarse con opciones en la línea de comandos también. La
+                ventaja es una integración más fácil con los clientes de
+                correo (por ejemplo con macros propios).</para>
+			
+		<para>Encontrarás una descripción detallada de todas las
+                opciones con <command>muttprint</command> <option>-h</option> 
+		o en la página manual <citerefentry><refentrytitle>muttprint</refentrytitle>
+		<manvolnum>1</manvolnum></citerefentry>.</para>
+			
+		<para>El resultado de éstas opciones es el mismo que con el
+                archivo de configuración pero las opciones de línea de comando
+                tienen preferencia sobre todas las otras configuraciones.</para>
+
+
+	</sect2>
+	<sect2>
+		<title>Otros idiomas</title>
+		
+		<para>Muttprint soporta los idiomas <emphasis>Alemán</emphasis>, 
+			<emphasis>Italiano</emphasis>, <emphasis>Español</emphasis>, 
+			<emphasis>Francés</emphasis> e <emphasis>Inglés</emphasis>. 
+			Normalmente la variable de entorno <envar>LANG</envar> está
+                        definida con el valor correcto: <literal>de</literal>, <literal>it</literal>,
+			<literal>fr</literal>, <literal>es</literal> o
+			<literal>en</literal>. Sólo los primeros dos caracteres son 
+                        reconocidos así que <literal>de_DE@euro</literal> is okay. 
+                        Si el valor es desconocido, Muttprint utilizará el
+                        Inglés.</para>
+
+		<para>Si quieres utilizar un idioma en Muttprint diferente del
+                idioma del sistema, puedes definir <literal>LANG</literal> en
+		tu <filename>.muttprintrc</filename>.</para>
+
+
+		<sect3>
+			<title>Idiomas en la impresión</title>
+		
+			<para>Los efectos más importantes de la elección del idioma
+                        son en la impresión: la cabecera y la fecha del
+                        mensaje.</para>
+				
+			<para>La fecha es creada con el paquete de LaTeX
+			<filename>babel.sty</filename>. Muttprint pasa al
+                        paquete la opción correcta que corresponde a tu idioma. Puedes 
+                        definir tu propio valor con la variable	<literal>LPack</literal>, 
+                        por ejemplo con el valor <literal>austrian</literal> o
+			<literal>spanish</literal>. Consulta <command>texdoc babel</command>
+			por una lista de todos los valores posibles.</para>
+
+			<para>Si quieres utilizar otras cadenas para la
+                        cabecera impresa, puedes definir las siguientes
+                        variables:</para>
+			
+			<ItemizedList spacing="compact">
+				<ListItem><para><literal>FROM_STRING</literal></para></ListItem>
+				<ListItem><para><literal>TO_STRING</literal></para></ListItem>
+				<ListItem><para><literal>SUBJECT_STRING</literal></para></ListItem>
+				<ListItem><para><literal>CC_STRING</literal></para></ListItem>
+				<ListItem><para><literal>DATE_STRING</literal></para></ListItem>
+				<ListItem><para><literal>PAGE_STRING</literal></para></ListItem>
+				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
+				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
+			</ItemizedList>
+		
+		</sect3>
+		<sect3>
+			<title>Archivo de traducción</title>
+		
+			<para>Los archivos de traducción de Muttprint están
+                        ubicados en el directorio <filename>share</filename> y sus nombres
+                        tienen el formato <filename>translation-<replaceable>idioma</replaceable>.pl</filename>.
+				Puedes añadir archivos nuevos en ése
+                                directorio sin hacer ninguna modificación en
+                                el script Muttprint. No sólo son traducidas
+                                las cabeceras mencionadas anteriormente, 
+                                también es traducido el mensaje de ayuda.</para>
+			
+			<para>Para crear nuevas traducciones toma cualquier
+                        archivo como plantilla, cópialo y tradúcelo. Si
+                        quieres proveer tu traducción a otros usuarios,
+                        simplemente envíame el nuevo archivo en un mensaje y
+                        lo añadiré en la próxima versión.</para>
+		</sect3>
+		
+
+	</sect2>
+</sect1>
+<sect1 id="notas">
+	<title>Notas</title>
+	
+	<sect2>
+		<title>Autor, Licencia</title>
+		
+		<para>El script fue escrito por Bernhard Walle 
+			<email>Bernhard.Walle@gmx.de</email>.</para>
+		
+		<para>Este programa es software libre; puedes redistribuirlo
+                y/o modificarlo bajo las condiciones de la Licencia Pública
+                General GNU como fue publicada por la Fundación por el
+                Software libre (Free Software Foundation); ya sea la versión 2
+                de la Licencia, o (a tu elección) cualquier versión posterior.</para>
+			
+		<para>Este programa es distribuido con la esperanza de que sea
+                útil, pero <emphasis>sin garantía alguna</emphasis>; incluso sin la 
+                garantía implícita de <emphasis>mercantibilidad</emphasis> o
+		<emphasis>aptitud para un propósito particular</emphasis>. Consulta 
+                la Licencia Pública General GNU por más detalles.</para>
+
+		<para>Has recibido una copia de la Licencia Pública General
+                GNU junto con éste programa (archivo <filename>COPYING</filename>).</para>
+			
+		<para>Por favor envíame notas, comentarios, propuestas de
+                mejoras etc. via correo electrónico.</para>
+
+	</sect2>
+	<sect2>
+		<title>Descarga</title>
+		
+		<para>La versión actual y todas las versiones anteriores
+                pueden ser descargadas desde <ulink url="http://muttprint.sourceforge.net"></ulink>.
+		Ésa el página web de Muttprint.</para>
+
+		<para>Anunciaré nuevas versiones en <ulink
+			url="http://www.freshmeat.net">Freshmeat</ulink>.</para>
+
+	</sect2>
+	<sect2>
+		<title>Agradecimientos</title>
+		
+		<para>a todos los que me ayudaron con sus reportes de fallos a
+                mejorar Muttprint. Especialmente quiero agradecer a Roman
+                Beigelbeck por proveer imágenes adicionales, a Roberto Vallone
+                por la traducción al Italiano, a Vincent Vernat por la
+                traducción al Francés, a Marcelo Ramos por la traducción al
+                Español y a los mantenedores de Debian Dr. Guenter Bechly y
+                Chanop Silpa-Anan.</para>
+
+		<para>Por último quiero agradecer a toda las personas que han
+                contribuído software libre. La mayoría lo hicieron en su
+                tiempo libre sin recibir ni un céntimo por ello!</para>
+
+	</sect2>
+        <sect2>
+                <title>Esta traducción</title>
+
+                <para>La traducción de éste documento al idioma español a
+                partir del documento en inglés del autor fue realizada por
+                Marcelo Ramos <email>mramos@adinet.com.uy</email>. Cualquier
+                comentario o propuesta para mejorar ésta traducción será
+                bienvenida.</para>
+                
+        </sect2>       
+</sect1>
+</article>

@@ -1,0 +1,405 @@
+=head1 NOME
+
+muttprint - stampa raffinata della posta elettronica con Mutt
+
+
+=head1 SINTASSI
+
+muttprint [I<opzioni>]... [-f I<file>]
+
+
+=head1 DESCRIZIONE
+
+Questa pagina di manuale documenta brevemente l'utility B<Muttprint>.
+Questa manpage è stata originariamente scritta per la distribuzione
+Debian GNU/Linux perché non aveva una propria pagina man, ma adesso ho
+scritto questa  manpage in formato POD.
+
+B<NOTA:> Il path F</usr/share/doc/packages/muttprint> potrebbe essere
+F</usr/doc/packages/muttprint> o F</usr/share/doc/muttprint> sul
+tuo sistema.
+
+B<Muttprint> è un'utility che formatta la stampa di Mutt e di altri
+clients di posta come XFMail o Pine per renderla simile alla stampa
+ottenuta con Netscape Messenger o Kmail. Può stampare un piccolo
+pinguino sulla prima pagina e un titolo in ogni pagina. Soprattutto,
+Muttprint stampa solamente gli headers più importanti scartando tutto
+ciò che è inutile.
+
+Per le istruzioni sull'uso di B<Muttprint> fai riferimento a
+F</usr/share/doc/packages/muttprint/muttprint-doc-XX.html> dove XX va
+sostituito con le due lettere indicanti la tua lingua.
+
+Ad ogni modo devi aggiungere o modificare la seguente linea nel tuo
+F</etc/Muttrc> o F<~/.muttrc>:
+
+B<set print_command="muttprint">
+
+Se vuoi personalizzare le impostazioni di B<Muttprint>, copia
+semplicemente F</usr/share/doc/packages/muttprint/sample-muttprintrc>
+in to F</etc/Muttprintrc> o in F<~/.muttprintrc> se vuoi cambiare le
+impostazioni solamente per un utente.
+
+Il linguaggio di default di B<Muttprint> è l'inglese se la variabile
+d'ambiente I<LANG> non è specificata. Ad esempio per l'Italiano
+dovresti settare:
+
+B<export LANG=it_IT>
+
+Questo può essere fatto nel tuo F<~/.bashrc>.
+
+Se B<Muttprint> non stampa emettendo il messaggio 
+C<lpr: unable to print file: ...>, bisognerà impostarlo per usare
+una stampante diversa da I<lp>, come ad es. I<lp5> o I<tp0> (se usi
+TurboPrint).
+
+B<NOTE PER L'UTENTE:> L'impostazione C<PRINTER="lp"> non ottiene
+effetto, e tu devi, invece, settare il nome della stampante 
+(es. I<LaserJet>), che puoi semplicemente rilevare scrivendo I<lpq>
+sulla tua linea di comando.
+
+
+=head1 OPZIONI
+
+B<NOTA BENE:> Le opzioni passate da linea di comando ignorano
+le impostazioni fatte in F<~/.muttprintrc> e F</etc/Muttprintrc>.
+
+Ecco una descrizione di tutte le opzioni da linea di comando (una
+descrizione delle impostazioni nell'rcfile è compresa nel file
+F<sample-muttprintrc> distribuito con B<Muttprint>):
+
+=over 7
+
+=item B<-h, --help>
+
+Stampa una lista di tutte le possibili opzioni.
+
+
+=item B<-v, --version>
+
+Stampa le versione corrente di B<Muttprint>.
+
+
+=item B<-f> I<file>B<, --file> I<file>
+
+Legge dal file specificato invece che dallo STDIN. Utile con certi
+clients come I<XFMail>. Se I<file> è I<->, B<Muttprint> legge dallo
+STDIN.
+
+
+=item B<-p> I<nome_stampante>B<, --printer> I<nome_stampante>
+
+Usa un'altra stampante invece di quella di default I<lp> o di quella
+impostata nell'rcfile. Puoi anche B<stampare in un file> usando
+F<TO_FILE:/path/to/file> come nome della stampante. Se vuoi avere il
+risultato sullo B<STDOUT>, setta il nome della stampante a I<->.
+
+=item B<-x, --x-face> | B<-nox, --nox-face>
+
+Abilita o disabilita la stampa dell'immagine trasmessa nell'header
+I<X-Face:>. Leggi la documentazione per una spiegazione dettagliata.
+
+=item B<-i> I<file>B<, --penguin> I<file>
+
+Usa F<file> come immagine stampata in alto a destra della pagina.
+F<file> deve comprendere il percorso completo. Imposta F<file> a I<off>
+se vuoi che non venga stampato alcunché.
+
+
+=item B<-t> I<numero>B<, --speed> I<numero>
+
+Questo indica il tempo in secondi di cui la tua stampante ha bisogno
+per ogni singola pagina. E` necessario solamente per stampare
+fronte-retro (duplex printing). Di default è 30 secondi.
+
+
+=item B<-w> I<numero>B<, --wait> I<numero>
+
+Tempo in secondi che B<Muttprint> deve attendere tra la stampa delle
+pagine pari e quella delle pagine dispari per la modalità fronte-retro
+(duplex printing)
+
+=item B<-F> I<fontname>B<, --font> I<fontname>
+
+Qui puoi scegliere la tua famiglia di font preferita. Le possibilità sono:
+I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> e
+I<Bookman>. Se tutti i fonts sono disponibili sul tuo sistema dipende dai
+pacchetti LaTeX installati. Di default viene usata I<Latex>.
+
+
+=item B<-H, --headrule> | B<-noH, --noheadrule>
+
+Qui puoi decidere se stampare un righello dopo la topline sulle pagine
+più grandi di 2.
+
+
+=item B<-b, --footrule> | B<-nob, --nofootrule>
+
+Qui puoi decidere se stampare un righello al di sopra della footline o
+no.
+
+
+=item B<-S> I<Style>B<, --frontstyle> I<Style>
+
+Sceglie uno stile per la stampa degli headers sulla prima pagina:
+I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Leggi il manuale per una descrizione
+dettagliata di questi valori.
+
+=item B<-a> I<headers>B<, --printed-headers> I<headers>
+
+Specifica gli headers da stampare. Separa ogni header con C<_>.
+Gli headers compresi tra I<*> vengono stampati in neretto; usa
+I</> per la stampa corsiva. Se un header non esiste verrà omesso.
+L'ordine saraà lo stesso sullo stampato.
+Due esempi:
+
+      Date_To_From_CC_Newsgroups_*Subject*   (default)
+      /Date/_To_From_X-Mailer_*/Subject/*
+
+
+=item B<-P> I<formato_della_carta>B<, --paper> I<formato_della_carta>
+
+Scegli qui il formato della carta in uso: I<A4> va bene per la maggior
+parte dei paesi ("DIN A4" in Germania) e I<letter> in U.S.A.
+
+
+=item B<-l> I<lingua>B<, --lang> I<lingua>
+
+Indica la forma breve per la tua lingua (attualmente supportate: I<de>
+(Tedesco), I<en> (Inglese) e I<it> (Italiano) in particolare).
+Di default viene usato l'ambiente I<LANG>, e se questi non è impostato
+viene usato l'Inglese.
+
+
+=item B<-c> I<charset>B<, --charset> I<charset>
+
+Questa opzione imposta il set di caratteri:
+
+    charset     Opzione di muttprint
+    --------------------------------
+    ISO-8859-1  latin1
+    ISO-8859-2  latin2
+    ISO-8859-3  latin3
+    ISO-8859-4  latin4
+    ISO-8859-9  latin5
+    ISO-8859-15 latin9
+    Windows-1252    latin1
+    Windows-1250    latin2
+            auto
+    ---------------------------------
+
+L'impostazione I<auto> cerca un header del messaggio che contenga
+il charset dello stesso. Funziona solo in condizioni particolari,
+per cui usala con cautela.
+
+=item B<-e> I<Stringa>B<, --date> I<Stringa>
+
+Questa opzione accetta due impostazioni: I<original> e I<local>.
+Se usi I<original>, la data sarà stampata invariata da come appare
+negli headers (la data di invio del messaggio per il sistema che l'ha
+inviato e nel formato da questi usato).
+Se impostata a I<local>, la data sarà stampata secondo le modalità
+locali e secondo la data del sistema. Vedi le opzioni
+I<--date-format> e I<--lang>.
+
+Esempi:
+
+        original: Tue, 15 Jan 2002 21:43:49 +0100
+        local:    Martedì, 15. Gennaio 2002 21:43:49 
+                  (Orario italiano)
+
+=item B<-E> I<Stringa>B<, --date-format> I<Stringa>
+
+Questa opzione ti permette di cambiare il formato della data
+(se hai scelto I<local> nell'opzione precedente). L'argomento è
+is una stringa di formato secondo strftime(3), es.:
+
+        "%A, %d. %B %Y %H:%M:%S" (standard in Italia)
+        "%a, %d.%m.%y %H:%M"     (forma ridotta)
+        "%Y-%m-%d %H:%M:%S"      (formato ISO)
+
+
+=item B<-D, --debug> | B<-noD, --nodebug>
+
+=item B<-A> I<String>B<, --addressformat> I<String>
+
+Con questa opzione puoi impostare come stampare gli indirizzi email.
+Il valore I<original> non cambia l'header originale. Altrimenti 
+devi specificare una stringa di formato; seguono le sostituzioni che
+vengono fatte:
+
+    %r      nome ("Il nome della persona")
+    %a      indirizzo di posta elettronica
+    \n      newline
+
+Per dafault si avrà I<%r E<lt>%aE<gt>,\n>. Soprattutto, puoi
+evidenziare alcune parti in grassetto o in corsivo. Per farlo
+devi comprenderle tra asterischi (C<*>) per il grassetto, tra
+slash (C</>) per il corsivo.
+
+Esempio:
+
+    "/%r/ (%a),"
+
+Le virgolette sono necessarie perché la stringa contiene spazi,
+altrimenti la shell la taglierà in due parti.
+
+=item B<-D, --debug> | B<-noD, --nodebug>
+
+Indica a B<Muttprint> di appuntare le sue operazioni in un file di log
+F</tmp/muttprint.log>. Utile per avere qualche informazione in più del
+perché B<Muttprint>, eventualmente, non funzioni.
+
+
+=item B<-d, --duplex> | B<-nod, --noduplex>
+
+Abilita o disabilita la stampa fronte-retro (duplex printing). Se
+abilitato, B<Muttprint> stampa solamente le pagine pari ed attende un
+po' prima di stampare le pagine dispari.
+
+
+=item B<-2> | B<-1>
+
+Stampa due pagine in un foglio come mostrato sotto:
+
+	+----------+----------+
+	|          |          |
+	|          |          |
+	|    1     |     2    |
+	|          |          |
+	|          |          |
+	|          |          |	
+	+----------+----------+
+	
+Questa opzione si chiama I<papersave mode> nel manuale e nell'rcfile.
+
+=item B<-g> I<numero>B<, --topmargin> I<numero>
+
+Imposta il margine alto in millimetri.
+
+
+=item B<-G> I<numero>B<, --bottommargin> I<numero>
+
+Imposta il margine basso in millimetri
+
+
+=item B<-j> I<numero>B<, --leftmargin> I<numero>
+
+Imposta il margine sinistro in millimetri.
+
+=item B<-J> I<numero>B<, --rightmargin> I<numero>
+
+Imposta il margine destro in millimetri.
+
+=item B<-s, --rem_sig> | B<-nos, --norem_sig>
+
+Rimuove la firma (separata da C<-- >) dalla stampa finale. Questo è
+utile quando si ha a che fare con firme molto lunghe. Purtroppo molte
+persone (o i loro clients di posta) non separano correttamente la firma
+(signature) dal corpo del messaggio, ed in tal caso questa opzione non
+funziona.
+
+
+=item B<-q, --rem_quote> | B<-noq, --norem_quote>
+
+Elimina dalla stampa finale il testo citato. B<Muttprint> riconosce
+il quoting dalle seguenti espressioni regolari:
+
+	/^([\t]*[|>:}#])+/
+
+Queste sono le stesse regexp che usa B<Mutt>, quindi dovrebbe
+funzionare :-)
+
+=item B<-z> I<size>B<, --fontsize> I<size>
+
+Specifica la grandezza del font. I valori possibili sono I<10pt>,
+I<11pt> and I<12pt>.
+
+
+=item B<-W> I<numero>B<, --wrapmargin> I<numero>
+
+Controlla quanto deve essere la lunghezza della linea più lunga.
+Quelle che vanno oltre verranno tagliate automaticamente ed il
+paragrafo verrà riformattato.
+
+=item B<-r> I<file>B<, --rcfile> I<file>
+
+Specifica un altro file di configurazione da leggere oltre a
+F</etc/Muttprintrc>
+e a F<~/.muttprintrc>. Il suo contenuto soprassederà a tutte le
+altre impostazioni, incluse quelle passate da linea di comando.
+(Non ha, quindi, senso specificare da linea di comando, opzioni già
+incluse nel file che state richiamando con l'opzione I<-f>.
+
+=back
+
+
+
+=head1 FILES
+
+=over 7
+
+=item F</etc/Muttprintrc>
+
+File di configurazione globale per il sistema.
+
+
+=item F<~/.muttprintrc>
+
+File di configurazione per il singolo utente.
+
+=item F</tmp/muttprint-XXXXX>
+
+Files temporanei creati da B<Muttprint>.
+
+
+=item F</usr/share/doc/packages/muttprint/>
+
+Manuali di B<Muttprint> in diversi formati e lingue.
+
+=item F</usr/lib/muttprint>
+
+Files di traduzione.
+
+
+
+=item F</usr/share/muttprint/>
+
+Alcune immagini che possono essere stampate sulla prima pagina dei tuoi
+messaggi.
+
+
+=back
+
+
+=head1 VEDERE ANCHE
+
+mutt(1)
+
+Homepage: I<http://muttprint.sourceforge.net>
+
+
+
+=head1 COPYRIGHT
+
+(c) 2000-2001 Bernhard Walle
+
+Questo è software libero; guarda il sorgente per le condizioni di
+copia.
+Non c'è nessuna garanzia; nemmeno per la commerciabilità o per l'uso in
+particolari condizioni.
+
+
+=head1 AUTORE
+
+Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=cut
+
+=head1 TRADUZIONE
+
+Questa traduzione in italiano della pagina man originale in inglese
+dell'autore è stata realizzata da Roberto Vallone
+E<lt>roberto.vallone@gmx.netE<gt>.
+Sono graditi commenti, correzioni e suggerimenti su questa traduzione.

@@ -1,0 +1,1589 @@
+#!/usr/bin/perl
+#
+# Hinweis:	Tabulatorbreite: 4 Zeichen
+#			(automatische Einstellung für ViM durch letzte Zeile)
+# Notice:   tab width: 4 characters
+#			(this is done for ViM automatically through the	last line)
+#
+########################################################################
+#                                                                      #
+#    Muttprint - erleichtert das Drucken von Mails                     #
+#    Copyright © 2000/01  Bernhard Walle <bernhard.walle@gmx.de>       #
+#                                                                      #
+#    This program is free software; you can redistribute it and/or     #
+#    modify it under the terms of the GNU General Public License as    #
+#    published by the Free Software Foundation; either version 2 of    #
+#    the License, or (at your option) any later version.               #
+#                                                                      #
+#    This program is distributed in the hope that it will be useful,   #
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of    #
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU  #
+#    General Public License for more details.                          #
+#                                                                      #
+#    You should have received a copy of the GNU General Public License #
+#    along with this program; if not, write to the Free Software       #
+#    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.         #
+#                                                                      #
+#    You find the GPL in the file "COPYING" which was distributed      #
+#    with Muttprint. For a German tranlation look at                   #
+#                                                                      #
+#    http://www.suse.de/de/linux/gpl/index.html                        #
+#                                                                      #
+########################################################################
+
+# Deklaration erzwingen
+use strict;
+# for developing and testing only
+use warnings;
+# Deklaration nach Perl-5.005-Art
+use vars qw($VERSION %String $LPack $charset);
+use sigtrap qw(die INT QUIT);
+use POSIX;
+
+
+
+# for working directory -- Perl 5 standard module
+use Cwd;
+
+
+
+
+############# BEGIN VARIABLES ################################################
+
+
+$VERSION = "0.62a";
+my $PACKAGE = "Muttprint";
+
+
+######## globale Variablen für Übersetzungen
+$charset = "latin1";						# Zeichensatz für LaTeX
+
+
+######## Subroutinen mit Prototypes
+sub ReadConfig (@);
+sub ReadOpts ();
+sub ReadPaperConfig ();
+sub FindCommonDir ($);
+sub CreateLatex ();
+sub GetRealname ($);
+sub GetShortFrom($$);
+sub GetSeitenzahl ($);
+sub PrintNormal ($);
+sub PrintPaperSave ($);
+sub ModifyPS ($);
+sub CreateTemp ();
+sub Setze_String ();
+sub WriteFormated ($*$);
+sub DecodeHeader();
+sub GetDefaultPrinterCDE();
+sub ChangeForXface($);
+sub get_charset($);
+sub convert_date($);
+sub getISOlatinExtensions($);
+
+######## 'private' Variablen für den Rest
+my %Config = (
+	PRINTER			=> 	'lp',
+	PENGUIN			=>	'on',
+	DUPLEX			=>	'off',
+	SPEED			=>	'30',
+	PAPERSAVE		=>	'off',
+	FONT			=>	'Latex',
+	PAPER			=>	'A4',
+	DEBUG			=>	'0',
+	REM_SIG			=>	'off',
+	REM_QUOTE		=>	'off',
+	WAIT			=>	'30',
+	TOPMARGIN		=>	'19',
+	BOTTOMMARGIN	=>	'22',
+	LEFTMARGIN		=>	'20',
+	RIGHTMARGIN		=>	'20',
+	HEADRULE		=>	'off',
+	FOOTRULE		=>	'off',
+	FRONTSTYLE		=>	'border',
+	DATE			=>	'original',
+	DATE_FORMAT		=>	'%c',
+	XFACE			=>	'off',
+	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
+	FONTSIZE		=>	'10pt',
+	WRAPMARGIN		=>	80,
+	RCFILE			=>	'',
+	ADDRESSFORMAT	=>	'%r <%a>,\n',
+);
+my %Fontpackage = (
+	'Latex'    		=>		'',
+	'Latex-bright'	=>		'cmbright',
+	'Times'			=>		'times',
+	'Charter'		=>		'charter',
+	'Utopia'		=>		'utopia',
+	'Palatino'		=>		'palatino',
+	'Bookman'		=>		'bookman',
+);
+my %EuroSign = (
+	'Latex'			=>		'\EURtm{}',
+	'Latex-bright'	=>		'\EURhv{}',
+	'Times'			=>		'\EURtm{}',
+	'Charter'		=>		'\EURtm{}',
+	'Utopia'		=>		'\EURtm{}',
+	'Palatino'		=>		'\EURtm{}',
+	'Bookman'		=>		'\EURtm{}',
+);
+my $EuroSign;								# zur jew. Schrift passendes ¤-Zeichen
+my $Lang = "en";							# Sprache
+my @print;									# ob Hilfe / Version angezeigt werden soll
+my %Temp;									# temporäre Dateien und Verzeichn.
+my %Header;									# Header ...
+my @PrintedMailheaders;						# Mailheader so wie er gedruckt wird (LaTeX-Code)
+my $PaperPS;								# Papierformat für dvips-Aufruf
+my $PaperTex;								# Papierformat für Latex-Aufruf
+my $Fontpackage = "";						# Fontpaket
+my $Umleitung;								# Umleitung
+my $child_pid;								# PID des Kinds
+my $File;									# Datei, in die gedruckt wird
+my @DVIopts;								# Optionen für DVI - Aufruf
+my $Seitenzahl;								# Anzahl der Seiten am Ende
+my @Command;								# Kommando zum Drucken; für Druck in Datei
+my $Laenge = "0";							# zum Ermitteln der längsten Zeile
+my $MaxLaenge = "0";						# die länste Zeile
+my $QP = 0;									# quoted printable encoded body
+my @LastHeader = ("", 0);					# letzter gefundener Header
+											# (Header, Zeilen#)
+my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für 
+											# Pinguin + Übersetzungen!
+my $lib_dir = FindCommonDir('lib');
+my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
+my @headers;
+my $image_height = "20mm";					# Höhe des gedruckten Bildes
+my $startworkingdir = cwd;					# Arbeitsverzeichnis, wenn Muttprint
+											# gestartet wird
+
+
+############# END VARIABLES ##################################################
+
+# Dateien am Ende löschen
+END {
+	# kein fork() => Hauptprozess löscht
+	# fork        => Kindprozess löscht, da er länger läuft
+	if (!$child_pid && $Temp{'dir'}) {
+		unlink (<$Temp{"dir"}/*>);
+		rmdir ($Temp{'dir'});
+	}
+}
+
+
+#
+# Konfiguration einlesen
+
+$Config{'PRINTER'} = $ENV{'PRINTER'} if defined $ENV{'PRINTER'};
+$Config{'PRINTER'} = GetDefaultPrinterCDE if GetDefaultPrinterCDE;
+
+ReadPaperConfig ();
+ReadConfig ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc");
+
+
+@print = ReadOpts ();
+
+if ($Config{'PENGUIN'} eq "on") {
+	$Config{'PENGUIN'} = 
+			-r "$share_dir/penguin.eps"
+			? "$share_dir/penguin.eps" : "off";
+}
+
+ReadConfig ($Config{RCFILE});
+
+
+# USE FOR DEBUG ONLY
+if ($Config{DEBUG}) {
+	foreach (keys %Config) {
+			print STDERR "$_  \t\t => \t $Config{$_} \n";
+	} 
+}
+
+
+################ MULIT LANGUAGE SUPPORT #######################################
+
+$Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
+$Lang = $Config{'LANG'} if defined $Config{'LANG'};
+POSIX::setlocale(&POSIX::LC_ALL, $Lang);
+
+Setze_String();
+
+#
+# Zeichensatz (Auswahl von vorher überschreiben, falls in Konfigdatei
+# anders)
+$charset = $Config{CHARSET} if defined $Config{CHARSET};
+
+#
+# Show help and version
+#
+# 0 => help (return 0)
+# 1 => version
+# 2 => error -> help (return 1)
+
+if ($print[0]) {
+	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
+	exit 0;
+} 
+elsif ($print[1]) {
+	print "\n"."Muttprint $VERSION"."\n\n".$String{'Lizenz'}."\n\n";
+	exit 0;
+} 
+elsif ($print[2]) {
+	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
+	exit 1;
+}
+
+
+#
+# Formatierung für Header
+foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
+	my $unformated = $_;
+	my $formats = "";
+	$unformated =~ s/[\*\/]//g;
+	
+	$formats .= '\\bfseries' if /\*.*\*/;
+	$formats .= '\\itshape' if /\/.*\//;
+	
+	$HeaderFormatAttr{$unformated} = $formats;
+	push @headers, $unformated;
+}
+
+
+{
+	my @KompletteMail = <>;
+	my $mail_charset;
+
+	my $Content;
+
+	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
+	
+		$. = $i;
+
+		# for software that outputs \r\n-line-Endings
+		s/\r//g;
+	
+		#
+		# Should the signature be printed?
+		last if (/^-- $/ && ($Config{'REM_SIG'} eq "on"));
+	
+		#
+		# and what's about Quoting?
+		next if (($Config{'REM_QUOTE'} eq "on") && (/^([\t]*[|>:}#])+/));
+	
+	
+		#
+		# Do sth with the header
+		if (0 ... /^$/) {
+	
+			my $aktHeader;
+		
+			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
+			($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/i unless $mail_charset;
+			
+			foreach $aktHeader (@headers, "X-Face") {
+			
+				if (/^${aktHeader}:[\t ]+/i) {
+					@LastHeader = ($aktHeader, $.);
+					chomp($Header{$aktHeader} = $');
+				} 
+				elsif (/^[\t ]+/i && ($LastHeader[1] + 1 == $.)) {
+					chomp($Header{"$LastHeader[0]"} .= " $'");
+					$LastHeader[1] ++;
+				}
+			}
+		}
+	
+	
+		#
+		# ... and do sth with the body
+		else {
+	
+			$Content .= $_;
+				
+			$Laenge = length($_);
+			$MaxLaenge = $Laenge if ($Laenge > $MaxLaenge);
+		
+		}
+	}
+
+	# ab in den Hintergrund 
+
+    unless ($Config{DEBUG}) {
+    	fork && exit;
+    }
+
+    # if ($^V ge v5.6);
+
+	#
+	# wenn die Header nicht ausgelesen werden können: so drucken!		
+	unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) { 
+	
+		open (PRINTER, "| lpr -P$Config{'PRINTER'}") 
+			|| die "unable to print with lpr: $!";
+		print PRINTER @KompletteMail;
+		close PRINTER;
+		exit;
+	
+	}
+
+
+	# formatieren
+	
+	# Body dekodieren
+	if ($QP) {
+		$Content =~ s/=([A-Fa-f0-9]{2})/chr(hex($1))/eg;
+	}
+
+	CreateTemp();
+	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
+
+	if ($MaxLaenge > $Config{WRAPMARGIN}) {
+		WriteFormated($Content, \*CONTENT, $Config{WRAPMARGIN});
+	
+	} else {
+		print CONTENT $Content;
+	}
+
+	close CONTENT;
+
+	# Zeichensatz automatisch erkennen
+	if ($charset eq "auto" and $mail_charset) {
+		$charset = get_charset($mail_charset);
+	}
+
+}
+
+
+# Realname
+$Header{'ShortFrom'} = GetShortFrom ($Header{'From'}, $Header{'To'});
+
+#
+# Fontpaket
+$Fontpackage = $Fontpackage{$Config{'FONT'}} if exists $Fontpackage{$Config{'FONT'}};
+
+#
+# passendes Eurozeichen
+if (exists $Config{FONT} and exists $EuroSign{$Config{FONT}}) {
+	$EuroSign = $EuroSign{$Config{FONT}};
+}
+
+
+my $type;
+foreach $type (@headers) {
+	
+	if (defined $Header{$type}) {
+		
+		if ($type =~ /^Date/i) {
+			$Header{$type} =~ s/-/--/;
+
+			#
+			# Datum konvertieren
+			if ($Config{DATE} eq "local") {
+				$Header{Date} = convert_date($Header{Date});
+			}
+		}
+		else {
+			for ($Header{$type}) {
+				
+				DecodeHeader();  # for notes, see the Subroutine!!
+				
+				#
+				# Header formatieren nach ADDRESSFORMAT
+				if ($type =~ /^(To|From|CC)/i && $Config{ADDRESSFORMAT} ne "original") {
+					# Adressen 'einrahmen'
+					s/(\S+\@[^\s,]+)/<$1>/g;
+					s/<+/</g;
+					s/>+/>/g;
+					
+					my $spezheader;
+					my $newheader;
+					foreach $spezheader (split /(?<=>),/, $_) {
+						my $realname = GetRealname($spezheader) || "";
+						my $format = $Config{ADDRESSFORMAT} || "%r <%a>\n";
+						my $address = ($spezheader =~ /(?<=<)(\S+\@\S+)(?=>)/)[0] || "";
+
+						if ($realname) {
+							$format =~ s/\*(.+)?\*/\0\\textbf\0{$1\0}/g;
+							$format =~ s/\/(.+)?\//\0\\textit\0{$1\0}/g;
+							$format =~ s/%r/$realname/g;
+							$format =~ s/%a/$address/g;
+							$format =~ s/\\n/\n/g;
+							$newheader .= $format;
+						}
+						else {
+							$newheader .= $format =~ /\n$/ ? "$address,\n" : "$address,";
+						}
+						$newheader .= " ";
+						
+					}
+
+					$newheader =~ s/[\s,\n]+$//g;
+					$_ = $newheader;
+
+				}
+					
+				s/(?<!\0)\\/\\textbackslash\{\}/g;
+				s/\n/\\newline/g;
+				s/(?<!\0)\{/\\\{/g;
+				s/(?<!\0)\}/\\\}/g;
+				s/\"/\\textquotedbl\{\}/g;
+				s/>/\\textgreater\{\}/g;
+				s/</\\textless\{\}/g;
+				s/\#/\\\#/g;
+				s/\&/\\&/g;
+				s/\$/\\\$/g;
+				s/\|/\\\|/g;
+				s/\~/\\\~{}/g;
+				s/\^/\\\^{}/g;
+				s/\%/\\\%/g;
+				s/_/\\_/g;
+				s/-/{-}/g;
+				s/\0//g;
+
+				if ($charset eq "latin1" or $charset eq "latin9") {
+					s/\200/$EuroSign/g;
+					if ($charset eq "latin9") {
+						s/¤/$EuroSign/g;
+					}
+				}
+			}
+		}
+
+		my $ftype = "\L\u$type";
+		$ftype = "Message-ID" if ($ftype eq "Message-id");
+		
+		unless (defined $String{$ftype}) {
+			$String{$ftype} = "$ftype:";
+		}
+		
+		push @PrintedMailheaders,
+			"{ $HeaderFormatAttr{$type} $String{$ftype}} \& ".
+			"$HeaderFormatAttr{$type} $Header{$type}  \& \\\\ \n";
+				
+	}
+}
+
+
+#
+# XFACE-Support
+
+if ($Config{'XFACE'} eq "on" && exists $Header{'X-Face'}) {
+	ChangeForXface($Header{'X-Face'});
+}
+
+#
+# Papierformat
+
+if ($Config{'PAPER'} eq "A4") {
+		
+	$PaperPS = "a4";
+	$PaperTex = "a4paper";
+	
+} elsif ($Config{'PAPER'} eq "letter") {
+
+	$PaperPS = "letter";
+	$PaperTex = "letterpaper";
+
+} 
+#
+# Umleitung ins Nirwana oder in Datei ?
+if ($Config{'DEBUG'} == 1) {
+	$Umleitung = $Temp{'log'};
+} else {
+	$Umleitung = "/dev/null";
+}
+
+
+#
+# Sprachpaket (Auswahl von vorher überschreiben, falls in Konfigdatei
+# anders)
+
+$LPack = $Config{'LPack'} if defined $Config{'LPack'};
+
+#
+# LaTeX-Datei erzeugen
+CreateLatex();
+
+chdir($Temp{'dir'});
+
+#
+# LaTeX zweimal laufen lassen, da sonst die Seitenzahl nicht ermittelt
+# werden kann
+foreach (qw(1 2)) {
+	system("latex -interaction=nonstopmode mail.tex >> $Umleitung 2>&1");
+}
+
+unless (-e $Temp{'dvi'}) {
+	
+	die "Latex didn't work.";
+	
+}
+
+
+##################################### DRUCKEN ################################
+
+#
+# Druck in Datei
+if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
+	$File = $Config{'PRINTER'};
+	$File =~ s/(TO_FILE|file)://;
+
+	# if not an absoute path
+	if ($File !~ /\//) {
+		$File = "$startworkingdir/$File";
+	}
+
+	$DVIopts[0] = "-o $File -t $PaperPS";
+	$DVIopts[1] = "-o ${File}2 -t $PaperPS";
+	
+	$Config{'SPEED'} = 0;
+	$Config{'WAIT'} = 0;
+	
+	$Command[0] = "> $File";
+	$Command[1] = "> ${File}2";
+	
+} elsif ($Config{'PRINTER'} =~ /^((TO_FILE|file):-?|-)$/i) {
+	
+	$Config{'DUPLEX'} = "off";
+	
+	$DVIopts[0] = "-f -t $PaperPS";
+	$DVIopts[1] = $DVIopts[0];
+
+	$Command[0] = "";
+	$Command[1] = $Command[0];
+
+
+} else {
+	
+	$DVIopts[0] = "-P $Config{'PRINTER'} -t $PaperPS";
+	$DVIopts[1] = $DVIopts[0];
+		
+	$Command[0] = "| lpr -P$Config{'PRINTER'}";
+	$Command[1] = $Command[0];
+	
+
+}
+
+
+#
+# erster Fall: normaler Druck
+if (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "off")) {
+	PrintNormal($DVIopts[0]);
+}
+#
+# zweiter Fall: nur Duplexdruck
+elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
+	
+	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") == 1) {
+		PrintNormal($DVIopts[0]);
+	
+	} else {
+
+		if (!defined($child_pid = fork())) {
+			die "kann fork nicht ausführen: $!";
+		} elsif ($child_pid) {
+			system ("dvips -A $DVIopts[0] $Temp{'dvi'}  2>> $Umleitung");
+		} else {
+			sleep ($Config{'SPEED'} * $Seitenzahl / 2 + $Config{'WAIT'});
+			system ("dvips -B $DVIopts[1] $Temp{'dvi'}  2>> $Umleitung");	
+			exit;
+		}
+	}
+}
+
+#
+# dritter Fall: nur Papiersparmodus
+elsif (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "on")) {
+	PrintPaperSave($Command[0]);
+}
+#
+# vierter Fall: Papiersparmodus und Duplexdruck
+elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
+
+	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") <= 2) {
+		PrintPaperSave($Command[0]);
+
+	
+	} else {
+
+		# erst in PS-Datei drucken
+		system ("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung "
+			." | psnup -2 -q > $Temp{'ps'} 2>>$Umleitung");
+		
+		# dann auswählen
+		if (!defined($child_pid = fork())) {
+			die "kann fork nicht ausführen: $!";
+		} elsif ($child_pid) {
+			system ("psselect -q -o $Temp{'ps'} $Command[0] 2>>$Umleitung");
+		
+		} else {
+			sleep ($Config{'SPEED'} * $Seitenzahl / 4 + $Config{'WAIT'});
+			system ("psselect -q -e $Temp{'ps'} $Command[1] 2>>$Umleitung");	
+			exit;
+		}
+	}
+
+}
+#
+# fünfter Fall: echter (!) Duplexdruck
+elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "off")) {
+
+	PrintNormal("-o mail.ps -t $PaperPS");
+	
+	ModifyPS("portrait");
+	system "cat $Temp{'ps'} $Command[0]";
+
+}
+
+elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
+
+	PrintPaperSave("> $Temp{'ps'}");
+
+	ModifyPS("landscape");
+	system "cat $Temp{'ps'} $Command[0]";
+	
+}
+
+
+
+################################### ENDE ####################################
+
+
+
+##################### UNTERFUNKTIONEN ########################################
+
+#
+# Liest die Konfigurationsdatei ein
+
+sub ReadConfig (@) {
+
+	my @rcfiles = @_;
+	my $rcfile;
+	
+	foreach $rcfile (@rcfiles) {
+
+		next unless (-r $rcfile);
+	
+		open (RCFILE, $rcfile) || die "Could not open $rcfile: $!";
+
+		while (<RCFILE>) {
+			if (/^([^#=\s]+)=(["']?)(.*)\2\s+$/) { 
+				$Config{$1} = $3; 
+			}
+		}
+			
+		close RCFILE || die "Could not close $rcfile: $!";
+		
+	}
+
+	# Abwärtskompatiblität
+	$Config{CHARSET} = $Config{charset} if defined $Config{charset};
+}
+
+
+sub ReadOpts () {
+
+	# wird für die Optionen benötigt (gehört zum Standardumfang von Perl 5)
+	use Getopt::Long; 
+	Getopt::Long::Configure ("no_ignore_case");
+
+	
+	my %opt;									# Aufrufoptionen	
+	my $error = 0;								# Beenden mit Fehler
+	
+	#
+	# Optionen einlesen und der zugehörigen Variablen zuordnen
+	
+	GetOptions (
+	
+		'h|help' 				=> 	\$opt{help},
+		'v|version'				=>	\$opt{version},
+
+		'p|printer=s' 			=>	\$Config{PRINTER},
+		'i|penguin=s'			=>	\$Config{PENGUIN},
+		't|speed=i'				=>	\$Config{SPEED},
+		'w|wait=i'				=>	\$Config{WAIT},
+		'F|font=s'				=>	\$Config{FONT},
+		'P|paper=s'				=>	\$Config{PAPER},
+		'S|frontstyle=s'		=>	\$Config{FRONTSTYLE},
+		'a|printed-headers=s'	=>	\$Config{PRINTED_HEADERS},
+        'z|fontsize=s'          =>  \$Config{FONTSIZE},
+        'W|wrapmargin=s'        =>  \$Config{WRAPMARGIN},
+		'c|charset=s'			=>	\$Config{CHARSET},
+		'D|debug!'				=>	\$Config{DEBUG},
+		'e|date=s'				=>	\$Config{DATE},
+		'E|date-format=s'		=>	\$Config{DATE_FORMAT},
+		'r|rcfile=s'			=>	\$Config{RCFILE},
+		'A|addressformat=s'		=>	\$Config{ADDRESSFORMAT},
+		'g|topmargin=s'			=>	\$Config{TOPMARGIN},
+		'G|bottommargin=s'		=>	\$Config{BOTTOMMARGIN},
+		'j|leftmargin=s'		=>	\$Config{LEFTMARGIN},
+		'J|rightmargin=s'		=>	\$Config{RIGHTMARGIN},
+
+
+		'l|lang=s'				=>	\$opt{LANG},
+		'd|duplex!'				=>	\$opt{DUPLEX},
+		'x|x-face!'				=>	\$opt{XFACE},
+		'H|headrule!'			=>	\$Config{HEADRULE},
+		'b|footrule!'			=>	\$Config{FOOTRULE},
+		'1'						=> 	\$opt{paper1},
+		'2'						=>	\$opt{paper2},
+		's|rem_sig!'			=>	\$opt{REM_SIG},
+		'q|rem_quote!'			=>	\$opt{REM_QUOTE},
+		
+		'f|file=s'				=>	\$opt{file},
+		
+	) or $error = 1;
+	
+	
+	#
+	# Logische Optionen => on/off
+	
+	foreach (qw /DUPLEX REM_SIG REM_QUOTE HEADRULE FOOTFULE XFACE/) {
+		next unless defined $opt{$_};
+		
+		if ($opt{$_}) {
+			$Config{$_} = "on";
+		}
+		else {
+			$Config{$_} = "off";
+		}	
+	}
+	
+	#
+	# Papiersparmodus
+	
+	$Config{'PAPERSAVE'} 	= "off"			if $opt{'paper1'};
+	$Config{'PAPERSAVE'}	= "on"			if $opt{'paper2'};
+
+	#
+	# andere Sprache
+	$Config{'LANG'} 		= $opt{'LANG'}	if defined $opt{'LANG'};
+
+	# aus Datei lesen
+
+	if (defined $opt{'file'}) {
+		if ($opt{'file'} eq "-") {
+			@ARGV = "-";
+		}
+		else {
+			unless (-e $opt{'file'}) {		
+				die "Could not open $opt{'file'}. Maybe the file does not exist.\n";
+			}
+			@ARGV = $opt{'file'};
+		}			
+	}
+	else {
+		@ARGV = "-";
+	}
+	
+	
+	# Rückgabe: Wahrheitswerte für 
+	# I Hilfe, II Version
+
+	return ($opt{'help'}, $opt{'version'}, $error);
+
+}
+
+sub ReadPaperConfig () {
+
+	my $DebianPaper;
+	my $Papersize = "/etc/papersize";
+
+	return unless (-r $Papersize);
+
+	open (RCFILE, $Papersize);
+	chomp($DebianPaper = <RCFILE>);
+
+	foreach ($DebianPaper) {
+		/a4/i 		&& 	do { $Config{PAPER} = "A4"; 		last };
+		/letter/i	&&	do { $Config{PAPER} = "letter";		last };
+	}
+
+}
+
+
+sub CreateTemp () {
+	#
+	# temp directory / temp files
+
+	mkdir ("/tmp/muttprint-$$", 0700) || die "Unable to create temp-folder: $!";
+	$Temp{'dir'} = "/tmp/muttprint-$$";
+	$Temp{'content'} = "$Temp{dir}/content";
+	$Temp{'latex'} = "$Temp{dir}/mail.tex";
+	$Temp{'log'} = "/tmp/muttprint.log";
+	$Temp{'dvi'} = "$Temp{dir}/mail.dvi";
+	$Temp{'ps'} = "$Temp{dir}/mail.ps";
+	$Temp{'xf_raw'} = "$Temp{dir}/xface.raw";
+	$Temp{'xf_xbm'} = "$Temp{dir}/xface.xbm";
+	$Temp{'xf_eps'} = "$Temp{dir}/xface.eps";
+}
+
+
+sub FindCommonDir ($) {
+
+	my $sort = shift;
+	my $common_dir;
+	my ($prefix) = $0 =~ m#(.*)/bin/muttprint#;
+	
+	foreach ($prefix, "/usr/", "/usr/local") {
+	
+		$common_dir = "$_/$sort/muttprint/";
+		return $common_dir if (-d $common_dir);
+	
+	}
+
+}
+
+sub ChangeForXface ($) {
+
+	open (RAW, ">$Temp{'xf_raw'}") || die "Could not create XF-Raw file: $!";
+	print RAW @_;
+	close RAW;
+
+	system ("uncompface -X $Temp{xf_raw} $Temp{xf_xbm}") 
+		&& die "Could not convert XF-Raw into XF-XBM: Maybe 'uncompface' not installed: $!";
+	
+	system ("convert $Temp{xf_xbm} $Temp{xf_eps}")
+		&& die "Could not convert XF-XBM into XF-EPS: Maybe 'convert' not installed: $!";
+	
+	$Config{'PENGUIN'} = $Temp{xf_eps};
+
+	$image_height = "15mm";
+
+}
+
+sub get_charset ($) {
+	for (shift) {
+		/iso[_\-]8859[_\-]15/i	&& return "latin9";
+		/iso[_\-]8859[_\-]1/i 	&& return "latin1";
+		/iso[_\-]8859[_\-]2/i 	&& return "latin2";
+		/iso[_\-]8859[_\-]3/i	&& return "latin3";
+		/iso[_\-]8859[_\-]4/i	&& return "latin4";
+		/iso[_\-]8859[_\-]9/i	&& return "latin5";
+		/(cp|windows)[_\-]?1252/i	&& return "latin1";
+		/(cp|windows)[_\-]?1250/i	&& return "latin2";
+		
+		return "latin1";
+	}
+}
+	
+		
+##############################################################################
+
+sub CreateLatex () {
+
+	my $PengCode = "";						# Kommando für den Pinguin
+	my $PengTab;			 				# restl. Größe für Pinguin
+	my $BeforeHeader;
+	my $AfterHeader;
+	my $LatexPackages = "$Fontpackage,fancyhdr,lastpage";
+	my $headerrule_other = '\\renewcommand{\\headrulewidth}{0pt}';
+	my $headerrule_first = '\\renewcommand{\\headrulewidth}{0pt}';
+	my $footerrule = "";
+	local $charset = $charset;
+
+	my $isolatinextensions = getISOlatinExtensions($charset);
+
+	if ($charset eq "latin9") {
+		$charset = "latin1";
+	}
+
+	# Pinguin drucken?
+
+	if ($Config{'PENGUIN'} ne "off") {
+		$PengCode = <<"EOF";
+\\raisebox{4mm}{
+\\begin{minipage}[t]{20mm}
+\\begin{flushright}
+~ \\\\
+\\includegraphics[height=$image_height]{$Config{'PENGUIN'}}
+\\end{flushright}
+\\end{minipage}}
+EOF
+		$PengTab = 158 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
+	}
+	else {
+		$PengTab = 170 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
+	}
+
+	if ($Config{PAPER} eq "letter") {
+		$PengTab += 6;			# Letter ist breiter
+	}
+
+	$PengTab .= "mm";			# Maßeinheit anhängen
+
+	#
+	# Frontstyle:
+	for ($Config{'FRONTSTYLE'}) {
+		/^plain$/i 			&& do {		
+			$BeforeHeader = "";
+			$AfterHeader = "\\vspace{8mm}";				
+		last; };
+			
+		/^fbox$/i 			&& do {
+			$BeforeHeader = '\\fbox{';
+			$AfterHeader = '} \\vspace{5mm}';
+		last; };
+		/^shadowbox$/i		&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\shadowbox{';
+			$AfterHeader = '} \\vspace{3mm}';
+		last; };
+		/^(?-i:o)valbox$/i	&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\ovalbox{';
+			$AfterHeader = '} \\vspace{6mm}';
+		last; };
+		/^(?-i:O)valbox$/i	&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\Ovalbox{';
+			$AfterHeader = '} \\vspace{6mm}';
+		last; };
+		/^doublebox$/i		&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\doublebox{';
+			$AfterHeader = '} \\vspace{5mm}';
+		last; };
+		/^grey$/i			&& do {
+			$LatexPackages .= ",color";
+			$BeforeHeader = '\\colorbox[gray]{0.85}{';
+			$AfterHeader = '} \\vspace{8mm}';
+		last; };
+		/^greybox$/i		&& do {
+			$LatexPackages .= ",color";
+			$BeforeHeader = '\\definecolor{light}{gray}{0.85} \\fcolorbox{black}{light}{';
+			$AfterHeader = '} \\vspace{6mm}';
+		last; };
+	
+
+			$BeforeHeader = "";
+			$AfterHeader = '\\vspace{5mm} \\hrule \\vspace{5mm}';	
+	}
+	
+	#
+	# Headerrule
+	if ($Config{'HEADRULE'} eq "on") {
+		$headerrule_other = '\\renewcommand{\\headrulewidth}{0.5pt}';
+	}
+	
+	#
+	# Footerrule
+	if ($Config{'FOOTRULE'} eq "on") {
+		$footerrule = '\\renewcommand{\\footrulewidth}{0.5pt}';
+	}
+	
+	
+	# if there's no subject:
+	$Header{'Subject'} ||= "(no subject)";
+
+	#
+	# Ränderberechnung
+
+
+
+	open (LATEX, "> $Temp{'latex'}") || die "unable to create $Temp{'latex'}: $!";
+
+
+#
+# hier wird die eigentliche LaTeX-Quelldatei erzeugt
+# statt Backslash [\] : \\ -> keine Maskierung nötig !
+
+
+print LATEX <<EOF;
+\\documentclass[$Config{FONTSIZE}]{article}
+\\usepackage[T1]{fontenc}
+\\usepackage[$LPack]{babel}
+\\usepackage[$charset]{inputenc}
+\\usepackage{$LatexPackages}
+\\usepackage[$PaperTex,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
+	top=$Config{TOPMARGIN}mm,bottom=$Config{BOTTOMMARGIN}mm,headsep=5mm]{geometry}
+\\usepackage{moreverb,graphicx,marvosym,textcomp,array}
+\\setlength{\\parindent}{0mm}
+$isolatinextensions
+\\pagestyle{fancy}
+\\lhead{\\itshape $Header{'ShortFrom'}}
+\\rhead{\\bfseries $Header{'Subject'}}
+\\cfoot{}
+\\lfoot{\\today}
+\\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}
+$headerrule_other
+$footerrule
+\\fancypagestyle{plain}{%
+$headerrule_first
+\\fancyhf{} 
+\\lfoot{\\today}
+\\setlength{\\headsep}{0mm}
+\\setlength{\\headheight}{0mm}
+\\addtolength{\\footskip}{12pt}
+\\addtolength{\\footskip}{5mm}
+\\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}}
+\\begin{document}
+\\thispagestyle{plain}
+$BeforeHeader
+{\\large
+\\begin{tabular}[t]{\@{}r>{\\raggedright}p{$PengTab}\@{}p{0mm}\@{}}
+@PrintedMailheaders
+\\end{tabular}}
+\\hfill
+$PengCode
+$AfterHeader
+\\verbatiminput{$Temp{'content'}}
+\\end{document}
+EOF
+
+	close LATEX;
+
+}
+
+##############################################################################
+
+sub getISOlatinExtensions ($) {
+	my %Extensions;
+	
+	$Extensions{latin159} = <<'EOF';
+\DeclareInputText{165}{\textyen}
+\DeclareInputText{173}{-}
+\DeclareInputText{172}{\textlnot}
+\DeclareInputText{174}{\textregistered}
+\DeclareInputText{176}{\textdegree}
+\DeclareInputText{177}{\textpm}
+\DeclareInputText{178}{\texttwosuperior}
+\DeclareInputText{179}{\textthreesuperior}
+\DeclareInputText{181}{\textmu}
+\DeclareInputText{185}{\textonesuperior}
+\DeclareInputText{215}{\texttimes}
+\DeclareInputText{247}{\textdiv}
+EOF
+
+	$Extensions{latin9} = <<'EOF';
+\DeclareInputText{164}{\EURcr}
+\DeclareInputText{180}{\v{Z}}
+\DeclareInputText{166}{\v{S}}
+\DeclareInputText{168}{\v{s}}
+\DeclareInputText{184}{\v{z}}
+\DeclareInputText{188}{\OE}
+\DeclareInputText{189}{\oe}
+\DeclareInputText{190}{\"{Y}}
+EOF
+	
+	$Extensions{latin2} = <<'EOF';
+\DeclareInputText{173}{-}
+\DeclareInputText{176}{\textdegree}
+\DeclareInputText{215}{\texttimes}
+\DeclareInputText{247}{\textdiv}
+EOF
+	
+	$Extensions{latin3} = <<'EOF';
+\DeclareInputText{173}{-}
+\DeclareInputText{176}{\textdegree}
+\DeclareInputText{177}{\textpm}
+\DeclareInputText{178}{\texttwosuperior}
+\DeclareInputText{179}{\textthreesuperior}
+\DeclareInputText{181}{\textmu}
+\DeclareInputText{185}{\textonesuperior}
+\DeclareInputText{215}{\texttimes}
+\DeclareInputText{247}{\textdiv}
+EOF
+
+	$Extensions{latin4} = <<'EOF';
+\DeclareInputText{173}{-}
+\DeclareInputText{176}{\textdegree}
+\DeclareInputText{215}{\texttimes}
+\DeclareInputText{247}{\textdiv}
+EOF
+
+	$Extensions{cp1252} = <<'EOF';
+\DeclareInputText{128}{\EURcr}
+\DeclareInputText{130}{\quotesinglbase}
+\DeclareInputText{131}{\textflorin}
+\DeclareInputText{132}{\quotedblbase}
+\DeclareInputText{133}{\dots}
+\DeclareInputText{134}{\dag}
+\DeclareInputText{135}{\ddag}
+\DeclareInputText{136}{\^{}}
+\DeclareInputText{137}{\textperthousand}
+\DeclareInputText{138}{\v S}
+\DeclareInputText{139}{\guilsinglleft}
+\DeclareInputText{140}{\OE}
+\DeclareInputText{142}{\v Z}
+\DeclareInputText{145}{\textquoteleft}
+\DeclareInputText{146}{\textquoteright}
+\DeclareInputText{147}{\textquotedblleft}
+\DeclareInputText{148}{\textquotedblright}
+\DeclareInputText{149}{\textbullet}
+\DeclareInputText{150}{\textendash}
+\DeclareInputText{151}{\textemdash}
+\DeclareInputText{152}{\~{}}
+\DeclareInputText{153}{\texttrademark}
+\DeclareInputText{154}{\v s}
+\DeclareInputText{155}{\guilsinglright}
+\DeclareInputText{156}{\oe}
+\DeclareInputText{158}{\v z}
+\DeclareInputText{159}{\"Y}
+EOF
+	
+	$Extensions{cp1250} = <<'EOF';
+\DeclareInputText{128}{\EURcr}
+\DeclareInputText{130}{\quotesinglbase}
+\DeclareInputText{132}{\quotedblbase}
+\DeclareInputText{133}{\dots}
+\DeclareInputText{134}{\dag}
+\DeclareInputText{135}{\ddag}
+\DeclareInputText{137}{\textperthousand}
+\DeclareInputText{138}{\v S}
+\DeclareInputText{139}{\guilsinglleft}
+\DeclareInputText{140}{\@tabacckludge'S}
+\DeclareInputText{141}{\v T}
+\DeclareInputText{142}{\v Z}
+\DeclareInputText{143}{\@tabacckludge'Z}
+\DeclareInputText{145}{\textquoteleft}
+\DeclareInputText{146}{\textquoteright}
+\DeclareInputText{147}{\textquotedblleft}
+\DeclareInputText{148}{\textquotedblright}
+\DeclareInputText{149}{\textbullet}
+\DeclareInputText{150}{\textendash}
+\DeclareInputText{151}{\textemdash}
+\DeclareInputText{153}{\texttrademark}
+\DeclareInputText{154}{\v s}
+\DeclareInputText{155}{\guilsinglright}
+\DeclareInputText{156}{\@tabacckludge's}
+\DeclareInputText{157}{\v t} 
+\DeclareInputText{158}{\v z}
+\DeclareInputText{159}{\@tabacckludge'z}
+EOF
+
+	for (shift) {
+		/latin[15]/ 	&& return join("", @Extensions{qw/latin159 cp1252/});
+		/latin9/		&& return join("", @Extensions{qw/latin159 cp1252 latin9/});
+		/latin2/ 		&& return join("", @Extensions{qw/latin2 cp1250/});
+		/latin3/ 		&& return $Extensions{latin3};
+		/latin4/ 		&& return $Extensions{latin4};
+		return "";
+	}
+} 
+
+###################################################################################
+
+sub GetShortFrom ($$) {
+	my $Header;
+	my $kind_of_Header;
+	my $Realname;
+	
+	if ($Header = shift) {
+		$kind_of_Header = $String{'From'};		
+	} 
+	elsif ($Header = shift) {
+		$kind_of_Header = $String{'To'};
+	}
+	else {
+		return ""; 
+	}
+
+	$Realname = GetRealname($Header);
+	
+	if ($Realname) {
+		return "$kind_of_Header $Realname";
+	}
+	else {
+		return "$kind_of_Header " . (split /,\s/, $Header)[0];
+	}
+}
+	
+
+sub GetRealname ($) {
+	my $Header = shift;
+	
+	for ($Header) {
+
+		if (/^\s*["']*(.+?)["']* <.+\@.+>/ || /^.+\@.+ \((.+)\)$/) {
+			return $1;
+		}
+
+		return undef;
+	}
+}
+
+
+##############################################################################
+
+sub GetSeitenzahl ($) {
+
+	open (AUX, "$_[0]");
+	
+	while (<AUX>) {
+		($Seitenzahl) = /\\newlabel{LastPage}{{}{(\d+)}}/;
+	}
+	
+	close AUX;
+	
+	return $Seitenzahl;
+}
+
+##############################################################################
+
+sub PrintNormal ($) {
+	
+	system ("dvips $_[0] $Temp{'dvi'} 2>> $Umleitung")
+	&& die "Unable to print: $!";
+
+}
+
+##############################################################################
+
+sub PrintPaperSave ($) {
+
+	system("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung | psnup -2 -q "
+	  ."$_[0] 2>>$Umleitung") && die "Unable to print: $!";
+}
+
+##############################################################################
+
+#
+# Here we decode HEADER
+# This is useful for printing raw mails / usenet articles
+# See RFC 2047 for MIME encoding. I would not say that this code decodes
+# all correct, but when I tested it, it worked :)
+#
+# Tipp:
+# For printing with KNode (KDE newsreader) save the article to a file and
+# execute   muttprint -f /tmp/some_file.txt
+# [This decoding stuff was done for KNode ;)]
+
+sub DecodeHeader () {
+	
+	my $EncPart;
+	
+	foreach $EncPart ($_ =~ /=\?ISO-8859-[0-9]+\?Q\?(.*?)\?=/gi) {		
+		
+ 		$EncPart =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+ 		$EncPart =~ s/_/ /g;
+		
+		s/=\?ISO-8859-[0-9]+\?Q\?.*?\?=/$EncPart/;
+		
+	}
+}
+
+##############################################################################
+
+
+
+
+#
+# Because lots of mail clients do not break the lines, we must do it here.
+# This is some like 'fmt', but better for our needs. We do not use 'fmt',
+# because its -s Option is *not* available on all systems!
+
+sub WriteFormated ($*$) {
+
+	local $_ = shift;
+	my $fh = shift;
+	my $wrapmargin = shift;
+	
+	$^L = "";
+	my $oldfh = select $fh;
+	$~ = "CONTENT";
+
+	#
+	# only wrap if 20 < $wrapmargin < 120
+	if ($wrapmargin > 120 || $wrapmargin < 20) {
+		print;
+		return;
+	}
+	
+	eval("format CONTENT = \n^" . '<' x ($wrapmargin - 1) . " ~~ \n\$_\n.");
+
+	#
+	# at first, we split each paragraph
+	
+	for (split /(?:\s*\n\s*){2,}/) {
+	
+		#
+		# then, we look if *every* line is too long
+		if ((() = /^.{$wrapmargin,}$/gmo) == tr/\n//) {
+		
+			#
+			# if so, we fill it! (as a normal fmt does)
+			
+			s/\s*\n\s*/ /g;
+			write;
+		} 
+		else {
+		
+			#
+			# and if not, we break every line separately
+			# (as fmt -s does)
+			
+			for (split /\n/) {
+				
+				if (/^.{$wrapmargin,}$/o) {
+					write;
+				} 
+				else {
+					print $_, "\n";
+				}
+			
+			}
+		}
+		
+		#
+		# finally, we print a Newline on the end of each
+		# paragraph
+		
+		print "\n";		
+	}
+	
+	$| = 1;
+	select $oldfh;
+}
+
+# .. so this is some like 'fmt' and 'fmt -s' in one
+
+##############################################################################
+
+sub convert_date ($) {
+	my $date = shift;
+
+	#
+	# Überprüfen, ob das Modul installiert ist. Wenn nicht, Warnung
+	# ausgeben und so verwenden.
+	eval "use Date::Parse";
+	
+	if ($@) {
+		warn "It seems that you don't have installed ".
+			"the module \"Date::Parse\" on your system. Please install it or ".
+			"use the setting \"DATE=original\" in your ~/.muttprintrc.\n";
+		return $date;
+	}
+	
+	return strftime($Config{DATE_FORMAT}, localtime(str2time($date)));
+
+}
+
+sub ModifyPS ($) {
+
+	my $Tumble;
+	my $Postscript;
+	my $DuplexCommand;
+	
+	# 
+	# /Tumble true will use a short edge binding while false will use a long
+	# ledge binding.
+	# long edge binding makes a duplex printing looks right for portrait page.
+	# short edge binding makes a duplex printing looks right for landscape
+	# page.
+	#
+
+	
+	if ($_[0] eq "portrait") {
+		$Tumble = "false";	
+	}
+	elsif ($_[0] eq "landscape") {
+		$Tumble = "true";
+	}
+	
+	$DuplexCommand = <<EOF;
+%%BeginFeature: *Duplex DuplexTumble
+
+    2 dict dup /Duplex true put dup /Tumble $Tumble  put setpagedevice
+
+%%EndFeature
+EOF
+	
+	
+	open(READ_PSFILE, "$Temp{'ps'}") || die "$!";
+	$Postscript = join("", (<READ_PSFILE>));	
+	close READ_PSFILE;
+	
+	#
+	# notwendige Kommentare hinzufügen!
+	
+	$Postscript =~ s#\%\%EndComments#$DuplexCommand#;
+	
+  	open(WRITE_PSFILE, "> $Temp{'ps'}") || die "$!";
+	print WRITE_PSFILE $Postscript;
+	close WRITE_PSFILE;
+
+}
+
+##############################################################################
+
+sub GetDefaultPrinterCDE () {
+
+	my $configfile = "$ENV{HOME}/.printers";
+	my $printer;
+	
+	return unless (-r $configfile);
+
+	open (CDEPRINTER, $configfile) 
+		or die "Could not open CDE printer configuration file: $!";
+	
+	while (<CDEPRINTER>) {
+		last if (($printer) = /^_default\s+(\w*)/);
+	}
+
+	close CDEPRINTER or die "Could not close CDE printer configuration file: $!";
+	return $printer if defined $printer;
+}
+
+
+##############################################################################
+
+
+sub Setze_String () {
+
+for ($Lang) {
+
+	/^(\w{2})/i	
+	
+		and do { 
+		
+			if (-r "$lib_dir/translation-$1.pl") {
+				do("$lib_dir/translation-$1.pl"); 
+				last;
+			}
+		};
+				
+
+$String{"Benutzung"} = <<EOF;
+
+Usage:   muttprint [option]... [-f file]
+ 
+Options:
+
+PLEASE NOTICE: This options override the corresponding settings in 
+~/.muttprintrc and /etc/Muttprintrc.
+
+-h, --help
+       This help.
+
+-v, --version
+       Prints the current version of Muttprint.
+
+-f [file], --file [file]
+       Reads from file instad of STDIN.
+
+-p [printername], --printer [printername]
+       Uses a specific printer.
+       "-" stands for STDOUT
+       For printing in a file use TO_FILE:/path/to/file
+	   
+-i [file], --penguin [file]
+       Sets the picture printed on the first page.
+
+-x, --x-face | -nox, --nox-face
+       Turn printing of X-Faces on/off.
+
+-t [number], --speed [number]
+       Time in seconds which the printer needs for one page.
+		   
+-w [number], --wait [number]
+       Time between printing odd and even pages for duplex printing.
+
+-F [fontname], --font [fontname]
+       Font family for printing. Possible values are:
+       Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
+	   
+-H, --headrule | -noH, --noheadrule
+       Turn printing of the headrule on or off.
+	   
+-b, --footrule | -nob, --nofootrule
+       Turn printing of the footrule on or off.
+	   
+-S Style | --frontstyle Style
+       Choose a style for the headers on the first page:
+       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       grey, greybox. 
+       Read the manual for a detailed description of this values.
+
+-a [headers], --printed-headers [headers]
+       Headers that should be printed. See manpage/manual for details.
+       Example: /Date/_To_From_*Subject*
+
+-P [paperformat], --paper [paperformat]
+       Paper format: "letter" (US) or "A4" (Europe).
+
+-l [language], --lang [language]
+       Language for messages and printing.
+
+-c [charset], --charset [charset]
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
+       auto (read the manual before you use "auto").
+
+-e [string], --date [string]
+       original: prints the date as it is in the header
+       local:    converts to local time zone and language
+
+-E [string], --date-format [string]
+       date format string; see strftime(3) for details
+
+-A [string], --addressformat [string]
+       Specifies the format of the mail address in the header,
+       see manpage or documentation for details.
+
+-D, --debug | -noD, --nodebug
+       Writes useful information to a logfile /tmp/muttprint.log.
+
+-g [number], --topmargin [number]
+       Top margin in millimeter
+
+-G [number], --bottommargin [number]
+       Bottom margin in millimeter
+
+-j [number], --leftmargin [number]
+       Left margin in millimeter
+
+-J [number], --rightmargin [number]
+       Right margin in millimeter
+
+-d, --duplex | -nod, --noduplex
+       Enables or disables duplex printing.
+	   
+-2 | -1
+       Prints two pages on one sheet. Corresponds to "papersave mode".
+
+-s, --rem_sig | -nos, --norem_sig
+       Removes the signature (separated by "-- ") in the printing.
+
+-q, --rem_quote | -noq, --norem_quote
+       Remove the quoted paragraph from the printing.
+
+-z [size], --fontsize [size]
+       Font size: 10pt, 11pt, 12pt (only this values)
+
+-W [number], --wrapmargin [number]
+       Specifies how long lines could be.
+	   
+-r [file], --rcfile [file]
+       Specifies a additional configuration file.
+
+EOF
+
+$String{"Lizenz"} = "This program is distributed under the terms of the
+GPL and can be freely copied.
+";
+
+$String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
+
+$String{"FileNotFound"} = "The specified file was not found.\n";
+
+@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
+("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:");
+
+$LPack = "english";
+}
+
+# Rückwärtskompatiblität
+# wird irgendwann entfernt!!
+$Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'} 
+			if defined $Config{'NEWSGROUP_STRING'};
+
+	foreach ("From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups") {
+		$String{$_}	= $Config{"\U$_"."_STRING"} if defined $Config{"\U$_"."_STRING"};
+	}
+}
+
+__END__
+
+#######################################################################################
+# vim:sw=4 ts=4
