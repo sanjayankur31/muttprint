@@ -51,7 +51,7 @@ use Cwd;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.62pre6";
+$VERSION = "0.62pre7";
 my $PACKAGE = "Muttprint";
 
 
