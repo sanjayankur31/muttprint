@@ -1252,7 +1252,7 @@ sub createLatex () {
 \\end{flushright}
 \\end{minipage}}
 EOF
-		$PengTab = 158 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
+		$PengTab = 155 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
 	}
 	else {
 		$PengTab = 170 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
