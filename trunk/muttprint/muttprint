@@ -47,7 +47,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.64pre2";
+$VERSION = "0.64pre3";
 
 my $PACKAGE = "Muttprint";
 
@@ -466,10 +466,10 @@ foreach $type (@headers) {
 				# Header formatieren nach ADDRESSFORMAT
 				if ($type =~ /^(To|From|CC)/i && $Config{ADDRESSFORMAT} ne "original") {
 					# Adressen 'einrahmen'
-					s/([^<>\s]+\@[^<>\s,]+)/<$1>/g;
+					s/(\s+?!['"]+)([^<>\s\\]+\@[^<>\s,]+)/<$1>/g;
 					s/<+/</g;
 					s/>+/>/g;
-					
+
 					my $spezheader;
 					my $newheader;
 					foreach $spezheader (split /(?<=>),/, $_) {
