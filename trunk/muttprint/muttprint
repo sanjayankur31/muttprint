@@ -47,7 +47,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.64pre5";
+$VERSION = "0.70pre1";
 
 my $PACKAGE = "Muttprint";
 

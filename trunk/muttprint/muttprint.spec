@@ -5,7 +5,7 @@
 #
 # Tab =^= 8 characters
 
-%define			version		0.65
+%define			version		0.70
 
 Summary: 		pretty printing of mails with Mutt
 Summary(de):		schöner Ausdruck von Mails mit Mutt

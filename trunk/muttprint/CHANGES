@@ -1,7 +1,7 @@
 CHANGES
 =======================================================================
 
-0.65    - changed fontpackage for Times to `mathptm' and the package
+0.70    - changed fontpackage for Times to `mathptm' and the package
           for Palatino to `mathpazo' because `times' and `palatino' are
           obsolte (according to de.comp.text.tex)
         - added font options `AvantGarde', `CentSchool', `Chancery' and
