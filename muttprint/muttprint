@@ -55,7 +55,6 @@ sub ReadConfig ();
 sub ReadOpts ();
 sub ReadPaperConfig ();
 sub FindCommonDir ($);
-sub SearchPenguin ();
 sub SubstituteVerbatim ($);
 sub CreateLatex ();
 sub GetRealname ($$);
@@ -73,17 +72,20 @@ sub DecodeHeader();
 
 ######## 'private' Variablen für den Rest
 my %Config = (
-	PRINTER		=> 	'lp0',
-	PENGUIN		=>	'on',
-	DUPLEX		=>	'off',
-	SPEED		=>	'30',
-	PAPERSAVE	=>	'off',
-	FONT		=>	'Latex-bright',
-	PAPER		=>	'A4',
-	DEBUG		=>	'0',
-	REM_SIG		=>	'off',
-	REM_QUOTE	=>	'off',
-	WAIT		=>	'30',
+	PRINTER			=> 	'lp0',
+	PENGUIN			=>	'on',
+	DUPLEX			=>	'off',
+	SPEED			=>	'30',
+	PAPERSAVE		=>	'off',
+	FONT			=>	'Latex-bright',
+	PAPER			=>	'A4',
+	DEBUG			=>	'0',
+	REM_SIG			=>	'off',
+	REM_QUOTE		=>	'off',
+	WAIT			=>	'30',
+	HEADRULE		=>	'off',
+	FOOTRULE		=>	'off',
+	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
 );
 my %Fontpackage = (
 	'Latex'    		=>		'',
@@ -98,7 +100,7 @@ my $Lang = "en";							# Sprache
 my @print;									# ob Hilfe / Version angezeigt werden soll
 my %Temp;									# temporäre Dateien und Verzeichn.
 my %Header;									# Header ...
-my %PrintHeader;							# LaTeX-Code für einen Header
+my @PrintedMailheaders;						# Mailheader so wie er gedruckt wird (LaTeX-Code)
 my $PaperPS;								# Papierformat für dvips-Aufruf
 my $PaperTex;								# Papierformat für Latex-Aufruf
 my $Fontpackage;							# Fontpaket
@@ -115,8 +117,9 @@ my @LastHeader = ("", 0);					# letzter gefundener Header
 											# (Header, Zeilen#)
 my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für 
 											# Pinguin + Übersetzungen!
-
 my $lib_dir = FindCommonDir('lib');
+my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
+my @headers;
 
 
 ############# END VARIABLES ##################################################
@@ -143,7 +146,9 @@ ReadConfig ();
 @print = ReadOpts ();
 
 if ($Config{'PENGUIN'} eq "on") {
-	$Config{'PENGUIN'} = SearchPenguin() ? SearchPenguin() : "off";
+	$Config{'PENGUIN'} = 
+			-r "$share_dir/penguin.eps"
+			? "$share_dir/penguin.eps" : "off";
 }
 
 
@@ -180,7 +185,21 @@ if ($print[0]) {
 	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
 	exit 1;
 }
+
+
+#
+# Formatierung für Header
+foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
+	my $unformated = $_;
+	my $formats = "";
+	$unformated =~ s/[\*\/]//g;
 	
+	$formats .= '\\bfseries' if /\*.*\*/;
+	$formats .= '\\itshape' if /\/.*\//;
+	
+	$HeaderFormatAttr{$unformated} = $formats;
+	push @headers, $unformated;
+}
 
 
 {
@@ -207,7 +226,7 @@ if ($print[0]) {
 			my $aktHeader;
 		
 			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
-			foreach $aktHeader ("From", "To", "Date", "Newsgroups", "CC", "Subject") {
+			foreach $aktHeader (@headers) {
 			
 				if (/^${aktHeader}:[\t ]+/i) {
 					@LastHeader = ($aktHeader, $.);
@@ -279,7 +298,7 @@ if ($print[0]) {
 $Header{'ShortFrom'} = GetRealname ($Header{'From'}, $Header{'To'});
 
 
-foreach ("From", "To", "Date", "Newsgroups", "CC", "Subject") {
+foreach (@headers) {
 	
 	if (defined $Header{$_}) {
 		
@@ -304,17 +323,15 @@ foreach ("From", "To", "Date", "Newsgroups", "CC", "Subject") {
 			}
 		}
 		
+		unless (defined $String{$_}) {
+			$String{$_} = $_.":";
+		}
 		
-		next if /^Subject/i;
-		
-		$PrintHeader{$_} = "$String{$_} & \\raggedright $Header{$_} & \\\\";
+		push @PrintedMailheaders,
+			"{ $HeaderFormatAttr{$_} $String{$_}} \& { $HeaderFormatAttr{$_} $Header{$_} } & \\\\";
 				
 	}
-	else {
-		$PrintHeader{$_} = "";
-	}
 }
-
 
 
 #
@@ -685,19 +702,6 @@ sub FindCommonDir ($) {
 
 }
 
-sub SearchPenguin () {
-
-	
-	
-	my $penguin;
-	my ($prefix) = $0 =~ m#(.*)/bin/muttprint#;
-	
-	foreach ($prefix, "/usr", "/usr/local") {
-		$penguin = "$_/share/muttprint/penguin.eps";
-		return $penguin if -r $penguin;
-	}
-
-}
 
 sub SubstituteVerbatim ($) {
 	
@@ -898,12 +902,7 @@ $headerrule_first
 $BeforeHeader
 {\\large
 \\begin{tabular}[t]{rp{$PengTab}l}
-$PrintHeader{'Date'}
-$PrintHeader{'From'}
-$PrintHeader{'To'}
-$PrintHeader{'CC'}
-$PrintHeader{'Newsgroups'}
-{\\bfseries $String{'Subject'}} \& {\\bfseries $Header{'Subject'} }
+@PrintedMailheaders
 \\end{tabular}}
 \\hfill
 $PengCode
@@ -1130,8 +1129,8 @@ EOF
 
 sub DeleteTemp () {
 
-	unlink (<$Temp{"dir"}/*>);
-	rmdir ($Temp{'dir'});
+	# unlink (<$Temp{"dir"}/*>);
+# 	rmdir ($Temp{'dir'});
 
 }
 
