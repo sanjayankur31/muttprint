@@ -570,29 +570,30 @@ sub ReadOpts () {
 	
 	GetOptions (
 	
-		'h|help' 			=> 	\$opt{'help'},
-		'v|version'			=>	\$opt{'version'},
+		'h|help' 				=> 	\$opt{'help'},
+		'v|version'				=>	\$opt{'version'},
 
-		'p|printer=s' 		=>	\$Config{'PRINTER'},
-		'i|penguin=s'		=>	\$Config{'PENGUIN'},
-		't|speed=i'			=>	\$Config{'SPEED'},
-		'w|wait=i'			=>	\$Config{'WAIT'},
-		'F|font=s'			=>	\$Config{'FONT'},
-		'P|paper=s'			=>	\$Config{'PAPER'},
-		'S|frontstyle=s'	=>	\$Config{'FRONTSTYLE'},
-		'D|debug!'			=>	\$Config{'DEBUG'},
+		'p|printer=s' 			=>	\$Config{'PRINTER'},
+		'i|penguin=s'			=>	\$Config{'PENGUIN'},
+		't|speed=i'				=>	\$Config{'SPEED'},
+		'w|wait=i'				=>	\$Config{'WAIT'},
+		'F|font=s'				=>	\$Config{'FONT'},
+		'P|paper=s'				=>	\$Config{'PAPER'},
+		'S|frontstyle=s'		=>	\$Config{'FRONTSTYLE'},
+		'a|printed-headers=s'	=>	\$Config{'PRINTED_HEADERS'},
+		'D|debug!'				=>	\$Config{'DEBUG'},
 
 
-		'l|lang=s'			=>	\$opt{'LANG'},
-		'd|duplex!'			=>	\$opt{'DUPLEX'},
-		'H|headrule!'		=>	\$Config{'HEADRULE'},
-		'b|footrule!'		=>	\$Config{'FOOTRULE'},
-		'1'					=> 	\$opt{'paper1'},
-		'2'					=>	\$opt{'paper2'},
-		's|rem_sig!'		=>	\$opt{'REM_SIG'},
-		'q|rem_quote!'		=>	\$opt{'REM_QUOTE'},
+		'l|lang=s'				=>	\$opt{'LANG'},
+		'd|duplex!'				=>	\$opt{'DUPLEX'},
+		'H|headrule!'			=>	\$Config{'HEADRULE'},
+		'b|footrule!'			=>	\$Config{'FOOTRULE'},
+		'1'						=> 	\$opt{'paper1'},
+		'2'						=>	\$opt{'paper2'},
+		's|rem_sig!'			=>	\$opt{'REM_SIG'},
+		'q|rem_quote!'			=>	\$opt{'REM_QUOTE'},
 		
-		'f|file=s'			=>	\$opt{'file'},
+		'f|file=s'				=>	\$opt{'file'},
 		
 	) or $error = 1;
 	
@@ -1196,9 +1197,13 @@ PLEASE NOTICE: This options override the corresponding settings in
 	   
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
-	   plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
-	   grey, greybox. 
-	   Read the manual for a detailled description of this values.
+       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       grey, greybox. 
+       Read the manual for a detailled description of this values.
+
+-a [headers], --printed-headers [headers]
+       Headers that should be printed. See manpage/manual for details.
+       Example: /Date/_To_From_*Subject*
 
 -P [paperformat], --paper [paperformat]
        Paper format: "letter" (US) or "A4" (Europe).
@@ -1227,7 +1232,7 @@ $String{"Lizenz"} = "This program is distributed unter the terms of the
 GPL und can be freely copied.
 ";
 
-$String{"Bugs"} = "Please report bugs on <Bernhard.Walle\@gmx.de>.\n";
+$String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
 
 $String{"FileNotFound"} = "The specified file was not found.\n";
 
