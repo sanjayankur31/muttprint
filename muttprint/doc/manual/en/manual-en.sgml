@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-12-15</pubdate>
+	<pubdate>2003-03-01</pubdate>
 	
-	<releaseinfo>Version 0.64</releaseinfo>   
+	<releaseinfo>Version 0.65</releaseinfo>   
 	
 		
 	
@@ -52,7 +52,7 @@
 <sect1 id="installation">
 	<title>Installation</title>
 	
-	<sect2>
+	<sect2 id="sysreq">
 		<title>System requirements</title>
 	
 		<para>Muttprint was realized in the programming language
@@ -64,7 +64,9 @@
 			than version 1.0) plus the programs <emphasis>psselect</emphasis> 
 			and <emphasis>psnup</emphasis> from the <emphasis>PS-Utils</emphasis>
 			are available on your system. The last are only necessary if you
-			want to use paper save mode and/or duplex printing.</para>
+			want to use paper save mode and/or duplex printing; and they are
+			not necessary if you use CUPS and if you configured Muttprint
+			to use it, see <xref linkend="printcommand">.</para>
 
 		<para>All required LaTeX packages are included in teTeX. If you use another
 			LaTeX distribution, read the file <filename>README.latex</filename>, which
@@ -100,7 +102,15 @@
 			problems except the function to convert the time zone and print the date
 			in the local language, see <xref linkend="date">.</para>
 
-
+		<para>To have support for the charset UTF-8 the LaTeX command for
+			changing the charset must support UTF-8. This is naturally not the case!
+			You'll find a suitable extension in the CTAN. Just download the
+			file <ulink 
+			url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
+			and install it as described in the file <filename>INSTALL</filename> which
+			is included. You only need UTF-8 support if your mail client delivers
+			Muttprint with UTF-8 encoded data.</para>
+		
 
 	</sect2>
 	<sect2>
@@ -413,7 +423,7 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Printer</title>
 			
-			<para>If Muttprint should not print to <emphasis>lp</emphasis>, you can change 
+			<para>If Muttprint should not print on the default printer, you can change 
 				this by setting <literal>PRINTER</literal> to the correct value.</para>
 				
 			<para>To print in a file, you could use following syntax, the name
@@ -423,10 +433,30 @@ set printer_name "muttprint"
 			
 			<para>If duplex printing is enabled, Muttprint creates a second file
 				with the prefix <filename>2</filename>, e.&nbsp;g.
-				<filename>test.ps2</filename>.</para>
+				<filename>test2.ps</filename>.</para>
+
+			<para>If this variable is not set, Muttprint evaluates the
+				environment variable <envar>PRINTER</envar> and uses its value
+				to get the printer. Normally it is set to the default printer.
+				If you use CDE (which is common on commercial Unix systems)
+				its configuration file is read to get the default printer.</para>
+				
+			<para>As of version 0.65 Muttprint offers direct support of
+			 	the new printing system CUPS. It will be turned on by
+				setting <literal>PRINT_COMMAND</literal> to <literal>CUPS</literal>.
+				Alternatively it is possible to set it to an arbitrary
+				command which contains the string <literal>$CUPS_OPTIONS</literal>
+				which is substituted by the CUPS printing options.</para>
+
+			<tip>
+				<para>You could use the setting <literal>gv -</literal> to have
+					a print preview. This is useful if you test different settings.
+				</para>
+			</tip>
+
 				
 		</sect3>
-		<sect3>
+		<sect3 id="printcommand">
 			<title>Printing command</title>
 
 			<para>Muttprint uses <application>lpr</application> to print in its
@@ -531,7 +561,7 @@ set printer_name "muttprint"
 				has duplex capabilities, you should set <literal>DUPLEX</literal>
 				to <literal>printer</literal>. This changes the Postscript
 				code in a way that tells your printer to enable automatic duplex
-				printing.</para>				
+				printing; for CUPS a corresponding option is used.</para>				
 		</sect3>
 		
 		<sect3>
@@ -637,7 +667,7 @@ set printer_name "muttprint"
 				<literal>Latex</literal> (standard steting) means the standard LaTeX font
 				of the EC family. <literal>Latex-bright</literal>
 				uses <emphasis>Computer Modern Bright</emphasis>. This font is not
-				available on current Debian systems because of its license<footnote>
+				available on many systems because of its license<footnote>
 				<!-- Footnote -->
 					<para>You can download this font and install it on your computer from
 						the CTAN. You find the fonts in
@@ -649,13 +679,16 @@ set printer_name "muttprint"
 						<ulink url="ftp://tug.ctan.org"></ulink>).
 					</para>
 				<!-- /Footnote -->
-				</footnote>
+				</footnote>.
 			</para>
 			
 			<para>There are several Postscript fonts which are possible here: 
 				<literal>Times</literal>, <literal>Palatino</literal>,
-				<literal>Utopia</literal>, <literal>Charter</literal> and
-				<literal>Bookman</literal>.</para>
+				<literal>Utopia</literal>, <literal>Charter</literal> 
+				<literal>Bookman</literal>, <literal>CentSchool</literal>
+				(New Century Schoolbook), <literal>Chancery</literal>
+				(Zapf Chancery), <literal>Helvetica</literal> or
+				<literal>AvantGarde</literal>.</para>
 
 			<para>Of course the fonts has to be installed on your system. As the LaTeX 
 				distribution <emphasis>teTeX</emphasis> is standard on Linux systems,
@@ -1044,6 +1077,11 @@ set printer_name "muttprint"
 							<entry>Windows-1250</entry>
 							<entry><literal>latin2</literal></entry>
 							<entry>Latin-2 with some enhancements</entry>
+						</row>
+							<row>
+							<entry>UTF-8</entry>
+							<entry><literal>utf8</literal></entry>
+							<entry>Unicode as supported by LaTeX, see <xref linkend="sysreq"></entry>
 						</row>
 					</tbody>
 				</tgroup>

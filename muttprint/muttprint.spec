@@ -5,7 +5,7 @@
 #
 # Tab =^= 8 characters
 
-%define			version		0.64
+%define			version		0.65
 
 Summary: 		pretty printing of mails with Mutt
 Summary(de):		schöner Ausdruck von Mails mit Mutt
@@ -26,7 +26,7 @@ BuildRoot:		%{_tmppath}/%{name}-%{version}-root
 Prefix:			%{_prefix}
 
 %description
-Muittprint is a utility that formats the printing of Mutt and other mail clients
+Muttprint is a utility that formats the printing of Mutt and other mail clients
 like XFMail or PINE to be like the printing of Netscape Messenger or Kmail. It
 can print a little penguin on the first page and a headline on every page.
 Furthermore, it only prints the most important headers, but not the whole
@@ -72,8 +72,7 @@ Autore: Bernhard Walle <Bernhard.Walle@gmx.de>
 
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{prefix}/bin
-mkdir -p $RPM_BUILD_ROOT/%{prefix}/share/muttprint
-mkdir -p $RPM_BUILD_ROOT/%{prefix}/lib/muttprint
+mkdir -p $RPM_BUILD_ROOT/%{prefix}/share/muttprint/translations
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/*/man1
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
@@ -88,13 +87,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %{prefix}/bin/muttprint
 %{prefix}/share/muttprint
-%{prefix}/lib/muttprint
 %{_mandir}/man1/muttprint.1.gz
 %{_mandir}/*/man1/muttprint.1.gz
 %{_docdir}/*
 
 
 %changelog
+* Thu Feb 20 2003 Bernhard Walle <Bernhard.Walle@gmx.de>
+- changed translation place to /prefix/share/muttprint/translations
 * Sat Dec 15 2001 Bernhard Walle <Bernhard.Walle@gmx.de>
 - new version
 * Fri Oct 05 2001 Bernhard Walle <Bernhard.Walle@gmx.de>
@@ -116,3 +116,5 @@ rm -rf $RPM_BUILD_ROOT
 - new version
 * Sat May 12 2001 Bernhard Walle <Bernhard.Walle@gmx.de>
 - first release with changelog
+
+# vim: sw=8 ts=8

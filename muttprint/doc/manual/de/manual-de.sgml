@@ -55,7 +55,7 @@
 <sect1 id="installation">
 	<title>Installation</title>
 	
-	<sect2>
+	<sect2 id="sysreq">
 		<title>Systemvoraussetzungen</title>
 	
 		<para>Muttprint wurde in der Programmiersprache
@@ -109,6 +109,18 @@
 			Muttprint ohne Probleme bis auf die Funktion, die Zeitzone zu
 			konvertieren und das Datum in der Landessprache auszudrucken,
 			siehe <xref linkend="date">.</para>
+
+			<para>Damit der Unicode-Zeichensatz UTF-8 unterst&uuml;tzt wird
+				muss der LaTeX-Befehl zum Umschalten des Encodings UTF-8
+				unterst&uuml;tzen. Dies ist noramlerweise nicht der Fall!
+				Eine passende Erweiterung finden Sie im CTAN. Laden Sie sich
+				die Datei <ulink 
+					url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
+				herunter und gehen Sie wie in der enthaltenen Datei
+				<filename>INSTALL</filename> vor, um sie zu installieren.
+				Sie brauchen UTF-8 Unterst&uuml;tzung nur dann, wenn Ihr
+				Mailprogramm die Daten in diesem Zeichensatz an Muttprint &uuml;bergibt.
+			</para>
 
 	</sect2>
 	<sect2>
@@ -1143,6 +1155,13 @@ set printer_name "muttprint"
 							<entry>Latin-2 mit einigen Erweiterungen, u.&nbsp;a.
 								typographische Anf&uuml;hrungszeichen</entry>
 						</row>
+						<row>
+							<entry>UTF-8</entry>
+							<entry><literal>utf8</literal></entry>
+							<entry>Unicode soweit von LaTeX unterst&uuml;tzt, siehe <xref
+								linkend="sysreq"></entry>
+						</row>
+
 					</tbody>
 				</tgroup>
 			</informaltable>

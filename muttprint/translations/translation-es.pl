@@ -1,3 +1,5 @@
+use bytes;
+
 $String{"Benutzung"} = <<EOF;
 
 Uso:   muttprint [opción]... [-f archivo]

@@ -1,3 +1,5 @@
+use bytes;
+
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
 
 $String{"Benutzung"} = <<EOF;

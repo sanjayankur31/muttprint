@@ -1,3 +1,5 @@
+use bytes;
+
 $String{"Benutzung"} = <<EOF;
 
 Uporaba:   muttprint [opcija]... [-f datoteka]

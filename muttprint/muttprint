@@ -8,7 +8,7 @@
 ########################################################################
 #                                                                      #
 #    Muttprint - erleichtert das Drucken von Mails                     #
-#    Copyright © 2000/01  Bernhard Walle <bernhard.walle@gmx.de>       #
+#    Copyright © 2000-03, Bernhard Walle <bernhard.walle@gmx.de>       #
 #                                                                      #
 #    This program is free software; you can redistribute it and/or     #
 #    modify it under the terms of the GNU General Public License as    #
@@ -35,7 +35,7 @@
 use strict;
 # Deklaration nach Perl-5.005-Art
 use vars qw($VERSION %String $LPack $charset);
-use sigtrap qw(die INT QUIT);
+use sigtrap qw(die INT QUIT TERM);
 use POSIX;
 
 
@@ -47,7 +47,8 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.64pre1";
+$VERSION = "0.64pre2";
+
 my $PACKAGE = "Muttprint";
 
 
@@ -56,30 +57,31 @@ $charset = "latin1";						# Zeichensatz für LaTeX
 
 
 ######## Subroutinen mit Prototypes
-sub ReadConfig (@);
-sub ReadOpts ();
-sub ReadPaperConfig ();
-sub FindCommonDir ($);
-sub CreateLatex ();
-sub GetRealname ($);
-sub GetShortFrom($$);
-sub GetSeitenzahl ($);
-sub PrintNormal ($);
-sub PrintPaperSave ($);
-sub ModifyPS ($);
-sub CreateTemp ();
-sub Setze_String ();
-sub WriteFormated ($*$);
-sub DecodeHeader();
-sub GetDefaultPrinterCDE();
-sub ChangeForXface($);
-sub get_charset($);
-sub convert_date($);
+sub readConfig (@);
+sub readOpts ();
+sub getPaperConfig ();
+sub findCommonDir ($);
+sub createLatex ();
+sub getRealname ($);
+sub getShortFrom($$);
+sub getNumberOfPages ($);
+sub copyFile ($$);
+sub printDuplexNoCups ($$$$);
+sub printDuplexCups ($$$);
+sub modifyPS ($);
+sub createTemp ();
+sub setStrings ();
+sub writeFormated ($*$);
+sub decodeHeader();
+sub getDefaultPrinterCDE();
+sub changeForXface($);
+sub getCharset($);
+sub convertDate($);
 sub getISOlatinExtensions($);
 
 ######## 'private' Variablen für den Rest
 my %Config = (
-	PRINTER			=> 	'lp',
+	PRINTER			=> 	'',
 	PRINT_COMMAND	=>	'lpr -P$PRINTER',
 	PENGUIN			=>	'on',
 	DUPLEX			=>	'off',
@@ -117,14 +119,18 @@ my %Config = (
 	LATEXCODE5		=>	'',
 	FOREGROUND		=>	0,
 );
-my %Fontpackage = (
+my %fontpackages = (
 	'Latex'    		=>		'',
 	'Latex-bright'	=>		'cmbright',
-	'Times'			=>		'times',
+	'Times'			=>		'mathptmx,courier',
 	'Charter'		=>		'charter',
 	'Utopia'		=>		'utopia',
-	'Palatino'		=>		'palatino',
+	'Palatino'		=>		'mathpple,courier',
 	'Bookman'		=>		'bookman',
+	'CentSchool'	=>		'newcent',
+	'Chancery'		=>		'chancery,courier',
+	'Helvetica'		=>		'helvet-SANSSERIF-,courier',
+	'AvantGarde'	=>		'avant-SANSSERIF-,courier',
 );
 my %EuroSign = (
 	'Latex'			=>		'\EURtm{}',
@@ -134,30 +140,24 @@ my %EuroSign = (
 	'Utopia'		=>		'\EURtm{}',
 	'Palatino'		=>		'\EURtm{}',
 	'Bookman'		=>		'\EURtm{}',
+	'CentSchool'	=>		'\EURtm{}',
+	'Chancery'		=>		'\EURtm{}',
+	'Helvetica'		=>		'\EURhv{}',
+	'AvantGarde'	=>		'\EURhv{}',
 );
-my $EuroSign;								# zur jew. Schrift passendes ¤-Zeichen
 my $Lang = "en";							# Sprache
 my @print;									# ob Hilfe / Version angezeigt werden soll
 my %Temp;									# temporäre Dateien und Verzeichn.
 my %Header;									# Header ...
 my @PrintedMailheaders;						# Mailheader so wie er gedruckt wird (LaTeX-Code)
-my $PaperPS;								# Papierformat für dvips-Aufruf
-my $PaperTex;								# Papierformat für Latex-Aufruf
-my $Fontpackage = "";						# Fontpaket
-my $Umleitung;								# Umleitung
-my $child_pid;								# PID des Kinds
-my $File;									# Datei, in die gedruckt wird
+my $childPid;								# PID des Kinds
 my $DVIopts;								# Optionen für DVI - Aufruf
-my $Seitenzahl;								# Anzahl der Seiten am Ende
 my @Command;								# Kommando zum Drucken; für Druck in Datei
 my $Laenge = "0";							# zum Ermitteln der längsten Zeile
 my $MaxLaenge = "0";						# die länste Zeile
 my $QP = 0;									# quoted printable encoded body
 my @LastHeader = ("", 0);					# letzter gefundener Header
 											# (Header, Zeilen#)
-my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für 
-											# Pinguin + Übersetzungen!
-my $lib_dir = FindCommonDir('lib');
 my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
 my @headers;
 my $image_height = "20mm";					# Höhe des gedruckten Bildes
@@ -172,7 +172,7 @@ my $signature;								# Signatur (Inhalt)
 END {
 	# kein fork() => Hauptprozess löscht
 	# fork        => Kindprozess löscht, da er länger läuft
-	if (!$child_pid && $Temp{'dir'}) {
+	if (!$childPid && $Temp{'dir'}) {
 		unlink (<$Temp{"dir"}/*>);
 		rmdir ($Temp{'dir'});
 	}
@@ -182,22 +182,31 @@ END {
 #
 # Konfiguration einlesen
 
-$Config{'PRINTER'} = $ENV{'PRINTER'} if defined $ENV{'PRINTER'};
-$Config{'PRINTER'} = GetDefaultPrinterCDE if GetDefaultPrinterCDE;
+$Config{PRINTER} = $ENV{PRINTER} if defined $ENV{PRINTER};
 
-ReadPaperConfig ();
-ReadConfig ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc");
-
-
-@print = ReadOpts ();
-
-if ($Config{'PENGUIN'} eq "on") {
-	$Config{'PENGUIN'} = 
-			-r "$share_dir/penguin.eps"
-			? "$share_dir/penguin.eps" : "off";
+#
+# CDE default printer
+{
+	my $CDEprinter = getDefaultPrinterCDE();
+	if ($CDEprinter) {
+		$Config{PRINTER} = $CDEprinter;
+	}
 }
 
-ReadConfig ($Config{RCFILE});
+$Config{PAPER} = getPaperConfig ();
+readConfig ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc");
+
+
+@print = readOpts ();
+
+if ($Config{'PENGUIN'} eq "on") {
+	my $sharedir = findCommonDir("share");
+	$Config{'PENGUIN'} = (-r "$sharedir/penguin.eps")
+			? "$sharedir/penguin.eps" 
+			: "off";
+}
+
+readConfig ($Config{RCFILE});
 
 
 # USE FOR DEBUG ONLY
@@ -214,7 +223,7 @@ $Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
 $Lang = $Config{'LANG'} if defined $Config{'LANG'};
 POSIX::setlocale(&POSIX::LC_ALL, $Lang);
 
-Setze_String();
+setStrings();
 
 #
 # Zeichensatz (Auswahl von vorher überschreiben, falls in Konfigdatei
@@ -241,6 +250,34 @@ elsif ($print[2]) {
 	exit 1;
 }
 
+
+#
+# Some printer settings. We need this here because of the `no real mail' case
+#
+
+# Using cups
+if ($Config{PRINT_COMMAND} eq "CUPS") {
+	$Config{PRINT_COMMAND} = 'lpr $CUPS_OPTIONS';
+}
+
+#
+# are we using cups?
+my $useCups = ( ($Config{PRINT_COMMAND} =~ /\$CUPS_OPTIONS/) && 
+		($Config{PRINTER} !~ /^TO_FILE/) )
+	? 1
+	: 0;
+
+# Need to substitute in the printer name if the printer was
+# set. If not we use 'lp' as a fallback printer name
+if ($Config{PRINTER}) {
+	if ($useCups) {
+		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS/ -P $Config{PRINTER} \$CUPS_OPTIONS/;
+	}
+	# no else case because $CUPS_OPTIONS and $PRINTER could be both in PRINT_COMMAND
+	$Config{PRINT_COMMAND} =~ s/\$PRINTER/$Config{PRINTER}/g;
+} else {
+	$Config{PRINT_COMMAND} =~ s/\$PRINTER/lp/g;
+}
 
 #
 # Formatierung für Header
@@ -354,6 +391,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	#
 	# wenn die Header nicht ausgelesen werden können: so drucken!		
 	unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) { 
+
+		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS//g;
         
 		open (PRINTER, "| $Config{PRINT_COMMAND}") 
         || die "unable to print with $Config{PRINT_COMMAND}: $!";
@@ -371,11 +410,11 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 		$Content =~ s/=([A-Fa-f0-9]{2})/chr(hex($1))/eg;
 	}
 
-	CreateTemp();
+	createTemp();
 	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
 
 	if ($MaxLaenge > $Config{WRAPMARGIN}) {
-		WriteFormated($Content, \*CONTENT, $Config{WRAPMARGIN});
+		writeFormated($Content, \*CONTENT, $Config{WRAPMARGIN});
 	
 	} else {
 		print CONTENT $Content;
@@ -385,21 +424,18 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 	# Zeichensatz automatisch erkennen
 	if ($charset eq "auto") {
-		$charset = $mail_charset ? get_charset($mail_charset) : "latin1";
+		$charset = $mail_charset ? getCharset($mail_charset) : "latin1";
 	}
 
 }
 
 
 # Realname
-$Header{'ShortFrom'} = GetShortFrom ($Header{'From'}, $Header{'To'});
-
-#
-# Fontpaket
-$Fontpackage = $Fontpackage{$Config{'FONT'}} if exists $Fontpackage{$Config{'FONT'}};
+$Header{'ShortFrom'} = getShortFrom ($Header{'From'}, $Header{'To'});
 
 #
 # passendes Eurozeichen
+my $EuroSign = '\EURtm{}';
 if (exists $Config{FONT} and exists $EuroSign{$Config{FONT}}) {
 	$EuroSign = $EuroSign{$Config{FONT}};
 }
@@ -417,13 +453,13 @@ foreach $type (@headers) {
 			#
 			# Datum konvertieren
 			if ($Config{DATE} eq "local") {
-				$Header{Date} = convert_date($Header{Date});
+				$Header{Date} = convertDate($Header{Date});
 			}
 		}
 		else {
 			for ($Header{$type}) {
 				
-				DecodeHeader();  # for notes, see the Subroutine!!
+				decodeHeader();  # for notes, see the Subroutine!!
 				
 				my $count = 0;
 				#
@@ -437,7 +473,7 @@ foreach $type (@headers) {
 					my $spezheader;
 					my $newheader;
 					foreach $spezheader (split /(?<=>),/, $_) {
-						my $realname = GetRealname($spezheader) || "";
+						my $realname = getRealname($spezheader) || "";
 						my $format = $Config{ADDRESSFORMAT} || "%r <%a>\n";
 						my $address = ($spezheader =~ /(?<=<)(\S+\@\S+)(?=>)/)[0] || "";
 
@@ -519,224 +555,249 @@ foreach $type (@headers) {
 }
 
 
-#
-# XFACE-Support
+# # XFACE-Support
 
 if ($Config{'XFACE'} eq "on" && exists $Header{'X-Face'}) {
-	ChangeForXface($Header{'X-Face'});
+	changeForXface($Header{'X-Face'});
 }
 
 #
 # Papierformat
+my $paperformat = ($Config{PAPER} eq "letter")
+	? "letter"
+	: "a4";
 
-if ($Config{'PAPER'} eq "A4") {
-		
-	$PaperPS = "a4";
-	$PaperTex = "a4paper";
-	
-} elsif ($Config{'PAPER'} eq "letter") {
-
-	$PaperPS = "letter";
-	$PaperTex = "letterpaper";
-
-} 
 #
-# Umleitung ins Nirwana oder in Datei ?
-if ($Config{'DEBUG'} == 1) {
-	$Umleitung = $Temp{'log'};
-} else {
-	$Umleitung = "/dev/null";
-}
+# redirection of the error output
+my $errorRedirection = $Config{DEBUG}
+	? "$Temp{logf}" 
+	: "/dev/null";
 
 
 #
 # Sprachpaket (Auswahl von vorher überschreiben, falls in Konfigdatei
 # anders)
-
-$LPack = $Config{'LPack'} if defined $Config{'LPack'};
+$LPack = $Config{LPack} if defined $Config{LPack};
 
 #
 # LaTeX-Datei erzeugen
-CreateLatex();
+createLatex();
 
-chdir($Temp{'dir'});
-
-#
-# LaTeX zweimal laufen lassen, da sonst die Seitenzahl nicht ermittelt
-# werden kann
-foreach (qw(1 2)) {
-	system("latex -interaction=nonstopmode mail.tex >> $Umleitung 2>&1");
-}
-
-unless (-e $Temp{'dvi'}) {
-	
-	die "Latex didn't work.";
-	
-}
-
-
-##################################### DRUCKEN ################################
-
-
-$Config{PRINT_COMMAND} =~ s/\$PRINTER/$Config{PRINTER}/g;
-
-if ($Config{DEBUG}) {
-	$Config{PRINT_COMMAND} .= " 2>> $Temp{log}";
-}
-else {
-	$Config{PRINT_COMMAND} .= " 2>> /dev/null";
-}
+chdir($Temp{dir});
 
 #
-# Druck in Datei
+# running latex twice because of the "page ... of ..."
+system("latex -interaction=nonstopmode mail.tex >> $errorRedirection 2>&1");
+system("latex -interaction=nonstopmode mail.tex >> $errorRedirection 2>&1");
+
+#
+# no check of the exit code because we do this here
+unless (-e $Temp{dvi}) {
+	die "Latex didn't work. There's no DVI file.";
+}
+
+
+##################################### PRINTING ###############################
+
+
+#
+# generating the postscript file in every case
+system("dvips -t $paperformat -o $Temp{ps} $Temp{dvi} >> $errorRedirection 2>&1")
+	and die "Error while running dvips: $!";
+
+
+# now we find out the number of pages the document has
+my $numberOfPages = getNumberOfPages("$Temp{dir}/mail.aux");
+
+#
+# if the papersave mode is `optional' we need to determine whether
+# it makes sense to turn papersave on, i.e. if there's more than
+# one page to print
+if ($Config{PAPERSAVE} eq "optional") {
+	$Config{PAPERSAVE} = ($numberOfPages > 1)
+		? "on"
+		: "off";
+}
+
+
+#
+# setting the paperformat for Cups
+if ($useCups) {
+	$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS/ -o media=\U$paperformat\E \$CUPS_OPTIONS/;
+}
+
+#
+# papersave mode
+if ($Config{PAPERSAVE} eq "on") {
+	if ($useCups) {
+		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS/ -o number-up=2 \$CUPS_OPTIONS/;
+	} else {
+		system("psnup -2 -q $Temp{ps} $Temp{psnew} >> $errorRedirection 2>&1") 
+			and die "Psnup failed: $!";
+		unlink($Temp{ps});
+		link($Temp{psnew}, $Temp{ps});
+	}
+}
+
+#
+# duplex printing with a `real' duplex printer
+if ($Config{DUPLEX} eq "printer") {
+	if ($Config{PAPERSAVE} eq "on") {
+		if ($useCups) {
+			$Config{PRINT_COMMAND} =~ 
+				s/\$CUPS_OPTIONS/ -o sides=two-sided-long-edge \$CUPS_OPTIONS/;
+		} else { # no cups
+			modifyPS("landscape");
+		}
+	} else { # no papersave
+		if ($useCups) {
+			$Config{PRINT_COMMAND} =~ 
+				s/\$CUPS_OPTIONS/ -o sides=two-sided-short-edge \$CUPS_OPTIONS/;
+		} else { # no cups
+			modifyPS("portrait");
+		}
+	}
+}
+
+#
+# simulated duplex printing
+if ($Config{DUPLEX} eq "on") {
+	if ($useCups) {
+		$Config{PRINT_COMMAND} =~ 
+				s/\$CUPS_OPTIONS/ -o page-set=oddeven \$CUPS_OPTIONS/;
+	} else {
+		system("psselect -q -o $Temp{ps} $Temp{ps1} >> $errorRedirection 2>&1")
+			and die "Psselect failed: $!";
+		system("psselect -q -e $Temp{ps} $Temp{ps2} >> $errorRedirection 2>&1")
+			and die "Psselect failed: $!";
+	}
+}
+			
+
+#
+# printing in a file
 if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
-	$File = $Config{'PRINTER'};
-	$File =~ s/(TO_FILE|file)://;
+	my $file1 = "$ENV{HOME}/muttprint.ps";
+	my $file2 = "$ENV{HOME}/muttprint2.ps";
+
+	$file1 = $Config{PRINTER};
+	$file1 =~ s/(TO_FILE|file)://;
 
 	# if not an absoute path
-	if ($File !~ /\//) {
-		$File = "$startworkingdir/$File";
+	if ($file1 !~ /\//) {
+		$file1 = "$startworkingdir/$file1";
 	}
 
-	$DVIopts = "-o - -t $PaperPS";
-	
-	$Config{'SPEED'} = 0;
-	$Config{'WAIT'} = 0;
-	
-	my $File2 = $File;
-	$File2 =~ s/\.(\w+)$/2.$1/;
+	# do we have two printfiles?
+	if ($Config{DUPLEX} eq "on") {
+		$file2 = $file1;
+		$file2 =~ s/\.(\w+)$/2.$1/;
 
-	if ($File eq $File2) {
-		$File2 .= "2";
+		# sure is sure
+		if ($file1 eq $file2) {
+			$file2 .= "2";
+		}
 	}
-	
-	$Command[0] = "> $File";
-	$Command[1] = "> $File2";
+
+	if ($Config{DUPLEX} eq "on") {
+		copyFile($Temp{ps1}, $file1);
+		copyFile($Temp{ps2}, $file2);
+	} else {
+		copyFile($Temp{ps}, $file1);
+	}
 	
 } elsif ($Config{'PRINTER'} =~ /^((TO_FILE|file):-?|-)$/i) {
 	
-	$Config{'DUPLEX'} = "off";
-	
-	$DVIopts = "-f -t $PaperPS";
-
-	$Command[0] = $Command[1] = "";
-
-
-} else {
-	
-	$DVIopts = "-f -t $PaperPS";
-		
-	$Command[0] = $Command[1] = "| $Config{PRINT_COMMAND}";
-	
-
-}
-
-#
-# bei optionalem Papiersparmodus:
-# ermitteln, ob sinnvoll und entsprechend setzen
-if ($Config{PAPERSAVE} eq "optional") {
-	if (GetSeitenzahl("$Temp{dir}/mail.aux") > 1) {
-		$Config{PAPERSAVE} = "on";
+	# Just write the postscript code to STDOUT
+	open (PS, "<$Temp{ps}") or die "Could not open $Temp{ps} for reading: $!";
+	while (<PS>) {
+		print $_;
 	}
-	else {
-		$Config{PAPERSAVE} = "off";
+	close PS or die "Could not close $Temp{ps}: $!";
+
+} else { # here's the code for normal printing
+	# remove CUPS_OPTIONS here
+	$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS//;
+
+	# correct the number of pages to the `real' number
+	if ($Config{PAPERSAVE} eq "on") {
+		$numberOfPages = POSIX::ceil($numberOfPages/2);
 	}
-}
-
-#
-# erster Fall: normaler Druck
-if (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "off")) {
-	PrintNormal($DVIopts);
-}
-#
-# zweiter Fall: nur Duplexdruck
-elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
 	
-	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") == 1) {
-		PrintNormal($DVIopts);
-	
-	} else {
+	if ( ($Config{DUPLEX} ne "on") || ($numberOfPages == 1) ) {
+		# we use the print command as pipe because it's more flexible
+		system("cat $Temp{ps} | $Config{PRINT_COMMAND} >> $errorRedirection 2>&1")
+			and die "Could not print with $Config{PRINT_COMMAND}: $!";
+	} else { # duplex is on
+		my $sleepTime = 0;
 
-		if (!defined($child_pid = fork())) {
-			die "kann fork nicht ausführen: $!";
-		} elsif ($child_pid) {
-			system ("dvips -A $DVIopts $Temp{'dvi'}  2>> $Umleitung $Command[0]");
+		# calculating the sleep time
+		$sleepTime = $Config{SPEED} * $numberOfPages + $Config{WAIT};
+
+		if ($useCups) {
+			printDuplexCups($Config{PRINT_COMMAND}, $Temp{ps}, $sleepTime);
 		} else {
-			sleep ($Config{'SPEED'} * $Seitenzahl / 2 + $Config{'WAIT'});
-			system ("dvips -B $DVIopts $Temp{'dvi'}  2>> $Umleitung $Command[1]");	
-			exit;
+			printDuplexNoCups($Config{PRINT_COMMAND}, $Temp{ps1}, $Temp{ps2}, $sleepTime);
 		}
 	}
 }
-
-#
-# dritter Fall: nur Papiersparmodus
-elsif (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "on")) {
-	PrintPaperSave($Command[0]);
-}
-#
-# vierter Fall: Papiersparmodus und Duplexdruck
-elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
-
-	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") <= 2) {
-		PrintPaperSave($Command[0]);
-
-	
-	} else {
-
-		# erst in PS-Datei drucken
-		system ("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung "
-			." | psnup -p$PaperPS -2 -q > $Temp{'ps'} 2>>$Umleitung");
-		
-		# dann auswählen
-		if (!defined($child_pid = fork())) {
-			die "kann fork nicht ausführen: $!";
-		} elsif ($child_pid) {
-			system ("psselect -q -o $Temp{'ps'} $Command[0] 2>>$Umleitung");
-		
-		} else {
-			sleep ($Config{'SPEED'} * $Seitenzahl / 4 + $Config{'WAIT'});
-			system ("psselect -q -e $Temp{'ps'} $Command[1] 2>>$Umleitung");	
-			exit;
-		}
-	}
-
-}
-#
-# fünfter Fall: echter (!) Duplexdruck
-elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "off")) {
-
-    my $old_command = $Command[0];
-    $Command[0] = "> $Temp{'ps'}";
-	PrintNormal("-t $PaperPS");
-    $Command[0] = $old_command;
-	
-	ModifyPS("portrait");
-	system "cat $Temp{'ps'} $Command[0]";
-
-}
-
-elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
-
-	PrintPaperSave("> $Temp{'ps'}");
-
-	ModifyPS("landscape");
-	system "cat $Temp{'ps'} $Command[0]";
-	
-}
-
-
 
 ################################### ENDE ####################################
 
 
-
 ##################### UNTERFUNKTIONEN ########################################
+
+sub printDuplexNoCups ($$$$) {
+
+	my $printCommand = shift;
+	my $firstFile = shift;
+	my $secondFile = shift;
+	my $timeBetween = shift;
+
+	if (!defined($childPid = fork())) {
+		die "kann fork nicht ausführen: $!";
+	} elsif ($childPid) {
+		system ("cat $firstFile | $printCommand >>$errorRedirection 2>&1")
+			and die "Error while running lpr: $!";
+	} else {
+		sleep ($timeBetween);
+		system ("cat $secondFile | $printCommand >>$errorRedirection 2>&1")
+			and die "Error while running lpr: $!";
+		exit;
+	}
+}
+
+##############################################################################
+
+sub printDuplexCups ($$$) {
+
+	my $printCommand = shift;
+	my $file = shift;
+	my $timeBetween = shift;
+
+	if (!defined($childPid = fork())) {
+		die "kann fork nicht ausführen: $!";
+	} elsif ($childPid) {
+		$printCommand =~ s/oddeven/odd/;
+		system ("cat $file | $printCommand >> $errorRedirection 2>&1")
+			and die "Error while running lpr: $!";
+	} else {
+		$printCommand =~ s/oddeven/even/;
+		sleep ($timeBetween);
+		print "$printCommand \n";
+		system ("cat $file | $printCommand >> $errorRedirection 2>&1")
+			and die "Error while running lpr: $!";
+		exit;
+	}
+}
+
+##############################################################################
+
 
 #
 # Liest die Konfigurationsdatei ein
 
-sub ReadConfig (@) {
+sub readConfig (@) {
 
 	my @rcfiles = @_;
 	my $rcfile;
@@ -761,8 +822,9 @@ sub ReadConfig (@) {
 	$Config{CHARSET} = $Config{charset} if defined $Config{charset};
 }
 
+##############################################################################
 
-sub ReadOpts () {
+sub readOpts () {
 
 	# wird für die Optionen benötigt (gehört zum Standardumfang von Perl 5)
 	use Getopt::Long; 
@@ -781,6 +843,7 @@ sub ReadOpts () {
 		'v|version'				=>	\$opt{version},
 
 		'p|printer=s' 			=>	\$Config{PRINTER},
+		'C|printcommand=s'		=>	\$Config{PRINT_COMMAND},
 		'i|penguin=s'			=>	\$Config{PENGUIN},
 		't|speed=i'				=>	\$Config{SPEED},
 		'w|wait=i'				=>	\$Config{WAIT},
@@ -869,68 +932,79 @@ sub ReadOpts () {
 
 }
 
-sub ReadPaperConfig () {
+##############################################################################
 
-	my $DebianPaper;
+sub getPaperConfig () {
+
+	my $DebianPaper = "A4";
+	my $paperFormat;
 	my $Papersize = "/etc/papersize";
 
 	return unless (-r $Papersize);
 
-	open (RCFILE, $Papersize);
+	open (RCFILE, $Papersize) or die "Could not open $Papersize: $!";
 	chomp($DebianPaper = <RCFILE>);
+	close RCFILE or die "Could not close $Papersize: $!";
 
 	foreach ($DebianPaper) {
-		/a4/i 		&& 	do { $Config{PAPER} = "A4"; 		last };
-		/letter/i	&&	do { $Config{PAPER} = "letter";		last };
+		/a4/i 		&& 	do { $DebianPaper = "A4";	 		last };
+		/letter/i	&&	do { $DebianPaper = "letter";		last };
 	}
 
+	return $DebianPaper;
 }
 
+##############################################################################
 
-sub CreateTemp () {
+sub createTemp () {
 	#
 	# temp directory / temp files
 
 	mkdir ("/tmp/muttprint-$$", 0700) || die "Unable to create temp-folder: $!";
-	$Temp{'dir'} = "/tmp/muttprint-$$";
-	$Temp{'content'} = "$Temp{dir}/content";
-	$Temp{'latex'} = "$Temp{dir}/mail.tex";
-	$Temp{'geoversion'} = "$Temp{dir}/geoversion.tex";
-	$Temp{'log'} = "/tmp/muttprint.log";
-	$Temp{'dvi'} = "$Temp{dir}/mail.dvi";
-	$Temp{'ps'} = "$Temp{dir}/mail.ps";
-	$Temp{'xf_raw'} = "$Temp{dir}/xface.raw";
-	$Temp{'xf_xbm'} = "$Temp{dir}/xface.xbm";
-	$Temp{'xf_eps'} = "$Temp{dir}/xface.eps";
+	$Temp{dir} = "/tmp/muttprint-$$";
+	$Temp{content} = "$Temp{dir}/content";
+	$Temp{latex} = "$Temp{dir}/mail.tex";
+	$Temp{logf} = "/tmp/muttprint.log";
+	$Temp{dvi} = "$Temp{dir}/mail.dvi";
+	$Temp{ps} = "$Temp{dir}/mail.ps";
+	$Temp{psnew} = "$Temp{dir}/mail-new.ps";
+	$Temp{ps1} = "$Temp{dir}/mail1.ps";
+	$Temp{ps2} = "$Temp{dir}/mail2.ps";
+	$Temp{xf_raw} = "$Temp{dir}/xface.raw";
+	$Temp{xf_xbm} = "$Temp{dir}/xface.xbm";
+	$Temp{xf_eps} = "$Temp{dir}/xface.eps";
 }
 
+##############################################################################
 
-sub FindCommonDir ($) {
+sub findCommonDir ($) {
 
 	my $sort = shift;
-	my $common_dir;
-	my ($prefix) = $0 =~ m#(.*)/bin/muttprint#;
+	my $prefix = "";
 	
-	foreach ($prefix, "/usr/", "/usr/local") {
+	$prefix = $0 =~ m#(.*)/bin/muttprint#;
 	
-		$common_dir = "$_/$sort/muttprint/";
-		return $common_dir if (-d $common_dir);
-	
+	foreach ($prefix, "/usr/", "/usr/local", $ENV{HOME}) {
+		my $common_dir = "$_/$sort/muttprint/";
+		if (-d $common_dir) {
+			return $common_dir;
+		}
 	}
-
 }
 
-sub ChangeForXface ($) {
+##############################################################################
+
+sub changeForXface ($) {
 
 	open (RAW, ">$Temp{'xf_raw'}") || die "Could not create XF-Raw file: $!";
 	print RAW @_;
 	close RAW;
 
 	system ("uncompface -X $Temp{xf_raw} $Temp{xf_xbm}") 
-		&& die "Could not convert XF-Raw into XF-XBM: Maybe 'uncompface' not installed: $!";
+		and die "Could not convert XF-Raw into XF-XBM: Maybe 'uncompface' not installed: $!";
 	
 	system ("convert $Temp{xf_xbm} $Temp{xf_eps}")
-		&& die "Could not convert XF-XBM into XF-EPS: Maybe 'convert' not installed: $!";
+		and die "Could not convert XF-XBM into XF-EPS: Maybe 'convert' not installed: $!";
 	
 	$Config{'PENGUIN'} = $Temp{xf_eps};
 
@@ -938,7 +1012,9 @@ sub ChangeForXface ($) {
 
 }
 
-sub get_charset ($) {
+##############################################################################
+
+sub getCharset ($) {
 	for (shift) {
 		/iso[_\-]8859[_\-]15/i	&& return "latin9";
 		/iso[_\-]8859[_\-]1/i 	&& return "latin1";
@@ -956,19 +1032,29 @@ sub get_charset ($) {
 		
 ##############################################################################
 
-sub CreateLatex () {
+sub createLatex () {
 
 	my $PengCode = "";						# Kommando für den Pinguin
 	my $PengTab;			 				# restl. Größe für Pinguin
 	my $BeforeHeader;
+	my $sansserif = '';
 	my $AfterHeader;
-	my $LatexPackages = "$Fontpackage,fancyhdr,lastpage";
+	my $fontpackage = '';
+	$fontpackage = $fontpackages{$Config{'FONT'}} if exists $fontpackages{$Config{'FONT'}};
 	my $headerrule_other = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $headerrule_first = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $footerrule = "";
 	local $charset = $charset;
 
 	my $isolatinextensions = getISOlatinExtensions($charset);
+
+	# Sans-Serif-Verhalten
+	if ($fontpackage =~ /-SANSSERIF-/) {
+		$fontpackage =~ s/-SANSSERIF-//;
+		$sansserif = '\renewcommand{\familydefault}{\sfdefault}';
+	}
+
+	my $LatexPackages = "$fontpackage,fancyhdr,lastpage";
 
 	# Richtiges Tab-Verhalten
 	foreach (qw/VERBATIMNORMAL VERBATIMSIG/) {
@@ -1088,9 +1174,6 @@ EOF
 		$numberReplacements++;
 	}
 
-	# old nor new geometry.sty?
-	my $compatString = GetGeometryVersion() > 2 ? "compat2" : "";
-
 	#
 	# Ränderberechnung
 
@@ -1101,19 +1184,19 @@ EOF
 
 #
 # hier wird die eigentliche LaTeX-Quelldatei erzeugt
-# statt Backslash [\] : \\ -> keine Maskierung nötig !
 
 
 print LATEX <<EOF;
-\\documentclass[$Config{FONTSIZE}]{article}
+\\documentclass[compat2,$Config{FONTSIZE}]{article}
 \\usepackage[T1]{fontenc}
 \\renewcommand{\\tt}{\\rm}
 \\usepackage[$LPack]{babel}
 \\usepackage[$charset]{inputenc}
 \\usepackage{$LatexPackages}
-\\usepackage[$compatString$PaperTex,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
+\\usepackage[${paperformat}paper,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
 	top=$Config{TOPMARGIN}mm,bottom=$Config{BOTTOMMARGIN}mm,headsep=5mm]{geometry}
 \\usepackage{fancyvrb,graphicx,marvosym,textcomp,array}
+$sansserif
 \\setlength{\\parindent}{0mm}
 $isolatinextensions
 \\pagestyle{fancy}
@@ -1288,7 +1371,7 @@ EOF
 
 ###################################################################################
 
-sub GetShortFrom ($$) {
+sub getShortFrom ($$) {
 	my $Header;
 	my $kind_of_Header;
 	my $Realname;
@@ -1303,7 +1386,7 @@ sub GetShortFrom ($$) {
 		return ""; 
 	}
 
-	$Realname = GetRealname($Header);
+	$Realname = getRealname($Header);
 	
 	if ($Realname) {
 		return "$kind_of_Header $Realname";
@@ -1317,7 +1400,7 @@ sub GetShortFrom ($$) {
 }
 	
 
-sub GetRealname ($) {
+sub getRealname ($) {
 	my $Header = shift;
 	
 	for ($Header) {
@@ -1333,37 +1416,23 @@ sub GetRealname ($) {
 
 ##############################################################################
 
-sub GetSeitenzahl ($) {
+sub getNumberOfPages ($) {
+	my $auxfile = shift;
+	my $numberOfPages = 0;
 
-	open (AUX, "$_[0]");
+	open (AUX, "$auxfile") or die "Could not open $auxfile: $!";
 	
 	while (<AUX>) {
-		($Seitenzahl) = /\\newlabel{LastPage}{{}{(\d+)}}/;
+		($numberOfPages) = /\\newlabel{LastPage}{{}{(\d+)}}/;
 	}
 	
-	close AUX;
+	close AUX or die "Could not close $auxfile: $!";
 	
-	return $Seitenzahl;
+	return $numberOfPages;
 }
 
 ##############################################################################
 
-sub PrintNormal ($) {
-	
-	system ("dvips $_[0] $Temp{dvi} 2>> $Umleitung $Command[0]")
-	&& die "Unable to print: $!";
-
-}
-
-##############################################################################
-
-sub PrintPaperSave ($) {
-
-	system("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung | psnup -p$PaperPS -2 -q "
-	  ."$_[0] 2>>$Umleitung") && die "Unable to print: $!";
-}
-
-##############################################################################
 
 #
 # Here we decode HEADER
@@ -1376,7 +1445,7 @@ sub PrintPaperSave ($) {
 # execute   muttprint -f /tmp/some_file.txt
 # [This decoding stuff was done for KNode ;)]
 
-sub DecodeHeader () {
+sub decodeHeader () {
 	
 	my $EncPart;
 	
@@ -1400,7 +1469,7 @@ sub DecodeHeader () {
 # This is some like 'fmt', but better for our needs. We do not use 'fmt',
 # because its -s Option is *not* available on all systems!
 
-sub WriteFormated ($*$) {
+sub writeFormated ($*$) {
 
 	local $_ = shift;
 	my $fh = shift;
@@ -1467,7 +1536,25 @@ sub WriteFormated ($*$) {
 
 ##############################################################################
 
-sub convert_date ($) {
+sub copyFile ($$) {
+	my $src = shift;
+	my $dst = shift;
+
+	open (SRC, "<$src") or die "Could not open $src for reading: $!";
+	open (DST, ">$dst") or die "Could not open $dst for writing: $!";
+
+	while (<SRC>) {
+		print DST $_;
+	}
+
+	close DST or die "Could not close $dst: $!";
+	close SRC or die "Could not close $src: $!";
+}
+
+
+##############################################################################
+
+sub convertDate ($) {
 	my $date = shift;
 
 	#
@@ -1486,7 +1573,7 @@ sub convert_date ($) {
 
 }
 
-sub ModifyPS ($) {
+sub modifyPS ($) {
 
 	my $Tumble;
 	my $Postscript;
@@ -1534,55 +1621,12 @@ EOF
 
 ##############################################################################
 
-sub GetGeometryVersion {
-	my $tempfile = "/tmp/muttprint-geometry-ver";
-	my $geometryVersion;
-	
-	# temporary file exists
-	if (-r $tempfile) {
-		open (GEO, "<$tempfile") or die "Could not open $tempfile: $!";
-		chomp($geometryVersion = <GEO>);
-		close GEO;
-	}
-	else {
-		my $versionYear = 0;
-		
-		open (LTXTEMP, ">$Temp{geoversion}")
-			or die "Could not create $Temp{geoversion}: $!";
-		print LTXTEMP '\documentclass{article} \listfiles \usepackage{geometry}',
-					  '\begin{document} \end{document}', "\n";
-		close LTXTEMP;
-
-		open (LTXOUTPUT, "latex $Temp{geoversion} 2>&1 |") or die
-			"Could not run LaTeX on $Temp{geoversion}: $!";
-		while (<LTXOUTPUT>) {
-			if (/geometry.sty\s+\d{2}/) {
-				($versionYear) = m#(\d{4})/\d{2}/\d{2}#;
-				last;
-			}
-		}
-		close LTXOUTPUT;
-
-		# Versionsjahr 'umrechnen'
-		$geometryVersion = $versionYear >= 2001 ? 3 : 2;
-
-		# in Tempdatei schreiben
-		open (GEO, ">$tempfile") or die "Could not open $tempfile for writing: $!";
-		print GEO $geometryVersion, "\n";
-		close GEO;
-	}
-		
-	return $geometryVersion;
-}
-
-##############################################################################
-
-sub GetDefaultPrinterCDE () {
+sub getDefaultPrinterCDE () {
 
 	my $configfile = "$ENV{HOME}/.printers";
 	my $printer;
 	
-	return unless (-r $configfile);
+	return "" unless (-r $configfile);
 
 	open (CDEPRINTER, $configfile) 
 		or die "Could not open CDE printer configuration file: $!";
@@ -1599,19 +1643,21 @@ sub GetDefaultPrinterCDE () {
 ##############################################################################
 
 
-sub Setze_String () {
+sub setStrings () {
 
-for ($Lang) {
+	my $translationDir = findCommonDir('share') . "/translations";
 
-	/^(\w{2})/i	
+	for ($Lang) {
+
+		/^(\w{2})/i	
 	
-		and do { 
-		
-			if (-r "$lib_dir/translation-$1.pl") {
-				do("$lib_dir/translation-$1.pl"); 
-				last;
-			}
-		};
+			and do { 
+			
+				if (-r "$translationDir/translation-$1.pl") {
+					do("$translationDir/translation-$1.pl"); 
+					last;
+				}
+			};
 				
 
 $String{"Benutzung"} = <<EOF;
@@ -1636,7 +1682,13 @@ PLEASE NOTICE: These options override the corresponding settings in
        Uses a specific printer.
        "-" stands for STDOUT
        For printing to a file use TO_FILE:/path/to/file
-	   
+
+-C [print command], --printcommand [print command]
+       Sets the printing command. "\$PRINTER" is substituted by the
+       printer name.
+       CUPS support is turned on by "CUPS" (or set it to any command
+       which containes the string "\$CUPS_OPTIONS").
+
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
 
@@ -1677,7 +1729,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -c [charset], --charset [charset]
        Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
-       auto (read the manual before you use "auto").
+       utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
        original: prints the date as it is in the header
