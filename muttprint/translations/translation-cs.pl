@@ -1,88 +1,88 @@
-# czech translations by: Dominik Formanek
+# czech translations by: Dominik Formánek <dominik@formanek.cz>
 
 
 
 $String{"Benutzung"} = <<EOF;
 
-Usage:   muttprint [option]... [-f file]
+Pou¾ití:   muttprint [parametry]... [-f soubor]
  
-Options:
+Parametry:
 
-PLEASE NOTICE: This options override the corresponding settings in 
-~/.muttprintrc and /etc/Muttprintrc.
+UPOZORNÌNÍ: Tyto parametry pøenastavují odpovídající nastavení 
+v ~/.muttprintrc a /etc/Muttprintrc.
 
 -h, --help
-       This help.
+       Tato pomoc.
 
 -v, --version
-       Prints the current version of Muttprint.
+       Tiskne souèasnou verzi programu Muttprint.
 
--f [file], --file [file]
-       Reads from file instad of STDIN.
+-f [soubor], --file [soubor]
+       Ète ze souboru místo ze STDIN.
 
--p [printername], --printer [printername]
-       Uses a specific printer.
-       "-" stands for STDOUT
-       For printing in a file use TO_FILE:/path/to/file
+-p [jméno_tiskárny], --printer [jméno_tiskárny]
+       U¾ívá specifickou tiskárnu.
+       "-" znamená výstup do STDOUT
+       Pro tisk do souboru pou¾ij TO_FILE:/cesta/k/souboru
 	   
--i [file], --penguin [file]
-       Sets the picture printed on the first page.
+-i [soubor], --penguin [soubor]
+       Nastavuje obrázek ti¹tìný na první stranì.
 
--t [number], --speed [number]
-       Time in seconds which the printer needs for one page.
+-t [èíslo], --speed [èíslo]
+       Èas v sekundách, který potøebuje tiskárna na vyti¹tìní jedné stránky.
 		   
--w [number], --wait [number]
-       Time between printing odd and even pages for duplex printing.
+-w [èíslo], --wait [èíslo]
+       Èas mezi tiskem sudých a lichých stran pøi duplexním tisku.
 
--F [fontname], --font [fontname]
-       Font family for printing. Possible values are:
-       Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
+-F [jméno_fontu], --font [jméno_fontu]
+       Jméno fontu pro tisk. Mo¾né hodnoty jsou:
+       Latex, Latex-bright, Times, Utopia, Palatino, Charter a Bookman
 	   
 -H, --headrule | -noH, --noheadrule
-       Turn printing of the headrule on or off.
+       Zapíná nebo vypíná tisk oddìlovací èáry v hlavièce stránky.
 	   
 -b, --footrule | -nob, --nofootrule
-       Turn printing of the footrule on or off.
+       Zapíná nebo vypíná tisk oddìlovací èáry v patièce stránky.
 	   
--S Style | --frontstyle Style
-       Choose a style for the headers on the first page:
-	   plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+-S Styl | --frontstyle Styl
+       Vybírá styl hlavièky na první stranì:
+	   plain, boder (implicitní), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
 	   grey, greybox. 
-	   Read the manual for a detailled description of this values.
+	   Detailní popis tìchto hodnot si pøeète¹ v manuálu.
 
--P [paperformat], --paper [paperformat]
-       Paper format: "letter" (US) or "A4" (Europe).
+-P [formát_papíru], --paper [formát_papíru]
+       Formát papíru: "letter" (US) nebo "A4" (Evropa).
 
--l [language], --lang [language]
-       Language for messages and printing.
+-l [jazyk], --lang [jazyk]
+       Jazyk pro zprávy a tisk.
 
 -D, --debug | -noD, --nodebug
-       Writes useful information to a logfile /tmp/muttprint.log.
+       Tiskne u¾iteèné informace do logovacího souboru /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
-       Enables or disables duplex printing.
+       Povoluje nebo zakazuje duplexní tisk.
 	   
 -2 | -1
-       Prints two pages on one sheet. Corresponds to "papersave mode".
+       Tiskne dvì strany na jeden list. Koresponduje s "papersave mode".
 
 -s, --rem_sig | -nos, --norem_sig
-       Removes the signature (separated by "-- ") in the printing.
+       Odstraní podpis (oddìlený "-- ") z tisku.
 
 -q, --rem_quote | -noq, --norem_quote
-       Remove the quoted paragraph from the printing.
+       Odstraní kvótované odstavce z tisku.
 	   
 EOF
 
-$String{"Lizenz"} = "This program is distributed unter the terms of the
-GPL und can be freely copied.
+$String{"Lizenz"} = "Tento program je distribuován pod podmínkami GPL
+ a mù¾e být volnì kopírován.
 ";
 
-$String{"Bugs"} = "Please report bugs on <Bernhard.Walle\@gmx.de>.\n";
+$String{"Bugs"} = "Chyby ohlaste prosím na <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "The specified file was not found.\n";
+$String{"FileNotFound"} = "Specifikovaný soubor nebyl nalezen.\n";
 
 @String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("Od:", "Pro:", "Pøedmì:", "Kopie:", "Datum:", "strana", "z", "Newsgroups:");
+("Od:", "Pro:", "Pøedmìt:", "Kopie:", "Datum:", "Strana", "z", "Newsgroups:");
 
-$LPack = "eczech";
+$LPack = "czech";
 $charset = "latin2";

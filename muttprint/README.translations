@@ -42,7 +42,7 @@ es      Spanish         Manpage + translation file      Marcelo Ramos
 
 fr      French          translation file                Vincent Bernat
 
-cs      Czech           headers + $charset/$LPack only  Dominik Formanek
+cs      Czech           headers + $charset/$LPack only  Dominik Formánek
 ---------------------------------------------------------------------------
 
 
@@ -108,6 +108,6 @@ Footnotes:
         * Roberto Vallone <jval@libero.it>
         * Marcello Ramos <mramos@montevideo.com.uy>
         * Vincent Bernat <bernat@free.fr>
-        * Dominik Formanek <dominik@formanek.cz>
+        * Dominik Formánek <dominik@formanek.cz>
 
 
