@@ -120,5 +120,5 @@ DATE="local"
 #
 # Date format string (only if DATE=local)
 # See strftime(3) for details
-DATE_FORMAT="%A, %d. %B %Y %H:%M:%S"
+DATE_FORMAT="%A, %d %B %Y %H:%M:%S"
 
