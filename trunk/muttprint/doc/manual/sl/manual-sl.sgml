@@ -1,0 +1,1257 @@
+<!DOCTYPE ARTICLE PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article lang="sl" id="index">
+	
+<articleinfo>
+	<title>Muttprint -- Navodila za uporabo</title>
+	
+	<author>
+		<firstname>Bernhard</firstname>
+		<surname>Walle</surname>
+		<affiliation>
+			<address><email>Bernhard.Walle@gmx.de</email></address>
+		</affiliation>
+	</author>
+
+	<pubdate>2003-03-01</pubdate>
+	
+	<releaseinfo>Verzija 0.65</releaseinfo>   
+	
+		
+	
+	<copyright>
+		<year>2000-2002</year>
+		<holder role="mailto:Bernhard.Walle@gmx.de">Bernhard Walle</holder>
+	</copyright>
+
+</articleinfo>
+
+
+
+<sect1 id="about">
+	<title>O Muttprint-u</title>
+
+	<para>Tiskanje po&scaron;te iz programa Mutt (ter mnogo ostalie email klientov) se
+		opravi kot ``plain text''. Navadno je to dovolj, vendar po mojem mnenju
+		ni tako lepo kot formatirano tiskanje, n.&nbsp;p. iz 
+		<application>Netscape-a</application>.</para>
+
+	<para>Drugo dejstvo, ki me moti: Tiskanje vsebuje vse prikazane dele informacij
+		glave. Sam sem ponastavil Mutt tako, da prikazuje stvari kot
+		<quote>X-Mailer</quote>, toda no&ccaron;em, da to tudi natisne. 
+		<application>XFMail</application> je &scaron;e huj&scaron;i: Natisne vse informacije
+		v glavi, tako, da je tiskanje po mojem neuporabno.</para>
+
+	<para>Nekaj &ccaron;asa sem imel idejo, da sam napi&scaron;em skripto, ki kreira lepo
+		tiskanje. In tu je rezultat. Menim, da izgleda bolje kot navaden
+		ASCII tekst ter je primerljivo z tiskanjem bolje znanih po&scaron;tnih
+odjemalcev
+		pod Mirkosoft Windos..</para>
+
+		
+</sect1>
+<sect1 id="installation">
+	<title>Namestitev</title>
+	
+	<sect2 id="sysreq">
+		<title>Zahteve za namestitev</title>
+	
+		<para>Muttprint je bil realiziran v programskem jeziku
+			<emphasis>Perl</emphasis>, ki zahteva delujo&ccaron; Perl interpreter
+			verzije 5. Ta naj bi bil &zcaron;e privzeto na vsakem Linux sistemu.</para>
+
+		<para>Prepri&ccaron;ajte se, da imate na sistemu name&scaron;&ccaron;en LaTeX (priporo&ccaron;am teTeX
+			verzijo vi&scaron;jo od 1.0) ter programe <emphasis>psselect</emphasis> 
+			ter <emphasis>psnup</emphasis> iz paketa <emphasis>PS-Utils</emphasis>
+			Zadnja dva sta potrebna le &ccaron;e ho&ccaron;ete uporabljati "paper
+save mode"
+			ter/ali obojestransko (duplex) tiskanje; ter nista
+obvezna
+			&ccaron;e imete CUPS ter ste nastavili Muttprint da ga
+uporablja
+			, glej <xref linkend="printcommand">.</para>
+
+		<para>Vse zahtevani LaTeX paketi so vklju&ccaron;eni v teTeX-u. &Ccaron;e &zcaron;elite uporabljati
+			drugo LaTeX distribucijo preberite datoteko <filename>README.latex</filename>, ki
+			vsebuje informacije o vseh zahtevanih paketih. Namestiti morate vse 
+			pakete, ki niso prisotni na va&scaron;em sistemu.</para>
+
+		<para>Za raz&ccaron;lenitev datuma, Muttprint uporablja Perl-ov modul
+			<application>Date::Parse</application><footnote>
+			<para>
+				<ulink url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
+			</para>
+		</footnote>
+		<footnote><para>Detajle o namestitvi boste na&scaron;li v datoteki sami.
+			Navadno bi moralo delti z uporabo naslednje procedure:</para>
+			
+			<para>
+				<prompt>$ </prompt><userInput>tar xvfz Time-Date-1.10.tar.gz</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make test</userinput> 
+			</para>
+			<para>
+				<prompt># </prompt><userinput>make install</userinput>
+			</para>
+			
+			</footnote>. &Ccaron;e modul ni name&scaron;&ccaron;en, bo Muttprint delal brez problemov 
+			razen funkcije za pretvorbo &ccaron;asovnega pasu ter izpisa datuma
+			v lokalnem jeziku, glej <xref linkend="date">.</para>
+
+		<para>Da bi imeli podporo nabora znakov UTF-8 mora LaTeX podpirati ukaze
+			za spreminjane podpore v UTF-8. To je navadno ni prednastavljeno!
+			Primerne dodatke boste na&scaron;li na CTAN. Le downloadajte
+datoteko 
+			<ulink url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
+			ter jo namestite kot je opisano v datoteki <filename>INSTALL</filename> v paketu
+			samem. UTF-8 podporo potrebujete samo, &ccaron;e va&scaron; po&scaron;tni odjemalec
+			po&scaron;ilja Muttprint-u podatke zapisane v UTF-8.</para>
+		
+
+	</sect2>
+	<sect2>
+		<title>Namestitev datotek na va&scaron;em ra&ccaron;unalniku</title>
+		
+		<sect3>
+			<title>Ro&ccaron;na namestitev</title>
+			
+			<para>Najprej morate razpakirati arhiv. To lahko naredite z ukazom
+				</para>
+			
+			<para>
+				<prompt>$  </prompt>
+				<UserInput>tar xvfz 
+					muttprint-<replaceable>Verzija</replaceable>.tar.gz</UserInput>
+			</para>
+			
+			<para>Premaknite se v direktorij, ki je bil ustvarjen:</para>
+			
+			<para>
+				<prompt>$  </prompt>
+				<UserInput>cd muttprint-<Replaceable>Verzija</Replaceable></UserInput>
+			</para>
+			
+			<para>Tam najdete prilo&zcaron;en primeren
+				<Filename>Makefile</Filename>  za Muttprint. Za
+prilagoditev
+				lokacij na va&scaron;em sistemu, uredite Makefile z va&scaron; priljubljen
+				urejevalnik teksta.</para>
+
+			<para>Za instalacijo programa boste potrebovali dovoljenja Root-a, do 
+				katerih lahko pridete z uporabo ukaza <command>su</command>,
+				ter nadaljujete namestitev z</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>make install</UserInput>
+			</para>
+			
+			<para>Skripta bi sedaj morala delati.</para>
+
+			<para>&Ccaron;e bi kasneje radi odstranili Muttprint ter imate
+&scaron;e vse datoteke
+				na isti lokaciji enostavno izvr&scaron;ite ukaz</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>make uninstall</UserInput>
+			</para>
+						
+			<para>kot root.</para>
+			
+		</sect3>
+		
+		<sect3>
+			<title>Namestitev paketov</title>
+			
+			<para>&Ccaron;e va&scaron;a distribucija uporablja sistem za vzdr&zcaron;evanje paketov 
+				kot je RPM ali DPKG, je verjetno dobra ideja uporabiti 
+				pripadajo&ccaron;i paket. Najve&ccaron;ja prednost tega je enostavna odstranitev.</para>
+
+			<para>Ve&ccaron;ina Linux distribucij uporablja RPM sistem
+urejanja
+				paketov. Najla&zcaron;ji na&ccaron;in in&scaron;talacije paketa je z ukazom</para>
+
+			<para>
+				<prompt>#  </prompt>
+				<userinput>rpm -Uvh 
+muttprint-<replaceable>Verzija</replaceable>-<replaceable>Release</replaceable>.noarch.rpm
+				</userinput>
+			</para>
+			
+			<para>Vsi RPM paketi so podpisani z mojim GnuPG-Key (ID DDAF6454).
+				Ve&ccaron; informacij o RPM ter verifikaciji podpisov dobite tule: 
+				 <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
+				RPM</ULink>.</para>
+
+			<para>Pakete za Debian ustvarja Chanop Silpa-Anan 
+				<email>chanop@debian.org</email> ter so navadno dosegljivi 
+				nekaj dni po novi izdaji Muttprint-a. Te lahko namestite
+				z</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>dpkg -i muttprint_[verzija]-[release]_noarch.deb</UserInput>
+			</para>
+			
+			<para>Oglejte si <ulink
+				url="http://www.debian.org/devel/">Debian  <quote>Developer's
+				Corner</quote></ulink> za ve&ccaron; informacij o Debianovih
+				paketih.</para>
+
+			<para>Druga mo&zcaron;nost namestitve Debianovih paketov je
+				<command>apt-get</command>.</para>
+			
+		</sect3>
+		
+	</sect2>
+		
+	<sect2>
+	
+		<title>Integracija Muttprint-a v po&scaron;tne ter novi&ccaron;arske kliente</title>
+
+		<para>Muttprint je bil prvotno razvit za uporabo skupaj le z programom Mutt.
+			Toda brez problema lahko se ga integrira tudi v slede&ccaron;e po&scaron;tne programe. 
+			Dobil sem opise uporabnikov. Muttprint bo tudi v prihodnje
+			deloval neodvisno od Mutt-a.</para>
+		
+		
+		<sect3 id="muttconfig">
+			<title>Mutt</title>
+		
+			<para>Spremeniti morate naslednjo vrstico v datoteki
+				<Filename>$HOME/.muttrc</Filename> ali globalni datoteki
+				<FileName>##SYSCONFDIR##/Muttrc</FileName>:</para>
+
+			<ProgramListing>set print_command="muttprint"</ProgramListing>
+
+			<para>Prepri&ccaron;ati se morate tudi, da ignorira nepotrebne
+dele glave
+				ko se email natisne. Najla&zcaron;ji na&ccaron;in za to je,
+da napi&scaron;ete makro
+				 (v va&scaron;em <filename>~/.muttrc</filename>)
+				ki se prepri&ccaron;a, da so deli glave izpu&scaron;&ccaron;eni. Samo najbolj
+				pomembni deli glave so dejansko natisnjeni (glej
+				<xref linkend="printedheaders">).</para>
+
+			<para>Tule je makro:</para>
+
+			<programlisting>
+# Ignoriraj celo glavo
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt; &lt;exit&gt;"
+macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+			</programlisting>
+
+			<para>Na za&ccaron;etku makro zamenja stanje, kjer so vsi deli glave vidni
+				, nato se po&scaron;ta natisne in na kncu se glava nastavi nazaj. Nujno
+				je da se izklju&ccaron;i potrjevanje tiskanja, tako da makro dela v 
+				redu:</para>
+
+			<programlisting>
+# No confirmation before printing
+set print="yes"
+			</programlisting>
+
+			<para>Da natisnete ve&ccaron; kot en mail normalno v enem koraku, 
+				dodajte naslednji vnos:</para>
+
+			<ProgramListing>
+# Print every mail extra
+set print_split
+			</ProgramListing>
+
+			<para>Ve&ccaron; informacij o Mutt-i boste na&scaron;li v njegovi dokumentaciji
+				(<Filename>##DOCDIR##/mutt/manual.txt(.gz)</Filename>).</para>
+
+		</sect3>
+
+		<sect3>
+				<title>Slrn</title>
+
+				<para>Enostavno dodajte naslednje vrstice v va&scaron;o konfiguracijsko datoteko
+					<filename>~/.slrnrc</filename>:</para>
+
+	      <programlisting>
+% Use Muttprint for printing
+set printer_name "muttprint"
+	      </programlisting>
+
+				<para>&Ccaron;e bi moral muttprint natisniti ve&ccaron; delov glave kot jih je 
+					prikazanih na zaslonu boste morali
+namesto 
+					normalnega ukaza za tiskanje <keycap>y</keycap> uporabiti kombinacijo
+					<keycap>Esc</keycap>, <keycap>1</keycap>, <keycap>y</keycap>
+					(eno za drugim). To je pomembno za tiskanje X-Face glave
+					glej <xref linkend="xface">.</para>
+
+		</sect3>
+		<sect3>
+			<title>XFMail</title>
+
+			<para>V dialogu <GUImenu>Misc</GUImenu>, <GUImenuItem>Config
+				Misc</GUImenuItem> morate dodati vnost v <GUIlabel>Print
+				Command</GUIlabel>:
+				<literal>##BINDIR##/muttprint -f $f</literal>.</para>
+
+			
+			<Note>				
+				<para>Pri nekaterih verzijah <Application>XFMail</Application>,
+					se pojavijo problemi ker XFMail ne doda glave
+					pri tiskanju. To ni problem Muttprint-a.
+					Da re&scaron;ite ta problem lahko poi&scaron;&ccaron;ete novej&scaron;o verzijo
+					XFMail-a, ki nima te napake.</para>
+					
+				<para>Glej tudi <ulink
+					url="http://slappy.org/listarchives/xfmail/2001-June/002398.html">
+					XFMail arhiv liste razvijalcev programa</ulink> za re&scaron;itev.</para>
+			</Note> 
+		</sect3>
+
+		<sect3>
+			<title>Pine</title>
+			
+			<para>Vnesite ukaz za tiskanje <literal>muttprint</literal> v 
+				<GUIlabel>Setup</GUIlabel>, <GUIlabel>Printer</GUIlabel>,
+				<GUIlabel>Personally select print command</GUIlabel>. Save the
+				changes.</para>				
+		</sect3>
+		
+		<sect3>
+			<title>Sylpheed</title>
+			
+			<para>Za uporabo Muttprint-a kot stalni program za tiskanje pokli&ccaron;ite
+				<GUImenu>Configuration</GUImenu>, <GUImenuItem>Common
+				preferences</GUImenuItem>, <GUIlabel>Other</GUIlabel>,
+				<GUIlabel>Printing</GUIlabel> ter vnos <literal>muttprint -f
+				%s</literal>.</para>
+		</sect3>
+		
+		<sect3>
+			<title>Gnus</title>
+
+
+			<para>Muttprint lahko integrirate tudi v
+				<application>Gnus</application>. Dobil sem Lisp kodo od
+				uporabnika ki realizira integracijo. Prosim, da mi o tem ne postavljate
+				vpra&scaron;anj, ker Lisp-a ne pounam in sam ne uporabljam 
+				<application>(X)Emacs</application>.</para>
+				
+			<para>Kodo najdete v <filename>README.Gnus</filename> ter bi
+				vas rad usmeril za navodila v tej datoteki. &Ccaron;e uporabljate
+				za namestitev pakete boste datoteko na&scaron;li v direktoriju
+				<filename>##DOCDIR##/muttprint/</filename>
+				.</para>
+		</sect3>
+
+		<sect3>
+			<title>Exmh</title>
+			
+			<para>Najprej izberite <GUIlabel>Preferences</GUIlabel>, nato
+				<GUIlabel>Text Print Command</GUIlabel> ter
+nastavite <GUIlabel>Text
+				Print Command</GUIlabel> na <literal>muttprint -f
+				$file</literal>.</para>
+
+		</sect3>
+		
+		<sect3>
+			<title>Ostali po&scaron;tni klienti</title>
+			
+			<para>Muttprint deluje teoreti&ccaron;no z vsemi programi za po&scaron;to, &ccaron;e le-ti lahko
+				ustrezajo naslednjim pogojem:</para>
+				
+			<ItemizedList spacing="compact">
+				<listitem>	
+					<Para>Izhodni tekst mora biti navaden ASCII tekst brez kakr&scaron;negakoli
+					  formatiranja.</Para>
+				</listitem>
+				<listitem>
+					<Para>Mora vam omogo&ccaron;ati prosto izbio ukaza za tiskanje.</Para>
+				</listitem>
+			</ItemizedList>
+	
+			<para>Tudi programi za branje novic so podprti, ker polje
+				<ComputerOutput>To</ComputerOutput> v glavi ni obvezno
+				ter je
+				<ComputerOutput>Newsgroups</ComputerOutput> polje glave tudi
+				uporabljeno.</para>
+			
+			<para>&Ccaron;e uporabljate Muttprint z drugimi programi kot so omenjeni zgoraj, prosim
+				da mi po&scaron;ljete kratko sporo&ccaron;ilo, kjer opi&scaron;ete kako ste nastavili
+				program. Tako bom tu lahko dodal opise.</para>
+
+		</sect3>
+	</sect2>
+</sect1>
+
+<sect1 id="config">
+	<title>Nastavitve</title>
+		
+	<sect2>
+		<title>Konfiguracijska datoteka</title>
+		
+		<para>Nekatere stvari se da nastaviti v Muttprint-u. To se lahko za stalno
+			naredi v konfiguracijski datoteki <filename>$HOME/.muttprintrc</filename>
+			(samo za tega uporabnika) ali <filename>##SYSCONFDIR##/Muttprintrc</filename>
+			(globalno za vse uporabnike). Uporabni&scaron;ke nastavitve
+prevladajo nad globalnimi.</para>
+			
+		<para>Lahko tudi nastavite dodatno konfiguracijsko datoteko z paramtrom
+			<option>-r <replaceable>filename</replaceable></option>
+. Ta datoteka
+			je prebrana na koncu in prepi&scaron;e opcije napisena v ukazni vrstici. Ta dodatna
+			konfiguracijska datoteka je uporabna &ccaron;e imate ve&ccaron; konfiguracij ter 
+			jih lahko nastavite skupaj z <emphasis>Hooks</emphasis> v
+			Mutt-u.</para>
+			
+		<para>Konfiguracijska datoteka je oblikovana na tak na&ccaron;in, da so vrednosti
+			dodeljene razli&ccaron;nim variablam -- to se razlikuje od
+			<filename>.muttrc</filename>. Ime variable je postavljeno najprej
+			ter je ob&ccaron;utljivo na male/velike &ccaron;rke. Nato sleid 
+			ena&ccaron;aj (<literal>=</literal>) brez presledkov.
+			Na koncu je vrednost. Narekovaji (<literal>'</literal> ali
+			<literal>"</literal>) so neobvezni.</para>
+		
+		<para>Primer konfiguracijske datoteke je prilo&zcaron;en 
+			Muttprint-u  (<filename>sample-muttprintrc</filename>). &Ccaron;e ste
+			namestili RPM ali Debian paket, jo boste na&scaron;li v
+			<filename>##DOCDIR##/muttprint/</filename>.</para>
+			
+		<para>Primer pravilne dodelitve:</para>
+		
+		<ProgramListing>VARIABLE=value</ProgramListing>
+		
+		<para>Navadno skripta deluje brez vseh sprememb. Toda priporo&ccaron;eno
+			je ,da se informirate o mo&zcaron;nostih, ki jih imate.</para>
+
+		
+		<sect3>
+			<title>Tiskalnik</title>
+			
+			<para>&Ccaron;e naj Muttprint nebi tiskal na privzeti tiskalnik, potem spremenite 
+				to nastavitev <literal>PRINTER</literal> in jo nastavite na pravilno vrednost.</para>
+				
+			<para>Da bi tiskali v datoteko lahko uporabite naslednjo sintakso:
+				ime (ter lokacijo) datoteke lahko prosto izberete:</para>
+
+			<ProgramListing>PRINTER="TO_FILE:/foo/bar/test.ps"</ProgramListing>
+			
+			<para>&Ccaron;e ima tiskalnik omogo&ccaron;eno obojestransko tiskanje, Muttprint ustvari drugo datoteko
+				z predpon <filename>2</filename>, npr.
+				<filename>test2.ps</filename>.</para>
+
+			<para>&Ccaron;e variabla ni nastavljena, Muttprint oceni spremenljivko
+				okolja <envar>PRINTER</envar> ter uporabi njeno vrednost
+				da dobi pravi tiskalnik. Navadno je ta nastavljena na privzeti tiskalnik.
+				&Ccaron;e uporabljate CDE (kar je v navadi pri komercialnih Unix sistemih)
+				je njegova konfiguracijska datoteka prebrana za
+privzeti tiskalnik.</para>
+				
+			<para>Od verzije 0.65 dalje Muttprint nudi direktno podporo 
+			 	novega sistema za tiskanje CUPS. Vklopi se ga tako, da se
+				nastavi <literal>PRINT_COMMAND</literal> na <literal>CUPS</literal>.
+				Alternativno lahko nastavite arbitrarni ukaz ki
+vsebuje 
+				niz <literal>$CUPS_OPTIONS</literal>
+				kateri je zamenjan z CUPS mo&zcaron;nostmi tiskanja.</para>
+
+			<tip>
+				<para>Lahko uporabite nastavitve <literal>gv -</literal> da dobite predogled tiskanja.
+					 To je uporabno, &ccaron;e &zcaron;elite testirati razne nastavitve.
+				</para>
+			</tip>
+
+				
+		</sect3>
+		<sect3 id="printcommand">
+			<title>Ukaz za tiskanje</title>
+
+			<para>Muttprint za privzeto uporablja <application>lpr</application> za tiskanje. 
+				&Ccaron;e bi radi uporabljali kak drug ukaz za tiskanje,
+				nastavite <literal>PRINT_COMMAND</literal> na
+&zcaron;eljeni ukaz.
+				 Niz <literal>$PRINTER</literal> je zamenjan z &zcaron;eljnim
+				tiskalnikom. Provzeto je nastavljen na <literal>lpr -P$PRINTER</literal>.
+			</para>
+
+			<tip>
+				<para>Uporabite lahko tudi nastavitev <literal>gv -</literal> za
+					predogled tiskanja. To je uporabno &ccaron;e
+&zcaron;lite testirati razne nastavitve.
+				</para>
+			</tip>
+		
+		</sect3>
+		<sect3>
+			<title>Pingvin</title>
+			
+			<para>Kot privzeto nastavitev se majhen pingvin natisne v desni zgornji
+				kot strani. &Ccaron;e bi tam &zcaron;eleli imeti drugo sliko ali &ccaron;e je
+				pingvin na drugi lokaciji kot to predvideva Muttprint lahko
+				to nastavite z varablo <literal>PENGUIN</literal> 
+				Slika mora biti v obliki  Encapsulated
+				PostScript (lahko uporabite <command>convert</command> iz 
+				paketa <application>Image Magick</application> 
+				za pretvarjanje va&scaron;e priljubljene slike v EPS) ter je 
+				velikosti vi&scaron;ine 2&nbsp;cm (5.08 in). Logotip ne
+				sme biti &scaron;ir&scaron;i kot je njegova vi&scaron;ina.</para>
+				
+			<para>&Ccaron;e <literal>PENGUIN=on</literal>, Muttprint poskusi
+				najti lokacijo datoteke s pingvinom. (Preberite izvorno
+				kodo, da izveste kje Muttprint i&scaron;&ccaron;e.) To je privzeta
+				nastavitev.</para>
+				
+			<para>Poleg tega pri Muttprint-u najdete tudi dodatne primere slik 
+				ki so &zcaron;e spremenjene v EPS format. Po namestitvi jih
+				boste na&scaron;li v <filename>##SHAREDIR##/muttprint</filename>.</para>
+				
+			<para>&Ccaron;e naj bi bilo tiskanje slik izklopljeno nastavite
+				vrednost <literal>PENGUIN</literal> na <literal>off</literal>.
+				</para>
+			
+		</sect3>
+		<sect3 id="xface">
+			<title>Tiskanje X-Faces</title>
+
+			<para>X-Faces so &ccaron;rno-bele slike velikosti 48 x 48 pikslov
+				ki so lahko vklju&ccaron;ene v glavi emaila (<literal>X-Face:</literal>
+				glava) v vsakem sporo&ccaron;ilu. To ni <quote>uradni</quote> standard
+				toda je raz&scaron;irjen, &scaron;e posebno v novi&ccaron;arskih skupinah.</para>
+
+			<para>Muttprint podpira tiskanje te slike namesto slike podane v
+				spremenljivki <literal>PENGUIN</literal>. Da to
+				omogo&ccaron;ite, nastavite <literal>XFACE</literal> na <literal>on</literal>. &Ccaron;e ni take
+				glave bo natisnjena slika <literal>PENGUIN</literal> (ali prazno)
+				.</para>
+
+			<para>Da to pravilno deluje potrebujete dva programa:</para>
+			
+			<itemizedlist spacing="compact">
+				<listitem>
+					<para>
+						<application>convert</application> iz 
+						<ulink url="http://www.imagemagick.org">paketa <application>Image 
+							Magick</application> </ulink>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<ulink 
+							url="http://www.ibiblio.org/pub/Linux/apps/graphics/convert/compface-1.4.tar.gz"><application>uncompface</application></ulink>
+					</para>
+				</listitem>
+
+			</itemizedlist>
+
+		<para>Oba programa naj bi bila del osnovne Linux distribucije ter
+			sta enostavno name&scaron;&ccaron;ena.</para>
+		
+		<para>V vsakem primeru se morate prepri&ccaron;ati da je ta del glave res poslan
+			v Muttprint. &Ccaron;e uporabljate Mutt, glej <xref linkend="muttconfig"> za 
+			pravilne nastavitve. V drugih primerih pa si preberite dokumentacijo
+			va&scaron;ega programa za po&scaron;to.</para>
+
+
+		</sect3>
+		<sect3>
+			<title>Obojestransko tiskanje</title>
+			
+			<para>Muttprint dovoli ro&ccaron;no obojestransko tiskanje. NAtisne najprej
+				lihe strani, po&ccaron;aka nekaj &ccaron;asa ter natisne &scaron;e sode.</para>
+				
+			<para>Muttprint potrebuje hitrost va&scaron;ega tiskalnika, da izra&ccaron;una
+				&ccaron;as ko se bo tiskanje sodih strani za&ccaron;elo, glej,
+				<xref linkend="speed">.</para>
+				
+			<para>Za aktivacijo obojestranskega tiskanja nastavite <literal>DUPLEX</literal>
+				na <literal>on</literal>.</para>
+				
+			<para>&Ccaron;e imate pravi Postscript tiskalnik ki ima mo&zcaron;nost 
+				obojestranskega tiskanja, potem nastavite <literal>DUPLEX</literal>
+				na <literal>printer</literal>. To spremeni Postscript
+				kodo na tak na&ccaron;in, da sporo&ccaron;i va&scaron;em printerju, da naj vklju&ccaron;i 
+				avtomatsko obojestransko tiskanje; za CUPS se uporabi pripadajo&ccaron;a opcija.</para>				
+		</sect3>
+		
+		<sect3>
+			<title>Na&ccaron;in za ohranjevanje papirja</title>
+			
+			<para>Lahko natisnete dve strani na eno stran v "landscape" na&ccaron;inu.
+				To vam omogo&ccaron;a prihranek papirja ter &ccaron;rnila ter
+pove&ccaron;a hitrost
+				tiskanja. Tak&scaron;no delovanje je smselno le z papirjem ormata DIN A4
+				ker dve pomanj&scaron;ani strani pa&scaron;eta to&ccaron;no na en list.</para>
+			
+			<para>Da omogo&ccaron;ite ta na&ccaron;in nastavite <literal>PAPERSAVE</literal> na
+				<literal>on</literal>.</para>				
+
+			<para>&Ccaron;e &zcaron;elite na&ccaron;in za ohranjevanje papirja vklju&ccaron;iti le &ccaron;e
+				se natisne ve&ccaron; kot ena stran nastavite <literal>PAPERSAVE</literal>
+				na <literal>optional</literal>.
+
+			</para>
+		</sect3>
+	
+		<sect3 id="date">
+			<title>Datum</title>
+
+			<para>Opcija <literal>DATE</literal> omogo&ccaron;a dve nastavitvi:
+				<literal>original</literal> ter <literal>local</literal>. &Ccaron;e
+				nastavite na <literal>original</literal>, Muttprint natisne datum
+				nespremenjeno, kot je v glavi po&scaron;te, npr. v angle&scaron;&ccaron;ini
+				ter v po&scaron;iljateljevem &ccaron;asovnem pasu.</para>
+
+			<para>&Ccaron;e nastavite to mo&zcaron;nost na <literal>local</literal>,
+				Muttprint spremeni &ccaron;asovni pas na &ccaron;asovni pas ssistema ter
+				natisne datum v lokalnem jeziku <footnote>
+					<para>To deluje neodvisno od datoteke s prevodom
+						z uporabo funkcij operacijskega sistema. Navkljub temu 
+						<literal>LANG</literal> (glej <xref linkend="lang">) v konfiguracijski
+						datoteki vpliva na jezik v datumu.</para>
+				</footnote>.</para>
+
+			<para>Format datuma lahko podate tudi z spremeljivko
+				<literal>DATE_FORMAT</literal>. Argument je
+				formatiran niz, npr. 
+				<literal>"%A, %d. %B %Y %H:%M:%S"</literal>. Narekovaji so
+				obvezni, ker niz vsebuje presledke.
+				<citerefentry><refentrytitle>strftime</refentrytitle>
+				<manvolnum>3</manvolnum></citerefentry> manpage vsebuje 
+				detajle o njem.</para>
+
+		</sect3>
+		<sect3>
+			<title>Format natisnjenega email naslova</title>
+
+			<para>Obstaja ve&ccaron; na&ccaron;inov pisanja email naslova ter imena skupaj v 
+				glavi sporo&ccaron;ila. Tu je nekaj primerov:</para>
+		
+			<ItemizedList spacing="compact">
+				<ListItem><para><literal>Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+						</literal></para></ListItem>
+				<ListItem><para><literal>"Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+						</literal></para></ListItem>
+				<ListItem><para><literal>Bernhard.Walle@gmx.de (Bernhard Walle)
+						</literal></para></ListItem>
+			</ItemizedList>
+
+			<para>Uporabljen format je odvisen od programa za po&scaron;to po&scaron;iljatelja; vsi trije
+				so pravilni. &Ccaron;e je spremenljivka <literal>ADDRESSFORMAT</literal> nastavljena
+				na vrednost <literal>original</literal>, je naslov natisnjen
+				nespremenjen.</para>
+
+			<para>&Ccaron;e bi &zcaron;eleli konstantno glavo e-maila lahko dodelite format 
+				niza tej spremenljivki. Privzeta nastavitev je <literal>"%r
+				&lt;%a&gt;,\n"</literal>. Uporabite lahko vse znake kot obliko niza,
+				<literal>%r</literal> je zamenjan z imenom (<quote>pravo
+				ime</quote>), <literal>%a</literal> z email naslovom ter
+				<literal>\n</literal> natisne novo vrstico. Mejniu narekovaji so nujni zaradi
+				presledkov. Znak za novo vrstico pomeni, da je vsak naslov natisnjen
+				v svojo vrstico, &ccaron;e je podan ve&ccaron; kot en naslov. Muttprint
+				odstrani znake za novo vrstico in vejice po zadnjem obdelanem naslovu.</para>
+
+			<para>Dodatno se lahko dolo&ccaron;eni deli natisnejo krepko ali po&scaron;even tekst. &Ccaron;e
+				je del omejen z zvezdicami (<literal>*</literal>), je tekst krepek;
+				po&scaron;evnice (<literal>/</literal>) pomenijo po&scaron;even tekst; mo&zcaron;no je tudi
+				gnezdenje.</para>
+		
+
+			<para>tu je drug primer uporabe formatiranega niza (tega uporabljam
+				tudi sam): <literal>"/%r/ (%a),"</literal>.</para>
+
+		</sect3>	
+		<sect3 id="speed">
+			<title>Hitrost tiskanja</title>
+			
+			<para>Kot omenjeno zgoraj, Muttprint zahteva podatek o trajanju v katerem
+				va&scaron; tiskalnik natisne eno stran. Ta nastavitev se spremeni z nastavitvijo
+				spremenljivke <literal>SPEED</literal> na vrednost &ccaron;asa v sekundah
+				(samo cela &scaron;tevila so dovoljena). Privzeto je nastavljeno na 30&nbsp;sekund
+				(<literal>SPEED=30</literal>).</para>
+		</sect3>
+		<sect3>
+			<title>Pisava</title>
+			
+			<para>Pri tiskanju lahko uporabite razne pisave. Ime pripadajo&ccaron;e
+				spremenljivke je <literal>FONT</literal>.
+				Vrednost <literal>Latex</literal> (standardna nastavitev) pomeni standardno LaTeX pisavo
+				iz dru&zcaron;ine EC. <literal>Latex-bright</literal>
+				uporablja <emphasis>Computer Modern Bright</emphasis>. Te pisave na mnogih
+				sistemih ni zaradi licence pod katero spada<footnote>
+				<!-- Footnote -->
+					<para>Na svoj ra&ccaron;unalnik lahko to pisavo nalo&zcaron;ite z CTAN-a
+						Pisave najdete v 
+						CTAN:/tex-archive/nonfree/fonts/cmbright/ (CTAN =
+						<emphasis>Comprehensive TeX Archive Network</emphasis> sestavljen iz
+						mre&zcaron;e ve&ccaron;ih stre&zcaron;nikov. CTAN stre&zcaron;nik v Nem&ccaron;iji je
+						<ulink url="ftp://ftp.dante.de"></ulink>, ter v Veliki Britaniji
+						<ulink url="ftp://cam.ctan.org"></ulink> ter v Zdru&zcaron;enih Dr&zcaron;avah
+						<ulink url="ftp://tug.ctan.org"></ulink>).
+					</para>
+				<!-- /Footnote -->
+				</footnote>.
+			</para>
+			
+			<para>Obstaja ve&ccaron; Postscript pisav, med uporabnimi tu so: 
+				<literal>Times</literal>, <literal>Palatino</literal>,
+				<literal>Utopia</literal>, <literal>Charter</literal> 
+				<literal>Bookman</literal>, <literal>CentSchool</literal>
+				(New Century Schoolbook), <literal>Chancery</literal>
+				(Zapf Chancery), <literal>Helvetica</literal> ali
+				<literal>AvantGarde</literal>.</para>
+
+			<para>Seveda morajo pisave biti name&scaron;&ccaron;ene na va&scaron;em sistemu. Ker je LaTeX 
+				distribucija <emphasis>teTeX</emphasis> standardna na Linux sistemih,
+				to nebi smelo predstavljati problema.</para>
+
+		</sect3>		
+		<sect3>
+			<title>Velikost pisav</title>
+
+			<para>Velikost pisav lahko uravnavate z spremenljivko
+				<literal>FONTSIZE</literal>. Samo vrednosti <literal>10pt</literal>,
+				<literal>11pt</literal> ter <literal>12pt</literal> so mo&zcaron;ne.
+			</para>
+		</sect3>
+		<sect3>
+			<title>Oblikovanje telesa e-po&scaron;te</title>
+
+			<para>Telo sporo&ccaron;ila je razdeljeno na dva dela: tekst ter podpis. &Ccaron;e podpis
+				obstaja in naj se ga ne odstrani (glej <xref
+				linkend="remsig">), lahko ta dva dela oblikujete lo&ccaron;eno.</para>
+
+			<para>Muttprint uporablja LaTeX paket <filename>fancyvrb.sty</filename>
+				za izpis telesa, kateri nudi mnogo opcij za oblikovanje. Mo&zcaron;nosti, ki
+				so poslane v <literal>Verbatim</literal> okolje
+				se lahko nastavijo z spremenljivko <literal>VERBATIMNORMAL</literal>
+				(za navaden tekst) ter <literal>VERBATIMSIG</literal> (za 
+				podpis).</para>
+
+			<para>Natan&ccaron;no sintakso boste na&scaron;li v dokumentaciji
+				<filename>fancyvrb.sty</filename>, katero si lahko ogledate z ukazom
+				<command>texdoc fancyvrb</command>. Navadno je podpis natisnjen s po&scaron;evno
+				pisavo. Natisnete lahko tudi robove.</para>
+
+			<para>&Ccaron;e ne &zcaron;elite lo&ccaron;iti oblikovanja telesa ter podpisa po&scaron;te nastavite
+				 <literal>VERBATIMSIG</literal> na <literal>raw</literal>.
+				&Ccaron;e to nastavite bo podpis obravnavan kot navaden del teksta ter natisnjen kot 
+				tak (vklju&ccaron;no z lo&ccaron;evalcem podpisa).</para>
+
+			<para>Nekaj primerov:</para>
+			
+			<itemizedList spacing="compact">
+				<listitem>
+					<para>
+						<literal>fontshape=it,frame=topline</literal>: 
+							po&scaron;evna pisava, rob okrog polja
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<literal>fontfamily=helvetica,fontseries=b</literal>:
+							pisava Helvetica, krepko
+					</para>
+				</listitem>
+				<listitem>
+					<para>	
+						<literal>numbers=left,stepnumber=5</literal>:
+							&Scaron;tevilk&ccaron;enje vrstic, vsaka peta vrstica
+					</para>
+				</listitem>
+			</itemizedList>
+			
+		</sect3>
+		<sect3>
+			<title>Nastavljanje robov</title>
+
+			<para>Robove lahko nastavite z nastavitvijo naslednjih spremenljivk:
+				<literal>TOPMARGIN</literal> (zgornji rob),
+				<literal>BOTTOMMARGIN</literal> (spodnji rob),
+				<literal>LEFTMARGIN</literal> (levi rob) ter
+				<literal>RIGHTMARGIN</literal> (desni rob).</para>
+		
+			<para>Te spremenljivke naj bi bile nastavljene na celo&scaron;tevilsko vrednost,
+				ki pomeni rob v milimetrih (mm). Ostale merske enote niso mo&zcaron;ne;
+				25.4&nbsp;mm je 1&nbsp;inch.</para>
+
+		</sect3>
+		<sect3>
+			<title>Prelom dolgih vrstic</title>
+
+			<para>Dol&zcaron;ina najdalj&scaron;e vrstice se dolo&ccaron;i z spremenljivko 
+				<literal>WRAPMARGIN</literal>. Dalj&scaron;e vrstice so prelomljene
+				avtomatsko, toda kraj&scaron;e niso zdru&zcaron;ene.</para>
+
+		</sect3>
+		<sect3>
+			<title>Pravila pred/za glavo ter nogo</title>
+			
+			<para>Natisne se lahko previlo pod glavo ali nad nogo 
+				sporo&ccaron;ila. Privzeto so izklju&ccaron;ena.</para>
+				
+			<para>Za aktivacijo astavite spremenljivko <literal>HEADRULE</literal>
+				ali <literal>FOOTRULE</literal> na 
+				<literal>on</literal> ali <literal>off</literal>.</para>
+		</sect3>
+		<sect3>
+			<title>Oblika prve strani</title>
+			
+			<para>Obstajajo razli&ccaron;ne mo&zcaron;nosti poudarjanja glave sporo&ccaron;ila na prvi
+				strani. Tule je izpis teh pravil:</para>
+			
+			<informaltable frame="topbot">
+				<tgroup cols=2 align=left>
+				<colspec colnum="1" colwidth="1.5in"> 
+				<thead>
+				<row>
+					<entry>Stil</entry>
+					<entry>Opis</entry>
+				</row>
+				</thead>
+				<tbody>
+				<row>
+					<entry><literal>plain</literal></entry>
+					<entry><para>brez pravil</para></entry>
+				</row>
+				<row>
+					<entry><literal>border</literal></entry>
+					<entry><para>pravilo za glavo 
+					(<emphasis>privzeta nastavitev)</emphasis>)
+					</para></entry>
+				</row>
+				<row>
+					<entry><literal>fbox</literal></entry>
+					<entry><para>enostaven rob okrog glave sporo&ccaron;ila</para></entry>
+				</row>
+				<row>
+					<entry><literal>shadowbox</literal></entry>
+					<entry><para>sen&ccaron;en rob okrog glave sporo&ccaron;ila</para></entry>
+				</row>
+				<row>
+					<entry><literal>ovalbox</literal></entry>
+					<entry><para>zaokro&zcaron;en rob okrog glave sporo&ccaron;ila 
+						(tanke vrstice)</para></entry>
+				</row>
+				<row>
+					<entry><literal>Ovalbox</literal></entry>
+					<entry><para>enako kot <literal>ovalbox</literal> toda krepkej&scaron;e
+					 	&ccaron;rte</para></entry>
+				</row>
+				<row>
+					<entry><literal>doublebox</literal></entry>
+					<entry><para>okvir z dvojno &ccaron;rto okrog glave sporo&ccaron;ila</para></entry>
+				</row>
+				<row>
+					<entry><literal>grey</literal></entry>
+					<entry><para>sivo ozadje za glavo sporo&ccaron;ila</para></entry>
+				</row>
+				<row>
+					<entry><literal>greybox</literal></entry>
+					<entry><para>enako kot <literal>grey</literal> toda z dodatnimim &ccaron;rnim
+						robom</para></entry>
+				</row>
+				</tbody>
+				</tgroup>
+			</informaltable>
+			
+			<para>Nastavite spremenljivko <literal>FRONTSTYLE</literal> na vrednost
+				iz zgornje tabele.</para>
+			
+		</sect3>
+		<sect3>
+			<title>Format papirja</title>
+			
+			<para>Za nastavitev formata papirja nastavite <literal>PAPER</literal> na pravilno 
+				vrednost. Mo&zcaron;no je le <literal>A4</literal> ter
+				<literal>letter</literal>.</para>
+				
+			<para>&Ccaron;e obstaja datoteka <filename>##SYSCONFDIR##/papersize</filename> kot
+				je navada na Debian sistemu, je upo&scaron;tevana. Lastne nastavitve 
+				prepi&scaron;ejo sistemske nastavitve.</para>
+
+
+		</sect3>
+		<sect3 id="remsig">
+			<title>Odre&zcaron;i podpis</title>
+			
+			<para>Pogosto podpis vsebuje neuporabne podatke ali reklame
+				in se ga zatorej nebi tiskalo. Muttprint lahko
+				odre&zcaron;e podpis, &ccaron;e je bil lo&ccaron;en od besedila po&scaron;te z uporabo
+				 <quote><literal>&ndash;&ndash; </literal></quote> -- pazi
+				na presledek (nekateri po&scaron;tni odjemalci ne generirajo
+				pravilnega lo&ccaron;ila).</para>
+				
+			<para>Da to dose&zcaron;ete nastavite <literal>REM_SIG</literal> (to pomeni
+				<quote>odstrani podpis</quote> na vrednost 
+				<literal>on</literal>.</para>
+		</sect3>
+		<sect3>
+			<title>Izpusti citate</title>
+			
+			<para>Pogosto avtor emaila ne citira smotrno, temve&ccaron; pripne
+				celotno sporo&ccaron;ilo, tako da izpis pri tiskanju postane zelo dolg
+				in nerazumljiv.</para>
+
+			<para>&Ccaron;e je <literal>REM_QUOTE</literal> nastavljen na
+				<literal>on</literal>, potem citati ne bodo natisnjeni.
+				Muttprint zazna citate z uporabo regularnih izrazov
+				tako kot program Mutt v njegovai standardni namestitveni datoteki.
+				Tako, da je tekst, ki je v Mutt-u poudarjen z barvo, izpu&scaron;&ccaron;en
+				pri tiskanju. To sovpada z funkcijo <emphasis>toggle
+				quote</emphasis>  
+				(<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>)
+				na zaslonu.</para>
+		</sect3>
+		<sect3 id="printedheaders">
+			<title>Tiskanje glave</title>
+			
+			<para>Navadno se natisne le zanimive dele glave. To
+				lahko spremenite z nastavitvijo spremenljivke
+				<literal>PRINTED_HEADERS</literal>. Definirajte vsak del
+			glave lo&ccaron;en z pod&ccaron;rtajem (<literal>_</literal>).</para>
+		
+			<para>Zaporedje je pomembno za tiskanje. Evaluacija izrazov
+				lo&ccaron;i male/velike &ccaron;rke. Deli glave, ki ne obstajajo se ignorirajo.
+				Za krepko tiskanje vstavite ime dela glave med zvezdici
+				 (<literal>*</literal>), za po&scaron;evno tiskanje naredite
+				enako s po&scaron;evnico (<literal>/</literal>).</para>
+
+			<para>Privzeta nastavitev je:</para>
+			
+			<programlisting>PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"</programlisting>
+			
+			<para>&Scaron;e en primer razumne nastavitve:</para>
+			
+			<programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
+
+		</sect3>
+		<sect3>
+			<title>Lastna LaTeX koda</title>
+
+			<para>Spremenljivka <literal>LATEXCODE</literal> je za ljudi, ki so doma&ccaron;i z
+				LaTeX-om ter bi si radi nastavili tiskanje brez spreminjanja
+				izborne kode programa Muttprint. Na primer, uporabno je nastaviti
+				svoje pisave.</para>
+
+			<para>Poleg <literal>LATEXCODE</literal> obstaja &scaron;e pet dodatnih 
+				spremenjljivk (<literal>LATEXCODE1</literal> do
+				<literal>LATEXCODE5</literal>) ki lepo razdelijo va&scaron;o LaTeX kodo
+				Te spremenljivke so vklju&ccaron;ene v kodo v tem zaporedju.</para>
+
+			<tip>
+				<para>Email lahko tiskate tudi z proporcionalnimi pisavami (namesto
+					typewriter pisv) z naslednjo nastavitvijo:
+				</para>
+					<programlisting>LATEXCODE="\renewcommand{\ttdefault}{\rmdefault}"</programlisting>
+			</tip>
+
+		</sect3>
+		<sect3>
+			<title>Poro&ccaron;ila o napakah</title>
+			
+			<para>Izhodna sporo&ccaron;ila ukaza <command>latex</command> ter
+				<command>dvips</command> niso prikazana. &Ccaron;e se pojavijo kaki
+				problemi, bi bilo uporabno, &ccaron;e bi lahko prebrali izhode. Takrat
+				nastavite variablo <literal>DEBUG</literal> na <literal>1</literal>
+				v va&scaron;em  <filename>.muttprintrc</filename>. Sedaj Muttprint
+				ustvari dnevnik imenovan <filename>/tmp/muttprint.log</filename>
+				tako lahko, ko naslednji&ccaron; po&zcaron;enete Muttprin opazujete izpis napak. 
+				To lahko pride prav tudi pri poro&ccaron;ilu o napakah.</para>
+		</sect3>
+	</sect2>
+	<sect2>
+		<title>Mo&zcaron;nosti ukazne vrstice</title>
+		
+		<para>Ve&ccaron;ina nastavitev se lahko nastavi tudi v ukazni vrstici.
+			To na da prednost la&zcaron;je integracije z po&scaron;tnim odjemalcem (npr. z lastnimi
+			makroji).</para>
+			
+		<para>Natan&ccaron;en opis vseh mo&zcaron;nosti dobite z ukazom
+			<command>muttprint</command> <option>-h</option> 
+			ali v man strani <citerefentry><refentrytitle>muttprint</refentrytitle>
+			<manvolnum>1</manvolnum></citerefentry>.</para>
+			
+		<para>Efekt teh mo&zcaron;nosti je enak kot v konfiguracijski datoteki, toda ukazna
+			vrstica prevlada nad ostalimi nastavitvami.</para>
+
+
+	</sect2>
+	<sect2 id="lang">
+		<title>Razli&ccaron;ni jeziki</title>
+		
+		<para>Muttprint podpira razne jezike.  Navadno se okoljsko spremenljivko
+			 <envar>LANG</envar> nastavi na pravilno vrednost: npr.
+			<literal>de</literal>, <literal>it</literal>, <literal>fr</literal>,
+			<literal>es</literal> ali <literal>en</literal>, kar je
+bli&zcaron;njica glede
+			na ISO 639. Prepoznana sta le prva dva znaka, tako da
+			je <literal>de_DE@euro</literal> v redu. &Ccaron;e vrednost ni znana,
+			Muttprint privzame angle&scaron;&ccaron;ino.</para>
+
+		<para>Opis mo&zcaron;nih prevodov najdete v datoteki
+			 <filename>README.translations</filename>, ki se namesti z
+			dokumentacijo v skupen direktorij.</para>
+
+		<para>&Ccaron;e bi radi uporabljali drug jezik za Muttprint kot za 
+			ostale programe sistema, lahko nastavite <literal>LANG</literal> v
+			va&scaron;em <filename>.muttprintrc</filename>.</para>
+
+
+		<sect3>
+			<title>Jeziki pri tiskanju</title>
+		
+			<para>Najbolj pomembni u&ccaron;inki prilagoditve jezika pri tiskanju
+				so: glava pisma ter datume.</para>
+				
+			<para>Zadnji se ustvari z LaTeX paketom
+				<filename>babel.sty</filename>. Muttprint po&scaron;lje pravilno
+				vrednost, ki sovpada z va&scaron;im jezikom paketu. Lahko
+				nastavite va&scaron;o lastno vrednost v spremenljivki
+				<literal>LPack</literal>, npr. na <literal>austrian</literal>,
+				<literal>spanish</literal>. Preberite <command>texdoc babel</command>
+				za spisek mo&zcaron;nih vrednosti.</para>
+
+			<para>&Ccaron;e bi radi za tiskanje glave uporabili &scaron;e druge nize si
+				lahko nastavite naslednje spremenljivke:</para>
+			
+			<ItemizedList spacing="compact">
+				<ListItem><para><literal>FROM_STRING</literal></para></ListItem>
+				<ListItem><para><literal>TO_STRING</literal></para></ListItem>
+				<ListItem><para><literal>SUBJECT_STRING</literal></para></ListItem>
+				<ListItem><para><literal>CC_STRING</literal></para></ListItem>
+				<ListItem><para><literal>DATE_STRING</literal></para></ListItem>
+				<ListItem><para><literal>PAGE_STRING</literal></para></ListItem>
+				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
+				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
+			</ItemizedList>
+			
+			<para>Dodatni deli glave, ki so nastavljeni za tiskanje (glej
+				<xref linkend="printedheaders">) se ne dajo prevesti.</para>
+		
+		</sect3>
+		<sect3>
+			<title>Nabori znakov</title>
+
+			<para>Muttprint podpira razli&ccaron;ne nabore znakov za tiskanje. Tule je kratek
+				pregled:</para>
+
+			<informaltable frame="topbot">
+				<tgroup cols=3 align=left>
+				<colspec colnum="1" colwidth="1in"> 
+				<colspec colnum="2" colwidth="0.8in"> 
+					<thead>
+						<row>
+							<entry>nabor</entry>
+							<entry>mo&zcaron;nost</entry>
+							<entry>opis</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>ISO-8859-1</entry>
+							<entry><literal>latin1</literal></entry>
+							<entry>zahodno evropski jeziki</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-2</entry>
+							<entry><literal>latin2</literal></entry>
+							<entry>vzhodno evropski jeziki</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-3</entry>
+							<entry><literal>latin3</literal></entry>
+							<entry>ju&zcaron;nozahodno evropski ter razni drugi jeziki</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-4</entry>
+							<entry><literal>latin4</literal></entry>
+							<entry>ju&zcaron;novzhodno evropski ter razni drugi jeziki</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-9</entry>
+							<entry><literal>latin5</literal></entry>
+							<entry>Latin-1 prirejen za tur&scaron;&ccaron;ino</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-15</entry>
+							<entry><literal>latin9</literal></entry>
+							<entry>Latin-1 z nekaj spremembami npr. znak za Evro
+								</entry>
+						</row>
+						<row>
+							<entry>Windows-1252</entry>
+							<entry><literal>latin1</literal></entry>
+							<entry>Latin-1 z nekatermi dodatki</entry>
+						</row>
+						<row>
+							<entry>Windows-1250</entry>
+							<entry><literal>latin2</literal></entry>
+							<entry>Latin-2 z nekatermim dodatki</entry>
+						</row>
+							<row>
+							<entry>UTF-8</entry>
+							<entry><literal>utf8</literal></entry>
+							<entry>Unicode kot ga podpira LaTeX, glej <xref linkend="sysreq"></entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+
+			<para>Ta nabor znakov omogo&ccaron;a tiskanje ve&ccaron;ine jeziko, ki uporabljajo
+				latin znake. Obna&scaron;anje nabora je odvisno v
+lgavnem od paketa 
+				LaTeX <filename>inputenc.sty</filename>, vendar je raz&zcaron;irjen.</para>
+
+			<para>Privzeti nabor je Latin-1. &Ccaron;e obstajajo datoteke s prevodi,
+				je nabor znakov spremenjen v dr&zcaron;avi pripradajo&ccaron;ega. Naprimer,
+				za nem&scaron;&ccaron;ino je uporabljen nabor Latin-9 za pravilno tiskanje znaka
+				valute Evro. Za &Ccaron;ehe je nabor spremenjen v 
+				Latin-2, ker je to vzhodno evropski jezik.</para>
+
+			<para>Kljub temu, pa lahko nabor znakov lo&ccaron;eno nastavite v namestitveni
+				datoteki z spremenljivko <literal>CHARSET</literal>. Navadno se to 
+				nastavi na nabor znakov, ki se uporablja za prikaz na zaslonu
+				glej spremenljivko <varname>charset</varname> pri Mutt-u.</para>
+
+			<para>&Ccaron;e nastavite <literal>CHARSET</literal> na vrednost
+				<literal>auto</literal>, bo Muttprint poskusil najti primeren delglave, ki
+				vsebuje nabor znakov sporo&ccaron;ila. To nastavitev uporabljajte pazljivo. 
+				Npr. Mutt prilagodi izgled naboru zaslonskih znakov. Na drugi 
+				strani, pa bi bile te nastavitve lahko uporabne, &ccaron;e tiskate mnogo
+				po&scaron;te z razli&ccaron;nimi nabori znakov.</para>
+
+			<para>Poleg znakov iz dru&zcaron;ine ISO-Latin Muttprint
+				podpira tudi izbolj&scaron;ave nabora Windos Windows-1252 (zhodno
+				evropski) ter Windows-1250 (vzhodno evropski). Ta nabor raz&scaron;iri ISO nabor
+				z nekatermi znaki, naprimer tipografski narekovaji, znak "na miljo", 
+				znak za valuto Evro. Zadnji se pogosto pojavlja na 
+				mestu 128 (decimalno) zaradi &scaron;iroke raz&scaron;irjenosti Windows -- delno
+				prznan kot ISO-8859-1. Muttprint natisne te maile pravilno, &ccaron;e po&scaron;tni
+				odjemalec &ccaron;esa ne spremeni.</para>
+
+			<para>Poln pregled ISO-8859-* znakovnih naborov najdete 
+				na <ulink	url="http://czyborra.com/charsets/iso8859.html"></ulink>.
+			</para>
+					
+		</sect3> <sect3> <title>Datoteka s prevodi</title>
+		
+			<para>Prevodi Muttprint datotek se nahajajo v 
+			<filename>share</filename> imeniku, ter imajo ime
+			<filename>translation-<replaceable>jezik</replaceable>.pl</filename>.
+			Lahko dodate nove datoteke v ta imenik brez kakrsnihkoli sprememb 
+			Muttprint skripte. Ne samo deli glave omenjeni zgoraj, temve&ccaron; tudi sporo&ccaron;ila
+			pomo&ccaron;i so prevedena tu.</para>
+			
+			<para>Za nove prevede vzemite katerokoli datoteko kot predlogo, jo
+			skopirajte ter prevedite. &Ccaron;e bi radi va&scaron; prevod ponudili drugim uporabnikom mi 
+			le po&scaron;ljite datoteko po e-mail-u in jo bom dodal v naslednjo verzijo programa.</para> </sect3>
+		
+
+	</sect2>
+</sect1>
+<sect1 id="nots">
+	<title>Opombe</title>
+	
+	<sect2>
+		<title>Avtor, Licenca</title>
+		
+		<para>Skripto je napisal Bernhard Walle 
+			<email>Bernhard.Walle@gmx.de</email>.</para>
+		
+		<para>Ta program je prosto programje; lahko ga raz&scaron;irjate in/ali
+			spreminjate pod pogoji GNU General Public License kot
+			jo je objavila Free Software Foundation; verzije 2 ali
+			(po va&scaron;i &zcaron;elji) katero kasnej&scaron;o verzijo.</para>
+			
+		<para>Ta program se raz&scaron;irja z upanjem, da bo uporaben, toda
+			<emphasis>brez kakr&scaron;nekoli garancije</emphasis>; tudi brez
+			nazna&ccaron;ene garancije o <emphasis>prodaji</emphasis> ali
+			<emphasis>sposobnosti za dolo&ccaron;en namen</emphasis>. Glej GNU
+			General Public License za natan&ccaron;nej&scaron;i opis.</para>
+
+		<para>Skupaj s to verzijo programa ste prejeli GNU General Public License 
+			 (datoteka <filename>COPYING</filename>).</para>
+			
+		<para>Prosim po&scaron;ljite mi opombe, komentarje, izbolj&scaron;ave ter predloge preko
+			e-maila.</para>
+			
+		<para>Pravice za kopiranje prevodov pripadajo njihovim 
+			prevajalcem. Preberite <filename>README.translations</filename> za
+			imena prevajalcev.</para>
+	</sect2>
+	<sect2>
+		<title>Download</title>
+		
+		<para>Trenutno verzijo, ter vse stare verzije lahko downloadate z
+			<ulink url="http://muttprint.sourceforge.net"></ulink>.
+			To je doma&ccaron;a stran programa Muttprint.</para>
+
+		<para>Obvestila o novih verzijah objavljam na <ulink
+			url="http://www.freshmeat.net">Freshmeat</ulink>.</para>
+
+	</sect2>
+	<sect2>
+		<title>Tiskanje priponk</title>
+		
+		<para>Muttprint ni sposoben natisniti priponk po&scaron;te. Da bi to dosegel,
+			bi Muttprint moral analizirati surova MIME sporo&ccaron;ila ter jih dekodirati.
+			To je precej zahtevno. Na primer Muttprint bi moral dekriptirati
+			PGP-enkriptirana sporo&ccaron;ila, se odlo&ccaron;ati za pravo alternativo 
+			<literal>multipart/alternative</literal> sporo&ccaron;il ter delati rekurzivno
+			za <literal>message/*</literal> -- to so le nekatere re&ccaron;i.
+			Na kratko: Esencialni deli odjemalcev po&scaron;te bi morali integrirani ter mnogo
+			nastavitev (naprimer za PGP) bi morali opraviti. &Scaron;e ve&ccaron;, vsi odjemalci po&scaron;te
+			ne podpirajo "raw" izpisa sporo&ccaron;il za tiskanje.</para>
+			
+		<para>Toda Mutt ima svojo uporabno funkcijo za tiskanje priponk. Lahko izbirate
+			med lo&ccaron;enimi ukazi za tiskanje razli&ccaron;nih tipov MIME. Ti se lahko nastavijo
+			v <filename>~/.mailcap</filename>. Ve&ccaron; o tem si preberite
+			v Mutt priro&ccaron;niku, razdelek 5.3.3.1.</para>
+
+		<para>Napisal sem zelo malo skripto imenovano <literal>imageprint</literal>
+			za tiskanje slik (skoraj vsi formati so podprti). Lahko jo uporabite
+			kot predlogo za lastne skripte. Tule je:</para>			
+
+		<programlisting>
+#!/bin/sh
+target=/tmp/imageprint-$$.ps
+convert -page A4 $1 $target
+lpr $target
+rm $target</programlisting>
+		
+		<para>Le pritisnite tipko <keycap>p</keycap> v meniju priponk v Mutt-u
+			.</para>
+		
+		<para>Uporabniki ostalih odjemalcev po&scaron;te pa naj si preberejo naovodila
+			za ionformacijo kako tiskati priponke.</para>
+
+	</sect2>
+	<sect2>
+		<title>Zahvala</title>
+		
+		<para>vsem, ki so mi pomagali z poro&ccaron;ili o napakah, da bi izbolj&scaron;ali
+			Muttprint. &Scaron;e posebno bi se rad zahvalil Romanu Beigelbecku za
+			pripravo dodatnih slik, Robertu Valloneu za italjanski 
+			prevod, Vincentu Bernatu za francoski prevod, Marcelu
+			Ramosu za &scaron;panski prevod, Dominiku Form&aacute;neku za
+			&ccaron;e&scaron;ki prevod ter vzdr&zcaron;evalcem Debian paketov Dr.
+			Guenterju Bechlyju ter Chanopu Silpa-Ananu.</para>
+
+		<para>Na koncu bi se rad zahvalil vsem ljudem, ki prispevajo k
+			k prostem programju. Ve&ccaron;ina ljudi to dela v svojem prostem
+			&ccaron;asu, brez kakr&scaron;nega koli pla&ccaron;ila!</para>
+
+	</sect2>
+</sect1>
+</article>
+
+<!-- ViM settings
+vim:tw=80 sw=2 ts=2
+-->
