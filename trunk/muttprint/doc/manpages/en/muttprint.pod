@@ -5,7 +5,7 @@ muttprint - pretty printing of mails with Mutt
 
 =head1 SYNOPSIS
 
-muttprint [I<option>]... [-f I<file>]
+muttprint [I<options>]... [-f I<file>]
 
 
 =head1 DESCRIPTION
@@ -25,14 +25,13 @@ or Kmail. It can print a little penguin on the first page and a headline on ever
 page. Furthermore, it only prints the most important headers, but not the 
 whole plethora of them.
 
-For instructions how to use B<Muttprint> see 
-F</usr/share/doc/packages/muttprint/muttprint-doc-XX.html> where
-XX stands for your language.
+For detailed informations about Muttprint look read the User's guide in PDF 
+and HTML format at F</usr/share/muttprint>.
 
 Anyway, you have to put the following line in your F</etc/Muttrc> or 
 F<~/.muttrc>:
 
-B<set print_command="muttprint">
+	set print_command="muttprint"
 
 If you want to customize the settings of B<Muttprint>, just copy
 F</usr/share/doc/packages/muttprint/sample-muttprintrc>
@@ -43,7 +42,7 @@ B<Muttprint> defaults to English lanuage settings if the environment
 variable I<LANG> is not set.  For example in a German environment 
 you should set:
 
-B<export LANG=de_DE>
+	export LANG=de_DE
 
 This can for instance be done in in your local F<~/.bashrc>.
 
@@ -52,7 +51,7 @@ C<lpr: unable to print file: ...>, you should try to use
 another printer than I<lp>, e. g. I<lp5> or I<tp0> (if you
 use TurboPrint).
 
-B<CUPS USERS NOTE:> The setting B<PRINTER="lp"> will not
+B<CUPS USERS NOTE:> The setting C<PRINTER="lp"> will not
 work, and you have to set the Cups printer name instead
 (e. g. I<LaserJet>), which you can easily check by typing I<lpq>
 on the commandline.
@@ -133,12 +132,24 @@ Here you can choose whether it should be printed a rule over the
 footline or not.
 
 
-=item B<-S> I<Style> | B<--frontstyle> I<Style>
+=item B<-S> I<Style>B<, --frontstyle> I<Style>
 
 Choose a style for the printing of the mailheaders on the first page:
 I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
 I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailled description
 of this values.
+
+=item B<-a> I<headers>B<, --printed-headers> I<headers>
+
+Specify the headers that should be printed. Separate each header with
+C<_>. Headers that are embedded in I<*> are printed bold; use
+I</> for italic printing. If a header does not exist, it will be omitted.
+The given order is the same as on the printing.
+
+Two examples:
+
+	Date_To_From_CC_Newsgroups_*Subject*   (default)
+	/Date/_To_From_X-Mailer_*/Subject/*
 
 
 
@@ -150,8 +161,9 @@ and I<letter> in the U.S.
 
 =item B<-l> I<language>B<, --lang> I<language>
 
-Give the short form of your language (currently supported: 
-I<de> (German), I<en> (English) and I<it> (Italian) particularly).
+Give the short form of your language. Currently are supported: 
+I<de> (German), I<en> (English) and I<it> (Italian), I<fr> (French),
+I<es> (Spanish) and I<cs> (Czech).
 Default is the I<LANG> environment, fallback is English.
 
 
@@ -196,12 +208,10 @@ feature works not always.
 
 =item B<-q, --rem_quote> | B<-noq, --norem_quote>
 
-Remove the quoted paragraph from the printing. B<Muttprint>
-detects quoting by following regular expression:
+Remove the quoted paragraph from the printing. 
 
-	/^([\t]*[|>:}#])+/
-
-This is the same regexp as B<Mutt> uses so it should work :-)
+B<Muttprint> detects the quoting with the same regular expression as Mutt, 
+so it should work.
 
 =back
 
@@ -231,21 +241,23 @@ Temporary files created by B<Muttprint>.
 B<Muttprint> manual files in different languages and formats.
 
 
-
 =item F</usr/share/muttprint/>
 
 Some pictures which can be used for printing on the
 first page of your mail.
 
+=item F</usr/lib/muttprint>
+
+Translation files.
 
 =back
 
 
 =head1 SEE ALSO
 
-mutt(1), abook(1)
+mutt(1)
 
-Homepage: I<http://bwalle.exit.mytoday.de/muttprint/>
+Homepage: I<http://muttprint.sourceforge.net>
 
 
 
