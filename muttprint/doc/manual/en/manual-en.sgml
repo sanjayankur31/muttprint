@@ -163,7 +163,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 		
 	<sect2>
 	
-		<title>Integration of Muttprint in mail clients</title>
+		<title>Integration of Muttprint in mail and news clients</title>
 
 		<para>Muttprint was orginally developed for the use together with Mutt only.
 			However, it could be integrated in following mail programs without problems. 
@@ -216,6 +216,18 @@ set print_split
 
 		</sect3>
 
+		<sect3>
+				<title>Slrn</title>
+
+				<para>Simply add following lines in your configuration file 
+					<filename>~/.slrnrc</filename>:</para>
+
+	      <programlisting>
+% Use Muttprint for printing
+set printer_name "muttprint"
+	      </programlisting>
+
+		</sect3>
 		<sect3>
 			<title>XFMail</title>
 
