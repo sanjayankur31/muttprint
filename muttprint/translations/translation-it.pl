@@ -1,5 +1,13 @@
 use bytes;
 
+# Questo file di traduzione è la traduzione italiana.
+# *Non* serve a Muttprint per girare dato che Muttprint ha le stringhe in inglese
+# al suo interno. Serve solo per esempio a coloro che vogliono creare il loro file di traduzione
+# Puoi prendere questo come bozza e tradurlo.
+
+#
+# (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
+
 $String{"Benutzung"} = <<EOF;
 
 Sintassi: muttprint [opzioni]... [-f file]
@@ -22,6 +30,12 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
        Utilizza la stampante specificata
        "-" sta per STDOUT
        Per stampare in un file usare TO_FILE:/path/del/file
+	   
+-C [comando di stampa], --printcommand [comando di stampa]
+       Imposta il comando di stampa da usare. "\$PRINTER" viene sostituito con
+       il nome della stampante.
+       Il supporto a CUPS viene abilitato da "CUPS" (o impostalo a qualunque comando
+       che contenga la stringa "\$CUPS_OPTIONS").
          
 -i [file], --penguin [file]
        Imposta l'immagine da stampare sulla prima pagina
@@ -65,7 +79,7 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 
 -c [charset], --charset [charset]
        Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
-       auto (leggi il manuale prima di usare "auto").
+       utf-8, koi8-r, auto (leggi il manuale prima di usare "auto").
 
 -e [stringa, --date [stringa
        original: stampa la data così come è negli headers
@@ -79,7 +93,13 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
        Imposta il formato per l'indirizzo email ed il nome.
        Guarda la manpage e la documentazione per i dettagli.
        
+-n [stringa], --verbatimnormal [stringa]
+       Viene usato per impostare il formato del testo principale della mail.
+	   Leggi il manuale utente e la manpage per i dettagli.
 
+-V [stringa], --verbatimsig [stringa]
+        Come per --verabtimnormal, ma viene settato il formato 
+        della firma.
 
 -D, --debug | -noD, --nodebug
        Scrive informazioni utili in un file di log /tmp/muttprint.log.
@@ -107,7 +127,7 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.
-       Rimuove il testo "quotato" dalla stampa.
+       Rimuove il testo citato dalla stampa.
 
 -z [grandezza], --fontsize [grandezza]
        Grandezza del font: 10pt, 11pt, 12pt (solo questi valori)
@@ -132,7 +152,7 @@ $String{"Bugs"} = "I bachi possono essere riportati a <Bernhard.Walle\@gmx.de>.\
 $String{"FileNotFound"} = "Il file specificato non è stato trovato.\n";
 
 @String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("Da:", "A:", "Oggetto:", "Copia Carbone:", "Data:", "pagina", "/", "Gruppo:");
+("Da:", "A:", "Oggetto:", "Copia Carbone:", "Data:", "pagina", "di", "Gruppo:");
 
 $LPack = "italian";
 $charset = "latin9";

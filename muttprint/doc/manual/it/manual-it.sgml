@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-12-15</pubdate>
+	<pubdate>2003-05-01</pubdate>
 	
-	<releaseinfo>Versione 0.64</releaseinfo>   
+	<releaseinfo>Versione 0.70</releaseinfo>   
 	
 		
 	
@@ -53,7 +53,7 @@
 <sect1 id="installation">
 	<title>Installazione</title>
 	
-	<sect2>
+	<sect2 id="sysreq">
 		<title>Richieste di sistema</title>
 	
 		<para>Muttprint è stato realizzato col il linguaggio di programmazione
@@ -103,8 +103,13 @@ url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
       </footnote>. Se questo modulo non è installato Muttprint funzionerà
       ugualmente eccetto la funzione di conversione della data, e stamperà la
       data nel formato locale. Vedi <xref linkend="date">.</para>
-
-
+	  <para>Per avere il supporto al set UTF-8 il comando LaTeX per cambiare il set di caratteri
+	        deve supportare UTF-8. Non è questo naturalmente il caso!
+			Troverai un'estensione disponibile nel CTAN. Scarica semplicemente il file
+			<ulink url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
+			e installalo come indicato nel file <filename>INSTALL</filename>
+			incluso. Hai bisogno solamente del supporto UTF-8 se il tuo client di posta invia
+			a Muttprint dati codificati con UTF-8.</para>
 
 	</sect2>
 	<sect2>
@@ -181,14 +186,14 @@ muttprint-<replaceable>Versione</replaceable>-<replaceable>Release</replaceable>
 				firma in <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
 				RPM</ULink>.</para>
 
-			<para>I pacchetti Debian sono creati da Ren&eacute; Engelhard 
-				<email>rene@debian.org</email> e sono normaomente disponibili
+			<para>I pacchetti Debian sono creati da Chanop Silpa-Anan 
+				<email>chanop@debian.org</email> e sono normaomente disponibili
 				pochi giorni dopo ogni release di Muttprint. Possono essere
 				installati con</para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>dpkg -i muttprint_[versione]-[release]_all.deb</UserInput>
+				<UserInput>dpkg -i muttprint_[versione]-[release]_noarch.deb</UserInput>
 			</para>
 			
 			<para>Dai un'occhiata a <ulink
@@ -219,7 +224,7 @@ muttprint-<replaceable>Versione</replaceable>-<replaceable>Release</replaceable>
 		
 			<para>Devi aggiungere o modificare la seguente linea nel file
 				<Filename>$HOME/.muttrc</Filename> o per tutto il sistema
-				<FileName>##SYSCONFDIR##/Muttrc</FileName>:</para>
+				<FileName>/etc/Muttrc</FileName>:</para>
 
 			<ProgramListing>set print_command="muttprint"</ProgramListing>
 
@@ -392,16 +397,16 @@ set printer_name "muttprint"
 		<para>Alcune cose possono essere configurate in Muttprint.
 			Ciò può essere fatto in modo permanente con i files di configurazione
 			<filename>$HOME/.muttprintrc</filename>
-			(solo per l'utente attuale) o <filename>##SYSCONFDIR##/Muttprintrc</filename>
+			(solo per l'utente attuale) o <filename>/etc/Muttprintrc</filename>
 			(valido per tutti gli utenti). Le impostazioni utente scavalcano
 			le impostazioni globali.</para>
 
-    <para>Puoi anche specificare un file di configurazione addizionale
-      mediante l'opzione <option>-r <replaceable>filename</replaceable></option>
-      Questo file verrà letto per ultimo ed il suo contenuto scavalcherà
-      tutte le altre impostazioni incluse quelle passate da linea di comando.
-      Questo file addizionale è utile per uare più di una configurazione
-      possibile combinandolo con qualche combinazione di tasti di Mutt.</para>
+	    <para>Puoi anche specificare un file di configurazione addizionale
+    	    mediante l'opzione <option>-r <replaceable>filename</replaceable></option>
+    	    Questo file verrà letto per ultimo ed il suo contenuto scavalcherà
+    	    tutte le altre impostazioni incluse quelle passate da linea di comando.
+    	    Questo file addizionale è utile per uare più di una configurazione
+    	    possibile combinandolo con qualche combinazione di tasti di Mutt.</para>
 			
 		<para>Il file di configurazione è struttrato in modo che dei valori 
 			siano assegnati a diverse variabili -- questo differisce da
@@ -414,7 +419,7 @@ set printer_name "muttprint"
 		<para>Un file di configurazione di esempio è distribuito con
 			Muttprint  (<filename>sample-muttprintrc</filename>). Se hai
 			installato un pacchetto RPM o debian lo troverai in
-			<filename>##DOCDIR##/muttprint/</filename>.</para>
+			<filename>/usr/share/doc/packages/muttprint/</filename>.</para>
 			
 		<para>Un esempio per una corretta sintassi:</para>
 		
@@ -438,10 +443,28 @@ set printer_name "muttprint"
 			<para>Se è abilitata la stampa fronte-retro, Muttprint crea un secondo
 				file col prefisso <filename>2</filename>, ad es.
 				<filename>test.ps2</filename>.</para>
+			<para>Se questa variabile non è impostata Muttprint valuta la
+				variabile d'ambiente <envar>PRINTER</envar> e usa il suo valore
+				per rilevare la staampante. Di solito è impostato alla stampante di default.
+				Se usi CDE (comune sui sistemi Unix commerciali)
+				il suo file di configurazione viene letto per rilevare la stampante di default.</para>
 				
+			<para>Dalla versione 0.65 Muttprint offre il supporto diretto
+			 	del nuovo sistema di stampa CUPS. Esso può essere abilitato
+				impostando <literal>PRINT_COMMAND</literal> a <literal>CUPS</literal>.
+				In alternativa è possibile impostarlo ad un comando arbitrario
+				che contenga la stringa <literal>$CUPS_OPTIONS</literal>
+				che viene sostituita alle opzioni di stampa di CUPS.</para>
+			 <tip>
+		        <para>Puoi usare l'impostazione <literal>gv -</literal> per
+						avere un'anteprima di stampa. Questo è utile per testare diverse
+						impostazioni.
+		        </para>
+		      </tip>
+			
 		</sect3>
-    <sect3>
-      <title>Printing command</title>
+    <sect3 id="printcommand">
+      <title>Comando di stampa</title>
 			  <para>Muttprint richiama <application>lpr</application> per stampare
 				      come default. Se vuoi usare un altro comando di stampa imposta
 							<literal>PRINT_COMMAND</literal> al programma che vuoi usare.
@@ -449,12 +472,7 @@ set printer_name "muttprint"
 							viene sostituita dalla stampante scelta. Il default è
 							<literal>lpr -P$PRINTER</literal>.
 				</para>
-		      <tip>
-		        <para>Puoi usare l'impostazione <literal>gv -</literal> per
-						avere un'anteprima di stampa. Questo è utile per testare diverse
-						impostazioni.
-		        </para>
-		      </tip>
+				
         </sect3>
 		   	<sect3>
 			<title>Pinguino</title>
@@ -475,9 +493,9 @@ set printer_name "muttprint"
 				per vedere dove Muttprint va a cercare). Questa è
 				l'impostazione di default.</para>
 
-      <para>In più, Muttprint viene distribuito con alcune immagini di
-        esempio già convertite nel formato EPS. Dopo l'installazione le
-        troverai in <filename>##SHAREDIR##/muttprint</filename>.</para>
+      		<para>In più, Muttprint viene distribuito con alcune immagini di
+        		esempio già convertite nel formato EPS. Dopo l'installazione le
+        		troverai in <filename>/usr/share/muttprint</filename>.</para>
 				
 			<para>Se si vuole si può non stampare alcunché:
 				imposta <literal>PENGUIN</literal> al valore <literal>off</literal>.
@@ -560,7 +578,7 @@ set printer_name "muttprint"
 		</sect3>
 		
 		<sect3>
-			<title>Paper save mode</title>
+			<title>Modo "risparmio carta"</title>
 			
 			<para>E` possibile stampare due pagine in una in orientazione landscape.
 				Questa ti permetterà di risparmiare carta, inchiostro e di aumentare
@@ -569,6 +587,7 @@ set printer_name "muttprint"
 			
 			<para>Per abilitare questa funzione setta <literal>PAPERSAVE</literal> a
 				<literal>on</literal>.</para>
+				
 			<para>Se si vuole attivare il modo <literal>PAPERSAVE</literal> solo
 			  quando si ha più di una pagina da stampare, impostare questa voce a
 				<literal>optional</literal>.</para>
@@ -661,8 +680,8 @@ set printer_name "muttprint"
 				corrispondente è <literal>FONT</literal>.
 				<literal>Latex</literal> userà il font standard di LaTeX
 				della famiglia EC. <literal>Latex-bright</literal>
-				(standard setting) userà <emphasis>Computer Modern Bright</emphasis>.
-        Questo font non è disponibile sugli attuali sistemi Debian a causa
+				userà <emphasis>Computer Modern Bright</emphasis>.
+        Questo font non è disponibile su molti sistemi a causa
         della sua licenza<footnote>
                 <!-- Footnote -->
           <para>Puoi scaricare questo font ed installarlo sul tuo computer dal
@@ -681,7 +700,10 @@ set printer_name "muttprint"
 			<para>Sono diversi i fonts Postscript che si possono usare: 
 				<literal>Times</literal>, <literal>Palatino</literal>,
 				<literal>Utopia</literal>, <literal>Charter</literal> and
-				<literal>Bookman</literal>.</para>
+				<literal>Bookman</literal>, <literal>CentSchool</literal>
+				(New Century Schoolbook), <literal>Chancery</literal>
+				(Zapf Chancery), <literal>Helvetica</literal> or
+				<literal>AvantGarde</literal>.</para>
 
 			<para>Ovviamente i fonts devono essere installati sul tuo sistema,
 				e, dato che la distribuzione <emphasis>teTeX</emphasis> di
@@ -710,11 +732,11 @@ set printer_name "muttprint"
 						opzioni che vengono passate all'ambiente <literal>Verbatim</literal>
 						possono essere impostate attraverso la variabile
 						<literal>VERBATIMNORMAL</literal> (per il testo normale) e					
-						<literal>VERBATIMSIG</literal> (per la firoma).</para>
+						<literal>VERBATIMSIG</literal> (per la firma).</para>
 
 			<para>Troverai l'esatta sintassi nella documentazione di
 		        <filename>fancyvrb.sty</filename>, che può essere consultata
-						con il comando <command>texdoc fancyvrb</command>. Normalmentehe
+						con il comando <command>texdoc fancyvrb</command>. Normalmente
 						la firma viene stampata in corsivo. Puoi stampare anche dei bordi.
 						</para>
 			 <para>Se non vuoi separare il corpo della mail dalla firma
@@ -915,16 +937,16 @@ stampato.
 
         </sect3>
 		    <sect3>
-   	      <title>Padroneggiare il codice LaTeXode</title>
+   	      <title>Utilizzare il proprio codice LaTeX</title>
 			      <para>La variabile <literal>LATEXCODE</literal> è per
-  								coloro che sono in confidenza con LaTeX e vogliono
+  								coloro che hanno confidenza con LaTeX e vogliono
 									personalizzare la stampa senza cambiare il codice
 					        sorgente di Muttprint. Per esempio, potrebbe essere
-									utile utilizzare proprio fonts.</para>
+									utile utilizzare propri fonts.</para>
 			      <para>Dietro <literal>LATEXCODE</literal> ci sono
 									cinque variabili addizionali (<literal>LATEXCODE1</literal>
 									fino a <literal>LATEXCODE5</literal>) per dividere il codice
-									LaTeX in maniera carina.
+									LaTeX in maniera interessante.
 									Queste variabili sono integrate nel codice in questo
 									ordine.</para>
 				      <tip>
@@ -957,10 +979,10 @@ stampato.
 			(e.&nbsp;g. con proprie macro).</para>
 			
 		<para>Puoi trovare una descrizione dettagliata di tutte le
-			ioni col comando
+			opzioni col comando
 			<command>muttprint</command> <option>-h</option> 
 			oppure nella pagina man di <citerefentry><refentrytitle>muttprint</refentrytitle>
-			<manvolnum>1</manvolnum></citerefentry> manpage.</para>
+			<manvolnum>1</manvolnum></citerefentry>.</para>
 			
 		<para>Gli effetti di queste opzioni solo gli stessi di quelli ottenuti
 			col file di configurazione, ma le opzioni da linea di comando
@@ -971,16 +993,19 @@ stampato.
 	<sect2 id="lang">
 		<title>Lingue diverse</title>
 		
-		<para>Muttprint supporta le lingue <emphasis>German</emphasis>, 
-			<emphasis>Italian</emphasis>, <emphasis>Spanish</emphasis>, 
-			<emphasis>French</emphasis> e <emphasis>English</emphasis>. 
+		<para>Muttprint supporta diverse lingue.
 			Solitamente la variabile d'ambiente <envar>LANG</envar> è
 			impostata al valore corretto:
 			<literal>de</literal>, <literal>it</literal>,
 			<literal>fr</literal>, <literal>es</literal> o
-			<literal>en</literal>. Solo i primi due caratteri sono rilevati,
+			<literal>en</literal> ovvero le abbrieviazioni in accordo all'ISO 639.
+			Solo i primi due caratteri sono rilevati,
 			così <literal>it_IT@euro</literal> va bene. Se il valore è
 			sconosciuto Muttprint userà l'inglese.</para>
+
+		<para>Puoi vedere quali sono le traduzioni disponibili nel file
+			<filename>README.translations</filename>, installato nella stessa
+			directory della documentazione.</para>
 
 		<para>Se vuoi usare una lingua diversa per Muttprint rispetto 
 			al resto del sistema, puoi impostare <literal>LANG</literal> nel
@@ -1030,53 +1055,58 @@ stampato.
         <colspec colnum="2" colwidth="0.8in">
           <thead>
             <row>
-              <entry>charset</entry>
-              <entry>option</entry>
-              <entry>description</entry>
+              <entry>set di caratteri</entry>
+              <entry>opzione</entry>
+              <entry>descrizione</entry>
             </row>
           </thead>
           <tbody>
             <row>
               <entry>ISO-8859-1</entry>
               <entry><literal>latin1</literal></entry>
-              <entry>west European lanuages</entry>
+              <entry>Lingue Europa Occidentale</entry>
             </row>
             <row>
               <entry>ISO-8859-2</entry>
               <entry><literal>latin2</literal></entry>
-              <entry>east European languages</entry>
+              <entry>Lingue Europa Orientale</entry>
             </row>
             <row>
               <entry>ISO-8859-3</entry>
               <entry><literal>latin3</literal></entry>
-              <entry>southeast European and miscellaneous languages</entry>
+              <entry>Lingue Europa sud-orientale ed altre lingue</entry>
             </row>
             <row>
               <entry>ISO-8859-4</entry>
               <entry><literal>latin4</literal></entry>
-              <entry>southeast European and miscellaneous languages</entry>
+              <entry>Lingue Europa sud-orientale ed altre lingue/entry>
             </row>
             <row>
               <entry>ISO-8859-9</entry>
               <entry><literal>latin5</literal></entry>
-              <entry>Latin-1 modification for Turkish</entry>
+              <entry>Latin-1 modificato per il Turco</entry>
             </row>
             <row>
               <entry>ISO-8859-15</entry>
               <entry><literal>latin9</literal></entry>
-              <entry>Latin-1 with some modifications, e.&nbsp;g. Euro currency
-                symbol</entry>
+              <entry>Latin-1 con alcune modifiche, e.&nbsp;g. Glifo della moneta
+                europea</entry>
             </row>
             <row>
               <entry>Windows-1252</entry>
               <entry><literal>latin1</literal></entry>
-              <entry>Latin-1 with some enhancements</entry>
+              <entry>Latin-1 con alcuni miglioramenti</entry>
             </row>
             <row>
               <entry>Windows-1250</entry>
               <entry><literal>latin2</literal></entry>
-              <entry>Latin-2 with some enhancements</entry>
+              <entry>Latin-2 con alcuni miglioramenti</entry>
             </row>
+			<row>
+			  <entry>UTF-8</entry>
+			  <entry><literal>utf8</literal></entry>
+			  <entry>Unicode come supportato da LaTeX, vedi <xref linkend="sysreq"></entry>
+			</row>
           </tbody>
         </tgroup>
       </informaltable>
@@ -1200,7 +1230,7 @@ traduttori.</para>
               Soprattutto, non tutti i clients supportano l'output dei
               messaggi nudo e crudo per la stampa.</para>
                         
-        <para>Mutt ha da sè una comoda funzione per stampare gli
+        <para>Mutt ha una sua comoda funzione per stampare gli
               allegati. Puoi scegliere un comando diverso per ogni tipo
               MIME. Ciò può essere impostato in <filename>~/.mailcap</filename>.
               Troverai maggiori informazioni nel manuale di Mutt, alla
@@ -1239,7 +1269,7 @@ rm $target</programlisting>
 
 		<para>Come ultima cosa vorrei ringraziare tutte le persone che
 			hanno contribuito al free software. La maggior parte lo ha
-			fatto durante il tempo libero e senza ricevere "una lira"
+			fatto durante il tempo libero e senza ricevere "un centesimo"
 			per questo!</para>
 
 	</sect2>
