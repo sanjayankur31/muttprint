@@ -13,6 +13,12 @@ doc-sed = manual-$(lang)-sed.sgml
 
 db2html = /usr/bin/db2html
 sgmltools = /usr/bin/sgmltools
+db2html = /usr/bin/db2html
+db2pdf = /usr/bin/db2pdf
+db2ps = /usr/bin/db2ps
+db2dvi = /usr/bin/db2dvi
+db2html = /usr/bin/db2html
+db2rtf = /usr/bin/db2rtf
 stylesheet = ../stylesheet.dsl
 nsgmls = /usr/bin/nsgmls
 catalog = /usr/share/sgml/CATALOG.docbook_4
@@ -34,7 +40,7 @@ INSTALLDIR = install -d
 #
 # we will not make 'all' but only the 'standard' by default
 default: pdf html sed-clean
-all: ps dvi pdf html txt rtf sed-clean
+all: ps dvi pdf html rtf sed-clean
 ps: manual-$(lang).ps
 pdf: manual-$(lang).pdf
 dvi: manual-$(lang).dvi
@@ -52,27 +58,23 @@ manual-$(lang)-sed.sgml: manual-$(lang).sgml
 		> manual-$(lang)-sed.sgml
 
 manual-$(lang).pdf: $(doc-sed)
-	$(sgmltools) -b pdf -s $(stylesheet) $(doc-sed)
+	$(db2pdf) -s $(stylesheet) $(doc-sed)
 	$(mv) manual-$(lang)-sed.pdf manual-$(lang).pdf
 
 manual-$(lang).ps: $(doc-sed)
-	$(sgmltools) -b ps -s $(stylesheet) $(doc-sed)
+	$(db2ps) -s $(stylesheet) $(doc-sed)
 	$(mv) manual-$(lang)-sed.ps manual-$(lang).ps
 
 manual-$(lang).dvi: $(doc-sed)
-	$(sgmltools) -b dvi -s $(stylesheet) $(doc-sed)
+	$(db2dvi) -s $(stylesheet) $(doc-sed)
 	$(mv) manual-$(lang)-sed.dvi manual-$(lang).dvi
 
 manual-$(lang)/*: $(doc-sed)
-	$(sgmltools) -b html -s $(stylesheet)\#html $(doc-sed)
+	$(db2html) -s $(stylesheet) $(doc-sed)
 	$(mv) manual-$(lang)-sed manual-$(lang)
 
-manual-$(lang).txt: $(doc-sed)
-	$(sgmltools) -b txt  $(doc-sed)
-	$(mv) manual-$(lang)-sed.txt manual-$(lang).txt
-
 manual-$(lang).rtf: $(doc-sed)
-	$(sgmltools) -b rtf -s $(stylesheet) $(doc-sed)
+	$(db2rtf) -s $(stylesheet) $(doc-sed)
 	$(mv) manual-$(lang)-sed.rtf manual-$(lang).rtf
 
 validate:
