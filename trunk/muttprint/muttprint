@@ -309,8 +309,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	my $formats = "";
 	$unformated =~ s/[\*\/]//g;
 	
-	$formats .= '\\bfseries' if /\*.*\*/;
-	$formats .= '\\itshape' if /\/.*\//;
+	$formats .= '\\bfseries ' if /\*.*\*/;
+	$formats .= '\\itshape ' if /\/.*\//;
 	
 	$HeaderFormatAttr{$unformated} = $formats;
 	push @headers, $unformated;
@@ -1386,7 +1386,7 @@ $isolatinextensions
 	output \*LATEX, $Header{ShortFrom};
 
 output \*LATEX, "}
-\\rhead{\\bfseries";
+\\rhead{\\bfseries ";
 
 	output \*LATEX, $Header{'ShortSubject'};
 
@@ -1428,7 +1428,7 @@ output \*LATEX, <<EOF;
 $PengCode }
 $AfterHeader
 \\VerbatimInput[$Config{VERBATIMNORMAL}]{$Temp{content}}
-\\setlength{\\parskip}{-4em}
+\\setlength{\\parskip}{-1em}
 $sig_tex
 \\end{document}
 EOF
