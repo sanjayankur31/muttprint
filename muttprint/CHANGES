@@ -158,3 +158,8 @@ CHANGES
         - applied some Debian patches:
           . replaced cwd() from Cwd with getcwd() from POSIX
           . replaced sgmltools -j ... option with the -s option
+
+0.64    - add compatibility option for new geometry.sty
+        - fixed bug with '_' in e-mail address in the headline
+        - limited size of subject in the headline to 60 chars
+
