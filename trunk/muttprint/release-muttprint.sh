@@ -13,7 +13,7 @@ VERSION=`muttprint -v | head -2 | tail -1 | cut --delimiter=' ' -f 2`
 ln -s muttprint muttprint-$VERSION
 
 # Tar-gz erzeugen
-tar cvzh --exclude CVS --exclude *jpg --exclude *png --exclude tags \
+tar cvzh --exclude CVS --exclude .cvsignore --exclude *jpg --exclude *png --exclude tags \
 	-f muttprint-$VERSION.tar.gz muttprint-$VERSION
 
 # Link löschen
