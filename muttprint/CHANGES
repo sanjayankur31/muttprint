@@ -123,7 +123,7 @@ CHANGES
         - Polish translation 
         - CDE printer configuration is recognized (~/.printers)
         - better code for deletion of temporary files
-	- fixed bug with reading configuration files
+        - fixed bug with reading configuration files
 
 0.62    - printing Euro sign works ($charset must be set to "latin9")
         - more ASCII charaters are escaped -> printing the header
@@ -136,9 +136,9 @@ CHANGES
           [Normally you should set $charset in dependence of
           the Mutt $charset variable]
         - new options: $DATE, $DATE_FORMAT
-	- new option: $ADDRESSFORMAT (specifies the format of the
-	  adresses in the mailheader
-	- new option: $RCFILE (additional configuration file)
+        - new option: $ADDRESSFORMAT (specifies the format of the
+          adresses in the mailheader
+        - new option: $RCFILE (additional configuration file)
 
 0.62a   - updated Italian and French translation
 
@@ -153,3 +153,8 @@ CHANGES
         - new option LATEXCODE (and LATEXCODE1 ... LATEXCODE5)
         - fixing some small bugs
 
+0.63a   - replaced absolute paths in the documentation with variables;
+          the variables are replaced before building the documentation
+        - applied some Debian patches:
+          . replaced cwd() from Cwd with getcwd() from POSIX
+          . replaced sgmltools -j ... option with the -s option

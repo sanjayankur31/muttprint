@@ -228,7 +228,7 @@ muttprint-<replaceable>versión</replaceable>-<replaceable>release</replaceable>.
 		
 			<para>tienes que añadir o modificar la siguiente línea
                         en el archivo <filename>$home/.muttrc</filename> o a
-                        nivel de todo el sistema en <filename>/etc/muttrc</filename>:</para>
+                        nivel de todo el sistema en <filename>##SYSCONFDIR##/muttrc</filename>:</para>
 
 			<programlisting>set print_command="muttprint"</programlisting>
 
@@ -267,7 +267,7 @@ set print_split
 			</ProgramListing>
 
 			<para>Encontrarás más información en la documentación de Mutt
-			(<Filename>/usr/share/doc/packages/mutt/manual.txt</Filename>).</para>
+			(<Filename>##DOCDIR##/mutt/manual.txt(.gz)</Filename>).</para>
 
 		</sect3>
 
@@ -297,7 +297,7 @@ set printer_name "muttprint"
 			<para>En el diálogo <GUImenu>Misc</GUImenu>, <GUImenuItem>Config
 				Misc</GUImenuItem> tienes que ingresar en <GUIlabel>Print
 				Command</GUIlabel>:
-				<literal>/usr/bin/muttprint -f $f</literal>.</para>
+				<literal>##BINDIR##/muttprint -f $f</literal>.</para>
 
 			
 			<Note>				
@@ -356,7 +356,7 @@ set printer_name "muttprint"
                         consultaras ése archivo. Si utilizas paquetes para la
                         instalación deberías encontrar ése archivo en el
                         directorio
-                        <filename>/usr/share/doc/packages/muttprint/</filename>.
+                        <filename>##DOCDIR##/muttprint/</filename>.
 			</para>
 		</sect3>
 
@@ -415,7 +415,7 @@ set printer_name "muttprint"
                 es realizado de forma permanente en los archivos de
                 configuración <filename>$HOME/.muttprintrc</filename> (sólo
                 para el usuario actual) o
-                <filename>/etc/Muttprintrc</filename> (global para todos los
+                <filename>##SYSCONFDIR##/Muttprintrc</filename> (global para todos los
                 usuarios). La configuración de cada usuario tienen prioridad
                 sobre la configuración global.</para>
 			
@@ -439,7 +439,7 @@ set printer_name "muttprint"
 		<para>Un ejemplo de un archivo de configuración es distribuído
                 con Muttprint (<filename>sample-muttprintrc-es</filename>). Si
                 has instalado desde un RPM o un paquete Debian, lo encontrarás
-                en <filename>/usr/share/doc/packages/muttprint/</filename>.</para>
+                en <filename>##DOCDIR##/muttprint/</filename>.</para>
 			
 		<para>Ejemplo de una asignación correcta:</para>
 		
@@ -491,7 +491,7 @@ set printer_name "muttprint"
 			<para>Además, Muttprint viene con algunas imágenes
 			de ejemplo que están ya convertidas al formato EPS. 
 			Después de la instalación, las encontrarás en
-			<filename>/usr/share/muttprint</filename>.</para>
+			<filename>##SHAREDIR##/muttprint</filename>.</para>
 				
 			<para>Si quieres la impresión de la imágen
                         desactivada, define <literal>PENGUIN</literal> con el valor
@@ -823,7 +823,7 @@ set printer_name "muttprint"
                         <literal>A4</literal> y <literal>letter</literal>.
 				</para>
 			
-			<para>Si existe un archivo <filename>/etc/papersize</filename>
+			<para>Si existe un archivo <filename>##SYSCONFDIR##/papersize</filename>
 			como es usual en sistemas Debian, éste será evaluado también.
 			Las configuraciones personales tienen preferencia sobre
 			éstas configuraciones del sistema.</para>

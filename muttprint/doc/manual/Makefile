@@ -7,8 +7,6 @@ INSTALL = install -m 0644
 INSTALLDIR = install -d 
 MAKE = make
 
-
-
 default: 
 	$(MAKE) -C de
 	$(MAKE) -C es

@@ -14,10 +14,6 @@ Tato manuálová stránka seznamuje s utilitou B<Muttprint>.
 Stránka byla napsaná pùvodnì pro distribuci Debian GNU/Linux, byla
 vytvoøena pomocí POD-formátu.
 
-B<POZNÁMKA:> Cesta F</usr/share/doc/packages/muttprint> mù¾e být
-F</usr/doc/packages/muttprint> nebo F</usr/share/doc/muttprint>
-na Va¹em systému!
-
 B<Muttprint> je utilita, která formátuje tisk z Muttu a ostatních mailových
 klientù jako jsou XFMail nebo PINE, aby byl více podobný tisku z Netscape
 Messengeru nebo Kmailu. Mù¾e tisknout malého tuèòáka na první stránce a
@@ -25,16 +21,16 @@ hlavièku na ka¾dé dal¹í stránce. V hlavièce zprávy se tisknou pouze dùle¾ité
 údaje.
 
 Detailní informace o Muttprintu získá¹ v U¾ivatelské pøíruèce v PDF a HTML
-formátu v F</usr/share/muttprint>.
+formátu v F<##SHAREDIR##/muttprint>.
 
-Musíte vlo¾it následující øádek do Va¹eho F</etc/Muttrc> nebo
+Musíte vlo¾it následující øádek do Va¹eho F<##SYSCONFDIR##/Muttrc> nebo
 F<~/.muttrc>:
 
 	set print_command="muttprint"
 
 Jestli¾e si pøejete upravit nastavení B<Muttprintu>, jen zkopírujte
-F</usr/share/doc/packages/muttprint/sample-muttprintrc-cs>
-do F</etc/Muttprintrc> nebo F<~/.muttprintrc> závislosti na tom,
+F<##DOCDIR##/muttprint/sample-muttprintrc-cs>
+do F<##SYSCONFDIR##/Muttprintrc> nebo F<~/.muttprintrc> závislosti na tom,
 jestli chcete mìnit nastavení celého systému nebo nastavení jednoho
 u¾ivatele.
 
@@ -58,7 +54,7 @@ toto jméno mù¾ete jednodu¹e zjistit pøíkazem I<lpq> v pøíkazové øádce.
 =head1 VOLBY
 
 B<POZNÁMKA:> Tyto volby pøenastavují odpovídající nastavené hodnoty
-v F<~/.muttprintrc> a F</etc/Muttprintrc>.
+v F<~/.muttprintrc> a F<##SYSCONFDIR##/Muttprintrc>.
 
 A tady je popis v¹ech voleb na pøíkazovém øádku (popis nastavení v rc-souboru
 obsahuje soubor F<sample-muttprintrc-cs> distribuovaný s B<Muttprintem>):
@@ -173,7 +169,7 @@ pou¾ívá se English.
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Volba urèuje, jestli bude B<Muttprint> tisknout do log-souboru
-F</tmp/muttprint.log>. U¾iteèné pøi dotazech o pomoc,
+F<##TEMPDIR##/muttprint.log>. U¾iteèné pøi dotazech o pomoc,
 kdy¾ B<Muttprint> nefunguje.
 
 
@@ -223,7 +219,7 @@ tak¾e by to mìlo fungovat.
 
 =over 7
 
-=item F</etc/Muttprintrc>
+=item F<##SYSCONFDIR##/Muttprintrc>
 
 Konfiguraèní soubor pro celý systém.
 
@@ -233,23 +229,23 @@ Konfiguraèní soubor pro celý systém.
 U¾ivatelský konfiguraèní soubor.
 
 
-=item F</tmp/muttprint-XXXXX>
+=item F<##TEMPDIR##/muttprint-XXXXX>
 
 Doèasné soubory vytvoøeny B<Muttprint>em.
 
 
-=item F</usr/share/doc/packages/muttprint/>
+=item F<##DOCDIR##/muttprint/>
 
 Manuálové soubory B<Muttprint>u v rozdílných jazycích a formátech.
 
 
-=item F</usr/share/muttprint/>
+=item F<##SHAREDIR##/muttprint/>
 
 Nìkteré obrázky, které mù¾ou být vyti¹tìny na první stránce
 zprávy.
 
 
-=item F</usr/lib/muttprint>
+=item F<##LIBDIR##/muttprint>
 
 Pøekladové soubory.
 

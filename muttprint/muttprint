@@ -47,7 +47,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63";
+$VERSION = "0.63a";
 my $PACKAGE = "Muttprint";
 
 
@@ -98,7 +98,7 @@ my %Config = (
 	HEADRULE		=>	'off',
 	FOOTRULE		=>	'off',
 	FRONTSTYLE		=>	'border',
-	MAXADDR		=>	'10',
+	MAXADDR		    =>	'10',
 	DATE			=>	'original',
 	DATE_FORMAT		=>	'%c',
 	XFACE			=>	'off',
@@ -313,7 +313,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 			my $aktHeader;
 		
 			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
-			($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/i unless $mail_charset;
+			($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/i unless $mail_charset; 
+            # wg. Syntax-Highlighting-Bug in JEdit "
 			
 			foreach $aktHeader (@headers, "X-Face") {
 			
