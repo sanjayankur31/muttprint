@@ -1654,8 +1654,8 @@ sub setStrings ($) {
 
 	my $stringsAreSet = FALSE;
 	my $lang = shift;
-	my (@translationDirs) = (findCommonDir('lib')."/translations",
-			findCommonDir('share')."/translations");
+	my (@translationDirs) = (findCommonDir('share')."/translations",
+			findCommonDir('lib')."/translations"), findCommonDir('lib');
 	
 	if ($lang =~ /^(\w{2})/i) {
 		my $shortLang = $1;

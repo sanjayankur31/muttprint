@@ -72,8 +72,7 @@ Autore: Bernhard Walle <Bernhard.Walle@gmx.de>
 
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{prefix}/bin
-mkdir -p $RPM_BUILD_ROOT/%{prefix}/share/muttprint
-mkdir -p $RPM_BUILD_ROOT/%{prefix}/lib/muttprint/translations
+mkdir -p $RPM_BUILD_ROOT/%{prefix}/share/muttprint/translations
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/*/man1
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
@@ -88,13 +87,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %{prefix}/bin/muttprint
 %{prefix}/share/muttprint
-%{prefix}/lib/muttprint
 %{_mandir}/man1/muttprint.1.gz
 %{_mandir}/*/man1/muttprint.1.gz
 %{_docdir}/*
 
 
 %changelog
+* Mon Apr 14 2003 Bernhard Walle <Bernhard.walle@gmx.de>
+- changed translation place to /prefix/share/muttprint/translations
 * Mon Apr 07 2003 Bernhard Walle <Bernhard.walle@gmx.de>
 - changed translation place to /prefix/lib/muttprint/translations
 * Thu Feb 20 2003 Bernhard Walle <Bernhard.Walle@gmx.de>

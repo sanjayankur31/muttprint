@@ -19,6 +19,8 @@ CHANGES
         - added KOI8-R support (experimental); this works not on all LaTeX
           systems, so use teTeX 2.0 if you have problems
         - added Russian translation, thanks to Alex Semenyaka
+        - changed translation directory to /usr/share/muttprint/translations
+          according to FHS
 
 0.64    - add compatibility option for new geometry.sty
         - fixed bug with '_' in e-mail address in the headline
