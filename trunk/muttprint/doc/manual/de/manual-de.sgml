@@ -929,6 +929,13 @@ set printer_name "muttprint"
 				(ausgesprochen hei&szlig;t das <quote>remove
 				signature</quote>) auf <literal>on</literal> gesetzt werden.</para>
 
+			<para>Sollen andere Signaturtrenner auch als solche erkannt werden
+				so kann die Variable <literal>SIG_REGEXP</literal> gesetzt werden.
+				Verlangt wird ein regulärer Ausdruck in Perl-Syntax, die
+				Standardeinstellung ist <literal>^-- $</literal>. Wenn Ihnen
+				diese Schreibweise nichts sagt, lassen Sie es bei der
+				Standardeinstellung!</para>
+
 		</sect3>
 		<sect3>
 			<title>Quoting nicht mitdrucken</title>

@@ -875,6 +875,13 @@ set printer_name "muttprint"
 			<para>To do this you've to set <literal>REM_SIG</literal> (this means
 				<quote>remove signature</quote> to the value 
 				<literal>on</literal>.</para>
+
+			<para>If Muttprint should recognize other separators to indicate
+				the beginning of a signature, you can set <literal>SIG_REGEXP</literal>
+				to a regular expression in Perl syntax. The default setting
+				is <literal>^-- $</literal>. If you don't know what this notation
+				means, just don't change the default.</para>
+				
 		</sect3>
 		<sect3>
 			<title>Omit quoting</title>

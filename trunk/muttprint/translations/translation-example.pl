@@ -123,6 +123,9 @@ PLEASE NOTICE: These options override the corresponding settings in
 -s, --rem_sig | -nos, --norem_sig
        Removes the signature (separated by "-- ") in the printing.
 
+--sig_regexp [Regular expression]
+       Specifies the regular expression used to recognize the signature.
+
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.
 
