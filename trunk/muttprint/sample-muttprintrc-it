@@ -2,12 +2,17 @@
 #
 # ~/.muttprintrc o /etc/Muttprintrc
 
-
 #
 # Qui puoi configurare la tua stampante
 # Per stampare in un file usa la seguente sintassi
 # PRINTER="TO_FILE:/home/ciccio/test.ps"
-PRINTER="lp0"
+PRINTER="lp"
+
+#
+# Qui puoi impostare il comando di stampa
+# $PRINTER verra` sostituito dalla variabile
+# PRINTER
+PRINT_COMMAND="lpr -P$PRINTER"
 
 #
 # Qui puoi settare il path per l'immagine del pinguino
@@ -25,7 +30,9 @@ DUPLEX="off"
 
 #
 # Qui puoi settare a "on" o "off" il paper save mode
-# (stampa di due pagine in una)
+# (stampa di due pagine in una). Impostando questa opzione a "optional"
+# si otterrà che il modo "papersave" verrà usato solo se le pagine da
+# stampare sono più di una
 PAPERSAVE="off"
 
 #
