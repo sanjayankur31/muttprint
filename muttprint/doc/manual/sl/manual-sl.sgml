@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2003-05-01</pubdate>
+	<pubdate>2003-04-26</pubdate>
 	
 	<releaseinfo>Verzija 0.70</releaseinfo>   
 	
@@ -454,7 +454,7 @@ prevladajo nad globalnimi.</para>
 				je njegova konfiguracijska datoteka prebrana za
 privzeti tiskalnik.</para>
 				
-			<para>Od verzije 0.65 dalje Muttprint nudi direktno podporo 
+			<para>Od verzije 0.70 dalje Muttprint nudi direktno podporo 
 			 	novega sistema za tiskanje CUPS. Vklopi se ga tako, da se
 				nastavi <literal>PRINT_COMMAND</literal> na <literal>CUPS</literal>.
 				Alternativno lahko nastavite arbitrarni ukaz ki
