@@ -17,6 +17,11 @@ docdir = /usr/share/doc/packages
 # (current setting is correct according to LSB)
 mandir = $(prefix)/share/man
 
+#
+# Muttprint needs GNU make. If you installed GNU make
+# as `gmake', you have to change this
+MAKE = make
+
 # Change this three directories only if you're know
 # what you do
 sharedir = $(prefix)/share
@@ -45,8 +50,8 @@ install:
 		$(docdir)/muttprint/
 	$(INSTALL) `find pics -type f -print` $(sharedir)/muttprint/
 	$(INSTALL) `find translations -type f -print` $(libdir)/muttprint/
-	make -C doc/manual docdir=$(docdir) install
-	make -C doc/manpages mandir=$(mandir) install
+	$(MAKE) -C doc/manual docdir=$(docdir) install
+	$(MAKE) -C doc/manpages mandir=$(mandir) install
 
 uninstall:
 	rm $(bindir)/muttprint
