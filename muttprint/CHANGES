@@ -21,6 +21,8 @@ CHANGES
         - added Russian translation, thanks to Alex Semenyaka
         - changed translation directory to /usr/share/muttprint/translations
           according to FHS
+        - creating temporary dir using File::Temp module which honors the
+          TMPDIR environment
 
 0.64    - add compatibility option for new geometry.sty
         - fixed bug with '_' in e-mail address in the headline
