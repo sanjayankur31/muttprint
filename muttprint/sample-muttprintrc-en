@@ -46,8 +46,8 @@ FONT="Latex-bright"
 # - plain       no rules
 # - border      rule after the headers
 # - fbox        simple box around the mailheaders
-# - shadowbox   shadowbox arount the header
-# - ovalbox     box with rounded corners arount the header (thin lines)
+# - shadowbox   shadowbox around the header
+# - ovalbox     box with rounded corners around the header (thin lines)
 # - Ovalbox     same as "ovalbox" but thicker lines
 # - doublebox   box with double lines around the header
 # - grey        grey background behind the headers
