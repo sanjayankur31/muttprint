@@ -16,6 +16,9 @@ PENGUIN="off"
 #
 # Qui puoi impostare ad "on" o ad "off" la stampa fronte - retro
 #
+# Per attivare/disattivare la stampa dell'immagine X-Face
+XFACE="off"
+#
 # Per le stampanti Postscript che possono farlo da sé settare a
 # "printer"
 DUPLEX="off"
@@ -88,5 +91,25 @@ REM_QUOTE="off"
 DEBUG="0"
 
 #
-# Abilita o disabilita la stampa dell'immagine indicata in X-Face
-XFACE="off"
+# Grandezza del font: 10pt, 11pt o 12pt
+FONTSIZE="10pt"
+
+#
+# Massima lunghezza della linea
+WRAPMARGIN="80"
+
+#
+# Set di caratteri
+# latin1, latin2, latin3, latin4, latin5, latin9, auto
+CHARSET="latin1"
+
+#
+# Data (formata della data in stampa)
+# valore originale, local
+DATE="local"
+
+#
+# Formata della stringa contentente la data (solo se DATE=local)
+# Vedi strftime(3) per i dettagli
+DATE_FORMAT="%A, %d. %B %Y %H:%M:%S"
+

@@ -63,11 +63,38 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 -l [langage], --lang [langage]
        Langue pour les messages et l'impression.
 
+-c [charset], --charset [charset]
+       Table de caractères en entrée: latin1, latin2, latin3, latin4,
+       latin5, latin9, auto (lire le manuel avant d'utiliser "auto").
+
+-e [chaîne], --date [chaîne]
+       original: imprime la date telle qu'elle est dans les entêtes
+       local:    convertit la date dans le fuseau et dans le langage local
+
+-E [chaîne], --date-format [chaîne]
+       chaîne de formatage de la date ; voir strftime(3) pour les détails
+
+-A [chaîne], --addressformat [chaîne]
+       Indique le format de l'adresse email dans les entêtes,
+       voir la page de manuel ou la documentation pour les détails.
+
 -D, --debug | -noD, --nodebug
        Envoie des informations utiles vers le fichier /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
        Active ou désactive l'impression recto verso.
+
+-g [nombre], --topmargin [nombre]
+       Taille de la marge supérieure en millimètres
+
+-G [nombre], --bottommargin [nombre]
+       Taille de la marge inférieure en millimètres
+
+-j [nombre], --leftmargin [nombre]
+       Taille de la marge de gauche en millimètres
+
+-J [nombre], --rightmargin [nombre]
+       Taille de la marge de droite en millimètres
 
 -2 | -1
        Imprime deux pages sur une feuille. ("papersave mode")
@@ -77,6 +104,15 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 
 -q, --rem_quote | -noq, --norem_quote
        Supprime les citations de l'impression.
+
+-z [taille], --fontsize [taille]
+       Taille de la fonte : 10pt, 11pt, 12pt (seules valeurs possibles)
+
+-W [nombre], --wrapmargin [nombre]
+       Indique quelle est la taille maximale d'une ligne
+	   
+-r [file], --rcfile [file]
+       Indique un fichier de configuration supplémentaire
 
 EOF
 
