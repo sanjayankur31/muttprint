@@ -81,7 +81,19 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 
 -d, --duplex | -nod, --noduplex
        Schaltet Duplexdruck ein oder aus.
-	   
+
+-g [Zahl], --topmargin [Zahl]
+       Oberer Rand in Millimeter
+
+-G [Zahl], --bottommargin [Zahl]
+       Unterer Rand in Millimeter
+
+-j [Zahl], --leftmargin [Zahl]
+       Linker Rand in Millimeter
+
+-J [Zahl], --rightmargin [Zahl]
+       Rechter Rand in Millimeter
+
 -2 | -1
        Druckt eine oder zwei Seiten auf ein Blatt. Siehe "Papiersparmdous".
 

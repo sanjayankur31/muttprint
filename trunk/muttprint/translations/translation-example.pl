@@ -88,7 +88,19 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
-	   
+
+-g [number], --topmargin [number]
+       Top margin in millimeter
+
+-G [number], --bottommargin [number]
+       Bottom margin in millimeter
+
+-j [number], --leftmargin [number]
+       Left margin in millimeter
+
+-J [number], --rightmargin [number]
+       Right margin in millimeter
+
 -2 | -1
        Prints two pages on one sheet. Corresponds to "papersave mode".
 

@@ -269,6 +269,26 @@ Dieses Feature wird im Manual und in der Konfigurationsdatei als I<Papiersparmod
 bezeichnet.
 
 
+=item B<-g> I<Zahl>B<, --topmargin> I<Zahl>
+
+Stellt den oberen Rand in Millimetern ein.
+
+
+=item B<-G> I<Zahl>B<, --bottommargin> I<Zahl>
+
+Stellt den unteren Rand in Millimetern ein.
+
+
+=item B<-j> I<Zahl>B<, --leftmargin> I<Zahl>
+
+Stellt den linken Rand in Millimetern ein.
+
+
+=item B<-J> I<Zahl>B<, --rightmargin> I<Zahl>
+
+Stellt den rechten Rand in Millimetern ein.
+
+
 =item B<-s, --rem_sig> | B<-nos, --norem_sig>
 
 Löscht die Signatur (abgetrennt durch C<-- >) im Ausdruck. 

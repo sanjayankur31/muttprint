@@ -66,6 +66,10 @@
 			are available on your system. The last are only necessary if you
 			want to use paper save mode and/or duplex printing.</para>
 
+		<para>All required LaTeX packages are included in teTeX. If you use another
+			LaTeX distribution, read the file <filename>README.latex</filename>, which
+			contains information about all required packages. You have to install all
+			packages, that are not present on your system.</para>
 
 		<para>For parsing the date, Muttprint uses the Perl module
 			<application>Date::Parse</application><footnote>
@@ -553,8 +557,7 @@ set printer_name "muttprint"
 				details about it.</para>
 
 		</sect3>
-
-	<sect3>
+		<sect3>
 			<title>Format of printed mail addresses</title>
 
 			<para>There are different ways of writing mail address and realname
@@ -643,6 +646,20 @@ set printer_name "muttprint"
 				<literal>FONTSIZE</literal>. Only the values <literal>10pt</literal>,
 				<literal>11pt</literal> and <literal>12pt</literal> are possible.
 			</para>
+		</sect3>
+		<sect3>
+			<title>Margin settings</title>
+
+			<para>The margins could be set by modifiying following variables:
+				<literal>TOPMARGIN</literal> (top margin),
+				<literal>BOTTOMMARGIN</literal> (bottom margin),
+				<literal>LEFTMARGIN</literal> (left margin) and
+				<literal>RIGHTMARGIN</literal> (right margin).</para>
+		
+			<para>This variables should be set to a integer, which specifies the
+				margin in millimeters (mm). Other measuring units are not possible;
+				25.4&nbsp;mm are 1&nbsp;inch.</para>
+
 		</sect3>
 		<sect3>
 			<title>Wrapping long lines</title>
@@ -969,9 +986,9 @@ set printer_name "muttprint"
 				declared as ISO-8859-1. Muttprint prints this mails correctly, if the
 				mailclient doesn't change something.</para>
 
-			<para>You find a full overview about the charsets from the ISO-8859 family
-				on the website <ulink
-				url="http://czyborra.com/charsets/iso8859.html"></ulink>.</para>
+			<para>You find a full overview about the ISO-8859-* charsets
+				on <ulink	url="http://czyborra.com/charsets/iso8859.html"></ulink>.
+			</para>
 					
 		</sect3> <sect3> <title>Translation file</title>
 		
