@@ -1,7 +1,7 @@
 <!DOCTYPE ARTICLE PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
 
-<article lang="en" id="index">
-	
+<article lang="es" id="index">
+
 <articleinfo>
 	<title>Muttprint -- Manual del usuario</title>
 	
@@ -36,55 +36,55 @@
         con formato, como por ejemplo desde <application>Netscape</application>.
         </para>
 
-	<para>Otro hecho que me molestó: La impresión muestra todas las
-        cabeceras. He configurado Mutt para que muestre cosas como <quote>X-Mailer</quote>,
-        pero no quiero imprimir éso. <application>XFMail</application> es
-        bastante peor: Imprime toda las cabeceras, así que la impresión es en
+	<para>otro hecho que me molestó: la impresión muestra todas las
+        cabeceras. he configurado mutt para que muestre cosas como <quote>x-mailer</quote>,
+        pero no quiero imprimir éso. <application>xfmail</application> es
+        bastante peor: imprime toda las cabeceras, así que la impresión es en
         mi opinión inutilizable.
         </para>
 
-	<para>Una vez tuve la idea de escribir un script yo mismo, que creara
-        una bonita impresión. Y aquí está el resultado. Pienso que luce
-        bastante mejor que el texto plano ASCII y es comparable con la
-        impresión desde clientes de correo bien conocidos bajo Microsoft
-        Windows.
+	<para>una vez tuve la idea de escribir un script yo mismo, que creara
+        una bonita impresión. y aquí está el resultado. pienso que luce
+        bastante mejor que el texto plano ascii y es comparable con la
+        impresión desde clientes de correo bien conocidos bajo microsoft
+        windows.
         </para>
 
 		
 </sect1>
 <sect1 id="installation">
-	<title>Instalación</title>
+	<title>instalación</title>
 	
 	<sect2>
-		<title>Requerimientos del sistema</title>
+		<title>requerimientos del sistema</title>
 	
-		<para>Muttprint fué realizado con el lenguaje de programación
-		<emphasis>Perl</emphasis> el cual requiere un intérprete de
-                Perl 5 funcional. Ésto último debería ser así en cualquier sistema
-                Linux por defecto.
+		<para>muttprint fué realizado con el lenguaje de programación
+		<emphasis>perl</emphasis> el cual requiere un intérprete de
+                perl 5 funcional. ésto último debería ser así en cualquier sistema
+                linux por defecto.
 		</para>
 
-		<para>Asegúrate de que estén disponibles en tu sistema una
-          distribución LaTeX (recomiendo teTeX versión superior a 1.0)
+		<para>asegúrate de que estén disponibles en tu sistema una
+          distribución latex (recomiendo tetex versión superior a 1.0)
           así como los programas <emphasis>psselect</emphasis> y
-					<emphasis>psnup</emphasis> del paquete <emphasis>PS-Utils</emphasis>.
-					El último sólo es necesario si quieres utilizar el modo de ahorro de papel y/o
+					<emphasis>psnup</emphasis> del paquete <emphasis>ps-utils</emphasis>.
+					el último sólo es necesario si quieres utilizar el modo de ahorro de papel y/o
 		      la impresión dúplex.</para>
 
-	<para>Para leer la fecha, Muttprint utiliza el módulo Perl
-	 <application>Date::Parse</application><footnote>
+	<para>para leer la fecha, muttprint utiliza el módulo perl
+	 <application>date::parse</application><footnote>
 	 <para>
-	 	<ulink url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
+	 	<ulink url="http://www.cpan.org/authors/id/gbarr/timedate-1.10.tar.gz"></ulink>
 	 </para>
 	 </footnote>
-	<footnote><para>Encontrarás detalles respecto a la instalación en éste
-	archivo. Normalmente, el siguiente procedimiento debería funcionar:</para>
+	<footnote><para>encontrarás detalles respecto a la instalación en éste
+	archivo. normalmente, el siguiente procedimiento debería funcionar:</para>
 
 	<para>
-	 <prompt>$ </prompt><userInput>tar xvfz Time-Date-1.10.tar.gz</userinput>
+	 <prompt>$ </prompt><userinput>tar xvfz time-date-1.10.tar.gz</userinput>
 	</para>
 	<para>
-	 <prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
+	 <prompt>$ </prompt><userinput>perl makefile.pl</userinput>
 	</para>
 	<para>
 	 <prompt>$ </prompt><userinput>make</userinput>
@@ -96,62 +96,62 @@
 	 <prompt># </prompt><userinput>make install</userinput>
 	</para>
 			
-	</footnote>. Si el módulo no se instala, Muttprint funciona sin
+	</footnote>. si el módulo no se instala, muttprint funciona sin
 	problemas salvo la función para convertir la zona horaria e
 	imprimir la fecha en el idioma local, consulta <xref linkend="date">.</para>
 
 
 	</sect2>
 	<sect2>
-		<title>Instalación de los archivos en tu computadora</title>
+		<title>instalación de los archivos en tu computadora</title>
 		
 		<sect3>
-			<title>Instalación manual</title>
+			<title>instalación manual</title>
 			
-			<para>Primero tienes que desempaquetar el archivo.
-                        Ésto puede hacerse con el comando
+			<para>primero tienes que desempaquetar el archivo.
+                        ésto puede hacerse con el comando
 		        </para>
 			
 			<para>
 				<prompt>$  </prompt>
-				<UserInput>tar xvfz 
-				muttprint-<replaceable>Versión</replaceable>.tar.gz</UserInput>
+				<userinput>tar xvfz 
+				muttprint-<replaceable>versión</replaceable>.tar.gz</userinput>
 			</para>
 			
-			<para>Ingresa al directorio que fué creado:</para>
+			<para>ingresa al directorio que fué creado:</para>
 			
 			<para>
 				<prompt>$  </prompt>
-				<UserInput>cd muttprint-<Replaceable>Versión</Replaceable></UserInput>
+				<userinput>cd muttprint-<replaceable>versión</replaceable></userinput>
 			</para>
 			
-			<para>Un archivo <Filename>Makefile</Filename> adecuado 
-			es distribuído con Muttprint. Para ajustar las rutas en
-                        tu sistema, edita el Makefile con tu editor favorito.
+			<para>un archivo <filename>makefile</filename> adecuado 
+			es distribuído con muttprint. para ajustar las rutas en
+                        tu sistema, edita el makefile con tu editor favorito.
 		        </para>
 
-			<para>Necesitas privilegios de root para instalar el
-                        programa. Después que hallas cambiado al usuario root
+			<para>necesitas privilegios de root para instalar el
+                        programa. después que hallas cambiado al usuario root
                         con el comando <command>su</command>, realiza la
                         instalación con
                         </para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>make install</UserInput>
+				<userinput>make install</userinput>
 			</para>
 			
-			<para>El script debería funcionar ahora.
+			<para>el script debería funcionar ahora.
                         </para>
 
-			<para>Si quieres desinstalar Muttprint
+			<para>si quieres desinstalar muttprint
                         más tarde y todos los archivos están todavía en
                         la misma ubicación, ejecuta simplemente
 		        </para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>make uninstall</UserInput>
+				<userinput>make uninstall</userinput>
 			</para>
 						
 			<para>como root.</para>
@@ -159,51 +159,51 @@
 		</sect3>
 		
 		<sect3>
-			<title>Instalación de los paquetes</title>
+			<title>instalación de los paquetes</title>
 			
-			<para>Si tu distribución utiliza un sistema de
-                        administración de paquetes tal como RPM o DPKG, es
-                        buena idea utilizar los paquetes correspondientes. La
+			<para>si tu distribución utiliza un sistema de
+                        administración de paquetes tal como rpm o dpkg, es
+                        buena idea utilizar los paquetes correspondientes. la
                         mayor ventaja es la fácil desinstalación.
 		        </para>
 
-			<para>La mayoría de las distribuciones utilizan el
-                        sistema de administración de paquetes RPM. La forma
+			<para>la mayoría de las distribuciones utilizan el
+                        sistema de administración de paquetes rpm. la forma
                         más fácil de installar el paquete es con el comando
 			</para>
 
 			<para>
 				<prompt>#  </prompt>
-				<userinput>rpm -Uvh 
-muttprint-<replaceable>Versión</replaceable>-<replaceable>Release</replaceable>.noarch.rpm
+				<userinput>rpm -uvh 
+muttprint-<replaceable>versión</replaceable>-<replaceable>release</replaceable>.noarch.rpm
 				</userinput>
 			</para>
 			
-			<para>Todos los paquetes RPM son firmados con mi
-                        clave-GnuPG (ID DDAF6454). Obtendrás más información
-                        detallada sobre RPM y la verificación de firmas en
-                        <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum RPM</ULink>.
+			<para>todos los paquetes rpm son firmados con mi
+                        clave-gnupg (id ddaf6454). obtendrás más información
+                        detallada sobre rpm y la verificación de firmas en
+                        <ulink url="http://www.rpm.org/maximum-rpm.ps.gz">maximum rpm</ulink>.
                         </para>
 
-			<para>Los paquetes Debian son creados por Chanop Silpa-Anan 
+			<para>los paquetes debian son creados por chanop silpa-anan 
 				<email>chanop@debian.org</email> y están
                                 disponibles en general unos pocos días
                                 después del lanzamiento de una nueva versión
-                                de Muttprint. Pueden instalarse con
+                                de muttprint. pueden instalarse con
 				</para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>dpkg -i muttprint_[versión]-[release]_noarch.deb</UserInput>
+				<userinput>dpkg -i muttprint_[versión]-[release]_noarch.deb</userinput>
 			</para>
 			
-			<para>Consulta <ulink
-				url="http://www.debian.org/devel/">Debian  <quote>Developer's
-				Corner</quote></ulink> por más información
-                                respecto a los paquetes Debian.
+			<para>consulta <ulink
+				url="http://www.debian.org/devel/">debian  <quote>developer's
+				corner</quote></ulink> por más información
+                                respecto a los paquetes debian.
 				</para>
 
-			<para>Otra posibilidad para instalar paquetes Debian
+			<para>otra posibilidad para instalar paquetes debian
                         es el comando <command>apt-get</command>.
                         </para>
 			
@@ -213,53 +213,53 @@ muttprint-<replaceable>Versión</replaceable>-<replaceable>Release</replaceable>.
 		
 	<sect2>
 	
-		<title>Integración de Muttprint con los clientes de correo y de noticias</title>
+		<title>integración de muttprint con los clientes de correo y de noticias</title>
 
-		<para>Muttprint fué originalmente desarrollado para ser
-                utilizado sólo con Mutt. Sin embargo puede ser integrado con
-                los siguientes programas de correo sin problemas. Algunos usuarios
-		me han facilitado la información sobre integración. Muttprint
-                será desarrollado independientemente de Mutt en el futuro.
+		<para>muttprint fué originalmente desarrollado para ser
+                utilizado sólo con mutt. sin embargo puede ser integrado con
+                los siguientes programas de correo sin problemas. algunos usuarios
+		me han facilitado la información sobre integración. muttprint
+                será desarrollado independientemente de mutt en el futuro.
                 </para>
 		
 		
 		<sect3 id="muttconfig">
-			<title>Mutt</title>
+			<title>mutt</title>
 		
-			<para>Tienes que añadir o modificar la siguiente línea
-                        en el archivo <Filename>$HOME/.muttrc</Filename> o a
-                        nivel de todo el sistema en <FileName>/etc/Muttrc</FileName>:</para>
+			<para>tienes que añadir o modificar la siguiente línea
+                        en el archivo <filename>$home/.muttrc</filename> o a
+                        nivel de todo el sistema en <filename>/etc/muttrc</filename>:</para>
 
-			<ProgramListing>set print_command="muttprint"</ProgramListing>
+			<programlisting>set print_command="muttprint"</programlisting>
 
-			<para>Además debes asegurarte de que todas las cabeceras
-			necesarias son generadas cuando el mail es impreso. La forma
+			<para>además debes asegurarte de que todas las cabeceras
+			necesarias son generadas cuando el mail es impreso. la forma
 			más fácil es escribir un pequeño macro 
 			(en tu <filename>~/.muttrc</filename>) el cual se asegura
-			que todas las cabeceras son generadas. Sólo las cabeceras 
+			que todas las cabeceras son generadas. sólo las cabeceras 
 			más importantes son impresas en realidad (consulta 
-			<xref linkend="printheaders">).</para>
+			<xref linkend="printedheaders">).</para>
 
-			<para>Aquí está el macro:</para>
+			<para>aquí está el macro:</para>
 
 			<programlisting>
-# Generar todas las cabeceras
+# generar todas las cabeceras
 macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
 macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
 			</programlisting>
 
-			<para>Primero, el macro cambia al modo donde todas las cabeceras
+			<para>primero, el macro cambia al modo donde todas las cabeceras
 			son mostradas, luego el correo es impreso y finalmente cambia
-			al modo anterior. Es necesario desactivar la confirmación de
+			al modo anterior. es necesario desactivar la confirmación de
 			impresión para que el macro funcione correctamente:</para>
 
 			<programlisting>
-# Sin confirmatión antes de la impresión
+# sin confirmatión antes de la impresión
 set print="yes"
 			</programlisting>
 
-			<para>Para imprimir más de un mensaje en un mismo paso,
-			se debería agregar la siguiente entrada:<para>
+			<para>para imprimir más de un mensaje en un mismo paso,
+			se debería agregar la siguiente entrada:</para>
 
 			<ProgramListing>
 # Imprimir cada mensaje adicional
@@ -424,7 +424,7 @@ set printer_name "muttprint"
 		Éste archivo es leído finalmente y tiene preferencia sobre las
 		opciones de línea de comandos también. Éste archivo de configuración
 		adicional es útil para utilizar más de una configuración y puedes
-		combinarlas con algunas <emphasis>Hooks</emphasis> de Mutt.<para>
+		combinarlas con algunas <emphasis>Hooks</emphasis> de Mutt.</para>
 		
 		<para>El archivo de configuración está estructurado de forma
                 que valores son asignados a diferentes variables -- ésto es
@@ -598,7 +598,7 @@ set printer_name "muttprint"
 		  usando las funciones del sistema operativo. A pesar de ésto, la 
 		  variable <literal>LANG</literal> (consulta <xref linkend="lang">)
 		  en el archivo de configuración afecta el idioma de la fecha.
-		  <para>
+		  </para>
 		</footnote>.</para>
 
 		<para>El formato de la fecha puede ser especificado con la variable
@@ -651,6 +651,7 @@ set printer_name "muttprint"
 
 	
 		
+		</sect3>
 		<sect3 id="speed">
 			<title>Velocidad de impresión</title>
 			
@@ -732,6 +733,7 @@ set printer_name "muttprint"
 
 
 		
+		</sect3>
 		<sect3>
 			<title>Líneas sobre/por debajo la cabecera y el pie de
                         página</title>
@@ -824,7 +826,7 @@ set printer_name "muttprint"
 			<para>Si existe un archivo <filename>/etc/papersize</filename>
 			como es usual en sistemas Debian, éste será evaluado también.
 			Las configuraciones personales tienen preferencia sobre
-			éstas configuraciones del sistema.
+			éstas configuraciones del sistema.</para>
 				
 		</sect3>
 		<sect3>
@@ -920,7 +922,7 @@ set printer_name "muttprint"
 
 
 	</sect2>
-	<sect2>
+	<sect2 id="lang">
 		<title>Otros idiomas</title>
 		
 		<para>Muttprint soporta los idiomas <emphasis>Alemán</emphasis>, 
@@ -1078,6 +1080,7 @@ set printer_name "muttprint"
 			</para>
 
 
+		</sect3>
 		<sect3>
 			<title>Archivo de traducción</title>
 		
