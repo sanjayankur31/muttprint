@@ -28,6 +28,9 @@ v ~/.muttprintrc a /etc/Muttprintrc.
 -i [soubor], --penguin [soubor]
        Nastavuje obrázek ti¹tìný na první stranì.
 
+-x, --x-face | -nox, --nox-face
+       Zapíná/vypíná tisk X-Face.
+
 -t [èíslo], --speed [èíslo]
        Èas v sekundách, který potøebuje tiskárna na vyti¹tìní jedné stránky.
 		   
