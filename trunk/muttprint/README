@@ -2,13 +2,9 @@ MUTTPRINT - ReadMe
 ---------------------------------------------------------------------------
 
 
-
-
 This file should give you a short overview about what to read:
 
-
 User's guide (doc/manual/*):
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is the full manual which contains all important things about
 Muttprint. Especially:
@@ -19,9 +15,7 @@ Muttprint. Especially:
 - changing the configuration file.
 
 
-
 Install notes (INSTALL):
-~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is a short guide to install from the source package. If you use RPM or
 Debian packages or if you read the User's guide, you need not read this
@@ -29,28 +23,20 @@ file. It's English and no translations are available because of this
 reason.
 
 
-
 Gnus notes (README.Gnus):
-~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If Gnus is the mail client you would like to use with Muttprint, this files
 contains important information (and a few lines LISP code!).
 
 
-
 Translation notes (README.translations):
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If English is not your native language, you could read this file. It
-contains the state of translation and some notes. If you speak Czech, you
-*should* read this file because of important notes. Otherwise, the
-information in the User's guide about using another language should be
-enough.
-
+If English is not your native language, you could read this file. It contains
+the state of translation and some notes. It says you, for example, if your
+translation is up to date or not.
 
 
 Manpage (man muttprint):
-~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you would like to use command line options, this Manpage is important
 for you. Otherwise it may contain interesting information. So, if you have
@@ -62,17 +48,13 @@ program should give the right translation. You could use
 to read the manpage in another language than your system's.
 
 
-
 Change log (CHANGES):
-~~~~~~~~~~~~~~~~~~~~~
 
 This file is interesting if you update from a earlier version of Muttprint
 and you would like to see what has changed in the meanwhile.
 
 
-
 License information (COPYING):
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This contains the full GNU General Public License (GPL). If the
 information, that Muttprint _is_ distributed under the terms of GPL, is

@@ -13,25 +13,27 @@
 
    The default settings should be OK. (Installation to /usr/local)
 
-   Then run "make install" to install the files on your system. Please
+   Run "make" to build the small C program ("muttprint-langinfo"). You
+   need this only if your Perl version is less than 5.8.x.  If you have no C
+   compiler and you run Linux then you can skip this step, too.
+
+   Now run "make install" to install the files on your system. Please
    recognize that you must run this as 'root' if you would like to
    install Muttprint global on your system.
 
    If you don't want to change the Makefile, you should run "make
-   prefix=/new/path install" as done by creation of RPM packages. Set
-   /new/path to your prefered directory.
+   prefix=/new/path docdir=/path/for/documentation install" as done by
+   creation of RPM packages. Set /new/path and /path/for/documentation to 
+   your preferred directory.
 
 
 2. Uninstallation
    --------------
 
    To uninstall, run "make uninstall" or "make prefix=/new/path
-   uninstall" if you had specified any prefix in the installation.
+   docdir=/path/for/documentation uninstall" if you had specified any prefix 
+   in the installation.
 
-   For further information about Muttprint, read the documentation. It
-   is available in PDF and HTML (and in Docbook-SGML-Sources if you are
-   developer.)
-   
 
 3. Further Information
    -------------------

@@ -5,7 +5,7 @@
 #
 # Tab =^= 8 characters
 
-%define			version		0.71
+%define			version		0.72
 
 Summary: 		pretty printing of mails with Mutt
 Summary(de):		schöner Ausdruck von Mails mit Mutt
@@ -64,6 +64,8 @@ importanti scartando tutto ciò che è inutile.
 
 Autore: Bernhard Walle <Bernhard.Walle@gmx.de>
 
+%build
+make
 
 %prep
 %setup
@@ -85,7 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%{prefix}/bin/muttprint
+%{prefix}/bin/muttprint*
 %{prefix}/share/muttprint
 %{_mandir}/man1/muttprint.1.gz
 %{_mandir}/*/man1/muttprint.1.gz
@@ -93,6 +95,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 28 2003 Bernhard Walle <Bernhard.Walle@gmx.de>
+- added rule to build muttprint-langinfo
 * Mon Apr 14 2003 Bernhard Walle <Bernhard.walle@gmx.de>
 - changed translation place to /prefix/share/muttprint/translations
 * Mon Apr 07 2003 Bernhard Walle <Bernhard.walle@gmx.de>

@@ -1,8 +1,6 @@
-use bytes;
+# czech translations by: Dominik FormÃ¡nek <dominik@formanek.cz>
 
-# czech translations by: Dominik Formánek <dominik@formanek.cz>
-
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Usage:   muttprint [option]... [-f file]
  
@@ -16,6 +14,9 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -v, --version
        Prints the current version of Muttprint.
+
+--print-locale
+       Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
        Reads from file instad of STDIN.
@@ -55,7 +56,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 	   
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
-       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
        Read the manual for a detailed description of this values.
 
@@ -65,13 +66,6 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -P [paperformat], --paper [paperformat]
        Paper format: "letter" (US) or "A4" (Europe).
-
--l [language], --lang [language]
-       Language for messages and printing.
-
--c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r,
-       utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
        original: prints the date as it is in the header
@@ -94,6 +88,10 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
+
+-B, --background | -noB, --nobackground
+       Puts Muttprint in the background after reading the mail data.
+       (prints no error messages anymore)
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
@@ -131,16 +129,16 @@ PLEASE NOTICE: These options override the corresponding settings in
 EOF
 
 
-$String{"Lizenz"} = "Tento program je distribuován pod podmínkami GPL
- a mù¾e být volnì kopírován.
+$String{License} = "Tento program je distribuovÃ¡n pod podmÃ­nkami GPL
+ a mÅ¯Å¾e bÃ½t volnÄ› kopÃ­rovÃ¡n.
 ";
 
-$String{"Bugs"} = "Chyby ohlaste prosím na <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "Chyby ohlaste prosÃ­m na <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "Specifikovaný soubor nebyl nalezen.\n";
+$String{FileNotFound} = "SpecifikovanÃ½ soubor nebyl nalezen.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("Od:", "Pro:", "Pøedmìt:", "Kopie:", "Datum:", "Strana", "z", "Newsgroups:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups"} =
+("Od:", "Pro:", "PÅ™edmÄ›t:", "Kopie:", "Datum:", "Newsgroups:");
 
-$LPack = "czech";
-$charset = "latin2";
+$String{PageOf} = "Strana %s z %s";
+

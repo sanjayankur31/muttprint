@@ -1,8 +1,6 @@
-use bytes;
-
 # Swedish translations by Simon Josefsson <simon@josefsson.org>
 
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Usage:   muttprint [option]... [-f file]
  
@@ -16,6 +14,9 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -v, --version
        Prints the current version of Muttprint.
+
+--print-locale
+       Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
        Reads from file instad of STDIN.
@@ -55,7 +56,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 	   
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
-       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
        Read the manual for a detailed description of this values.
 
@@ -65,13 +66,6 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -P [paperformat], --paper [paperformat]
        Paper format: "letter" (US) or "A4" (Europe).
-
--l [language], --lang [language]
-       Language for messages and printing.
-
--c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r,
-       utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
        original: prints the date as it is in the header
@@ -94,6 +88,10 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
+
+-B, --background | -noB, --nobackground
+       Puts Muttprint in the background after reading the mail data.
+       (prints no error messages anymore)
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
@@ -130,17 +128,16 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 EOF
 
-$String{"Lizenz"} = "Det här programmet är fri programvara och
+$String{License} = "Det hÃ¤r programmet Ã¤r fri programvara och
 distribueras under villkoren i GPL.
 ";
 
-$String{"Bugs"} = "Rapportera fel till <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "Rapportera fel till <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "Den angivna filen finns inte.\n";
+$String{FileNotFound} = "Den angivna filen finns inte.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("Från:", "Till:", "Ämne:", "Kopia:", "Datum:", "sida", "av", "Nyhetsgrupp:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups"} =
+("FrÃ¥n:", "Till:", "Ã„mne:", "Kopia:", "Datum:", "Nyhetsgrupp:");
 
-$LPack = "swedish";
-$charset = "latin1";
+$String{PageOf} = "sida %s av %s";
 

@@ -115,11 +115,6 @@ FONTSIZE="10pt"
 WRAPMARGIN="80"
 
 #
-# Zeichensatz
-# latin1, latin2, latin3, latin4, latin5, latin9, koi8-r, utf8, auto
-CHARSET="latin1"
-
-#
 # Datum (Format des Ausdrucks)
 # original, local
 DATE="local"
@@ -128,4 +123,9 @@ DATE="local"
 # Datumformatstring (nur wenn DATE=local)
 # Siehe strftime(3) für Details
 DATE_FORMAT="%c"
+
+# 
+# soll Muttprint nach dem Einlesen der Maildaten in den
+# Hintergrund geschickt werden (keine Fehlermeldungen mehr!)
+BACKGROUND="off"
 

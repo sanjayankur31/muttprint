@@ -1,12 +1,10 @@
-use bytes;
-
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Benutzung:   muttprint [Optionen]... [-f Datei]
  
 Optionen:
 
-BITTE BEACHTEN: Diese Optionen überschreiben die zugehörigen Einstellungen
+BITTE BEACHTEN: Diese Optionen Ã¼berschreiben die zugehÃ¶rigen Einstellungen
 in ~/.muttprintrc and /etc/Muttprintrc.
 
 -h, --help
@@ -15,19 +13,22 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -v, --version
        Gibt die aktuelle Version von Muttprint aus.
 
+--print-locale
+       Gibt Informationen Ã¼ber die aktuelle Sprachumgebung aus.
+
 -f [Datei], --file [Datei]
        Liest von Datei anstelle von STDIN.
 
 -p [Druckername], --printer [Druckername]
        Verwendet einen speziellen Drucker.
-       "-" steht für STDOUT.
+       "-" steht fÃ¼r STDOUT.
        Um in eine Datei zu drucken, verwenden Sie TO_FILE:/Pfad/zu/Datei
 
 -C [Druckbefehl], --printcommand [Druckbefehl]
        Setzt den Druckbefehl. "\$PRINTER" wird durch den Druckernamen 
        ersetzt.
-       CUPS-Unterstützung wird mit "CUPS" aktiviert (alternativ: beliebiges
-       Kommando, das "\$CUPS_OPTIONS" enthält)
+       CUPS-UnterstÃ¼tzung wird mit "CUPS" aktiviert (alternativ: beliebiges
+       Kommando, das "\$CUPS_OPTIONS" enthÃ¤lt)
    
 -i [Datei], --penguin [Datei]
        Gibt das Bild an, das auf der ersten Seite gedruckt wird.
@@ -36,36 +37,36 @@ in ~/.muttprintrc and /etc/Muttprintrc.
        Druck von X-Faces ein-/ausschalten
 
 -t [Zahl], --speed [Zahl]
-       Zeit in Sekuden, die der Drucker für eine Seite benötigt.
+       Zeit in Sekuden, die der Drucker fÃ¼r eine Seite benÃ¶tigt.
 		   
 -w [Zahl], --wait [Zahl]
        Zeit zwischen Druck von geraden und ungeraden Seiten beim Duplexdruck.
 
 -F [Schriftname], --font [Schriftname]
-       Schriftfamilie für den Ausdruck. Möglich sind:
+       Schriftfamilie fÃ¼r den Ausdruck. MÃ¶glich sind:
        Latex, Latex-bright, Times, Utopia, Palatino, Charter und Bookman
 	   
 -H, --headrule | -noH, --noheadrule
        Druck der Linie nach der Kopfzeile ein-/ausschalten.
 	   
 -b, --footrule | -nob, --nofootrule
-       Druck der Linie über der Fußzeile ein-/ausschalten.
+       Druck der Linie Ã¼ber der FuÃŸzeile ein-/ausschalten.
 	   
 -S Stil | --frontstyle Stil
-       Stil für den Druck der Mailheader auf der ersten Seite:
-       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       Stil fÃ¼r den Druck der Mailheader auf der ersten Seite:
+       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
-       Für eine Beschreibung der Werte siehe Handbuch.
+       FÃ¼r eine Beschreibung der Werte siehe Handbuch.
 
 -a [Header], --printed-headers [Header]
-       Mailheader die gedruckt werden sollen. Siehe Manpage/Handbuch für Details.
+       Mailheader die gedruckt werden sollen. Siehe Manpage/Handbuch fÃ¼r Details.
        Beispiel: /Date/_To_From_*Subject*
 
 -P [Papierformat], --paper [Papierformat]
        Papierformat: "letter" (USA) oder "A4" (Europa).
 
 -l [Sprache], --lang [Sprache]
-       Sprache für Meldungen und Ausdruck.
+       Sprache fÃ¼r Meldungen und Ausdruck.
 
 -c [Zeichensatz], --charset [Zeichensatz]
        Eingabezeichensatz: latin1, latin2, latin3, latin4, latin5, latin9, 
@@ -77,22 +78,22 @@ in ~/.muttprintrc and /etc/Muttprintrc.
        local:    rechnet in lokale Zeitzone und Sprache um
 
 -E [Zeichenkette], --date-format [Zeichenkette]
-       Datumformatstring; siehe strftime(3) für Details
+       Datumformatstring; siehe strftime(3) fÃ¼r Details
 
 -A [Zeichenkette], --addressformat [Zeichenkette]
-       Gibt das Format für die Mailadresse im Kopf an, siehe
-       die Manpage oder Dokumentation für Details.
+       Gibt das Format fÃ¼r die Mailadresse im Kopf an, siehe
+       die Manpage oder Dokumentation fÃ¼r Details.
 
 -n [Zeichenkette], --verbatimnormal [Zeichenkette]
        Dient zur Einstellung der Formatierung des normalen Mailtextes.
-       Lesen Sie die Manpage und das Handbuch für Details.
+       Lesen Sie die Manpage und das Handbuch fÃ¼r Details.
 
 -V [Zeichenkette], --verbatimsig [Zeichenkette]
        Wie --verbatimnormal, allerdings wird hiermit die Formatierung
        der Signatur eingestellt.
   
 -D, --debug | -noD, --nodebug
-       Schreibt nützliche Informationen in eine Logdatei /tmp/muttprint.log.
+       Schreibt nÃ¼tzliche Informationen in eine Logdatei /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
        Schaltet Duplexdruck ein oder aus.
@@ -115,35 +116,35 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -s, --rem_sig | -nos, --norem_sig
        Entfernt die Signatur (durch "-- " abgetrennt) im Ausdruck.
 
---sig_regexp [Regulärer Ausdruck]
-       Gibt den regulären Ausdruck zur Erkennung der Signatur an.
+--sig_regexp [RegulÃ¤rer Ausdruck]
+       Gibt den regulÃ¤ren Ausdruck zur Erkennung der Signatur an.
 
 -q, --rem_quote | -noq, --norem_quote
        Entfernt zitierte Abschnitte vom Druck.
 
--z [Größe], --fontsize [Größe]
-       Schriftgröße: 10pt, 11pt, 12pt (nur diese Werte)
+-z [GrÃ¶ÃŸe], --fontsize [GrÃ¶ÃŸe]
+       SchriftgrÃ¶ÃŸe: 10pt, 11pt, 12pt (nur diese Werte)
 
 -W [Zahl], --wrapmargin [Zahl]
-       Gibt die maximale Zeilenlänge an.
+       Gibt die maximale ZeilenlÃ¤nge an.
  
 -r [Datei], --rcfile [Datei]
-       Einlesen einer zusätzliche Konfigurationsdatei.
+       Einlesen einer zusÃ¤tzliche Konfigurationsdatei.
 
 EOF
 
-$String{"Lizenz"} = <<EOF;
+$String{License} = <<EOF;
 Dieses Programm steht unter der GPL und darf beliebig verbreitet werden.
 EOF
 
-$String{"Bugs"} = "Berichten Sie Fehler an <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "Berichten Sie Fehler an <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = <<EOF;
+$String{FileNotFound} = <<EOF;
 Die angegebene Datei existiert nicht oder es wurde keine angegeben.
 EOF
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization"} = 
-("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Seite", "von", "Newsgruppen:", "Organisation:");
+@String{"From", "To", "Subject", "CC", "Date","Newsgroups", "Organization"} = 
+("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Newsgruppen:", "Organisation:");
 
-$LPack = "ngerman";
-$charset = "latin9";
+$String{PageOf} = "Seite %s von %s";
+

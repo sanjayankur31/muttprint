@@ -1,5 +1,3 @@
-use bytes;
-
 # This translation file is the English "translation".
 # It is *not* needed for running Muttprint because it has the English strings
 # built in. It is for others who want to create their own translation file.
@@ -9,7 +7,7 @@ use bytes;
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
 
 
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Usage:   muttprint [option]... [-f file]
  
@@ -23,6 +21,9 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -v, --version
        Prints the current version of Muttprint.
+
+--print-locale
+       Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
        Reads from file instad of STDIN.
@@ -62,7 +63,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 	   
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
-       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
        Read the manual for a detailed description of this values.
 
@@ -72,13 +73,6 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -P [paperformat], --paper [paperformat]
        Paper format: "letter" (US) or "A4" (Europe).
-
--l [language], --lang [language]
-       Language for messages and printing.
-
--c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r,
-       utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
        original: prints the date as it is in the header
@@ -101,6 +95,10 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
+
+-B, --background | -noB, --nobackground
+       Puts Muttprint in the background after reading the mail data.
+       (prints no error messages anymore)
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
@@ -140,17 +138,16 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 EOF
 
-$String{"Lizenz"} = "This program is distributed under the terms of the
+$String{License} = "This program is distributed under the terms of the
 GPL and can be freely copied.
 ";
 
-$String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "The specified file was not found.\n";
+$String{FileNotFound} = "The specified file was not found.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization"} =
-("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:", "Organization:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups", "Organization"} =
+("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "Newsgroups:", "Organization:");
 
-$LPack = "english";
-$charset = "latin1";
-$texFontenc = "T1";
+$String{PageOf} = "page %s of %s";
+

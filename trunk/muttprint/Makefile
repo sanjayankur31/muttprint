@@ -38,9 +38,8 @@ INSTALLBIN = $(install) -m 0755
 INSTALL = $(install) -m 0644 
 
 
-nothing:
-	@echo "Nothing to do. Run \"make install\" to install Muttprint."
-
+all:
+	$(MAKE) -C langinfo 
 
 install: 
 	mkdir -p $(docdir)/$(docdirname) $(bindir) $(sharedir)/muttprint/translations \
@@ -51,11 +50,13 @@ install:
 		$(docdir)/$(docdirname)
 	$(INSTALL) `find pics -type f -print` $(sharedir)/muttprint/
 	$(INSTALL) `find translations -type f -print` $(sharedir)/muttprint/translations
+	$(MAKE) -C langinfo bindir=$(bindir) install
 	$(MAKE) -C doc/manual docdir=$(docdir) docdirname=$(docdirname) install
 	$(MAKE) -C doc/manpages mandir=$(mandir) install
 
+
 uninstall:
-	rm $(bindir)/muttprint
+	rm $(bindir)/muttprint*
 	rm -r $(sharedir)/muttprint/
 	rm $(mandir)/man1/muttprint*
 	rm $(mandir)/de/man1/muttprint*
@@ -69,8 +70,5 @@ validate: muttprint
 	perl -c muttprint
 
 clean:
-	@echo -e "\nNothing to clean. \n\n"
-	@echo "\"make clean\" in the doc/* subdirectories"
-	@echo "removes precompiled documentation and manpages!"
-	@echo "Do this only as developer if you're sure that your installation"
-	@echo "is able to recreate this files."
+	$(MAKE) -C langinfo clean
+
