@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2003-05-27</pubdate>
+	<pubdate>2003-08-01</pubdate>
 	
-	<releaseinfo>Version 0.71</releaseinfo>   
+	<releaseinfo>Version 0.72</releaseinfo>   
 	
 		
 	
@@ -61,13 +61,18 @@
 			default.</para>
 
 		<para>Make sure that a LaTeX distribution (I recommend teTeX higher
-			than version 1.0) plus the programs <emphasis>psselect</emphasis> 
+			than version 2.0) plus the programs <emphasis>psselect</emphasis> 
 			and <emphasis>psnup</emphasis> from the <emphasis>PS-Utils</emphasis>
 			are available on your system. The last are only necessary if you
 			want to use paper save mode and/or duplex printing; and they are
 			not necessary if you use CUPS and if you configured Muttprint
 			to use it, see <xref linkend="printcommand">.</para>
-
+		
+		<para>If you use a Perl 5.6 then it must be a small C program compiled. It
+			is required to get information about the current locale environment.
+			That means that there must be a C compiler installed. If you use
+			Linux this is not necessary.</para>
+	
 		<para>All required LaTeX packages are included in teTeX. If you use another
 			LaTeX distribution, read the file <filename>README.latex</filename>, which
 			contains information about all required packages. You have to install all
@@ -76,14 +81,14 @@
 		<para>For parsing the date, Muttprint uses the Perl module
 			<application>Date::Parse</application><footnote>
 			<para>
-				<ulink url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
+				<ulink url="http://search.cpan.org/CPAN/authors/id/G/GB/GBARR/TimeDate-1.16.tar.gz"></ulink>
 			</para>
 		</footnote>
 		<footnote><para>You find details about the installation in this file.
 			Normally, using the following procedure should work:</para>
 			
 			<para>
-				<prompt>$ </prompt><userInput>tar xvfz Time-Date-1.10.tar.gz</userinput>
+				<prompt>$ </prompt><userInput>tar xvfz Time-Date-1.16.tar.gz</userinput>
 			</para>
 			<para>
 				<prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
@@ -102,14 +107,57 @@
 			problems except the function to convert the time zone and print the date
 			in the local language, see <xref linkend="date">.</para>
 
+
+
+
+		<para>Since Muttprint 0.72 the Perl module <application>Text::Iconv</application> 
+			<footnote>
+			<para>
+				<ulink url="http://search.cpan.org/CPAN/authors/id/M/MP/MPIOTR/Text-Iconv-1.2.tar.gz"></ulink>
+			</para>
+		</footnote>
+		<footnote><para>You find details about the installation in this file.
+			Normally, using the following procedure should work:</para>
+			
+			<para>
+				<prompt>$ </prompt><userInput>tar xvfz Text-Iconv-1.2.tar.gz</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make test</userinput> 
+			</para>
+			<para>
+				<prompt># </prompt><userinput>make install</userinput>
+			</para>
+			
+			</footnote>
+			  has to be installed. It is used to convert between different encodings.
+				At first you should check if the module is distributed with your
+				operating system (on Linux: distribution). Search for a file called
+				<filename>Iconv.pm</filename>. If not, install it. If you cannot install
+				Perl modules on your system, Muttprint can use the external applications
+				<application>iconv</application> (or even <application>recode</application>).
+				This is slower and error-prone. If you want to do this, just set the
+				variable <literal>ICONV_EXTERNAL</literal> to <literal>on</literal> in
+				your configuration file, see <xref linkend="configfile">. But keep in
+				mind that this is only a compromise solution!</para>
+
+
 		<para>To have support for the charset UTF-8 the LaTeX command for
 			changing the charset must support UTF-8. This is naturally not the case!
 			You'll find a suitable extension in the CTAN. Just download the
 			file <ulink 
 			url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
 			and install it as described in the file <filename>INSTALL</filename> which
-			is included. You only need UTF-8 support if your mail client delivers
-			Muttprint with UTF-8 encoded data.</para>
+			is included. You only need UTF-8 support if you work in a UTF-8
+			environment. You find out the current encoding under Linux with the
+			command <command>locale charmap</command>, on other operating systems use
+			<literal>muttprint --print-locale</literal> after Muttprint is installed.</para>
 		
 
 	</sect2>
@@ -139,6 +187,14 @@
 				<Filename>Makefile</Filename>  with Muttprint. To adjust the
 				locations on your system,  edit the Makefile with your
 				favourite editor.</para>
+
+			<para>As mentioned above, there must be a small C program compiled. If you use Perl
+				5.8 and/or Linux, you could skip this step. For this, just execute 
+
+			<para>
+				<prompt>$ </prompt>
+				<userinput>make</userinput>
+			</para>
 
 			<para>You need Root permissions to install the program. After you have
 				changed with the <command>su</command> command to the superuser,
@@ -384,7 +440,7 @@ set printer_name "muttprint"
 <sect1 id="config">
 	<title>Configuration</title>
 		
-	<sect2>
+	<sect2 id="configfile">
 		<title>The configuration file</title>
 		
 		<para>Some things could be configured in Muttprint. This is permanently
@@ -595,9 +651,7 @@ set printer_name "muttprint"
 				Muttprint converts the time zone in the time zone of the system and
 				prints the date in the local language <footnote>
 					<para>This works independent from the translation file
-						by using the functions of the operating system. Despite this, the
-						<literal>LANG</literal> (see <xref linkend="lang">) in the
-						configuration file affects the language of the date.</para>
+						by using the functions of the operating system. </para>
 				</footnote>.</para>
 
 			<para>The format of the date could be specified with the
@@ -765,7 +819,7 @@ set printer_name "muttprint"
 				25.4&nbsp;mm are 1&nbsp;inch.</para>
 
 		</sect3>
-		<sect3>
+		<sect3 id="wrapmargin">
 			<title>Wrapping long lines</title>
 
 			<para>The length of the longest line is specified with the 
@@ -808,6 +862,11 @@ set printer_name "muttprint"
 					<entry><literal>border</literal></entry>
 					<entry><para>rule after the headers 
 					(<emphasis>default setting</emphasis>)
+					</para></entry>
+				</row>
+                <row>
+					<entry><literal>Border</literal></entry>
+					<entry><para>thick rule after the headers 
 					</para></entry>
 				</row>
 				<row>
@@ -945,6 +1004,25 @@ set printer_name "muttprint"
 
 		</sect3>
 		<sect3>
+			<title>Printing in the background</title>
+
+			<para>Normally Muttprint runs in the foreground and terminates after the
+				print procedure is finished successfully. This simplyfies the output of
+				error messages. On modern computers, the printing of normal mails takes
+				only a few seconds. (An exception could be the first run of Muttprint
+				because LaTeX has to create lots of font files.)
+			</para>
+
+			<para>Sometimes it could be useful to put Muttprint in the background
+				immediately. So you can use the your mail client instantly after you started
+				the print job. This is only recommended if you already tested Muttprint to make
+				sure that there must be printed no error messages.</para>
+
+			<para>For this, you can assign the variable <literal>BACKGROUND</literal>
+				the value <literal>on</literal>. In the debug mode (see <xref
+				linkend="debug">) this option has no effect.</para>
+		
+		<sect3 id="debug">
 			<title>Error messages</title>
 			
 			<para>The output of <command>latex</command> and
@@ -976,189 +1054,130 @@ set printer_name "muttprint"
 	</sect2>
 	<sect2 id="lang">
 		<title>Different languages</title>
+				<sect3>
+			<title>Overview</title>
 		
-		<para>Muttprint supports different languages.  Normally the environment
-			variable <envar>LANG</envar> is set to the right value: e. g.
-			<literal>de</literal>, <literal>it</literal>, <literal>fr</literal>,
-			<literal>es</literal> or <literal>en</literal>, which is the shortcut
-			according to ISO 639.  Only the first two characters are recognized so
-			that <literal>de_DE@euro</literal> is okay. If the value is not known,
-			Muttprint falls back to English.</para>
+		<para>The script supports different languages. In contrast to old versions
+			the configuration is done not with the configuration file but with the
+			locale environment of your operating system.</para>
 
-		<para>You find a overview about all available translations in the
-			file <filename>README.translations</filename>, which is installed
-			with the documentation in the same directory.</para>
+		<para>Under Unix environment variables are used to control the locale
+			settings. There are different variables which control different aspects
+			of localization. For example a user might English text messages but
+			he wants to work with German texts (and the Western European character
+			set).</para>
 
-		<para>If you would like to use another language for Muttprint than for
-			the remaining system, you could define <literal>LANG</literal> in
-			your <filename>.muttprintrc</filename>.</para>
+		<para>For Muttprint the variables <literal>LC_ALL</literal>,
+			<literal>LANG</literal>, <literal>LC_MESSAGES</literal>,
+			<literal>LC_CTYPE</literal> and <literal>LC_TIME</literal> are
+			important. <literal>LC_CTYPE</literal> specifies the encoding used
+			for input and output. Muttprint expects its input (especially
+			the mail that should be printed) in this charset and prints all
+			messages in this charset. <literal>LC_MESSAGES</literal> specifies the
+			language for messages and the printing and <literal>LC_TIME</literal>
+			is responsible for date and time information. The date in the footer
+			is generated by LaTeX and so it's in the language specified by
+			<literal>LC_MESSAGES</literal>. <literal>LC_ALL</literal> overwrites
+			all other <literal>LC_</literal> variables, so if it's set, the other
+			have no meaning anymore. <literal>LANG</literal> is a fallback:
+			If, for example, <literal>LC_MESSAGES</literal> is not defined 
+			<literal>LANG</literal> is used to determine the language for
+			messages. Normally you only set the <literal>LANG</literal> variable.
+		</para>
 
+		<para>In the first place the language adaptions affect some words
+			in the printing, which means the labels of the mail header and the
+			date.</para>
 
-		<sect3>
-			<title>Lanuages on the printing</title>
-		
-			<para>The most important effects of language adaption are
-				on the printing: the mail header and the date.</para>
-				
-			<para>The last one is created with the LaTeX package
-				<filename>babel.sty</filename>. Muttprint passes the right
-				option which corresponds to your language to the package. You
-				could set your own value with the variable
-				<literal>LPack</literal>, e.&nbsp;g. to <literal>austrian</literal>,
-				<literal>spanish</literal>. Read <command>texdoc babel</command>
-				for a list of all possible values.</para>
+		<para>Also the encoding is determined by the locale enviroment of
+			your system. There's no way to do this manual as in older versions
+			of Muttprint anymore. The number of supported charsets is limited
+			because of the usage of LaTeX. Following encodings are supported:
+			ISO-8859-1 (Western Euroean languages), ISO-8859-2 (Eastern European
+			languages), ISO-8859-3 (South-Eastern European and other languages), 
+			ISO-8859-4 (Scandinavic and Baltical languages), ISO-8859-9 (Turkish),
+			ISO-8859-15 (ISO-8859-1 with some modifications, especially the
+			Euro sign), KOI8-R (languages with Cyrillic characters, e. g.
+			Russian) and UTF-8.</para>
 
-			<para>If you would like to use another strings for the printed
-				header, you could set following variables:</para>
-			
-			<ItemizedList spacing="compact">
-				<ListItem><para><literal>FROM_STRING</literal></para></ListItem>
-				<ListItem><para><literal>TO_STRING</literal></para></ListItem>
-				<ListItem><para><literal>SUBJECT_STRING</literal></para></ListItem>
-				<ListItem><para><literal>CC_STRING</literal></para></ListItem>
-				<ListItem><para><literal>DATE_STRING</literal></para></ListItem>
-				<ListItem><para><literal>PAGE_STRING</literal></para></ListItem>
-				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
-				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
-				<ListItem><para><literal>ORGANIZATION_STRING</literal></para></ListItem>
-			</ItemizedList>
-			
-			<para>Additional headers that are configured for printing (see
-				<xref linkend="printedheaders">) could not be translated.</para>
-		
-		</sect3>
-		<sect3>
-			<title>Charsets</title>
+		<para>The support of UTF-8 is not complete. LaTeX itself uses 8-bit
+			character sets. This means that it could be only this subset of
+			characters used, which are usual in the current locale environment.
+			So Cyrillic letters could only be printed in a Russian enviroment.
+			Maybe this changes in future but the main problem is LaTeX. </para>
 
-			<para>Muttprint supports different charsets for the printing. Here's a 
-				short overview:</para>
-
-			<informaltable frame="topbot">
-				<tgroup cols=3 align=left>
-				<colspec colnum="1" colwidth="1in"> 
-				<colspec colnum="2" colwidth="0.8in"> 
-					<thead>
-						<row>
-							<entry>charset</entry>
-							<entry>option</entry>
-							<entry>description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>ISO-8859-1</entry>
-							<entry><literal>latin1</literal></entry>
-							<entry>west European lanuages</entry>
-						</row>
-						<row>
-							<entry>ISO-8859-2</entry>
-							<entry><literal>latin2</literal></entry>
-							<entry>east European languages</entry>
-						</row>
-						<row>
-							<entry>ISO-8859-3</entry>
-							<entry><literal>latin3</literal></entry>
-							<entry>southeast European and miscellaneous languages</entry>
-						</row>
-						<row>
-							<entry>ISO-8859-4</entry>
-							<entry><literal>latin4</literal></entry>
-							<entry>southeast European and miscellaneous languages</entry>
-						</row>
-						<row>
-							<entry>ISO-8859-9</entry>
-							<entry><literal>latin5</literal></entry>
-							<entry>Latin-1 modification for Turkish</entry>
-						</row>
-						<row>
-							<entry>ISO-8859-15</entry>
-							<entry><literal>latin9</literal></entry>
-							<entry>Latin-1 with some modifications, e.&nbsp;g. Euro currency
-								symbol</entry>
-						</row>
-						<row>
-							<entry>KOI8-R</entry>
-							<entry><literal>koi8-r</literal></entry>
-							<entry>Languages with cyrillic characters such as Russian</entry>
-						</row>
-						<row>
-							<entry>Windows-1252</entry>
-							<entry><literal>latin1</literal></entry>
-							<entry>Latin-1 with some enhancements</entry>
-						</row>
-						<row>
-							<entry>Windows-1250</entry>
-							<entry><literal>latin2</literal></entry>
-							<entry>Latin-2 with some enhancements</entry>
-						</row>
-							<row>
-							<entry>UTF-8</entry>
-							<entry><literal>utf8</literal></entry>
-							<entry>Unicode as supported by LaTeX, see <xref linkend="sysreq"></entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-
-			<para>This charsets allows you printing of most languages that use
-				latin characters. The charset handling is mostly based on the LaTeX
-				package <filename>inputenc.sty</filename>, but it is extended.</para>
-
-			<para>The default charset is Latin-1. If there are translation files,
-				the charset is changed to the Country-specific one. For example,
-				for German the charset Latin-9 is used for printing the Euro 
-				currency sign correctly. For Czech, the charset is changed
-				to Latin-2 because it's a east European language.</para>
-
-			<para>Moreover, you can change the charset in the configuration file
-				with the variable <literal>CHARSET</literal>. Normally, you should
-				set this to the charset used for displaying the mail on the
-				screen, see the variable <varname>charset</varname> of Mutt.</para>
-
-			<para>If you set <literal>CHARSET</literal> to the value
-				<literal>auto</literal>, Muttprint tries to find a suitable mail header
-				that contains the charset of the mail. Use this setting carefully. For
-				example, Mutt adapts the output to the screen charset. On the other
-				side, this setting could be useful if you often print mails with
-				different charsets.</para>
-
-			<para>Aside from the charsets of the ISO-Latin family, Muttprint
-				supports the enhancements of the Windows charsets Windows-1252 (West
-				European) and Windows-1250 (East European). This charsets extends the
-				ISO charsets with some characters, for example typographical quotation
-				marks, per mille sign or the Euro sign. Last one often appears one the
-				place 128 (decimal) because of the wide spread of Windows -- partial
-				declared as ISO-8859-1. Muttprint prints this mails correctly, if the
-				mailclient doesn't change something.</para>
-
-			<para>Since version 0.65 Muttprint supports printing of mails with
-				cyrillic characters. In this case the charset is <literal>koi8-r</literal>.
-				Please recognize that this does not work with all LaTeX systems;
-				I recommend teTeX in version <emphasis>2.0</emphasis> or higher.
-				Morover not all fonts contain the needed characters -- please
-				use the LaTeX standard fonts, see also <xref linkend="font">.</para>
-
-			<para>You find a full overview about the ISO-8859-* charsets
-				on <ulink	url="http://czyborra.com/charsets/iso8859.html"></ulink>.
-			</para>
 					
-		</sect3> <sect3> <title>Translation file</title>
+		</sect3> 
+		<sect3> 
+			<title>Translation file</title>
 		
 			<para>The Muttprint translation files are located in the
-			<filename>share</filename> directory and have the name
-			<filename>translation-<replaceable>language</replaceable>.pl</filename>.
-			You could add new files in this directory without any changes on the
-			Muttprint script. Not only the headers mentioned above but also the help
-			message are translated here.</para>
+				<filename>share</filename> directory and have the name
+				<filename>translation-<replaceable>language</replaceable>.pl</filename>.
+				You could add new files in this directory without any changes on the
+				Muttprint script. Not only the headers mentioned above but also the help
+				message are translated here.</para>
 			
 			<para>For new translations take any file as template, copy it and
-			translate it. If you would like to provide your translation to other
-			users, just send me the new file with a e-mail and I'll add it in the next
-			release.</para> </sect3>
+				translate it. If you would like to provide your translation to other
+				users, just send me the new file with a e-mail and I'll add it in the next
+				release.</para>
 		
-
+			<para>Important: The encoding of this file must be (independent of the
+				current locale enviroment) UTF-8. Read the file
+				<filename>README</filename> which is in the
+				<filename>tranlation/</filename> directory of Muttprint (the source code
+				distribution).
+			</para>
+		</sect3>
 	</sect2>
 </sect1>
+
+
+<sect1>
+	<title>Known Bugs</title>
+
+	<para>Even Muttprint contains bugs. Following problems exists currently:</para>
+
+	<para><emphasis role="bold">Problem with parsing of the configuration file
+		(RedHat Linux).</emphasis> Because of a bug in the Perl version distributed
+		with RedHat Linux 9.0, Muttprint cannot parse the configuration file
+		in a UTF-8 environment. You can use Muttprint in a non-UTF-8 environment
+		or upgrade Perl from <ulink
+			url="ftp://ftp.redhat.com/pub/redhat/linux/rawhide/">RawHide</ulink>.
+		The bug is described at <ulink 
+		url="http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=98274"></ulink>.</para>
+
+	<para><emphasis role="bold">Error in line-wrapping with Perl 5.6.</emphasis>
+		Lines that contain non-ASCII characters are wrapped too early in all 
+		Perl 5.6.x versions (earlier versions don't work at all). Umlauts
+		and Cyrillic characters count twice. The problem occurs in all locale
+		environments and bases on a bug in the standard module
+		<application>Text::Wrap</application> in this Perl versions. The bug
+		occurs only if the mail contains lines which are too long and you don't 
+		see it in a normal German or English text. You can increase the
+		value of <literal>WRAPMARGIN</literal> (see <xref linkend="wrapmargin">)
+		or use a up to date Perl (recommended is 5.8.1).</para>
+		
+	<para><emphasis role="bold">Wrong printing of the date (Perl 5.8.0).</emphasis>
+		The date is printed wrong if it's printed in the language of the country
+		(see <xref linkend="date">) and if it contains non-ASCII characters. 
+		The problem is that the mentioned Perl version encodes the UTF-8 encoded
+		string again in UTF-8. The result is a quasi twice-encoded date.
+		There are improved versions of Perl 5.8.0 where this problem is solved
+		(for example the Perl distributed with Debian unstable).
+	</para>
+	
+
+</sect1>
+
+
+
+
+
+
+
+
 <sect1 id="nots">
 	<title>Notes</title>
 	

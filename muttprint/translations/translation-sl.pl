@@ -1,19 +1,21 @@
-use bytes;
-
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Uporaba:   muttprint [opcija]... [-f datoteka]
  
-Moænosti:
+Mo≈ænosti:
 
 POZOR: Te nastavitve imajo prednost pred enakovrednim nastavitvam
 v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
 
 -h, --help
-       Ta pomoË.
+       Ta pomoƒç.
 
 -v, --version
-       Izpiπe trenutno verzijo Muttprint-a.
+       Izpi≈°e trenutno verzijo Muttprint-a.
+
+--print-locale
+       Izpi≈°e podatke o trenutno uporabljenih lokalizacijskih nastavitvah, ter
+       konƒça izvajanje.
 
 -f [datoteka], --file [datoteka]
        Bere iz datoteke namesto iz STDIN.
@@ -26,7 +28,7 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
 -C [ukaz za tiskanje], --printcommand [ukaz za tiskanje]
        Nastavi ukaz za tiskanje. "\$PRINTER" se zamenja z imenom
        tiskalnika.
-       CUPS podpora je vkljuËena z "CUPS" (ali pa nastavite katerikoli
+       CUPS podpora je vkljuƒçena z "CUPS" (ali pa nastavite katerikoli
        ukaz, ki vsebuje niz "\$CUPS_OPTIONS").
 	   
 -i [datoteka], --penguin [datoteka]
@@ -35,14 +37,14 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
 -x, --x-face | -nox, --nox-face
        Vklopi/izklopi tisnkanje X-faces.
 
--t [πtevilka], --speed [πtevilka]
-       »as v sekundah, v katerih tiskalnik natisne eno stran.
+-t [≈°tevilka], --speed [≈°tevilka]
+       ƒåas v sekundah, v katerih tiskalnik natisne eno stran.
 		   
--w [πtevilka], --wait [πtevilka]
-       »as med tiskanji lihih in sodih strani za obojestransko tiskanje.
+-w [≈°tevilka], --wait [≈°tevilka]
+       ƒåas med tiskanji lihih in sodih strani za obojestransko tiskanje.
 
 -F [ime_pisave], --font [ime_pisave]
-       Druæina pisave za tiskanje. Moæne vrednosti so:
+       Dru≈æina pisave za tiskanje. Mo≈æne vrednosti so:
        Latex, Latex-bright, Times, Utopia, Palatino, Charter ter Bookman
 	   
 -H, --headrule | -noH, --noheadrule
@@ -53,74 +55,71 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
 	   
 -S Stil | --frontstyle Stil
        Izberite stil za glavo na prvi strani:
-       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
-       Preberite si navodila, za natanËnejπi opis teh vrednosti.
+       Preberite si navodila, za natanƒçnej≈°i opis teh vrednosti.
 
--a [Ëleni_glave], --printed-headers [Ëleni_glave]
-       »leni glave, ki naj bodo natisnjeni. Za natanËnejπi opis si poglejte
+-a [ƒçleni_glave], --printed-headers [ƒçleni_glave]
+       ƒåleni glave, ki naj bodo natisnjeni. Za natanƒçnej≈°i opis si poglejte
        navodila. Primer: /Date/_To_From_*Subject*
 
 -P [format_papirja], --paper [format_papirja]
        Format papirja: "letter" (US) ali "A4" (Europe).
 
--l [jezik], --lang [jezik]
-       Jeziki za sporoËila in tiskanje.
-
--c [jezikovni_nabor], --charset [jezikovni_nabor]
-       Vhodni nabor: latin1, latin2, latin3, latin4, latin5, latin9,
-       utf8, auto (preberite manual preden uporabite "auto" ali "utf8").
-
 -e [niz], --date [niz]
-       original: izpiπe datum, kot ga najde v glavi
-       local:    pretvori v lokalno Ëasovno obmoËje in jezik
+       original: izpi≈°e datum, kot ga najde v glavi
+       local:    pretvori v lokalno ƒçasovno obmoƒçje in jezik
 
 -E [niz], --date-format [niz]
-       oblika niza datuma; glej strftime(3) za natanËnejπi opis
+       oblika niza datuma; glej strftime(3) za natanƒçnej≈°i opis
 
 -A [niz], --addressformat [niz]
      Poda format e-naslova v glavi e-pisma, poglejte si navodila 
-     programa ali dokumentacijo za natanËnejπi opis.
+     programa ali dokumentacijo za natanƒçnej≈°i opis.
 
 -n [niz], --verbatimnormal [niz]
-     Za oblikovanje normalnega teksta sporoËila elektronske poπte. Za 
-     natanËnejπi opis si preberite uporabniπki priroËnik.
+     Za oblikovanje normalnega teksta sporoƒçila elektronske po≈°te. Za 
+     natanƒçnej≈°i opis si preberite uporabni≈°ki priroƒçnik.
 
 -V [niz], --verbatimsig [niz]
      Enako kot --verbatimnormal, toda ta nastavi
      oblikovanje podpisa.
 
 -D, --debug | -noD, --nodebug
-       Izpiπe uporabne podatke v datoteko za dnevnik /tmp/muttprint.log.
+       Izpi≈°e uporabne podatke v datoteko za dnevnik /tmp/muttprint.log.
+
+-B, --background | -noB, --nobackground
+       Po≈°lje Muttprint v ozadje po tem, ko je prebral podatke potrebne za
+       tiskanje. (ne izpi≈°e sporoƒçil o napakah)
 
 -d, --duplex | -nod, --noduplex
-       VkljuËi ali izkljuËi duplex (obojestransko) tiskanje.
+       Vkljuƒçi ali izkljuƒçi duplex (obojestransko) tiskanje.
 
--g [πtevilka], --topmargin [πtevilka]
+-g [≈°tevilka], --topmargin [≈°tevilka]
        Zgornji rob v milimetrih
 
--G [πtevilka], --bottommargin [πtevilka]
+-G [≈°tevilka], --bottommargin [≈°tevilka]
        Spodnji rob v milimetrih
 
--j [πtevilka], --leftmargin [πtevilka]
+-j [≈°tevilka], --leftmargin [≈°tevilka]
        Levi rob v milimetrih
 
--J [πtevilka], --rightmargin [πtevilka]
+-J [≈°tevilka], --rightmargin [≈°tevilka]
        Desni rob v milimetrih   
 
 -2 | -1
        Tiska na eno ali dve strani. Enakovredno "papersave mode".
 
 -s, --rem_sig | -nos, --norem_sig
-       Odstrani podpise (loËene z "-- ") pri tiskanju.
+       Odstrani podpise (loƒçene z "-- ") pri tiskanju.
 
 -q, --rem_quote | -noq, --norem_quote
        Odstrani navedene odstavke pri tiskanju.
 
 -z [velikost], --fontsize [velikost]
-       Velikost Ërk: 10pt, 11pt, 12pt (samo te vrednosti)
+       Velikost ƒçrk: 10pt, 11pt, 12pt (samo te vrednosti)
 
--W [πtevilka], --wrapmargin [πtevilka]
+-W [≈°tevilka], --wrapmargin [≈°tevilka]
        Definira, kako dolge naj bodo vrstice.
 	   
 -r [datoteka], --rcfile [datoteka]
@@ -128,16 +127,16 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
        
 EOF
 
-$String{"Lizenz"} = "Ta program se distribuira pod pogoji GPL licence, 
+$String{License} = "Ta program se distribuira pod pogoji GPL licence, 
 ter se ga lahko prosto kopira.
 ";
 
-$String{"Bugs"} = "Prosim, da napake prijavite na <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "Prosim, da napake prijavite na <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "Podane datoteke ni bilo mogoËe najti.\n";
+$String{FileNotFound} = "Podane datoteke ni bilo mogoƒçe najti.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups:"} =
-("Od:", "Za:", "Zadeva:", "Kopija:", "Datum:", "Stran:", "od:", "NoviËarske skupine:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups:"} =
+("Od:", "Za:", "Zadeva:", "Kopija:", "Datum:", "Noviƒçarske skupine:");
 
-$LPack = "slovene";
-$charset = "latin2";
+$String{PageOf} = "Stran %s od %s";
+

@@ -1,7 +1,20 @@
 CHANGES
 =======================================================================
 
-0.72    - added Finish translation
+0.72    - added Finnish translation
+        - changed internationalization completely, read the manual for
+          more information, it is all documented
+          · requires Perl 5.8 or Linux or external C program 
+            "muttprint-langinfo"
+          · requires Text::Iconv or (but this is NOT required) external
+            iconv
+          · conviguration by the locale environment
+        - removed LANG and CHARSET configuration option and command
+          line switches
+        - output error messages using 'dialog' if installed
+        - running in foreground by default, new variable BACKGROUND
+        - changed translation "API" to English names (changed all
+          distributed translations so there sould be no problem)
 
 0.71	- changed shebang line to #!/usr/bin/env perl because it works
           on all system regardless where perl is installed (only in

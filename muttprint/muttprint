@@ -7,7 +7,7 @@
 #
 ########################################################################
 #                                                                      #
-#    Muttprint - erleichtert das Drucken von Mails                     #
+#    Muttprint - pretty printing of mails with Mutt                    #
 #    Copyright © 2000-03, Bernhard Walle <bernhard.walle@gmx.de>       #
 #                                                                      #
 #    This program is free software; you can redistribute it and/or     #
@@ -25,31 +25,38 @@
 #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.         #
 #                                                                      #
 #    You find the GPL in the file "COPYING" which was distributed      #
-#    with Muttprint. For a German tranlation look at                   #
+#    with Muttprint. For a German translation look at                  #
 #                                                                      #
-#    http://www.suse.de/de/linux/gpl/index.html                        #
+#    http://www.suse.de/de/private/support/licenses/gpl.html           #
 #                                                                      #
 ########################################################################
 
 # Deklaration erzwingen
 use strict;
-# Deklaration nach Perl-5.005-Art
-use vars qw($VERSION %Config $LPack $charset $texFontenc %String);
+
+use vars qw(%Config $texFontenc %String);
 use sigtrap qw(die INT QUIT TERM);
 use POSIX;
+use Text::Wrap;
 use File::Temp qw(tempdir);
+use utf8;
 
-
-# richtig und falsch
+# boolean type
 use constant TRUE 	=> 1;
 use constant FALSE	=> 0;
+
+use constant COUNTRYCODE 			=> 0;
+use constant LANGUAGECODE			=> 1;
+use constant CHARSET 				=> 2;
+use constant CHARSET_TEX_NOTATION 	=> 3;
+use constant BABEL_LANGUAGE 		=> 4;
+use constant TEX_FONTENC			=> 5;
 
 
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.71";
-
+our $VERSION = "0.72pre6";
 my $PACKAGE = "Muttprint";
 
 
@@ -67,14 +74,21 @@ sub printDuplexNoCups ($$$$);
 sub printDuplexCups ($$$);
 sub modifyPS ($);
 sub createTemp ();
-sub setStrings ($);
+sub setStrings ();
 sub writeFormated ($*$);
 sub decodeHeader();
 sub getDefaultPrinterCDE();
 sub changeForXface($);
-sub getCharset($);
 sub convertDate($);
 sub getISOlatinExtensions($);
+sub fatalError($);
+sub output (*@);
+sub outputstd (@);
+sub input (*);
+sub native2utf ($);
+sub utf2native ($);
+sub getLocaleInformation($);
+sub convert_init ();
 
 ######## 'private' Variablen für den Rest
 %Config = (
@@ -86,7 +100,7 @@ sub getISOlatinExtensions($);
 	PAPERSAVE		=>	'off',
 	FONT			=>	'Latex',
 	PAPER			=>	'A4',
-	DEBUG			=>	'1',
+	DEBUG			=>	'0',
 	REM_SIG			=>	'off',
 	REM_QUOTE		=>	'off',
 	WAIT			=>	'30',
@@ -115,7 +129,8 @@ sub getISOlatinExtensions($);
 	LATEXCODE3		=>	'',
 	LATEXCODE4		=>	'',
 	LATEXCODE5		=>	'',
-	FOREGROUND		=>	0,
+	BACKGROUND		=>	0,
+	ICONV_EXTERNAL	=> 'off',
 );
 my %fontpackages = (
 	'Latex'    		=>		'',
@@ -143,7 +158,6 @@ my %EuroSign = (
 	'Helvetica'		=>		'\EURhv{}',
 	'AvantGarde'	=>		'\EURhv{}',
 );
-my $Lang = "en";							# Sprache
 my @print;									# ob Hilfe / Version angezeigt werden soll
 my %Temp;									# temporäre Dateien und Verzeichn.
 my %Header;									# Header ...
@@ -162,10 +176,11 @@ my $image_height = "20mm";					# Höhe des gedruckten Bildes
 my $startworkingdir = getcwd();				# Arbeitsverzeichnis, wenn Muttprint
 											# gestartet wird
 my $signature;								# Signatur (Inhalt)
+my $runningInBackground = FALSE;			# does Muttprint run *currently* in Background
+my $inputSource = "-";						# - stands for stdin
 
 
 ############# END VARIABLES ##################################################
-
 
 
 #
@@ -188,9 +203,9 @@ readConfig ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc");
 
 @print = readOpts ();
 
-if ($Config{'PENGUIN'} eq "on") {
+if ($Config{PENGUIN} eq "on") {
 	my $sharedir = findCommonDir("share");
-	$Config{'PENGUIN'} = (-r "$sharedir/penguin.eps")
+	$Config{PENGUIN} = (-r "$sharedir/penguin.eps")
 			? "$sharedir/penguin.eps" 
 			: "off";
 }
@@ -201,32 +216,41 @@ readConfig ($Config{RCFILE});
 
 ################ MULIT LANGUAGE SUPPORT #######################################
 
-$Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
-$Lang = $Config{'LANG'} if defined $Config{'LANG'};
-POSIX::setlocale(&POSIX::LC_ALL, $Lang);
-
-setStrings($Lang);
+convert_init();
+POSIX::setlocale(&POSIX::LC_ALL, "");
+setStrings();
 
 #
 # Show help and version
 #
 # 0 => help (return 0)
 # 1 => version
-# 2 => error -> help (return 1)
+# 2 => print locale
+# 3 => error -> help (return 1)
 
 if ($print[0]) {
-	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
+	outputstd "\n".$String{Usage}."\n\n".$String{Bugs}."\n\n";
 	exit 0;
-} 
-elsif ($print[1]) {
-	print "\n"."Muttprint $VERSION"."\n\n".$String{'Lizenz'}."\n\n";
+} elsif ($print[1]) {
+	outputstd "\n"."Muttprint $VERSION"."\n\n".$String{Lizenz}."\n\n";
 	exit 0;
-} 
-elsif ($print[2]) {
-	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
+} elsif ($print[2]) {
+	outputstd "Encoding ......: ".getLocaleInformation(CHARSET)."\n";
+	outputstd "Language ......: ".getLocaleInformation(LANGUAGECODE)."\n";
+	outputstd "Country .......: ".getLocaleInformation(COUNTRYCODE)."\n";
+	outputstd "Babel option ..: ".getLocaleInformation(BABEL_LANGUAGE)."\n";
+	outputstd "TeX inputenc ..: ".getLocaleInformation(CHARSET_TEX_NOTATION)."\n";
+	outputstd "TeX fontenc ...: ".getLocaleInformation(TEX_FONTENC)."\n";
+	exit 0;
+} elsif ($print[3]) {
+	fatalError "You used an option which does not exist. Maybe this is because ".
+		"there have been options removed since the last version. Read the manual ".
+		"and the manpages to find out more. Read also the CHANGES file to see ".
+		"what has been changed. If this file is not installed, then try ".
+		"http://muttprint.sf.net/changes.shtml\n\n".
+		"--> For quick information try \"muttprint --help\" <--";;
 	exit 1;
 }
-
 
 # default settings 
 # we need to set this here because we want that configuration file
@@ -234,15 +258,6 @@ elsif ($print[2]) {
 # configuration file first because in this file the language can
 # be set (some sort of hen-egg-problem)
 
-if (!defined $Config{CHARSET}) {
-	$Config{CHARSET} = $charset ? $charset : 'latin1';
-}
-if (!defined $Config{LPack}) {
-	$Config{LPack} = $LPack ? $LPack : 'english';
-}
-if (!defined $Config{TEX_FONTENC}) {
-	$Config{TEX_FONTENC} = $texFontenc ? $texFontenc : 'T1';
-}
 
 # USE FOR DEBUG ONLY
 if ($Config{DEBUG}) {
@@ -302,8 +317,15 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 }
 
 {
-	my @KompletteMail = <>;
-	my $mail_charset;
+	my @KompletteMail;
+	
+	if ($inputSource eq "-") {
+		@KompletteMail = input \*STDIN;
+	} else {
+		open MAIL, $inputSource or fatalError "Could not read $inputSource:\n$!";
+		@KompletteMail = input \*MAIL;
+		close MAIL or fatalError "Could not read $inputSource:\n$!";
+	}
 
 	my $Content;
 
@@ -357,8 +379,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	
 			my $aktHeader;
 		
-			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
-			($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/i unless $mail_charset; 
+			##$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
+			##($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/i unless $mail_charset; 
 			
 			foreach $aktHeader (@headers, "X-Face") {
 			
@@ -391,19 +413,20 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 	# ab in den Hintergrund 
 
-    unless ($Config{DEBUG} || $Config{FOREGROUND}) {
-    	fork && exit;
-    }
+	if (!$Config{DEBUG} && $Config{BACKGROUND}) {
+	  fork && exit;
+	  $runningInBackground = TRUE;
+	}
 
 	#
 	# wenn die Header nicht ausgelesen werden können: so drucken!		
-	unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) { 
+	unless ($Header{From} || $Header{To} || $Header{Subject}) { 
 
 		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS//g;
         
 		open (PRINTER, "| $Config{PRINT_COMMAND}") 
-        || die "unable to print with $Config{PRINT_COMMAND}: $!";
-		print PRINTER @KompletteMail;
+			or fatalError "Unable to print with $Config{PRINT_COMMAND}:\n$!";
+		output \*PRINTER, @KompletteMail;
 		close PRINTER;
 		exit;
 	
@@ -418,21 +441,17 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	}
 
 	createTemp();
-	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
+	open (CONTENT, "> $Temp{'content'}") 
+		or fatalError "Unable to create $Temp{'content'}:\n$!";
 
 	if ($MaxLaenge > $Config{WRAPMARGIN}) {
 		writeFormated($Content, \*CONTENT, $Config{WRAPMARGIN});
 	
 	} else {
-		print CONTENT $Content;
+		output \*CONTENT, $Content;
 	}
 
 	close CONTENT;
-
-	# Zeichensatz automatisch erkennen
-	if ($Config{CHARSET} eq "auto") {
-		$Config{CHARSET} = $mail_charset ? getCharset($mail_charset) : "latin1";
-	}
 
 }
 
@@ -464,8 +483,6 @@ foreach $type (@headers) {
 		}
 		else {
 			for ($Header{$type}) {
-				
-				decodeHeader();  # for notes, see the Subroutine!!
 				
 				my $count = 0;
 				#
@@ -536,12 +553,8 @@ foreach $type (@headers) {
 				s/-/{-}/g;
 				s/\0//g;
 
-				if ($Config{CHARSET} eq "latin1" or $Config{CHARSET} eq "latin9") {
-					s/\200/$EuroSign/g;
-					if ($Config{CHARSET} eq "latin9") {
-						s/¤/$EuroSign/g;
-					}
-				}
+				# euro
+				s/Â¤/$EuroSign/g;
 			}
 		}
 
@@ -593,7 +606,8 @@ system("latex -interaction=nonstopmode mail.tex >> $errorRedirection 2>&1");
 #
 # no check of the exit code because we do this here
 unless (-e $Temp{dvi}) {
-	die "Latex didn't work. There's no DVI file.";
+	fatalError "Latex didn't work. There's no DVI file. If you ".
+		"write a bugreport, please include a mail where printing fails.";
 }
 
 
@@ -603,7 +617,7 @@ unless (-e $Temp{dvi}) {
 #
 # generating the postscript file in every case
 system("dvips -t $paperformat -o $Temp{ps} $Temp{dvi} >> $errorRedirection 2>&1")
-	and die "Error while running dvips: $!";
+	and fatalError "Error while running dvips:\n$!";
 
 
 # now we find out the number of pages the document has
@@ -633,7 +647,7 @@ if ($Config{PAPERSAVE} eq "on") {
 		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS/ -o number-up=2 \$CUPS_OPTIONS/;
 	} else {
 		system("psnup -2 -q $Temp{ps} $Temp{psnew} >> $errorRedirection 2>&1") 
-			and die "Psnup failed: $!";
+			and fatalError "Psnup failed:\n$!";
 		unlink($Temp{ps});
 		link($Temp{psnew}, $Temp{ps});
 	}
@@ -711,9 +725,9 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 	# Just write the postscript code to STDOUT
 	open (PS, "<$Temp{ps}") or die "Could not open $Temp{ps} for reading: $!";
 	while (<PS>) {
-		print $_;
+		outputstd $_;
 	}
-	close PS or die "Could not close $Temp{ps}: $!";
+	close PS or fatalError "Could not close $Temp{ps}:\n$!";
 
 } else { # here's the code for normal printing
 	# remove CUPS_OPTIONS here
@@ -727,7 +741,7 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 	if ( ($Config{DUPLEX} ne "on") || ($numberOfPages == 1) ) {
 		# we use the print command as pipe because it's more flexible
 		system("cat $Temp{ps} | $Config{PRINT_COMMAND} >> $errorRedirection 2>&1")
-			and die "Could not print with $Config{PRINT_COMMAND}: $!";
+			and fatalError "Could not print with $Config{PRINT_COMMAND}:\n $!";
 	} else { # duplex is on
 		my $sleepTime = 0;
 
@@ -755,14 +769,14 @@ sub printDuplexNoCups ($$$$) {
 	my $timeBetween = shift;
 
 	if (!defined($childPid = fork())) {
-		die "kann fork nicht ausführen: $!";
+		fatalError "Could not fork:\n$!";
 	} elsif ($childPid) {
 		system ("cat $firstFile | $printCommand >>$errorRedirection 2>&1")
-			and die "Error while running lpr: $!";
+			and fatalError "Error while running lpr:\n$!";
 	} else {
 		sleep ($timeBetween);
 		system ("cat $secondFile | $printCommand >>$errorRedirection 2>&1")
-			and die "Error while running lpr: $!";
+			and fatalError "Error while running lpr:\n$!";
 		exit;
 	}
 }
@@ -776,17 +790,16 @@ sub printDuplexCups ($$$) {
 	my $timeBetween = shift;
 
 	if (!defined($childPid = fork())) {
-		die "kann fork nicht ausführen: $!";
+		fatalError "Couldn't fork:\n$!";
 	} elsif ($childPid) {
 		$printCommand =~ s/oddeven/odd/;
 		system ("cat $file | $printCommand >> $errorRedirection 2>&1")
-			and die "Error while running lpr: $!";
+			and fatalError "Error while running lpr: $!";
 	} else {
 		$printCommand =~ s/oddeven/even/;
 		sleep ($timeBetween);
-		print "$printCommand \n";
 		system ("cat $file | $printCommand >> $errorRedirection 2>&1")
-			and die "Error while running lpr: $!";
+			and fatalError "Error while running lpr: $!";
 		exit;
 	}
 }
@@ -806,7 +819,7 @@ sub readConfig (@) {
 
 		next unless (-r $rcfile);
 	
-		open (RCFILE, $rcfile) || die "Could not open $rcfile: $!";
+		open (RCFILE, $rcfile) or fatalError "Could not open $rcfile:\n$!";
 
 		while (<RCFILE>) {
 			if (/^([^#=\s]+)=(["']?)(.*)\2\s+$/) { 
@@ -814,12 +827,9 @@ sub readConfig (@) {
 			}
 		}
 			
-		close RCFILE || die "Could not close $rcfile: $!";
+		close RCFILE or fatalError "Could not close $rcfile:\n$!";
 		
 	}
-
-	# Abwärtskompatiblität
-	$Config{CHARSET} = $Config{charset} if defined $Config{charset};
 }
 
 ##############################################################################
@@ -841,6 +851,7 @@ sub readOpts () {
 	
 		'h|help' 				=> 	\$opt{help},
 		'v|version'				=>	\$opt{version},
+		'print-locale'			=>	\$opt{print_locale},
 
 		'p|printer=s' 			=>	\$Config{PRINTER},
 		'C|printcommand=s'		=>	\$Config{PRINT_COMMAND},
@@ -853,9 +864,8 @@ sub readOpts () {
 		'a|printed-headers=s'	=>	\$Config{PRINTED_HEADERS},
         'z|fontsize=s'          =>  \$Config{FONTSIZE},
         'W|wrapmargin=s'        =>  \$Config{WRAPMARGIN},
-		'c|charset=s'			=>	\$Config{CHARSET},
 		'D|debug!'				=>	\$Config{DEBUG},
-		'foreground!'			=>	\$Config{FOREGRUND},
+		'B|background!'			=>	\$Config{BACKGROUND},
 		'e|date=s'				=>	\$Config{DATE},
 		'E|date-format=s'		=>	\$Config{DATE_FORMAT},
 		'r|rcfile=s'			=>	\$Config{RCFILE},
@@ -869,7 +879,6 @@ sub readOpts () {
 		'sig_regexp=s'			=>	\$Config{SIG_REGEXP},
 
 
-		'l|lang=s'				=>	\$opt{LANG},
 		'd|duplex!'				=>	\$opt{DUPLEX},
 		'x|x-face!'				=>	\$opt{XFACE},
 		'H|headrule!'			=>	\$Config{HEADRULE},
@@ -911,25 +920,18 @@ sub readOpts () {
 	# aus Datei lesen
 
 	if (defined $opt{'file'}) {
-		if ($opt{'file'} eq "-") {
-			@ARGV = "-";
-		}
-		else {
+		unless ($opt{'file'} eq "-") {
 			unless (-e $opt{'file'}) {		
-				die "Could not open $opt{'file'}. Maybe the file does not exist.\n";
+				fatalError "Could not open $opt{'file'}. Maybe the file does not exist.\n";
 			}
-			@ARGV = $opt{'file'};
+			$inputSource = $opt{'file'};
 		}			
 	}
-	else {
-		@ARGV = "-";
-	}
-	
 	
 	# Rückgabe: Wahrheitswerte für 
-	# I Hilfe, II Version
+	# I Hilfe, II Version, III Locale
 
-	return ($opt{'help'}, $opt{'version'}, $error);
+	return ($opt{help}, $opt{version}, $opt{print_locale}, $error);
 
 }
 
@@ -943,9 +945,9 @@ sub getPaperConfig () {
 
 	return unless (-r $Papersize);
 
-	open (RCFILE, $Papersize) or die "Could not open $Papersize: $!";
+	open (RCFILE, $Papersize) or fatalError "Could not open $Papersize:\n$!";
 	chomp($DebianPaper = <RCFILE>);
-	close RCFILE or die "Could not close $Papersize: $!";
+	close RCFILE or fatalError "Could not close $Papersize:\n$!";
 
 	foreach ($DebianPaper) {
 		/a4/i 		&& 	do { $DebianPaper = "A4";	 		last };
@@ -956,6 +958,194 @@ sub getPaperConfig () {
 }
 
 ##############################################################################
+
+{
+	my $countrycode;
+	my $languagecode;
+	my $charset;
+	
+	sub getCharsetTexNotation () {
+		for ($charset) {
+			/iso[_\-]8859[_\-]15/i		&& return "latin9";
+			/iso[_\-]8859[_\-]1/i 		&& return "latin1";
+			/iso[_\-]8859[_\-]2/i 		&& return "latin2";
+			/iso[_\-]8859[_\-]3/i		&& return "latin3";
+			/iso[_\-]8859[_\-]4/i		&& return "latin4";
+			/iso[_\-]8859[_\-]9/i		&& return "latin5";
+			/(cp|windows)[_\-]?1252/i	&& return "latin1";
+			/(cp|windows)[_\-]?1250/i	&& return "latin2";
+			/utf[-_]8/i					&& return "utf8";
+			/koi8[-_]r/i				&& return "koi8-r";
+			/us[-_]ascii/i				&& return "latin1";
+
+			return "latin1";
+		}
+	}
+
+	sub getBabelLanguage () {
+		my $full_locale = $countrycode."_".$languagecode;
+
+		# all languages supported by babel according to the documentation
+		my %babel = (
+			af		=> "afrikaans",
+			in		=> "bahasa",
+			eu		=> "basque",
+			br		=> "breton",
+			bg		=> "bulgarian",
+			ca		=> "catalan",
+			hr		=> "croatian",
+			cs		=> "czech",
+			da		=> "danish",
+			nl		=> "dutch",
+			en_US	=> "american",
+			en_GB	=> "british",
+			en_CA	=> "canadian",
+			en		=> "english",
+			eo		=> "esperanto",
+			et		=> "estonian",
+			fi		=> "finnish",
+			fr		=> "french",
+			gl		=> "galician",
+			de		=> "ngerman",
+			de_AT	=> "naustrian",
+			gr		=> "greek",
+			iw		=> "hebrew",
+			hu		=> "hungarian",
+			is		=> "icelandic",
+			ga		=> "irish",
+			it		=> "italian",
+			la		=> "latin",
+			lp		=> "samin",
+			no		=> "norsk",
+			po		=> "polish",
+			pt		=> "portuguese",
+			pt_BR	=> "brazil",
+			ro		=> "romanian",
+			ru		=> "russian",
+			es		=> "spanish",
+			sk		=> "slovak",
+			sl		=> "slovene",
+			sv		=> "swedish",
+			sr		=> "serbian",
+			tr		=> "turkish",
+			uk		=> "ukrainian",
+			cy		=> "welsh"
+		);
+
+		if (defined $babel{$full_locale}) {
+			return $babel{$full_locale};
+		} elsif (defined $babel{$languagecode}) {
+			return $babel{$languagecode};
+		} else {
+			return "english";
+		}
+	}
+	
+	# helping functions
+	sub message_locale {
+		if (defined $ENV{LC_ALL}) {
+			return $ENV{LC_ALL};
+		} elsif (defined $ENV{LC_MESSAGES}) {
+			return $ENV{LC_MESSAGES};
+		} elsif (defined $ENV{LANG}) {
+			return $ENV{LANG};
+		} else {
+			return "en_US";
+		}
+	}
+	sub get_language {
+		my $locale = message_locale();
+		my $language = "en";
+		if (length($locale) >= 2 && $locale =~ /^[[:lower:]]{2}/) {
+			$language = substr($locale, 0, 2);
+		}
+		return $language;
+	}
+
+	sub get_country {
+		my $locale = message_locale();
+		my $country = "US";
+		if (length($locale) >= 5 && $locale =~ /^[[:lower:]]{2}_[[:upper:]]{2}/) {
+			$country = substr($locale, 3, 2);
+		} 
+		return $country;
+	}
+
+	sub get_charset {
+		my $charset = `locale charmap`;
+		chomp($charset);
+		if ($charset eq "ANSI_X3.4-1968") {
+			$charset = "US-ASCII";
+		}
+		return $charset;
+	}
+
+
+	sub setLocaleInformation {
+		
+		$languagecode = get_language();
+		$countrycode = get_country();
+		
+		# try to use the perl module
+		eval {
+			require I18N::Langinfo;
+			I18N::Langinfo->import(qw(langinfo CODESET));
+			$charset = langinfo(CODESET()); # note the ()
+		};
+		
+		if ($@) { 
+			no warnings;
+			my $output = `muttprint-langinfo -c`;
+			if (defined $output) {
+				chomp $output;
+				$charset = $output;
+			} else {
+				if ($^O =~ /linux/i) {
+					$output = `locale charmap`;
+					if (!defined $output) {
+						fatalError "There's no \"locale\" in \$PATH. Since you run Linux this is ".
+							"confusing. Please install this small \"locale\" program, update to ".
+							"Perl 5.8.1 or install muttprint-langinfo which is distributed ".
+							"with Muttprint.";
+					}
+					chomp $output;
+					$charset = $output;
+				} else {
+					fatalError "There's no muttprint-langinfo in \$PATH. Please install it ".
+						"or update to Perl 5.8.1. The C program should be work on all systems which ".
+						"follow the \"The Single UNIX(R) Specification, Version 2\". You find ".
+						"it in the langinfo/ subdirectory of the Muttprint source distribution.";
+				}
+			}
+		}
+	}
+
+	sub getLocaleInformation ($) {
+		my $type = shift;
+		
+		unless (defined $countrycode) {
+			setLocaleInformation();
+		}
+
+		if ($type == LANGUAGECODE) {
+			return $languagecode;
+		} elsif ($type == COUNTRYCODE) {
+			return $countrycode;
+		} elsif ($type == CHARSET) {
+			return $charset;
+		} elsif ($type == CHARSET_TEX_NOTATION) {
+			return getCharsetTexNotation();
+		} elsif ($type == BABEL_LANGUAGE) {
+			return getBabelLanguage();
+		} elsif ($type == TEX_FONTENC) {
+			if (defined $Config{TEX_FONTENC}) {
+				return $Config{TEX_FONTENC};
+			} else {
+				return $texFontenc ? $texFontenc : "T1";
+			}
+		}
+	}
+}
 
 sub createTemp () {
 	#
@@ -995,15 +1185,18 @@ sub findCommonDir ($) {
 
 sub changeForXface ($) {
 
-	open (RAW, ">$Temp{'xf_raw'}") || die "Could not create XF-Raw file: $!";
+	open (RAW, ">$Temp{'xf_raw'}") or fatalError "Could not create XF-Raw file:\n$!";
+	binmode RAW;
 	print RAW @_;
 	close RAW;
 
 	system ("uncompface -X $Temp{xf_raw} $Temp{xf_xbm}") 
-		and die "Could not convert XF-Raw into XF-XBM: Maybe 'uncompface' not installed: $!";
+		and fatalError "Could not convert XF-Raw into XF-XBM:\n".
+			"Maybe 'uncompface' not installed:\n$!";
 	
 	system ("convert $Temp{xf_xbm} $Temp{xf_eps}")
-		and die "Could not convert XF-XBM into XF-EPS: Maybe 'convert' not installed: $!";
+		and fatalError "Could not convert XF-XBM into XF-EPS:\n".
+			"Maybe 'convert' not installed: $!";
 	
 	$Config{'PENGUIN'} = $Temp{xf_eps};
 
@@ -1011,24 +1204,6 @@ sub changeForXface ($) {
 
 }
 
-##############################################################################
-
-sub getCharset ($) {
-	for (shift) {
-		/iso[_\-]8859[_\-]15/i		&& return "latin9";
-		/iso[_\-]8859[_\-]1/i 		&& return "latin1";
-		/iso[_\-]8859[_\-]2/i 		&& return "latin2";
-		/iso[_\-]8859[_\-]3/i		&& return "latin3";
-		/iso[_\-]8859[_\-]4/i		&& return "latin4";
-		/iso[_\-]8859[_\-]9/i		&& return "latin5";
-		/(cp|windows)[_\-]?1252/i	&& return "latin1";
-		/(cp|windows)[_\-]?1250/i	&& return "latin2";
-		
-		return "latin1";
-	}
-}
-	
-		
 ##############################################################################
 
 sub createLatex () {
@@ -1043,9 +1218,11 @@ sub createLatex () {
 	my $headerrule_other = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $headerrule_first = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $footerrule = "";
-	my $charset = $Config{CHARSET};
 	my $fontencString;
-	my $isolatinextensions = getISOlatinExtensions($charset);
+	my $babellanguage = getLocaleInformation(BABEL_LANGUAGE);
+	my $inputcharset = getLocaleInformation(CHARSET_TEX_NOTATION);
+	my $isolatinextensions = getISOlatinExtensions($inputcharset);
+
 
 	# Sans-Serif-Verhalten
 	if ($fontpackage =~ /-SANSSERIF-/) {
@@ -1061,13 +1238,10 @@ sub createLatex () {
 	}
 
 	# LaTeX Fontencoding
-	$fontencString = defined $Config{TEX_FONTENC}
-		? "\\usepackage[$Config{TEX_FONTENC}]{fontenc}"
+	my $tex_fontec = getLocaleInformation(TEX_FONTENC);
+	$fontencString = defined $tex_fontec 
+		? "\\usepackage[$tex_fontec]{fontenc}"
 		: "";
-
-	if ($charset eq "latin9") {
-		$charset = "latin1";
-	}
 
 	# Pinguin drucken?
 
@@ -1144,6 +1318,10 @@ EOF
 			$LatexPackages .= ",color";
 			$BeforeHeader = '\\definecolor{light}{gray}{0.85} \\fcolorbox{black}{light}{';
 			$AfterHeader = '} \\vspace{6mm}';
+        last; };
+        /^(?-i:B)order$/i	&& do {
+        $BeforeHeader = "";
+        $AfterHeader = '\\vspace{5mm} \\hrule height 1truemm \\vspace{5mm}';
 		last; };
 	
 
@@ -1178,19 +1356,26 @@ EOF
 		$numberReplacements++;
 	}
 
-	open (LATEX, "> $Temp{'latex'}") || die "unable to create $Temp{'latex'}: $!";
+	# page of ...
+	my $pageString;
+	unless (exists $String{PageOf}) {
+		$String{PageOf} = "$String{Page} %s $String{of} %s";
+	}
+	$pageString = sprintf $String{PageOf}, "\\thepage{}", "\\pageref{LastPage}";
+
+	open (LATEX, "> $Temp{'latex'}")
+		or fatalError "Unable to create $Temp{'latex'}:\n$!";
 
 
 #
 # hier wird die eigentliche LaTeX-Quelldatei erzeugt
 
-
-print LATEX <<EOF;
+output \*LATEX, "
 \\documentclass[compat2,$Config{FONTSIZE}]{article}
 $fontencString
 \\renewcommand{\\tt}{\\rm}
-\\usepackage[$Config{LPack}]{babel}
-\\usepackage[$charset]{inputenc}
+\\usepackage[$babellanguage]{babel}
+\\usepackage[$inputcharset]{inputenc}
 \\usepackage{$LatexPackages}
 \\usepackage[${paperformat}paper,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
 	top=$Config{TOPMARGIN}mm,bottom=$Config{BOTTOMMARGIN}mm,headsep=5mm]{geometry}
@@ -1203,7 +1388,7 @@ $isolatinextensions
 \\rhead{\\bfseries $Header{'ShortSubject'}}
 \\cfoot{}
 \\lfoot{\\today}
-\\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}
+\\rfoot{", $pageString, "}
 $headerrule_other
 $footerrule
 \\fancypagestyle{plain}{%
@@ -1214,7 +1399,7 @@ $headerrule_first
 \\setlength{\\headheight}{0mm}
 \\addtolength{\\footskip}{12pt}
 \\addtolength{\\footskip}{5mm}
-\\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}}
+\\rfoot{", $pageString,"}}
 $Config{LATEXCODE}
 $Config{LATEXCODE1}
 $Config{LATEXCODE2}
@@ -1222,11 +1407,14 @@ $Config{LATEXCODE3}
 $Config{LATEXCODE4}
 $Config{LATEXCODE5}
 \\begin{document}
-\\thispagestyle{plain}
-$BeforeHeader
-{\\large
-\\begin{tabular}[t]{\@{}r>{\\raggedright}p{$PengTab}\@{}p{0mm}\@{}}
-@PrintedMailheaders
+\\thispagestyle{plain}",
+$BeforeHeader,
+"{\\large
+\\begin{tabular}[t]{\@{}r>{\\raggedright}p{$PengTab}\@{}p{0mm}\@{}}";
+
+	output \*LATEX, @PrintedMailheaders;
+
+output \*LATEX, <<EOF;
 \\end{tabular}}
 \\hfill
 $PengCode
@@ -1419,13 +1607,13 @@ sub getNumberOfPages ($) {
 	my $auxfile = shift;
 	my $numberOfPages = 0;
 
-	open (AUX, "$auxfile") or die "Could not open $auxfile: $!";
+	open (AUX, "$auxfile") or fatalError "Could not open $auxfile:\n$!";
 	
 	while (<AUX>) {
 		($numberOfPages) = /\\newlabel{LastPage}{{}{(\d+)}}/;
 	}
 	
-	close AUX or die "Could not close $auxfile: $!";
+	close AUX or fatalError "Could not close $auxfile:\n$!";
 	
 	return $numberOfPages;
 }
@@ -1433,105 +1621,15 @@ sub getNumberOfPages ($) {
 ##############################################################################
 
 
-#
-# Here we decode HEADER
-# This is useful for printing raw mails / usenet articles
-# See RFC 2047 for MIME encoding. I would not say that this code decodes
-# all correct, but when I tested it, it worked :)
-#
-# Tipp:
-# For printing with KNode (KDE newsreader) save the article to a file and
-# execute   muttprint -f /tmp/some_file.txt
-# [This decoding stuff was done for KNode ;)]
-
-sub decodeHeader () {
-	
-	my $EncPart;
-	
-	foreach $EncPart ($_ =~ /=\?ISO-8859-[0-9]+\?Q\?(.*?)\?=/gi) {		
-		
- 		$EncPart =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
- 		$EncPart =~ s/_/ /g;
-		
-		s/=\?ISO-8859-[0-9]+\?Q\?.*?\?=/$EncPart/i;
-		
-	}
-}
-
-##############################################################################
-
-
-
-
-#
-# Because lots of mail clients do not break the lines, we must do it here.
-# This is some like 'fmt', but better for our needs. We do not use 'fmt',
-# because its -s Option is *not* available on all systems!
-
 sub writeFormated ($*$) {
-
-	local $_ = shift;
+	my $text = shift;
 	my $fh = shift;
 	my $wrapmargin = shift;
-	
-	$^L = "";
-	my $oldfh = select $fh;
-	$~ = "CONTENT";
+	$Text::Wrap::columns = $Config{WRAPMARGIN};
 
-	#
-	# only wrap if 20 < $wrapmargin < 120
-	if ($wrapmargin > 120 || $wrapmargin < 20) {
-		print;
-		return;
-	}
-	
-	eval("format CONTENT = \n^" . '<' x ($wrapmargin - 1) . " ~~ \n\$_\n.");
-
-	#
-	# at first, we split each paragraph
-	
-	for (split /(?:\s*\n\s*){2,}/) {
-	
-		#
-		# then, we look if *every* line is too long
-		if ((() = /^.{$wrapmargin,}$/gmo) == tr/\n//) {
-		
-			#
-			# if so, we fill it! (as a normal fmt does)
-			
-			s/\s*\n\s*/ /g;
-			write;
-		} 
-		else {
-		
-			#
-			# and if not, we break every line separately
-			# (as fmt -s does)
-			
-			for (split /\n/) {
-				
-				if (/^.{$wrapmargin,}$/o) {
-					write;
-				} 
-				else {
-					print $_, "\n";
-				}
-			
-			}
-		}
-		
-		#
-		# finally, we print a Newline on the end of each
-		# paragraph
-		
-		print "\n";		
-	}
-	
-	$| = 1;
-	select $oldfh;
+	output $fh, wrap("", "", $text);
 }
 
-# .. so this is some like 'fmt' and 'fmt -s' in one
 
 ##############################################################################
 
@@ -1539,15 +1637,17 @@ sub copyFile ($$) {
 	my $src = shift;
 	my $dst = shift;
 
-	open (SRC, "<$src") or die "Could not open $src for reading: $!";
-	open (DST, ">$dst") or die "Could not open $dst for writing: $!";
+	open (SRC, "<$src") or fatalError "Could not open $src for reading:\n$!";
+	open (DST, ">$dst") or fatalError "Could not open $dst for writing:\n$!";
+	binmode SRC;
+	binmode DST;
 
 	while (<SRC>) {
 		print DST $_;
 	}
 
-	close DST or die "Could not close $dst: $!";
-	close SRC or die "Could not close $src: $!";
+	close DST or fatalError "Could not close $dst:\n$!";
+	close SRC or fatalError "Could not close $src:\n$!";
 }
 
 
@@ -1557,18 +1657,16 @@ sub convertDate ($) {
 	my $date = shift;
 
 	#
-	# Überprüfen, ob das Modul installiert ist. Wenn nicht, Warnung
-	# ausgeben und so verwenden.
+	# Überprüfen, ob das Modul installiert ist. Wenn nicht, Fehler
 	eval "use Date::Parse";
 	
 	if ($@) {
-		warn "It seems that you don't have installed ".
+		fatalError "It seems that you don't have installed ".
 			"the module \"Date::Parse\" on your system. Please install it or ".
 			"use the setting \"DATE=original\" in your ~/.muttprintrc.\n";
-		return $date;
 	}
 	
-	return strftime($Config{DATE_FORMAT}, localtime(str2time($date)));
+	return native2utf_string(strftime($Config{DATE_FORMAT}, localtime(str2time($date))));
 
 }
 
@@ -1603,7 +1701,7 @@ sub modifyPS ($) {
 EOF
 	
 	
-	open(READ_PSFILE, "$Temp{'ps'}") || die "$!";
+	open(READ_PSFILE, "$Temp{'ps'}") or fatalError "$!";
 	$Postscript = join("", (<READ_PSFILE>));	
 	close READ_PSFILE;
 	
@@ -1612,13 +1710,211 @@ EOF
 	
 	$Postscript =~ s#\%\%EndComments#$DuplexCommand#;
 	
-  	open(WRITE_PSFILE, "> $Temp{'ps'}") || die "$!";
-	print WRITE_PSFILE $Postscript;
+  	open(WRITE_PSFILE, "> $Temp{'ps'}") or fatalError "$!";
+	output \*WRITE_PSFILE, $Postscript;
 	close WRITE_PSFILE;
 
 }
 
 ##############################################################################
+
+sub fatalError ($) {
+	
+	my $message = shift;
+	my $hasDialog = FALSE;
+	
+	$Text::Wrap::columns = 70;
+	$message = wrap("", "", "Line ". join " ", (caller)[1, 2] .": " .  $message);
+	
+	my $messageString = "Muttprint Version $VERSION -- Error\n".
+		"======================================================================\n\n".
+		 $message . 
+		"\n\n\----------------------------------------------------------------------\n".
+		"If this message does not help you, write to the author of Muttprint\n".
+		"(bernhard.walle\@gmx.de) and include a detailed error description.\n".
+		"Please make sure that you've read the whole documentation and checked \n".
+		"for updates before you write! ******* Press Ctrl-L after terminating \n".
+		"this process if the screen is not redrawed correctly!\n";
+
+	if ($Config{DEBUG}) {
+		open LOG, ">>$Temp{logf}";
+		output \*LOG, $messageString;
+		close LOG;
+	}
+
+	if (-x "/usr/bin/dialog") {
+		$hasDialog = TRUE;
+	} else {
+		system("which dialog") or $hasDialog = TRUE;
+	}
+
+	unless ($runningInBackground) {
+		if ($hasDialog && -t STDOUT && -t STDERR) {
+			system("dialog", "--msgbox", $messageString, "22", "75");
+			system("clear");
+		} else {
+			output \*STDERR, $messageString;
+		}
+	}
+	exit 1;
+}
+
+##############################################################################
+
+{ 
+	my $utf2native;
+	my $native2utf;
+	
+	my $iconv_external;
+	my $native2utf_command;
+	my $utf2native_command;
+	
+	my $charset;
+	my $needs_conversion;
+
+	sub convert_init () {
+		
+		$charset = getLocaleInformation(CHARSET);
+		if ($charset =~ /utf[-_]8/) {
+			$needs_conversion = FALSE;
+			return;
+		} else {
+			$needs_conversion = TRUE;
+		}
+		check_iconv();
+		
+		if (!$iconv_external) {
+			if (!defined $utf2native) {
+				$utf2native = Text::Iconv->new("UTF-8", $charset);
+			}
+			if (!defined $native2utf) {
+				$native2utf = Text::Iconv->new($charset, "UTF-8");
+			}
+			Text::Iconv->raise_error(FALSE);
+		}
+	}
+
+	sub check_iconv {
+		if ($Config{ICONV_EXTERNAL} eq "on") {
+			$iconv_external = TRUE;
+		} else {
+			$iconv_external = FALSE;
+			eval "use Text::Iconv";
+
+			if ($@) {
+				fatalError "It seems that you don't have installed ".
+				"the module \"Text::Iconv\" on your system. Please install it! Another ".
+				"possibility is to use the external iconv on your system. ".
+				"This is much slower but works. To use it, set the variable ".
+				"ICONV_EXTERNAL to \"on\" in your configuration file. ".
+				"It's not guaranteed that later versions of Muttprint ".
+				"have this option. But internationalization of Muttprint may".
+				"change in future in general.";
+			}
+			return;
+		}
+
+		my $try_iconv = "/usr/bin/env iconv -f $charset -t utf-8 - >> /dev/null 2>&1";
+		my $try_recode = "/usr/bin/env recode $charset..utf-8a     >> /dev/null 2>&1";
+		my $iconv_command = $try_iconv;
+
+		# trying ...
+		system ("echo Test | $iconv_command") and 
+			( $iconv_command = $try_recode and system ("echo Test | $try_recode"))
+			and fatalError "You have not installed Text::Iconv, you have no external ".
+				"iconv working and you have no recode on your system. I have no idea ".
+				"how to convert your characters. Giving up ...";
+
+		if ($iconv_command eq $try_iconv) {
+			$native2utf_command = "/usr/bin/env iconv -f $charset -t utf-8 -";
+			$utf2native_command = "/usr/bin/env iconv -f utf-8 -t $charset -";
+		} else {
+			$native2utf_command = "/usr/bin/env recode $charset..utf-8";
+			$utf2native_command = "/usr/bin/env recode utf-8..native";
+		}
+		# we finally need this for piping
+		use IPC::Open2;
+	}
+
+	sub utf2native_string ($) {
+		my $string = shift;
+
+		unless ($needs_conversion) {
+			return $string;
+		}
+
+		if ($iconv_external) {
+			open2(\*READ, \*WRITE, $utf2native_command );
+			print WRITE $string;
+			close WRITE;
+			return join "", <READ>;
+		} else {
+			return $utf2native->convert($string);
+		}
+	}
+
+	sub output (*@) {
+		my $fh = shift;
+		my @text = @_;
+		my $result;
+
+		foreach (@text) {
+			$result = utf2native_string($_);
+			if (defined $result) {
+				print $fh $result;
+			} else {
+				fatalError "Error in charset conversion.";
+			}
+		}
+	}
+
+	sub outputstd (@) {
+		output \*STDOUT, @_;
+	}
+
+	sub native2utf_string ($) {
+		my $string = shift;
+
+		unless ($needs_conversion) {
+			return $string;
+		}
+
+		if ($iconv_external) {
+			open2(\*READ, \*WRITE, $native2utf_command );
+			print WRITE $string;
+			close WRITE;
+			return join "", <READ>;
+		} else {
+			return $native2utf->convert($string);
+		}
+	}
+
+	sub input (*) {
+		my $fh = shift;
+		my $result;
+
+		if (wantarray) { 
+			my @text = <$fh>;
+			foreach (@text) {
+				$result = native2utf_string($_);
+				if (defined $result) {
+					$_ = $result;
+				} else {
+					fatalError "Error in charset conversion.";
+				}
+			}
+			return @text;
+		} else {
+			my $text = <$fh>;
+			$text = $native2utf->convert($text);
+			return $text;
+		}
+	}
+}
+
+##############################################################################
+
+
 
 sub getDefaultPrinterCDE () {
 
@@ -1628,13 +1924,13 @@ sub getDefaultPrinterCDE () {
 	return "" unless (-r $configfile);
 
 	open (CDEPRINTER, $configfile) 
-		or die "Could not open CDE printer configuration file: $!";
+		or fatalError "Could not open CDE printer configuration file:\n$!";
 	
 	while (<CDEPRINTER>) {
 		last if (($printer) = /^_default\s+(\w*)/);
 	}
 
-	close CDEPRINTER or die "Could not close CDE printer configuration file: $!";
+	close CDEPRINTER or fatalError "Could not close CDE printer configuration file:\n$!";
 	return $printer if defined $printer;
 }
 
@@ -1642,29 +1938,25 @@ sub getDefaultPrinterCDE () {
 ##############################################################################
 
 
-sub setStrings ($) {
+sub setStrings () {
 
 	my $stringsAreSet = FALSE;
-	my $lang = shift;
 	my $sharedir = findCommonDir('share');
+	my $lang = getLocaleInformation(LANGUAGECODE);
 	my $libdir = findCommonDir('lib');
 	my (@translationDirs) = ("$sharedir/translations", $sharedir,
 			"$libdir/translations", $libdir);
 	
-	if ($lang =~ /^(\w{2})/i) {
-		my $shortLang = $1;
-
-		foreach (@translationDirs) {
-			if (-r "$_/translation-$1.pl") {
-				do("$_/translation-$1.pl"); 
-				$stringsAreSet = TRUE;
-			}
+	foreach (@translationDirs) {
+		if (-r "$_/translation-$lang.pl") {
+			do("$_/translation-$lang.pl"); 
+			$stringsAreSet = TRUE;
 		}
 	}
 
 	unless ($stringsAreSet) {
 
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Usage:   muttprint [option]... [-f file]
  
@@ -1678,6 +1970,9 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -v, --version
        Prints the current version of Muttprint.
+
+--print-locale
+       Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
        Reads from file instad of STDIN.
@@ -1717,7 +2012,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 	   
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
-       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
        Read the manual for a detailed description of this values.
 
@@ -1727,13 +2022,6 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -P [paperformat], --paper [paperformat]
        Paper format: "letter" (US) or "A4" (Europe).
-
--l [language], --lang [language]
-       Language for messages and printing.
-
--c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r
-       utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
        original: prints the date as it is in the header
@@ -1756,6 +2044,10 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
+
+-B, --background | -noB, --nobackground
+       Puts Muttprint in the background after reading the mail data.
+       (prints no error messages anymore)
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
@@ -1799,12 +2091,14 @@ $String{"Lizenz"} = "This program is distributed under the terms of the
 GPL and can be freely copied.
 ";
 
-$String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
+$String{"Bugs"} = "Please report bugs to <bernhard.walle\@gmx.de>.\n";
 
 $String{"FileNotFound"} = "The specified file was not found.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization"} =
-("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:", "Organization:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups", "Organization"} =
+("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "Newsgroups:", "Organization:");
+
+$String{PageOf} = "page %s of %s";
 
 }
 

@@ -1,6 +1,4 @@
-use bytes;
-
-# Questo file di traduzione è la traduzione italiana.
+# Questo file di traduzione Ã¨ la traduzione italiana.
 # *Non* serve a Muttprint per girare dato che Muttprint ha le stringhe in inglese
 # al suo interno. Serve solo per esempio a coloro che vogliono creare il loro file di traduzione
 # Puoi prendere questo come bozza e tradurlo.
@@ -8,7 +6,7 @@ use bytes;
 #
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
 
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Sintassi: muttprint [opzioni]... [-f file]
   
@@ -22,6 +20,9 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 
 -v, --version
        Stampa la versione corrente di Muttprint.
+
+--print-locale
+       Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
        Legge da file invece che dallo STDIN
@@ -47,7 +48,7 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
        Tempo in secondi di cui la stampante ha bisogno per ciascuna pagina.
                  
 -w [numero], --wait [numero]
-       Tempo tra la stampa di ciascuna facciata per la modalità fronte-retro.
+       Tempo tra la stampa di ciascuna facciata per la modalitÃ  fronte-retro.
 
 -F [nome del font], --font [nome del font]
        Tipo di font per la stampa. I possibili valori sono:
@@ -61,7 +62,7 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 	   
 -S Style | --frontstyle Style
        Sceglie uno stile per gli headers sulla prima pagina:
-       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, boder (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox.
        Si legga il manuale per una descrizione dettagliata di questi
        valori.
@@ -74,15 +75,8 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 -P [formato pagina], --paper [formato pagina]
        Formato della pagina: "letter" (US) o "A4" (Europe).
 
--l [lingua], --lang [lingua]
-       Lingua per i messaggi e la stampa
-
--c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
-       utf-8, koi8-r, auto (leggi il manuale prima di usare "auto").
-
 -e [stringa, --date [stringa
-       original: stampa la data così come è negli headers
+       original: stampa la data cosÃ¬ come Ã¨ negli headers
        local:    converte la data alla time zone e alla lingua locale
 
 -E [stringa, --date-format [stringa
@@ -103,6 +97,10 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 
 -D, --debug | -noD, --nodebug
        Scrive informazioni utili in un file di log /tmp/muttprint.log.
+
+-B, --background | -noB, --nobackground
+       Puts Muttprint in the background after reading the mail data.
+       (prints no error messages anymore)
 
 -d, --duplex | -nod, --noduplex
        Abilita/disabilita la stampa fronte - retro.
@@ -142,17 +140,18 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 EOF
 
 
-$String{"Lizenz"} = <<EOF;
-Questo programma è distribuito secondo i termini della licenza 
-GPL e può, quindi, essere liberamente distribuito.
+$String{License} = <<EOF;
+Questo programma Ã¨ distribuito secondo i termini della licenza 
+GPL e puÃ², quindi, essere liberamente distribuito.
 EOF
 
-$String{"Bugs"} = "I bachi possono essere riportati a <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "I bachi possono essere riportati a <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "Il file specificato non è stato trovato.\n";
+$String{FileNotFound} = "Il file specificato non Ã¨ stato trovato.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("Da:", "A:", "Oggetto:", "Copia Carbone:", "Data:", "pagina", "di", "Gruppo:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups"} =
+("Da:", "A:", "Oggetto:", "Copia Carbone:", "Data:", "Gruppo:");
 
-$LPack = "italian";
-$charset = "latin9";
+$String{PageOf} = "pagina %s di %s";
+
+

@@ -1,15 +1,13 @@
-use bytes;
-
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
 
 
-$String{"Benutzung"} = <<EOF;
+$String{Usage} = <<EOF;
 
 Usage:   muttprint [option]... [-f fichier]
  
 Options:
 
-ATTENTION: Ces options prennent le pas sur les réglages correspondants
+ATTENTION: Ces options prennent le pas sur les rÃ©glages correspondants
 dans les fichiers ~/.muttprintrc et /etc/Muttprintrc.
 
 -h, --help
@@ -18,80 +16,75 @@ dans les fichiers ~/.muttprintrc et /etc/Muttprintrc.
 -v, --version
        Affiche la version actuelle de Muttprint.
 
+--print-locale
+       Prints out information about the current locale environment and exits.
+
 -f [fichier], --file [fichier]
-       Lit depuis le fichier indiqué plut
+       Lit depuis le fichier indiquÃ© plut
 
 -p [imprimante], --printer [imprimante]
-       Utilise une imprimante particulière.
+       Utilise une imprimante particuliÃ¨re.
        "-" signifie la sortie standard
        Pour imprimer vers un fichier : TO_FILE:/chemin/fichier
 
 -C [commande], --printcommand [commande]
        Indique quelle est la commande pour imprimer. "\$PRINTER" est
-       remplacé par le nom de l'imprimante.
-       Le support pour CUPS est activé en indiquant "CUPS" (ou n'importe
-       quelle commande qui contient la chaîne "\$CUPS_OPTIONS").
+       remplacÃ© par le nom de l'imprimante.
+       Le support pour CUPS est activÃ© en indiquant "CUPS" (ou n'importe
+       quelle commande qui contient la chaÃ®ne "\$CUPS_OPTIONS").
 
 -i [fichier], --penguin [fichier]
-       Indique quelle image utiliser sur la première page.
+       Indique quelle image utiliser sur la premiÃ¨re page.
 
 -x, --x-face | -nox, --nox-face
-       Active ou désactive l'impression des X-Faces.
+       Active ou dÃ©sactive l'impression des X-Faces.
 
 -t [nombre], --speed [nombre]
-       Temps en secondes nécessaire pour imprimer une page.
+       Temps en secondes nÃ©cessaire pour imprimer une page.
 
 -w [nombre], --wait [nombre]
        Temps en secondes entre les pages impaires et les pages paires
        pour l'impression recto verso.
 
 -F [fonte], --font [fonte]
-       Fonte à utiliser pour l'impression. Les valeurs possibles sont :
+       Fonte Ã  utiliser pour l'impression. Les valeurs possibles sont :
        Latex, Latex-bright, Times, Utopia, Palatino, Charter et Bookman
 	   
 -H, --headrule | -noH, --noheadrule
-       Imprime ou non un trait horizontal après l'entête.
+       Imprime ou non un trait horizontal aprÃ¨s l'entÃªte.
 
 -b, --footrule | -nob, --nofootrule
        Imprime ou non un trait horizontal avant le pied de page.
 
 -S Style | --frontstyle Style
-       Style à utiliser pour les entêtes sur la première page :
-	   plain, boder (défaut), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       Style Ã  utiliser pour les entÃªtes sur la premiÃ¨re page :
+	   plain, boder (dÃ©faut), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
 	   grey, greybox. 
-       Le manuel décrit en détail ces valeurs.
+       Le manuel dÃ©crit en dÃ©tail ces valeurs.
 
 -a [entetes], --printed-headers [entetes]
-       Indique quelles sont les entêtes à imprimer. Se reporter au manuel pour 
-       plus de détails.
+       Indique quelles sont les entÃªtes Ã  imprimer. Se reporter au manuel pour 
+       plus de dÃ©tails.
        Exemple: /Date/_To_From_*Subject*
 
 -P [papier], --paper [papier]
        Format du papier : "letter" (US) ou "A4" (Europe).
 
--l [langage], --lang [langage]
-       Langue pour les messages et l'impression.
-
--c [charset], --charset [charset]
-       Table de caractères en entrée: latin1, latin2, latin3, latin4,
-       latin5, latin9, koi8-r, utf8, auto (lire le manuel avant d'utiliser 
-       "auto" ou "utf8").
-
--e [chaîne], --date [chaîne]
-       original: imprime la date telle qu'elle est dans les entêtes
+-e [chaÃ®ne], --date [chaÃ®ne]
+       original: imprime la date telle qu'elle est dans les entÃªtes
        local:    convertit la date dans le fuseau et dans le langage local
 
--E [chaîne], --date-format [chaîne]
-       chaîne de formatage de la date ; voir strftime(3) pour les détails
+-E [chaÃ®ne], --date-format [chaÃ®ne]
+       chaÃ®ne de formatage de la date ; voir strftime(3) pour les dÃ©tails
 
--A [chaîne], --addressformat [chaîne]
-       Indique le format de l'adresse email dans les entêtes,
-       voir la page de manuel ou la documentation pour les détails.
+-A [chaÃ®ne], --addressformat [chaÃ®ne]
+       Indique le format de l'adresse email dans les entÃªtes,
+       voir la page de manuel ou la documentation pour les dÃ©tails.
 
 -n [chaine], --verbatimnormal [chaine]
        Permet d'indiquer quel formatage utiliser pour le texte du corps du
        message. Voir le guide de l'utilisateur et la page de manuel pour
-       plus de détails.
+       plus de dÃ©tails.
 
 -V [chaine], --verbatimsig [chaine]
        Comme pour --verbatimnormal, mais pour la signature.
@@ -99,26 +92,30 @@ dans les fichiers ~/.muttprintrc et /etc/Muttprintrc.
 -D, --debug | -noD, --nodebug
        Envoie des informations utiles vers le fichier /tmp/muttprint.log.
 
+-B, --background | -noB, --nobackground
+       Puts Muttprint in the background after reading the mail data.
+       (prints no error messages anymore)
+
 -d, --duplex | -nod, --noduplex
-       Active ou désactive l'impression recto verso.
+       Active ou dÃ©sactive l'impression recto verso.
 
 -g [nombre], --topmargin [nombre]
-       Taille de la marge supérieure en millimètres
+       Taille de la marge supÃ©rieure en millimÃ¨tres
 
 -G [nombre], --bottommargin [nombre]
-       Taille de la marge inférieure en millimètres
+       Taille de la marge infÃ©rieure en millimÃ¨tres
 
 -j [nombre], --leftmargin [nombre]
-       Taille de la marge de gauche en millimètres
+       Taille de la marge de gauche en millimÃ¨tres
 
 -J [nombre], --rightmargin [nombre]
-       Taille de la marge de droite en millimètres
+       Taille de la marge de droite en millimÃ¨tres
 
 -2 | -1
        Imprime deux pages sur une feuille. ("papersave mode")
 
 -s, --rem_sig | -nos, --norem_sig
-       Supprime la signature (separatée par "-- ") de l'impression.
+       Supprime la signature (separatÃ©e par "-- ") de l'impression.
 
 -q, --rem_quote | -noq, --norem_quote
        Supprime les citations de l'impression.
@@ -130,20 +127,20 @@ dans les fichiers ~/.muttprintrc et /etc/Muttprintrc.
        Indique quelle est la taille maximale d'une ligne
 	   
 -r [file], --rcfile [file]
-       Indique un fichier de configuration supplémentaire
+       Indique un fichier de configuration supplÃ©mentaire
 
 EOF
 
-$String{"Lizenz"} = "Ce programme est distribué selon les termes de la licence GPL 
-et peut être redistribué librement.
+$String{License} = "Ce programme est distribuÃ© selon les termes de la licence GPL 
+et peut Ãªtre redistribuÃ© librement.
 ";
 
-$String{"Bugs"} = "Envoyez les rapports de bugs à <Bernhard.Walle\@gmx.de>.\n";
+$String{Bugs} = "Envoyez les rapports de bugs Ã  <Bernhard.Walle\@gmx.de>.\n";
 
-$String{"FileNotFound"} = "Le fichier spécifié est introuvable.\n";
+$String{FileNotFound} = "Le fichier spÃ©cifiÃ© est introuvable.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("De:", "À:", "Sujet:", "Copie Carbone:", "Date:", "page", "sur", "Groupe:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups"} =
+("De:", "Ã€:", "Sujet:", "Copie Carbone:", "Date:", "Groupe:");
 
-$LPack = "francais";
-$charset = "latin9";
+$String{PageOf} = "page %s sur %s";
+
