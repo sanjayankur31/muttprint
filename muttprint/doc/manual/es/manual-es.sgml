@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2003-05-1</pubdate>
+	<pubdate>2003-04-26</pubdate>
 	
 	<releaseinfo>Versión 0.70</releaseinfo>   
 	
@@ -55,7 +55,7 @@
 <sect1 id="installation">
 	<title>Instalación</title>
 	
-	<sect2>
+	<sect2 id="sysreq">
 		<title>Requerimientos del sistema</title>
 	
 		<para>Muttprint fué realizado con el lenguaje de programación
@@ -673,7 +673,7 @@ set printer_name "muttprint"
                         El valor por defecto es 30&nbsp;segundos (<literal>SPEED=30</literal>).
 			</para>
 		</sect3>
-		<sect3>
+		<sect3 id="font">
 			<title>Fuente</title>
 			
 			<para>Puedes usar diferentes fuentes para la
@@ -1126,7 +1126,7 @@ set printer_name "muttprint"
 			el cliente de correo no modificó nada.</para>
 
 			<para>
-				Desde la versión 0.65 Muttprint puede imprimir mensajes con caracteres
+				Desde la versión 0.70 Muttprint puede imprimir mensajes con caracteres
 				cirílicos. En este caso el juego de caracteres a usar es <literal>koi8-r</literal>.
 				Por favor note que esto no funciona con todos los sistemas LaTeX; se recomienda
 				teTeX en su versión <emphasis>2.0</emphasis> o superior.
