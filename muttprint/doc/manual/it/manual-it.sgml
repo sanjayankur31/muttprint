@@ -181,14 +181,14 @@ muttprint-<replaceable>Versione</replaceable>-<replaceable>Release</replaceable>
 				firma in <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
 				RPM</ULink>.</para>
 
-			<para>I pacchetti Debian sono creati da Chanop Silpa-Anan 
-				<email>chanop@debian.org</email> e sono normaomente disponibili
+			<para>I pacchetti Debian sono creati da Ren&eacute; Engelhard 
+				<email>rene@debian.org</email> e sono normaomente disponibili
 				pochi giorni dopo ogni release di Muttprint. Possono essere
 				installati con</para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>dpkg -i muttprint_[versione]-[release]_noarch.deb</UserInput>
+				<UserInput>dpkg -i muttprint_[versione]-[release]_all.deb</UserInput>
 			</para>
 			
 			<para>Dai un'occhiata a <ulink
