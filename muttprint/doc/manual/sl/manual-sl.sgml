@@ -191,7 +191,7 @@ muttprint-<replaceable>Verzija</replaceable>-<replaceable>Release</replaceable>.
 				 <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
 				RPM</ULink>.</para>
 
-			<para>Pakete za Debian ustvarja Ren&eacute; Engelhard
+			<para>Pakete za Debian ustvarja Ren&eacute; Enelhard
 				<email>rene@debian.org</email> ter so navadno dosegljivi 
 				nekaj dni po novi izdaji Muttprint-a. Te lahko namestite
 				z</para>
@@ -676,7 +676,7 @@ pove&ccaron;a hitrost
 				(samo cela &scaron;tevila so dovoljena). Privzeto je nastavljeno na 30&nbsp;sekund
 				(<literal>SPEED=30</literal>).</para>
 		</sect3>
-		<sect3>
+		<sect3 id="font">
 			<title>Pisava</title>
 			
 			<para>Pri tiskanju lahko uporabite razne pisave. Ime pripadajo&ccaron;e
@@ -1086,6 +1086,11 @@ bli&zcaron;njica glede
 								</entry>
 						</row>
 						<row>
+							<entry>KOI8-R</entry>
+                                                       <entry><literal>koi8-r</literal></entry>
+                                                       <entry>Jeziki z cirili&ccaron;nimi znaki kot je Ru&scaron;&ccaron;ina</entry>
+                                               </row>
+                                               <row>	
 							<entry>Windows-1252</entry>
 							<entry><literal>latin1</literal></entry>
 							<entry>Latin-1 z nekatermi dodatki</entry>
@@ -1135,6 +1140,14 @@ lgavnem od paketa
 				mestu 128 (decimalno) zaradi &scaron;iroke raz&scaron;irjenosti Windows -- delno
 				prznan kot ISO-8859-1. Muttprint natisne te maile pravilno, &ccaron;e po&scaron;tni
 				odjemalec &ccaron;esa ne spremeni.</para>
+
+
+                       <para>Od verzije 0.65 Muttprint podpira tiskanje po&scaron;te z cirili&ccaron;nimi
+                               znaki. V tem primeru je nabor znakov <literal>koi8-r</literal>.
+                               Prosim upo&scaron;tevajte, da to ne deluje z vsemi sistemi LaTeX-a;
+                               sam priporo&ccaron;am verzijo teTeX <emphasis>2.0</emphasis> ali vi&scaron;jo.
+                               &Scaron;e ve&ccaron;, vse pisave ne vsebujejo potrebnih znakov, prosim uporabljajte
+                               LaTeX-ove standardne pisave, glej <xref linkend="font">.</para>
 
 			<para>Poln pregled ISO-8859-* znakovnih naborov najdete 
 				na <ulink	url="http://czyborra.com/charsets/iso8859.html"></ulink>.
