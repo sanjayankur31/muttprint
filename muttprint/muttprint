@@ -1542,7 +1542,7 @@ sub GetGeometryVersion {
 		close GEO;
 	}
 	else {
-		my $versionYear;
+		my $versionYear = 0;
 		
 		open (LTXTEMP, ">$Temp{geoversion}")
 			or die "Could not create $Temp{geoversion}: $!";
@@ -1561,12 +1561,7 @@ sub GetGeometryVersion {
 		close LTXOUTPUT;
 
 		# Versionsjahr 'umrechnen'
-		if ($versionYear >= 2001) {
-			$geometryVersion = 3;
-		}
-		else {
-			$geometryVersion = 2;
-		}
+		$geometryVersion = $versionYear >= 2001 ? 3 : 2;
 
 		# in Tempdatei schreiben
 		open (GEO, ">$tempfile") or die "Could not open $tempfile for writing: $!";
@@ -1575,7 +1570,6 @@ sub GetGeometryVersion {
 	}
 		
 	return $geometryVersion;
-
 }
 
 ##############################################################################
