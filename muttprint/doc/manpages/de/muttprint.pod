@@ -44,7 +44,17 @@ Dies kann in beispielsweise in Ihrer F<~/.bashrc> vorgenommen werden. Für
 genauere Informationen über die Lokalisierung von B<Muttprint> lesen Sie
 das Benutzerhandbuch.
 
+=head1 PROBLEME
 
+Wenn B<Muttprint> nicht druckt und stattdessen meldet:  lpr: unable to print
+file client-error-not-found, sollten Sie versuchen, einen anderen Drucker als
+lp zu benutzen, zum Beispiel lp5 oder tp0 (wenn Sie TurboPrint verwenden). 
+
+Für CUPS Benutzer eine Anmerkung:  Die Einstellung I<PRINTER="lp"> funktioniert
+normalerweise nicht, wenn I<PRINT_COMMAND=CUPS> angegeben ist. Benutzen Sie
+stattdessen den Druckernamen (z.B. LaserJet), den Sie leicht überprüfen können,
+indem Sie B<lpq> auf der Kommandozeile eingeben. Natürlich kann es sein, dass
+Ihr Drucker I<lp> heißt, dann passt die Einstellung I<PRINTER="lp">.
 
 
 =head1 OPTIONEN
