@@ -40,6 +40,12 @@ de      German          Manpage, User's guide,          Bernhard Walle
 it      Italian         Manpage, User's guide,          Roberto Vallone
                         translation file
                         -- up to date --
+
+es      Spanish         Manpage, User's guide           Fernando Pereda
+                        translation file,
+                        sample-muttprintrc,
+                        README, INSTALL
+                        -- up to date --
                         
 sl      Slovenian       User's guide, translation       Bo¨tjan Müller
                         file, sample-muttprintrc
@@ -54,12 +60,6 @@ ru      Russian         translation file                Alex Semenyaka
 fr      French          translation file,               Vincent Bernat
                         sample-muttprintrc
                         -- up to date --
-
-es      Spanish         Manpage, User's guide           Marcelo Ramos
-                        translation file,
-                        sample-muttprintrc,
-                        README, INSTALL
-                        -- version 0.62 --
 
 cs      Czech           translation file (not help)     Dominik Formánek
                         -- version 0.61 --
@@ -117,13 +117,12 @@ Footnotes:
 [1]     For comments to the translations, please mail to:
 
         * Alex Semenyaka        <alexs@ratmir.ru>
-        * Bernhard Walle        <Bernhard.Walle@gmx.de>
+        * Bernhard Walle        <bernhard.walle@gmx.de>
         * Bo¨tjan Müller        <neonatus@neonatus.net>
         * Dominik Formánek      <dominik@formanek.cz>
-        * Marcello Ramos        <mramos@montevideo.com.uy>
+        * Fernando Pereda       <ferdy@ferdyx.org>
         * Radek Kaczorowski     <kaczor@mail.desy.de>
         * Roberto Vallone       <roberto.vallone@gmx.net>
         * Simon Josefsson       <simon@josefsson.org>
         * Vincent Bernat        <bernat@free.fr>
-
 
