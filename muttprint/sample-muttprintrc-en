@@ -9,6 +9,12 @@
 PRINTER="lp"
 
 #
+# Here you can set the print command
+# $PRINTER is substituted by the PRINTER
+# variable
+PRINT_COMMAND="lpr -P$PRINTER"
+
+#
 # Here you can set the path to the penguin image
 PENGUIN="off"
 

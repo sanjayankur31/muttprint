@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-05-01</pubdate>
+	<pubdate>2002-06-01</pubdate>
 	
 	<releaseinfo>Version 0.63</releaseinfo>   
 	
@@ -940,6 +940,32 @@ set printer_name "muttprint"
 			<para>Ein weiteres Beispiel f&uuml;r eine sinnvolle Einstellung:</para>
 			
 			<programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
+
+		</sect3>
+		<sect3>
+			<title>Eigener LaTeX-Code</title>
+
+			<para>Die Variable <literal>LATEXCODE</literal> ist f&uuml;r Leute gedacht, die
+				sich gut mit LaTeX auskennen und den Ausdruck etwas ver&auml;ndern
+				m&ouml;chten, ohne gleich im Quellcode von Muttprint zu &Auml;nderungen
+				vorzunehmen.  Zum Beispiel eignet sich die Variable gut, um eigene
+				Schriften zu verwenden.
+			</para>
+				
+			<para>Neben <literal>LATEXCODE</literal> stehen noch f&uuml;nf weitere Variablen
+				(<literal>LATEXCODE1</literal> bis <literal>LATEXCODE5</literal>) zur
+				Verf&uuml;gung, damit der Code sch&ouml;ner aufgeteilt werden kann.  Die
+				Variablen werden der Reihe nach in den LaTeX-Quellcode eingebunden.
+			</para>
+
+			<tip>
+				<para>Mit folgender Einstellungen kann der Mailtext in einer
+					proportionalen Schrift (anstelle von Schreibmaschinenschrift) gedruckt
+					werden:</para>
+
+					<programlisting>LATEXCODE="\renewcommand{\ttdefault}{\rmdefault}"</programlisting>
+			</tip>
+
 
 		</sect3>
 		<sect3>

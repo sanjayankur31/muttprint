@@ -150,4 +150,5 @@ CHANGES
           formating of text and signature
         - new option PAPERSAVE="optional"
         - new variable PRINT_COMMAND to change the print command
+        - new option LATEXCODE (and LATEXCODE1 ... LATEXCODE5)
 
