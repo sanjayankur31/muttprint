@@ -168,7 +168,7 @@ and I<letter> in the U.S.
 =item B<-l> I<language>B<, --lang> I<language>
 
 Give the short form of your language. Currently are supported: 
-I<de> (German), I<en> (English) and I<it> (Italian), I<fr> (French),
+I<de> (German), I<en> (English), I<it> (Italian), I<fr> (French),
 I<es> (Spanish) and I<cs> (Czech).
 Default is the I<LANG> environment, fallback is English.
 
