@@ -54,7 +54,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72pre10";
+our $VERSION = "0.72pre11";
 my $PACKAGE = "Muttprint";
 
 
@@ -645,7 +645,8 @@ if ($Config{PAPERSAVE} eq "on") {
 	if ($useCups) {
 		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS/ -o number-up=2 \$CUPS_OPTIONS/;
 	} else {
-		system("psnup -2 -q $Temp{ps} $Temp{psnew} >> $errorRedirection 2>&1") 
+		system("psnup -2 -p$paperformat -P$paperformat -q $Temp{ps} ".
+			"$Temp{psnew} >> $errorRedirection 2>&1") 
 			and fatalError "Psnup failed:\n$!";
 		unlink($Temp{ps});
 		link($Temp{psnew}, $Temp{ps});
