@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-02-16</pubdate>
+	<pubdate>2003-05-1</pubdate>
 	
-	<releaseinfo>Versión 0.62</releaseinfo>   
+	<releaseinfo>Versión 0.70</releaseinfo>   
 	
 		
 	
@@ -72,33 +72,47 @@
 		la impresión dúplex.</para>
 
 	<para>Para leer la fecha, Muttprint utiliza el módulo Perl
-	 <application>Date::Parse</application><footnote>
-	 <para>
-	 	<ulink url="http://www.cpan.org/authors/id/gbarr/timedate-1.10.tar.gz"></ulink>
-	 </para>
-	 </footnote>
-	<footnote><para>Encontrarás detalles respecto a la instalación en este
-	archivo. Normalmente, el siguiente procedimiento debería funcionar:</para>
+		 <application>Date::Parse</application>
+		 <footnote>
+			 <para>
+	 			<ulink url="http://www.cpan.org/authors/id/gbarr/timedate-1.10.tar.gz"></ulink>
+			 </para>
+		 </footnote>
+		<footnote>
+			<para>
+				Encontrarás detalles respecto a la instalación en este
+				archivo. Normalmente, el siguiente procedimiento debería funcionar:
+			</para>
+
+			<para>
+				 <prompt>$ </prompt><userinput>tar xvfz time-date-1.10.tar.gz</userinput>
+			</para>
+			<para>
+				 <prompt>$ </prompt><userinput>perl makefile.pl</userinput>
+			</para>
+			<para>
+				 <prompt>$ </prompt><userinput>make</userinput>
+			</para>
+			<para>
+				 <prompt>$ </prompt><userinput>make test</userinput> 
+			</para>
+			<para>
+				 <prompt># </prompt><userinput>make install</userinput>
+			</para>
+			
+		</footnote>. Si el módulo no se instala, muttprint funciona sin
+	problemas salvo la función para convertir la zona horaria e
+	imprimir la fecha en el idioma local, consulta <xref linkend="date">.
+	</para>
 
 	<para>
-	 <prompt>$ </prompt><userinput>tar xvfz time-date-1.10.tar.gz</userinput>
+		Para activar el soporte para el juego de caracteres UTF-8 el comando de LaTeX para cambiar
+		el juego de caracteres debe soportar UTF-8. ¡Lo que no es lo normal!
+		Encontrarás una extensión que lo soporte en CTAN. Simplemente descargue <ulink 
+		url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
+		e instálelo tal y como se describe en el fichero <filename>INSTALL</filename>. Solo necesita
+		soporte para UTF-8 si su cliente de correo manda a Muttprint la información codificada con UTF-8.
 	</para>
-	<para>
-	 <prompt>$ </prompt><userinput>perl makefile.pl</userinput>
-	</para>
-	<para>
-	 <prompt>$ </prompt><userinput>make</userinput>
-	</para>
-	<para>
-	 <prompt>$ </prompt><userinput>make test</userinput> 
-	</para>
-	<para>
-	 <prompt># </prompt><userinput>make install</userinput>
-	</para>
-			
-	</footnote>Si el módulo no se instala, muttprint funciona sin
-	problemas salvo la función para convertir la zona horaria e
-	imprimir la fecha en el idioma local, consulta <xref linkend="date">.</para>
 
 
 	</sect2>
@@ -214,8 +228,8 @@ muttprint-<replaceable>versión</replaceable>-<replaceable>release</replaceable>.
 		<para>muttprint fué originalmente desarrollado para ser
                 utilizado sólo con mutt. sin embargo puede ser integrado con
                 los siguientes programas de correo sin problemas. algunos usuarios
-		me han facilitado la información sobre integración. muttprint
-                será desarrollado independientemente de mutt en el futuro.
+		me han facilitado la información sobre integración. Muttprint
+                será desarrollado independientemente de Mutt en el futuro.
                 </para>
 		
 		
@@ -228,7 +242,7 @@ muttprint-<replaceable>versión</replaceable>-<replaceable>release</replaceable>.
 
 			<programlisting>set print_command="muttprint"</programlisting>
 
-			<para>además debes asegurarte de que todas las cabeceras
+			<para>Además debes asegurarte de que todas las cabeceras
 			necesarias son generadas cuando el mail es impreso. la forma
 			más fácil es escribir un pequeño macro 
 			(en tu <filename>~/.muttrc</filename>) el cual se asegura
@@ -240,7 +254,7 @@ muttprint-<replaceable>versión</replaceable>-<replaceable>release</replaceable>.
 
 			<programlisting>
 # generar todas las cabeceras
-macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt; &lt;exit&gt;"
 macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
 			</programlisting>
 
@@ -349,7 +363,7 @@ set printer_name "muttprint"
 				
 			<para>Encontrarás el código en
                         <filename>README.Gnus</filename> y me gustaría que
-                        consultaras ése archivo. Si utilizas paquetes para la
+                        consultaras ese archivo. Si utilizas paquetes para la
                         instalación deberías encontrar ése archivo en el
                         directorio
                         <filename>##DOCDIR##/muttprint/</filename>.
@@ -391,9 +405,9 @@ set printer_name "muttprint"
                         también es evaluada.
                         </para>
 			
-			<para>Si utilizas Muttprint con otras programas no
-                        mencionados aquí, por favor envíame un mensaje corto
-                        en el cual describas como configuraste el programa.
+			<para>Si utilizas Muttprint con otros programas no
+                        mencionados aquí, por favor envíame un mensaje describiendo
+			como lo hiciste.
                         Así podré añadir la descripción aquí.
 		       </para>
 
@@ -567,12 +581,12 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Modo ahorro de papel</title>
 			
-			<para>Es posible imprimir dos páginas en una carilla
-                        en modo apaisado (landscape). Ésto te
+			<para>Es posible imprimir dos páginas en una cara
+                        en modo apaisado (landscape). Esto te
                         permitirá ahorrar papel y tinta e incrementará la
                         velocidad de impresión. Ésto tiene sentido sólo con el
                         formato de papel DIN A4 ya que dos páginas reducidas
-                        encajan exactamente en una carilla.</para>
+                        encajan exactamente en una cara.</para>
 			
 			<para>Para habilitar éste modo, define <literal>PAPERSAVE</literal> con
 			el valor <literal>on</literal>.</para>				
@@ -884,6 +898,31 @@ set printer_name "muttprint"
 
 		</sect3>
 
+		<sect3>
+			<title>Código LaTeX propio</title>
+
+			<para>
+				La variable <literal>LATEXCODE</literal> es para personas que están
+				familiarizadas con LaTeX y quieren customizar la impresión sin cambiar
+				el código fuente de Muttprint. Por ejemplo, es muy útil para usar fuentes
+				propias.
+			</para>
+
+			<para>
+				Además de <literal>LATEXCODE</literal> hay cinco variables adicionales
+				(desde <literal>LATEXCODE1</literal> hasta <literal>LATEXCODE5</literal>) esto
+				es para separar el código LaTeX y que quede bonito.
+			</para>
+			<tip>
+				<para>
+					Puede imprimir el email con una fuente proporcional en lugar
+					de hacerlo con una de máquina de escribir (typewriter) con
+					el siguiente código:
+				</para>
+					<programlisting>LATEXCODE="\renewcommand{\ttdefault}{\rmdefault}"</programlisting>
+			</tip>
+
+		</sect3>
 
 		<sect3>
 			<title>Mensajes de error</title>
@@ -931,6 +970,12 @@ set printer_name "muttprint"
                         reconocidos así que <literal>es_ES@euro</literal> is okay. 
                         Si el valor es desconocido, Muttprint utilizará el idioma
                         Inglés.</para>
+
+		<para>
+			Encontrarás información sobre todas las traducciones disponibles en el fichero
+			<filename>README.translations</filename>, que es instalado en el mismo directorio
+			que la documentación.
+		</para>
 
 		<para>Si quieres utilizar un idioma en Muttprint diferente del
                 idioma del sistema, puedes definir <literal>LANG</literal> en
@@ -1018,8 +1063,12 @@ set printer_name "muttprint"
 						<row>
 							<entry>ISO-8859-15</entry>
 							<entry><literal>latin9</literal></entry>
-							<entry>Latin-1 con algunas modificaciones, por ejemplo símbolo del Euro
-								</entry>
+							<entry>Latin-1 con algunas modificaciones, por ejemplo símbolo del Euro</entry>
+						</row>
+						<row>
+							<entry>KOI8-R</entry>
+							<entry><literal>koi8-r</literal></entry>
+							<entry>Idiomas con caracteres cirílicos como el Ruso.</entry>
 						</row>
 						<row>
 							<entry>Windows-1252</entry>
@@ -1030,6 +1079,11 @@ set printer_name "muttprint"
 							<entry>Windows-1250</entry>
 							<entry><literal>latin2</literal></entry>
 							<entry>Latin-2 con algunas mejoras</entry>
+						</row>
+						<row>
+							<entry>UTF-8</entry>
+							<entry><literal>utf8</literal></entry>
+							<entry>Unicode tal y como lo es soportado por LaTeX, ver <xref linkend="sysreq"></entry>
 						</row>
 					</tbody>
 				</tgroup>
@@ -1071,6 +1125,15 @@ set printer_name "muttprint"
 			como ISO-8859-1. Muttprint imprime esos mensajes correctamente, si
 			el cliente de correo no modificó nada.</para>
 
+			<para>
+				Desde la versión 0.65 Muttprint puede imprimir mensajes con caracteres
+				cirílicos. En este caso el juego de caracteres a usar es <literal>koi8-r</literal>.
+				Por favor note que esto no funciona con todos los sistemas LaTeX; se recomienda
+				teTeX en su versión <emphasis>2.0</emphasis> o superior.
+				Aún así, no todas las fuentes contienen estos caracteres -- por favor
+				use las fuentes por defecto de LaTeX, para más información vea <xref linkend="font">
+			</para>
+	
 			<para>Podrás encontrar un resúmen completo de los charsets ISO-8859-*
 			en  <ulink url="http://czyborra.com/charsets/iso8859.html"></ulink>.
 			</para>
@@ -1206,10 +1269,18 @@ rm $objetivo</programlisting>
 
                 <para>La traducción de éste documento al idioma español a
                 partir del documento en inglés del autor fue realizada por
-                Marcelo Ramos <email>mramos@montevideo.com.uy</email>. Cualquier
-                comentario o propuesta para mejorar ésta traducción será
-                bienvenida.</para>
-                
+                Marcelo Ramos <email>mramos@montevideo.com.uy</email>.
+		</para>
+
+		<para>
+			Marcelo Ramos dejó la traducción de Muttprint en 
+			su versión 0.62 a partir de entonces se encargó de 
+			ella Fernando J. Pereda <email>ferdyATferdyx.org</email>.
+		</para>
+
+		<para>
+			Cualquier duda o comentario será bienvenido.
+		</para>
         </sect2>       
 </sect1>
 </article>
