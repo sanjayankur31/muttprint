@@ -77,7 +77,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        Language for messages and printing.
 
 -c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r,
        utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
@@ -150,3 +150,4 @@ $String{"FileNotFound"} = "The specified file was not found.\n";
 
 $LPack = "english";
 $charset = "latin1";
+$texFontenc = "T1";

@@ -34,7 +34,7 @@
 # Deklaration erzwingen
 use strict;
 # Deklaration nach Perl-5.005-Art
-use vars qw($VERSION %String $LPack $charset);
+use vars qw($VERSION %Config $LPack $charset $texFontenc %String);
 use sigtrap qw(die INT QUIT TERM);
 use POSIX;
 
@@ -47,13 +47,9 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.64pre3";
+$VERSION = "0.64pre5";
 
 my $PACKAGE = "Muttprint";
-
-
-######## globale Variablen für Übersetzungen
-$charset = "latin1";						# Zeichensatz für LaTeX
 
 
 ######## Subroutinen mit Prototypes
@@ -70,7 +66,7 @@ sub printDuplexNoCups ($$$$);
 sub printDuplexCups ($$$);
 sub modifyPS ($);
 sub createTemp ();
-sub setStrings ();
+sub setStrings ($);
 sub writeFormated ($*$);
 sub decodeHeader();
 sub getDefaultPrinterCDE();
@@ -80,7 +76,7 @@ sub convertDate($);
 sub getISOlatinExtensions($);
 
 ######## 'private' Variablen für den Rest
-my %Config = (
+%Config = (
 	PRINTER			=> 	'',
 	PRINT_COMMAND	=>	'lpr -P$PRINTER',
 	PENGUIN			=>	'on',
@@ -209,13 +205,6 @@ if ($Config{'PENGUIN'} eq "on") {
 readConfig ($Config{RCFILE});
 
 
-# USE FOR DEBUG ONLY
-if ($Config{DEBUG}) {
-	foreach (keys %Config) {
-			print STDERR "$_  \t\t => \t $Config{$_} \n";
-	} 
-}
-
 
 ################ MULIT LANGUAGE SUPPORT #######################################
 
@@ -223,12 +212,7 @@ $Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
 $Lang = $Config{'LANG'} if defined $Config{'LANG'};
 POSIX::setlocale(&POSIX::LC_ALL, $Lang);
 
-setStrings();
-
-#
-# Zeichensatz (Auswahl von vorher überschreiben, falls in Konfigdatei
-# anders)
-$charset = $Config{CHARSET} if defined $Config{CHARSET};
+setStrings($Lang);
 
 #
 # Show help and version
@@ -248,6 +232,37 @@ elsif ($print[1]) {
 elsif ($print[2]) {
 	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
 	exit 1;
+}
+
+
+# default settings 
+# we need to set this here because we want that configuration file
+# options overwrite language file options but we need to read the
+# configuration file first because in this file the language can
+# be set (some sort of hen-egg-problem)
+
+if (!defined $Config{CHARSET}) {
+	$Config{CHARSET} = $charset ? $charset : 'latin1';
+}
+if (!defined $Config{LPack}) {
+	$Config{LPack} = $LPack ? $LPack : 'english';
+}
+if (!defined $Config{TEX_FONTENC}) {
+	$Config{TEX_FONTENC} = $texFontenc ? $texFontenc : 'T1';
+}
+
+# USE FOR DEBUG ONLY
+if ($Config{DEBUG}) {
+	my @configs;
+	foreach (keys %Config) {
+		if (defined $Config{$_}) {
+			push (@configs, sprintf("%-20.20s  => %-40.40s\n", $_, $Config{$_}));
+		}
+	}
+	@configs = sort(@configs);
+	print "=" x 70, "\n";
+	foreach (@configs) { print; }
+	print "=" x 70, "\n";
 }
 
 
@@ -351,7 +366,6 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 		
 			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
 			($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/i unless $mail_charset; 
-            # wg. Syntax-Highlighting-Bug in JEdit "
 			
 			foreach $aktHeader (@headers, "X-Face") {
 			
@@ -423,8 +437,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	close CONTENT;
 
 	# Zeichensatz automatisch erkennen
-	if ($charset eq "auto") {
-		$charset = $mail_charset ? getCharset($mail_charset) : "latin1";
+	if ($Config{CHARSET} eq "auto") {
+		$Config{CHARSET} = $mail_charset ? getCharset($mail_charset) : "latin1";
 	}
 
 }
@@ -450,7 +464,6 @@ foreach $type (@headers) {
 		if ($type =~ /^Date/i) {
 			$Header{$type} =~ s/-/--/;
 
-			#
 			# Datum konvertieren
 			if ($Config{DATE} eq "local") {
 				$Header{Date} = convertDate($Header{Date});
@@ -504,7 +517,6 @@ foreach $type (@headers) {
 
 					$newheader =~ s/[\s,\n]+$//g;
 					$_ = $newheader;
-
 				}
 					
 				s/(?<!\0)\{/\\\{/g;
@@ -531,9 +543,9 @@ foreach $type (@headers) {
 				s/-/{-}/g;
 				s/\0//g;
 
-				if ($charset eq "latin1" or $charset eq "latin9") {
+				if ($Config{CHARSET} eq "latin1" or $Config{CHARSET} eq "latin9") {
 					s/\200/$EuroSign/g;
-					if ($charset eq "latin9") {
+					if ($Config{CHARSET} eq "latin9") {
 						s/¤/$EuroSign/g;
 					}
 				}
@@ -573,11 +585,6 @@ my $errorRedirection = $Config{DEBUG}
 	? "$Temp{logf}" 
 	: "/dev/null";
 
-
-#
-# Sprachpaket (Auswahl von vorher überschreiben, falls in Konfigdatei
-# anders)
-$LPack = $Config{LPack} if defined $Config{LPack};
 
 #
 # LaTeX-Datei erzeugen
@@ -1016,12 +1023,12 @@ sub changeForXface ($) {
 
 sub getCharset ($) {
 	for (shift) {
-		/iso[_\-]8859[_\-]15/i	&& return "latin9";
-		/iso[_\-]8859[_\-]1/i 	&& return "latin1";
-		/iso[_\-]8859[_\-]2/i 	&& return "latin2";
-		/iso[_\-]8859[_\-]3/i	&& return "latin3";
-		/iso[_\-]8859[_\-]4/i	&& return "latin4";
-		/iso[_\-]8859[_\-]9/i	&& return "latin5";
+		/iso[_\-]8859[_\-]15/i		&& return "latin9";
+		/iso[_\-]8859[_\-]1/i 		&& return "latin1";
+		/iso[_\-]8859[_\-]2/i 		&& return "latin2";
+		/iso[_\-]8859[_\-]3/i		&& return "latin3";
+		/iso[_\-]8859[_\-]4/i		&& return "latin4";
+		/iso[_\-]8859[_\-]9/i		&& return "latin5";
 		/(cp|windows)[_\-]?1252/i	&& return "latin1";
 		/(cp|windows)[_\-]?1250/i	&& return "latin2";
 		
@@ -1044,8 +1051,8 @@ sub createLatex () {
 	my $headerrule_other = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $headerrule_first = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $footerrule = "";
-	local $charset = $charset;
-
+	my $charset = $Config{CHARSET};
+	my $fontencString;
 	my $isolatinextensions = getISOlatinExtensions($charset);
 
 	# Sans-Serif-Verhalten
@@ -1060,6 +1067,11 @@ sub createLatex () {
 	foreach (qw/VERBATIMNORMAL VERBATIMSIG/) {
 		$Config{$_} = 'obeytabs=true,' . $Config{$_};
 	}
+
+	# LaTeX Fontencoding
+	$fontencString = defined $Config{TEX_FONTENC}
+		? "\\usepackage[$Config{TEX_FONTENC}]{fontenc}"
+		: "";
 
 	if ($charset eq "latin9") {
 		$charset = "latin1";
@@ -1174,11 +1186,6 @@ EOF
 		$numberReplacements++;
 	}
 
-	#
-	# Ränderberechnung
-
-
-
 	open (LATEX, "> $Temp{'latex'}") || die "unable to create $Temp{'latex'}: $!";
 
 
@@ -1188,9 +1195,9 @@ EOF
 
 print LATEX <<EOF;
 \\documentclass[compat2,$Config{FONTSIZE}]{article}
-\\usepackage[T1]{fontenc}
+$fontencString
 \\renewcommand{\\tt}{\\rm}
-\\usepackage[$LPack]{babel}
+\\usepackage[$Config{LPack}]{babel}
 \\usepackage[$charset]{inputenc}
 \\usepackage{$LatexPackages}
 \\usepackage[${paperformat}paper,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
@@ -1643,22 +1650,25 @@ sub getDefaultPrinterCDE () {
 ##############################################################################
 
 
-sub setStrings () {
+sub setStrings ($) {
 
-	my $translationDir = findCommonDir('share') . "/translations";
-
-	for ($Lang) {
-
-		/^(\w{2})/i	
+	my $stringsAreSet = FALSE;
+	my $lang = shift;
+	my (@translationDirs) = (findCommonDir('lib')."/translations",
+			findCommonDir('share')."/translations");
 	
-			and do { 
-			
-				if (-r "$translationDir/translation-$1.pl") {
-					do("$translationDir/translation-$1.pl"); 
-					last;
-				}
-			};
-				
+	if ($lang =~ /^(\w{2})/i) {
+		my $shortLang = $1;
+
+		foreach (@translationDirs) {
+			if (-r "$_/translation-$1.pl") {
+				do("$_/translation-$1.pl"); 
+				$stringsAreSet = TRUE;
+			}
+		}
+	}
+
+	unless ($stringsAreSet) {
 
 $String{"Benutzung"} = <<EOF;
 
@@ -1728,7 +1738,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        Language for messages and printing.
 
 -c [charset], --charset [charset]
-       Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9, koi8-r
        utf8, auto (read the manual before you use "auto" or "utf8").
 
 -e [string], --date [string]
@@ -1799,7 +1809,6 @@ $String{"FileNotFound"} = "The specified file was not found.\n";
 @String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
 ("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:");
 
-$LPack = "english";
 }
 
 # Rückwärtskompatiblität
