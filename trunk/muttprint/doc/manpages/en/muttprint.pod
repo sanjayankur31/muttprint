@@ -132,11 +132,11 @@ Here you can choose whether it should be printed a rule over the
 footline or not.
 
 
-=item B<-S> I<Style>B<, --frontstyle> I<Style>
+=item B<-S> I<style>B<, --frontstyle> I<style>
 
 Choose a style for the printing of the mailheaders on the first page:
-I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
-I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailled description
+I<plain>, I<border> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailed description
 of this values.
 
 =item B<-a> I<headers>B<, --printed-headers> I<headers>
