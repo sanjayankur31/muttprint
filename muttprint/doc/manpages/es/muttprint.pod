@@ -117,7 +117,7 @@ impresión de páginas pares e impares para impresión dúplex.
 Aquí puedes elegir una agradable familia de fuentes para tu impresión. Las
 posibles son: I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>,
 I<Charter> y I<Bookman>. Que todas esas fuentes estén disponibles en tu sistema
-depende de tu sistema LaTeX. Por defecto es I<Latex-bright>.
+depende de tu sistema LaTeX. Por defecto es I<Latex>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>

@@ -122,7 +122,7 @@ Hier können Sie eine schöne Schriftfamlilie für den Ausdruck auswählen. Möglich
 sind:
 I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> und
 I<Bookman>. Ob alle Schriften verfügbar sind hängt von Ihrer LaTeX-Installation
-ab. Voreinstellung ist I<Latex-bright>.
+ab. Voreinstellung ist I<Latex>.
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
 

@@ -124,7 +124,7 @@ pagine pari e quella delle pagine dispari per la modalità fronte-retro
 Qui puoi scegliere la tua famiglia di font preferita. Le possibilità sono:
 I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> e
 I<Bookman>. Se tutti i fonts sono disponibili sul tuo sistema dipende dai
-pacchetti LaTeX installati. Di default viene usata I<Latex-bright>.
+pacchetti LaTeX installati. Di default viene usata I<Latex>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>

@@ -539,11 +539,24 @@ set printer_name "muttprint"
 			<title>Schriftart</title>
 			
 			<para>Der Ausdruck kann mit verschiedenen Schriften erfolgen.  Dazu
-				ist <literal>FONT</literal> gedacht. Der Wert 
-				<literal>Latex</literal> ist dabei der Standard-LaTeX-Font  aus
-				der EC-Familie. Mit <literal>Latex-bright</literal>
-				(Standardeinstellung) wird die Schrift  <emphasis>Computer
-				Modern Bright</emphasis> verwendet. </para>
+				ist <literal>FONT</literal> gedacht. Der Wert <literal>Latex</literal>
+				(Standardeinstellung) ist dabei der Standard-LaTeX-Font aus der
+				EC-Familie. Mit <literal>Latex-bright</literal> wird die Schrift
+				<emphasis>Computer Modern Bright</emphasis> verwendet. Diese Schrift ist
+				aufgrund ihrer Lizenz auf aktuellen Debian-Systemen nicht
+				verf&uuml;gbar<footnote>
+				<!-- Fussnote --> 
+					<para>Sie k&ouml;nnen die Schrift trotzdem
+						selber aus dem CTAN herunterladen und auf Ihrem System installieren.
+						Sie finden die Schriften unter
+						CTAN:/tex-archive/nonfree/fonts/cmbright/ (CTAN =
+						<emphasis>Comprehensive TeX Archive Network</emphasis> besteht aus
+						einem Netzwerk mehrerer Server. Der CTAN-Server in Deutschland ist 
+						<ulink url="ftp://ftp.dante.de"></ulink>).
+					</para>
+				<!-- /Fussnote --> 
+				</footnote> 
+			</para>
 
 			<para>An Postscript-Schriften sind noch auch noch
 				<literal>Times</literal>, <literal>Palatino</literal>,

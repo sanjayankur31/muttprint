@@ -123,7 +123,7 @@ printing odd and even pages for duplex printing.
 Here you can choose a nice font family for your printing. Possible are:
 I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> and
 I<Bookman>. If all fonts are available on your system depends of
-your installed LaTeX-system. Default is I<Latex-bright>.
+your installed LaTeX-system. Default is I<Latex>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
