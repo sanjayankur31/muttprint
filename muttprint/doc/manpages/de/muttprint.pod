@@ -182,6 +182,7 @@ Diese Option legt den Eingabezeichensatz fest:
 	ISO-8859-4      latin4
 	ISO-8859-9      latin5
 	ISO-8859-15     latin9
+	KOI8-R			koi8-r
 	Windows-1252    latin1
 	Windows-1250    latin2
 	UTF-8*          utf8
@@ -381,7 +382,7 @@ Dokumentation in verschiedenen Sprachen und Formaten.
 Einige Bilder, die für den Druck auf der erste Seite der Mail verwendet werden
 können.
 
-=item F<##SHAREDIR##/muttprint/translations>
+=item F<##LIBDIR##/muttprint/translations>
 
 Die Übersetzungsdateien.
 
