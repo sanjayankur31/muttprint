@@ -3,7 +3,6 @@
 
 
 prefix = /usr
-#docdir = $(prefix)/share/doc/packages
 docdir = /usr/share/doc/packages
 mandir = $(prefix)/share/man
 sharedir = $(prefix)/share
@@ -21,9 +20,11 @@ nothing:
 
 install: 
 	mkdir -p $(docdir)/muttprint $(bindir) $(sharedir)/muttprint $(mandir)/man1 \
-		$(mandir)/de/man1 $(mandir)/es/man1 $(mandir)/it/man1 $(libdir)/muttprint
+		$(mandir)/de/man1 $(mandir)/es/man1 \
+		$(mandir)/it/man1 $(libdir)/muttprint
 	$(INSTALLBIN) muttprint $(bindir)/
-	$(INSTALL) CHANGES COPYING INSTALL README* sample-muttprintrc-* $(docdir)/muttprint/
+	$(INSTALL) CHANGES COPYING INSTALL README* sample-muttprintrc-* \
+		$(docdir)/muttprint/
 	$(INSTALL) pics/* $(sharedir)/muttprint/
 	$(INSTALL) translations/* $(libdir)/muttprint/
 	make -C doc/manual docdir=$(docdir) install
@@ -37,7 +38,7 @@ uninstall:
 	rm $(mandir)/de/man1/muttprint*
 	rm $(mandir)/es/man1/muttprint*
 	rm -r $(docdir)/muttprint/
-	
+
 clean:
 	@echo -e "\nNothing to clean. \n\n"
 	@echo "\"make clean\" in the doc/* subdirectories"
