@@ -125,3 +125,7 @@ CHANGES
         - better code for deletion of temporary files
 	- fixed bug with reading configuration files
 
+0.62    - printing Euro sign works ($charset must be set to "latin9")
+        - more ASCII charaters are escaped -> printing the header
+          should work now with *all* ASCII chars
+        - new options: $FONTSIZE and $WRAPMARGIN

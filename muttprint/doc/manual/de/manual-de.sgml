@@ -833,46 +833,73 @@ set printer_name "muttprint"
 		</sect3>
 		<sect3>
 			<title>Zeichens&auml;tze</title>
+
+			<sect4>
+				<title>Der Standardzeichensatz ISO-8859-1</title>
 			
-			<para>Verschiedene Sprachen erfordern verschiedene Zeichens&auml;tze. Der
-				Standardzeichensatz von Muttprint beim Ausdruck ist 
-				<emphasis>ISO-8859-1</emphasis> (auch ISO Latin 1). Damit sind die
-				Sprachen Afrikaans, Baskisch, D&auml;nisch, Deutsch, Englisch,
-				F&auml;r&ouml;erisch, Finnisch, Franz&ouml;sisch, Gallisch,
-				Holl&auml;ndisch, Isl&auml;ndisch, Irisch, Italienisch, Katalanisch,
-				Norwegisch, Portugisisch, Schottisch, Schwedisch und Spanisch
-				abgedeckt. Zus&auml;tzlich ersetzt Muttprint noch die Zeichen 128 bis
-				159 im Windowszeichensatz <emphasis>cp1252</emphasis> durch sinnvolle
-				ASCII-Zeichen.</para>
+				<para>Verschiedene Sprachen erfordern verschiedene Zeichens&auml;tze. Der
+					Standardzeichensatz von Muttprint beim Ausdruck ist 
+					<emphasis>ISO-8859-1</emphasis> (auch ISO Latin 1). Damit sind die
+					Sprachen Afrikaans, Baskisch, D&auml;nisch, Deutsch, Englisch,
+					F&auml;r&ouml;erisch, Finnisch, Franz&ouml;sisch, Gallisch,
+					Holl&auml;ndisch, Isl&auml;ndisch, Irisch, Italienisch, Katalanisch,
+					Norwegisch, Portugisisch, Schottisch, Schwedisch und Spanisch
+					abgedeckt. Zus&auml;tzlich ersetzt Muttprint noch die Zeichen 128 bis
+					159 im Windowszeichensatz <emphasis>cp1252</emphasis> durch sinnvolle
+					ASCII-Zeichen.</para>
 
-			<para>Eine Unterst&uuml;tzung f&uuml;r <emphasis>ISO-8859-15</emphasis>
-				(entspricht ISO Latin 9) ist nicht m&ouml;glich, weil er in den
-				enstprechenden LaTeX-Paketen fehlt. Deshalb wird das Eurozeichen
-				(Zeichen 164) durch die Zeichenfolge <literal>EUR</literal>
-				ersetzt.</para>
+			</sect4>
+			<sect4>
+				<title>Unterstützung für das Eurosymbol</title>
+
+				<para>Das neu eingef&uuml;hrte Eurozeichen ist im Standardzeichensatz
+					ISO-8859-1 nicht enthalten. Deshalb wurde ein neuer Zeichensatz
+					<emphasis>ISO-8859-15</emphasis> (<emphasis>Latin 9</emphasis>)
+					definiert, in dem das allgemeine Währungssymbol durch das
+					Eurosymbol ersetzt wurde (und noch einige andere Zeichen geändert,
+					die in den Sprachen Französisch und Finnisch benötigt werden).
+					Um von Latin&nbsp;1 auf Latin&nbsp;9 umzustellen, kann die
+					<literal>charset</literal>-Variable auf <literal>latin9</literal>
+					gesetzt werden. Ihr LaTeX-System (genauer:
+					<filename>inputenc.sty</filename>) muss dazu diesen Zeichensatz
+					unterstützen. </para>
+
+				<para>In den &Uuml;bersetzungsdateien f&uuml;r die Sprachen
+					Deutsch, Spanisch, Italienisch und Franz&ouml;sisch wurde der
+					Latin-9-Zeichensatz als Standardeinstellung gewählt, weil
+					in den zugehörigen Ländern der Euro als W&auml;hrung
+					eingef&uuml;hrt wurde. (Ich wei&szlig;, dass auch in 
+					S&uuml;damerika	Spanisch gesprochen wird.)</para>
+
+				<para>Dar&uuml;berhinaus funktioniert mit dieser Einstellung
+					auch der Druck des Eurosymbols, wenn der Windows-Zeichensatz
+					cp1252 verwendet wurde.</para>
+
+			</sect4>
+			<sect4>
+				<title>Der Zeichensatz ISO-8859-2 f&uuml;r Osteuropa</title>
 				
-			<para>F&uuml;r die Unterst&uuml;tzung von Tschechisch wurde der
-				Zeichensatz <emphasis>ISO-8859-2</emphasis> (ISO Latin 2) n&ouml;tig.
-				Bei einer tschechischen Umgebung wird dieser automatisch
-				gesetzt. Andernfalls kann die Variable <literal>charset</literal>
-				entweder auf <literal>latin1</literal> oder <literal>latin2</literal>
-				gesetzt werden.</para>
+				<para>F&uuml;r die Unterst&uuml;tzung von Tschechisch wurde der
+					Zeichensatz <emphasis>ISO-8859-2</emphasis> (ISO Latin 2) n&ouml;tig.
+					Bei einer tschechischen Umgebung wird dieser automatisch
+					gesetzt. Andernfalls kann die Variable <literal>charset</literal>
+					entweder auf <literal>latin1</literal> oder <literal>latin2</literal>
+					gesetzt werden.</para>
 							
-			<para>ISO Latin 2 unterst&uuml;tzt die Sprachen Albanisch, Bosnisch,
-				Kroatisch, Tschechisch, Englisch, Deutsch, Ungarisch, Irisch, Polnisch,
-				Rum&auml;nisch, Slowakisch, Slowenisch und Sorbisch. (Da die deutschen
-				Sonderzeichen in Latin 1 und 2 an gleicher Stelle liegen, k&ouml;nnen
-				deutsche Mails mit beiden Einstellungen korrekt ausgedruckt werden.)
-				Au&szlig;erdem erfolgt bei Mazedonisch und Serbisch eine richtige
-				Transliteration von der kyrillischen in die lateinische Schrift.
-				</para>
+				<para>ISO Latin 2 unterst&uuml;tzt die Sprachen Albanisch, Bosnisch,
+					Kroatisch, Tschechisch, Englisch, Deutsch, Ungarisch, Irisch, Polnisch,
+					Rum&auml;nisch, Slowakisch, Slowenisch und Sorbisch. (Da die deutschen
+					Sonderzeichen in Latin 1 und 2 an gleicher Stelle liegen, k&ouml;nnen
+					deutsche Mails mit beiden Einstellungen korrekt ausgedruckt werden.)
+					Au&szlig;erdem erfolgt bei Mazedonisch und Serbisch eine richtige
+					Transliteration von der kyrillischen in die lateinische Schrift.
+					</para>
 
-			<para>Ein Druck von Zeichen aus beiden Zeichens&auml;tzen in einer Mail
-				ist prinzipbedingt nicht m&ouml;glich. Dies w&uuml;rde Unicode
-				erfordern. Eine Unicode-Unterst&uuml;tzung von LaTeX existiert meines
-				Wissens nicht.</para>
-
-				
+				<para>Ein Druck von Zeichen aus beiden Zeichens&auml;tzen in einer Mail
+					ist prinzipbedingt nicht m&ouml;glich. Dies w&uuml;rde Unicode
+					erfordern. Eine Unicode-Unterst&uuml;tzung von LaTeX existiert meines
+					Wissens nicht.</para>
+			</sect4>
 		</sect3>
 		<sect3>
 			<title>&Uuml;bersetzungsdatei</title>

@@ -48,7 +48,7 @@ use Cwd;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.62pre1";
+$VERSION = "0.62pre2";
 my $PACKAGE = "Muttprint";
 
 
@@ -105,6 +105,16 @@ my %Fontpackage = (
 	'Palatino'		=>		'palatino',
 	'Bookman'		=>		'bookman',
 );
+my %EuroSign = (
+	'Latex'			=>		'\EURtm{}',
+	'Latex-bright'	=>		'\EURhv{}',
+	'Times'			=>		'\EURtm{}',
+	'Charter'		=>		'\EURtm{}',
+	'Utopia'		=>		'\EURtm{}',
+	'Palatino'		=>		'\EURtm{}',
+	'Bookman'		=>		'\EURtm{}',
+);
+my $EuroSign;								# zur jew. Schrift passendes ¤-Zeichen
 my $Lang = "en";							# Sprache
 my @print;									# ob Hilfe / Version angezeigt werden soll
 my %Temp;									# temporäre Dateien und Verzeichn.
@@ -156,6 +166,7 @@ $Config{'PRINTER'} = GetDefaultPrinterCDE if GetDefaultPrinterCDE;
 ReadPaperConfig ();
 ReadConfig ();
 
+
 @print = ReadOpts ();
 
 if ($Config{'PENGUIN'} eq "on") {
@@ -165,10 +176,12 @@ if ($Config{'PENGUIN'} eq "on") {
 }
 
 
-# # USE FOR DEBUG ONLY
-# foreach (keys %Config) {
-# 		print STDERR "$_  \t\t => \t $Config{$_} \n";
-# }  
+# USE FOR DEBUG ONLY
+if ($Config{DEBUG}) {
+	foreach (keys %Config) {
+			print STDERR "$_  \t\t => \t $Config{$_} \n";
+	} 
+}
 
 
 ################ MULIT LANGUAGE SUPPORT #######################################
@@ -176,7 +189,13 @@ if ($Config{'PENGUIN'} eq "on") {
 $Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
 $Lang = $Config{'LANG'} if defined $Config{'LANG'};
 
+
 Setze_String();
+
+#
+# Zeichensatz (Auswahl von vorher überschreiben, falls in Konfigdatei
+# anders)
+$charset = $Config{'charset'} if defined $Config{'charset'};
 
 #
 # Show help and version
@@ -216,6 +235,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 {
 	my @KompletteMail = <>;
+
 	my $Content;
 
 	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
@@ -313,6 +333,15 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 # Realname
 $Header{'ShortFrom'} = GetRealname ($Header{'From'}, $Header{'To'});
 
+#
+# Fontpaket
+$Fontpackage = $Fontpackage{$Config{'FONT'}};
+
+#
+# passendes Eurozeichen
+$EuroSign = $EuroSign{$Config{FONT}};
+
+
 
 foreach (@headers) {
 	
@@ -333,11 +362,20 @@ foreach (@headers) {
 				s/</\\textless\{\}/g;
 				s/\#/\\\#/g;
 				s/\&/\\&/g;
+				s/\$/\\\$/g;
+				s/\{/\\\{/g;
+				s/\}/\\\}/g;
+				s/\|/\\\|/g;
+				s/\~/\\\~{}/g;
+				s/\^/\\\^{}/g;
+				s/\%/\\\%/g;
 				s/_/\\_/g;
-				s/%/\\%/g;
 				s/-/{-}/g;
-				s/¤/EUR/g;
-				s/\200/EUR/g;
+
+				if ($charset eq "latin9") {
+					s/\200/¤/g;
+					s/¤/$EuroSign/g;
+				}
 				
 				
 			}
@@ -375,11 +413,6 @@ if ($Config{'PAPER'} eq "A4") {
 	$PaperTex = "letterpaper";
 
 } 
-
-#
-# Fontpaket
-$Fontpackage = $Fontpackage{$Config{'FONT'}};
-
 #
 # Umleitung ins Nirwana oder in Datei ?
 if ($Config{'DEBUG'} == 1) {
@@ -394,11 +427,6 @@ if ($Config{'DEBUG'} == 1) {
 # anders)
 
 $LPack = $Config{'LPack'} if defined $Config{'LPack'};
-
-#
-# Zeichensatz (Auswahl von vorher überschreiben, falls in Konfigdatei
-# anders)
-$charset = $Config{'charset'} if defined $Config{'charset'};
 
 #
 # LaTeX-Datei erzeugen
@@ -743,12 +771,10 @@ sub ChangeForXface ($) {
 sub SubstituteVerbatim ($) {
 	
 	my %SubstituteText = (
-		"¤"			=>		"EUR",
 		"×"			=>		"x",
 		"÷"			=>		":",
 		"­"			=>		"-",
 		" "			=>		" ",
-		"\200"		=>		"EUR",
 		"\201"		=>		" ",
 		"\202"		=>		",",
 		"\203"		=>		"f",
@@ -792,18 +818,25 @@ sub SubstituteVerbatim ($) {
 		"¥"			=>		"YEN",
 		"¦"			=>		"|",		
 	);
-
+	my %SubstituteTextLatin9 = (
+		"\200"		=>		"¤",
+	);
+	
 	my $Line = shift;
 	
 	foreach (keys(%SubstituteText)) {
 			$Line =~ s/$_/$SubstituteText{$_}/g;
 	}
-	if ($charset eq "latin1") {
+	if ($charset eq "latin1" or $charset eq "latin9") {
 		foreach (keys(%SubstituteTextLatin1)) {
 			$Line =~ s/$_/$SubstituteTextLatin1{$_}/g;
 		}
 	}
-
+	if ($charset eq "latin9") {
+		foreach (keys(%SubstituteTextLatin9)) {
+			$Line =~ s/$_/$SubstituteTextLatin9{$_}/g;
+		}
+	}
 
 	return $Line;
 }
@@ -836,8 +869,7 @@ sub CreateLatex () {
 EOF
 		$PengTab="118 mm";
 	}
-	
-	
+
 	#
 	# Frontstyle:
 	for ($Config{'FRONTSTYLE'}) {
@@ -917,8 +949,9 @@ print LATEX <<EOF;
 \\usepackage[$charset]{inputenc}
 \\usepackage{$LatexPackages}
 \\usepackage[$PaperTex,left=20mm,right=20mm,top=18mm,bottom=25mm,headsep=5mm]{geometry}
-\\usepackage{moreverb,graphicx}
+\\usepackage{moreverb,graphicx,marvosym,textcomp}
 \\setlength{\\parindent}{0mm}
+\\let \\texteuro=\\EURcr
 \\pagestyle{fancy}
 \\lhead{\\itshape $Header{'ShortFrom'}}
 \\rhead{\\bfseries $Header{'Subject'}}
