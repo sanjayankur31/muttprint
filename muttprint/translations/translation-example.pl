@@ -56,7 +56,7 @@ PLEASE NOTICE: This options override the corresponding settings in
        Choose a style for the headers on the first page:
        plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
-       Read the manual for a detailled description of this values.
+       Read the manual for a detailed description of this values.
 
 -a [headers], --printed-headers [headers]
        Headers that should be printed. See manpage/manual for details.
