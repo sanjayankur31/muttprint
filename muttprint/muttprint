@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre4";
+$VERSION = "0.63pre5";
 my $PACKAGE = "Muttprint";
 
 
@@ -266,7 +266,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 		$. = $i;
 
 		# for software that outputs \r\n-line-Endings
-		s/\r//g;
+		s/[\r\f]+//g;
 	
 		#
 		# signature 
