@@ -16,6 +16,9 @@ CHANGES
           a global option [closes Debian-Bug #180615]
         - added UTF-8 support (experimental)
         - reversed this CHANGES file (first entry is most current version)
+        - added KOI8-R support (experimental); this works not on all LaTeX
+          systems, so use teTeX 2.0 if you have problems
+        - added Russian translation, thanks to Alex Semenyaka
 
 0.64    - add compatibility option for new geometry.sty
         - fixed bug with '_' in e-mail address in the headline

@@ -48,10 +48,12 @@ sl      Slovenian       User's guide, translation       Bo¨tjan Müller
               is wrong because we need the language code (ISO 639-1) and not
               the country code (ISO 3166-1)
 
+ru      Russian         translation file                Alex Semenyaka
+                        -- up to date --
+
 fr      French          translation file,               Vincent Bernat
                         sample-muttprintrc
                         -- up to date --
-
 
 es      Spanish         Manpage, User's guide           Marcelo Ramos
                         translation file,
@@ -87,10 +89,17 @@ Czech/Polish:
 ~~~~~~~~~~~~~
 
 This translation files changes the charset to ISO-8859-2 as used in Eastern
-Europe. For details to this topic, read the User's guide, section
-3.3.2 Charsets.
+Europe. For details to this topic, read the User's guide, section 3.3.
 
 
+Russian:
+~~~~~~~~
+
+This translation files changes the charset to KOI8-R. This is not supported
+by all LaTeX systems, please use teTeX 2.0 if you have any problems. Also,
+not all fonts contains the required characters, so you may have to use
+the LaTeX default fonts (Computer Modern). For details read the User's guide,
+section 3.3.
 
 
 Finally, I would like to thank _all_ translators for their provided work.
@@ -107,13 +116,14 @@ Footnotes:
 
 [1]     For comments to the translations, please mail to:
 
-        * Vincent Bernat        <bernat@free.fr>
+        * Alex Semenyaka        <alexs@ratmir.ru>
+        * Bernhard Walle        <Bernhard.Walle@gmx.de>
+        * Bo¨tjan Müller        <neonatus@neonatus.net>
         * Dominik Formánek      <dominik@formanek.cz>
         * Marcello Ramos        <mramos@montevideo.com.uy>
-        * Roberto Vallone       <roberto.vallone@gmx.net>
-        * Bernhard Walle        <Bernhard.Walle@gmx.de>
         * Radek Kaczorowski     <kaczor@mail.desy.de>
+        * Roberto Vallone       <roberto.vallone@gmx.net>
         * Simon Josefsson       <simon@josefsson.org>
-        * Bo¨tjan Müller        <neonatus@neonatus.net>
+        * Vincent Bernat        <bernat@free.fr>
 
 
