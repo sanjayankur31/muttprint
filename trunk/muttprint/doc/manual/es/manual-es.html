@@ -1,0 +1,778 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 99.2beta8 (1.43)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Muttprint - Manual del Usuario</TITLE>
+<META NAME="description" CONTENT="Muttprint - Manual del Usuario">
+<META NAME="keywords" CONTENT="manual-es">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v99.2beta8">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual-es.css">
+
+</HEAD>
+
+<BODY >
+
+<H1 ALIGN="CENTER">Muttprint - Manual del Usuario</H1>
+<P ALIGN="CENTER"><STRONG>Bernhard Walle (<TT><A NAME="tex2html1"
+  HREF="Bernhard.Walle@gmx.de">Bernhard.Walle@gmx.de</A></TT>)</STRONG></P>
+<P ALIGN="CENTER"><STRONG>12/08/2001, versión 0.53a</STRONG></P>
+
+<P>
+<BR>
+
+<H2><A NAME="SECTION00010000000000000000">
+&#205;ndice General</A>
+</H2>
+<!--Table of Contents-->
+
+<UL>
+<LI><A NAME="tex2html46"
+  HREF="manual-es.html">&#205;ndice General</A>
+<LI><A NAME="tex2html47"
+  HREF="manual-es.html#SECTION00020000000000000000">Acerca de este script</A>
+<LI><A NAME="tex2html48"
+  HREF="manual-es.html#SECTION00030000000000000000">Instalación</A>
+<UL>
+<LI><A NAME="tex2html49"
+  HREF="manual-es.html#SECTION00031000000000000000">Instalación del script en tu computadora</A>
+<LI><A NAME="tex2html50"
+  HREF="manual-es.html#SECTION00032000000000000000">Integración de Muttprint en los clientes de correo</A>
+</UL>
+<LI><A NAME="tex2html51"
+  HREF="manual-es.html#SECTION00040000000000000000">Configuración</A>
+<UL>
+<LI><A NAME="tex2html52"
+  HREF="manual-es.html#SECTION00041000000000000000">Archivo de Configuración</A>
+<LI><A NAME="tex2html53"
+  HREF="manual-es.html#SECTION00042000000000000000">Opciones de línea de comandos</A>
+<LI><A NAME="tex2html54"
+  HREF="manual-es.html#SECTION00043000000000000000">Las cabeceras en otros idiomas</A>
+</UL>
+<LI><A NAME="tex2html55"
+  HREF="manual-es.html#SECTION00050000000000000000">Programas necesarios</A>
+<LI><A NAME="tex2html56"
+  HREF="manual-es.html#SECTION00060000000000000000">Notas</A>
+<UL>
+<LI><A NAME="tex2html57"
+  HREF="manual-es.html#SECTION00061000000000000000">Autor, Licencia</A>
+<LI><A NAME="tex2html58"
+  HREF="manual-es.html#SECTION00062000000000000000">Descarga</A>
+<LI><A NAME="tex2html59"
+  HREF="manual-es.html#SECTION00063000000000000000">Agradecimientos</A>
+<LI><A NAME="tex2html60"
+  HREF="manual-es.html#SECTION00064000000000000000">Traducción</A>
+</UL>
+<LI><A NAME="tex2html61"
+  HREF="manual-es.html#SECTION00070000000000000000">Bibliograf&#237;a</A>
+<LI><A NAME="tex2html62"
+  HREF="manual-es.html#SECTION00080000000000000000">Sobre este documento...</A>
+</UL>
+<!--End of Table of Contents-->
+<P>
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+Acerca de este script</A>
+</H1>
+
+<P>
+La impresión de mensajes de correo desde Mutt (y muchos otros clientes de
+correo) es realizada como ``texto plano''. En general, ésto no es suficiente,
+pero en mi opinión no es tan bella como una impresión con formato como por
+ejemplo desde Netscape. Pero no quiero usar Netscape ya que Mutt tiene muchas
+otras ventajas.
+
+<P>
+Otro hecho que me incomoda: La impresión contiene todas las cabeceras
+visibles. He configurado Mutt para que muestre cosas como ``X-Mailer'', pero
+no quiero imprimir eso. XFMail es bastante peor: Imprime todas las cabeceras,
+así que la impresión es en mi opinión inutilizable.
+
+<P>
+Una vez tuve la idea de escribir un script yo mismo, que creara una hermosa
+impresión. Y aquí está el resultado. Pienso que luce bastante mejor que el
+texto ASCII plano y es comparable a la impresión desde programas como 
+<I>Microsoft Outlook (Express)</I> o <I>Netscape Messenger</I>.
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+Instalación</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00031000000000000000">
+Instalación del script en tu computadora</A>
+</H2>
+
+<P>
+
+<H3><A NAME="SECTION00031100000000000000">
+Instalación Manual</A>
+</H3>
+
+<P>
+Primero tienes que desempaquetar el script. La forma más simple es teclear el
+comando
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$  tar xvfz muttprint-[versión].tar.gz</TT>
+
+<P>
+Entonces ingresa en el nuevo directorio con el siguiente comando:
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$  cd muttprint-[Versión]</TT>
+
+<P>
+En éste directorio encontrarás un archivo <TT>Makefile</TT> adecuado. Para
+cambiar el destino de la instalación para tu sistema, simplemente edita éste
+archivo con tu editor favorito.
+
+<P>
+Necesitarás privilegios de administrador (root) para instalar el programa.
+Después que te hayas convertido en root con el comando <TT>su</TT>, podrás
+iniciar la instalación con:
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#  make install</TT>
+
+<P>
+El script ahora debería funcionar.
+
+<P>
+Si quieres desinstalar el script más tarde, y todos los archivos están
+todavía en el mismo lugar, simplemente corre
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#  make uninstall</TT>
+
+<P>
+como root.
+
+<P>
+
+<H3><A NAME="SECTION00031200000000000000">
+Instalación de los paquetes</A>
+</H3>
+
+<P>
+Si tu distribución utiliza un sistema de administración de paquetes tal como
+RPM o DPKG es una buena idea utilizar los paquetes correspondientes.
+
+<P>
+Está disponible un paquete RPM para distribuciones basadas en el formato RPM
+(SuSE, RedHat, TurboLinux, EasyLinux, Mandrake ...) con cada nueva versión
+de Muttprint. La instalación (o actualización) es realizada por el comando:
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#  rpm -Uvh muttprint-[Versión]-[Revisión].noarch.rpm</TT>
+
+<P>
+Todos los paquetes RPM están firmados con mi clave (ID DDAF6454). Puedes
+encontrar más información sobre el uso de RPMs y la verificación de firmas 
+en [<A
+ HREF="manual-es.html#maxrpm">1</A>].
+
+<P>
+Los paquetes Debian son creados por Chanop&nbsp;Silpa-Anan <TT><A NAME="tex2html2"
+  HREF="chanop@debian.org">chanop@debian.org</A></TT>y están disponibles solo unos pocos días después del lanzamiento de una
+nueva versión de Muttprint. La instalación es realizada por el comando:
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#  dpkg -i muttprint_[versión]-[revisión]_noarch.deb</TT>
+
+<P>
+Puedes encontrar más información sobre el sistema de paquetes Debian en 
+[<A
+ HREF="manual-es.html#deb">2</A>].
+
+<P>
+
+<H2><A NAME="SECTION00032000000000000000">
+Integración de Muttprint en los clientes de correo</A>
+</H2>
+
+<P>
+
+<H3><A NAME="SECTION00032100000000000000">
+Mutt</A>
+</H3>
+
+<P>
+Para usar Muttprint con Mutt, tienes que cambiar o agregar la siguiente
+línea en 
+
+<P>
+<TT>$HOME/.muttrc</TT> o en
+<TT>/etc/Muttrc</TT>:
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set print_command=<code>"</code>muttprint<code>"</code></TT>
+
+<P>
+Además debes cerciorarte de que las siguientes cabeceras sean mostradas y de
+ese modo son entregadas a Muttprint para ser impresas: <TT>From:</TT>,
+<TT>Date:</TT>, <TT>To:</TT>, <TT>CC:</TT> and <TT>Subject:</TT>.
+Ésa es la única forma con la cual Muttprint puede obtener la información e
+imprimir correctamente. El order no es importante.
+
+<P>
+Un configuración posible en <TT>~/.muttrc</TT> puede ser:
+
+<P>
+<PRE>
+# ignorar todas las cabeceras ...
+ignore * 
+
+# ... excepto estas
+unignore        from: subject to cc date
+</PRE>
+
+<P>
+Para imprimir más de un mensaje, deberías colocar lo siguiente:
+
+<P>
+<PRE>
+# Separar los mensajes para ser impresos
+set print_split
+</PRE>
+
+<P>
+Puedes encontrar más información en la documentación de Mutt (en general 
+la encontrarás en  <BR>[5]<TT><A NAME="tex2html3"
+  HREF="/usr/share/doc/packages/mutt/manual.txt">/usr/share/doc/packages/mutt/manual.txt</A></TT>).
+
+<P>
+
+<H3><A NAME="SECTION00032200000000000000">
+XFMail</A>
+</H3>
+
+<P>
+En el diálogo ``Misc'', ``Config Misc'' tienes que ingresar el script en ``Print
+Command'' de este modo: <TT>/usr/bin/muttprint -f $f</TT>.
+
+<P>
+<I>Atención:</I> Con algunas versiones de XFMail se reportaron problemas a
+causa de que XFMail no agrega las cabeceras en la impresión. Pero aquí no
+puedo hacer nada ...
+
+<P>
+
+<H3><A NAME="SECTION00032300000000000000">
+Pine</A>
+</H3>
+
+<P>
+Ingresa el comando de impresión <TT>muttprint</TT> en ``Setup'',
+``Printer'', ``Personally select print command''. Guarda los cambios.
+
+<P>
+
+<H3><A NAME="SECTION00032400000000000000">
+Sylpheed</A>
+</H3>
+
+<P>
+Para usar Muttprint permanentemente como programa de impresión, entra en
+``Configuration'', ``Common preferences'', ``Other'', ``Printing'' e ingresa <TT>muttprint -f
+%s</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00032500000000000000">
+Gnus</A>
+</H3>
+
+<P>
+Muttprint también puede ser integrado en <I>Gnus</I>. Un usuario me ha
+proporcionado un código Lisp que realiza la integración. Por favor no me 
+preguntes al respecto ya que no conozco Lisp y no uso (X)Emacs personalmente.
+
+<P>
+Encontrarás el código en <TT>README.Gnus</TT> y me gustaría que consultaras
+ése archivo. Si usas paquetes para la instalación deberías encontrar ése
+archivo en el directorio <TT><A NAME="tex2html4"
+  HREF="/usr/share/doc/packages/muttprint/">/usr/share/doc/packages/muttprint/</A></TT>.
+
+<P>
+
+<H3><A NAME="SECTION00032600000000000000">
+Otros clientes de correo</A>
+</H3>
+
+<P>
+En general el script funciona con todos los clientes de correo que cumplen las
+siguientes condiciones:
+
+<P>
+
+<UL>
+<LI>El formato de salida es texto plano ASCII (o con el conjunto de
+caracteres ISO&nbsp;Latin&nbsp;1).
+</LI>
+<LI>Debe ser posible elegir el comando de impresión..
+</LI>
+</UL>
+
+<P>
+Los lectores de grupos de noticias también son soportados. La cabecera ``To''
+es opcional y la cabecera ``Newsgroups'' también se imprime.
+
+<P>
+Si consigues que Muttprint funcione con otros programas, por favor envíame un
+mensaje corto y describe como has configurado el programa. Lo agregaré aquí.
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+Configuración</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00041000000000000000">
+Archivo de Configuración</A>
+</H2>
+
+<P>
+Algunas cosas pueden ser configuradas en Muttprint. Esto es realizado en forma
+permanente en los archivos de configuración <TT>$HOME/.muttprintrc</TT>
+para el usuario actual o <TT>/etc/Muttprintrc</TT> para todos los usuarios.
+
+<P>
+En el archivo de configuración, se asignan valores a algunos parámetros -
+algunos diferentes a los de <TT>muttrc</TT>. Primero va el nombre del
+parámetro (que consiste sólo de mayúsculas), después un signo de igual (<TT>=</TT>) 
+y finalmente el valor. Es buena idea escribir el valor entre comillas dobles
+(<TT><code>""</code></TT>).
+
+<P>
+Un ejemplo de un archivo de configuración es distribuído con Muttprint: 
+(<TT>sample-muttprintrc-es</TT>). Si has instalado un paquete RPM o 
+Debian, lo encontrarás en <BR>
+<TT><A NAME="tex2html5"
+  HREF="/usr/share/doc/packages/muttprint/">/usr/share/doc/packages/muttprint/</A></TT>.
+
+<P>
+Un ejemplo de una asignación correcta:
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARÁMETRO=<code>"</code>valor<code>"</code></TT>
+
+<P>
+En general el script funciona sin ninguna modificación, pero es recomendable
+informar las posibilidades que tienes.
+
+<P>
+
+<H3><A NAME="SECTION00041100000000000000">
+Impresora</A>
+</H3>
+
+<P>
+Si no quieres que Muttprint imprima a <TT>lp0</TT>, puedes cambiar la
+impresora con <TT>PRINTER</TT>.
+
+<P>
+Para imprimir en un archivo, usa la siguiente línea. Puedes elegir el archivo
+que quieras.
+
+<P>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRINTER=<code>"</code>TO_FILE:/foo/bar/prueba.ps<code>"</code></TT>
+
+<P>
+Si la impresión dúplex está activada, también se crea un segundo archivo con
+el sufijo <TT>2</TT>, e.g. <TT>prueba.ps2</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00041200000000000000">
+Pingüino</A>
+</H3>
+
+<P>
+Por defecto será impreso un pequeño pingüino en la esquina superior derecha de
+la página. Si quieres que Muttprint imprima otra imágen, puedes especificarlo 
+con <TT>PENGUIN</TT>. La imágen debe estar en el formato ``Encapsulated 
+PostScript'' (un programa de conversión adecuado es <TT>convert</TT>, del 
+paquete <I>Image Magick</I>) y ésta será cambiada de tamaño manteniendo su 
+forma con una altura de 2&nbsp;cm. El ancho deber ser menor que 2&nbsp;cm en este caso.
+
+<P>
+Para desactivar la impresión del pingüino, usa el valor <TT>off</TT> en <TT>PENGUIN</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00041300000000000000">
+Impresión Dúplex</A>
+</H3>
+
+<P>
+Muttprint hace posible imprimir en ambos lados de una hoja. Primero son
+impresas las páginas impares (1,&nbsp;3,&nbsp;...) y después las pares (2,&nbsp;4,&nbsp;...).
+En el medio, hay un pequeña pausa.
+
+<P>
+Para calcular el intervalo de tiempo que Muttprint debe esperar para empezar a
+imprimir las páginas pares, éste necesita la velocidad de tu impresora;
+consulta <A HREF="manual-es.html#velocidad"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="file:/usr/lib/latex2html/icons/crossref.png"></A>.
+
+<P>
+Para activar ésta funcionalidad, tienes que usar el valor <TT>on</TT> en 
+<TT>DUPLEX</TT>.
+
+<P>
+Si posees un verdadera impresora Postscript y ésa impresora tiene la capacidad
+de impresión dúplex, deberías usar el valor <TT>printer</TT> en <TT>DUPLEX</TT>. 
+De esa manera el código Postscript será modificado y se ordenará a la
+impresora que use la funcionalidad dúplex.
+
+<P>
+
+<H3><A NAME="SECTION00041400000000000000">
+Modo ahorro de papel</A>
+</H3>
+
+<P>
+Es posible imprimir dos páginas en una carilla de la hoja en modo horizontal
+(landscape) para ahorrar papel, tinta y para mejorar la velocidad de
+impresión. Esto es posible con el formato de hoja DIN&nbsp;A4 sense, ya que dos
+páginas reducidas encajan exactamente en una página. (Razón entre las
+proporciones <IMG
+ WIDTH="53" HEIGHT="42" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.png"
+ ALT="$1 : \sqrt{2}$">).
+
+<P>
+Para ahorrar papel, tienes que usar el valor <TT>on</TT> en <TT>PAPERSAVE</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00041500000000000000"></A>
+<A NAME="velocidad"></A><BR>
+Velocidad de impresión
+</H3>
+
+<P>
+Como se describió en el último párrafo, Muttprint requiere la velocidad con la
+cual se imprime una página. Debes decirselo a Muttprint con el parámetro <TT>SPEED</TT>.
+Los valores son en segunds (sin la unidad). El valor por defecto es
+30&nbsp;segundos, entonces la línea de configuración es <TT>SPEED=<code>"</code>30<code>"</code></TT>.
+
+<P>
+
+<H3><A NAME="SECTION00041600000000000000">
+Fuente</A>
+</H3>
+
+<P>
+La impresión puede realizarse con diferentes fuentes. Para elegir la fuente,
+puedes cambiar <TT>FONT</TT>. Por defecto es <TT>Latex</TT>, esto
+significa que se utilizará la fuente estándar L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>Xfont de la familia EC.
+Con <TT>Latex-bright</TT>, se utiliza la fuente ``Computer Modern Bright''.
+
+<P>
+Pueden utilizarse también las fuentes Postscript <TT>Times</TT>, <TT>Palatino</TT>,
+<TT>Utopia</TT> y <TT>Bookman</TT>.
+
+<P>
+Por supuesto, las fuentes deben estar instaladas en tu sistema. Esto no
+debería ser un problema ya que la distribución de L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X ``teT<SMALL>E</SMALL>X'' es
+estándar en los sistemas Linux.
+
+<P>
+Simplemente prueba algunas fuentes para averiguar cual es tu favorita.
+
+<P>
+
+<H3><A NAME="SECTION00041700000000000000">
+Formato del papel</A>
+</H3>
+
+<P>
+Para elegir el formato del papel, puedes usar los valores <TT>A4</TT> y <TT>letter</TT>.
+en el parámetro <TT>PAPER</TT>. 
+
+<P>
+
+<H3><A NAME="SECTION00041800000000000000">
+Eliminación de la firma</A>
+</H3>
+
+<P>
+A menudo la firma contiene información inúti o publicidad, por lo tanot no
+debería ser impresa. Muttprint es capaz de eliminar la firma si ésta fue
+separada del resto del mensaje utilizando ``<TT>-&nbsp;</TT>'' - observa el
+espacio en blanco (algunos clientes de correo no generan correctamente el
+separador).
+
+<P>
+Para hacer esto tienes que usar el valor <TT>on</TT> en el parámetro
+<TT>REM_SIG</TT> (esto significa ``eliminar la firma'').
+
+<P>
+
+<H3><A NAME="SECTION00041900000000000000">
+Omitir el texto citado</A>
+</H3>
+
+<P>
+A menudo el autor del mensaje no cita sensatamente sino que adjunta todo el
+mensjae (piensa en  <TT>-- Original Message --</TT>) de modo que la
+impresión se vuelve larga y confusa.
+
+<P>
+Si el valor de <TT>REM_QUOTE</TT> es <TT>on</TT>, el texto citado no será
+impreso. Muttprint detecta el texto citado utilizando la misma expresión
+regular que utiliza Mutt con su configuración estándar. De esa manera el texto
+cuyo color es enfatizado en Mutt deberá ser omitido en la impresión. Ésto
+corresponde a la función ``toggle quote'' (<TT>Shift-t</TT>) en Mutt en la
+pantalla.
+
+<P>
+
+<H3><A NAME="SECTION000411000000000000000">
+Mensajes de error</A>
+</H3>
+
+<P>
+Los mensajes <TT>latex</TT> y <TT>dvips</TT> no son desplegados por
+defecto. Si existen problemas, sería útil leer ésos mensajes. Por lo tanto
+deberías usar el valor <TT>1</TT> en el parámetro <TT>DEBUG</TT> en tu archivo
+de configuración. Ahora Muttprint creará un archivo llamado <TT><A NAME="tex2html6"
+  HREF="/tmp/muttprint.log">/tmp/muttprint.log</A></TT> 
+en la próxima ejecución, de ese modo podrás mirar esos mensajes de error. Ésto
+puede ser útil para todos los reportes de fallos, también.
+
+<P>
+
+<H2><A NAME="SECTION00042000000000000000">
+Opciones de línea de comandos</A>
+</H2>
+
+<P>
+La mayoría de las posibilidades de configuración están disponibles también
+como opciones en la línea de comandos. La ventaja es una integración más fácil
+en los clientes de correo, por ejemplo con macros propios.
+
+<P>
+Obtendrás un descripción explícita de todas las opciones con el comando <TT>muttprint -h</TT> 
+(en Español, Inglés y Alemán) o en la página manual con <TT>man muttprint</TT>
+(en Español e Inglés).
+
+<P>
+El resultado de estas opciones es el mismo que con el archivo de
+configuración, pero las opciones de línea de comandos tienen preferencia sobre
+cualquier otra opción de configuración.
+
+<P>
+
+<H2><A NAME="SECTION00043000000000000000">
+Las cabeceras en otros idiomas</A>
+</H2>
+
+<P>
+El script soporta los idiomas <I>Alemán</I>, <I>Italiano</I>, <I>Español</I> e <I>Inglés</I>.
+Si el valor del parámetro <TT>LANG</TT> es <TT>DE</TT> o <TT>de</TT>, Muttprint
+utiliza el Alemán, si es <TT>ES</TT> o <TT>es</TT> éste utiliza el
+Español, en cualquier otro caso utizará el Inglés. 
+
+<P>
+Si quieres utilizar otro idioma para la impresión, diferente del idioma del
+sistema, puedes especificar <TT>LANG</TT> en tu archivo de configuración
+<TT>muttprintrc</TT>.
+
+<P>
+La fecha es creada con el paquete <TT>babel.sty</TT> de L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X. Si el valor
+de <TT>LANG</TT> es <TT>ES</TT> or <TT>es</TT>, Muttprint toma a
+<TT>espanol</TT> como argumento. Para usar la fecha en otro idioma, puedes
+cambiar <TT>LPack</TT> en tu archivo  <TT>/etc/Muttprintrc</TT> o
+<TT>~/.muttprintrc</TT>, por ejemplo usando <TT>spanish</TT> or
+<TT>ngerman</TT>.
+
+<P>
+Si quieres que el idioma utilizado por Muttprint sea diferente al utilizado
+por tu sistema, dale el valor adecuado al parámetro <TT>LANG</TT> en tu
+archivo de configuración. Si quieres utilizar idiomas diferentes o solo
+palabras diferentes, puedes cambiar los siguientes parámetros:
+
+<P>
+
+<UL>
+<LI><TT>FROM_STRING</TT>
+</LI>
+<LI><TT>TO_STRING</TT>
+</LI>
+<LI><TT>SUBJECT_STRING</TT>
+</LI>
+<LI><TT>CC_STRING</TT>
+</LI>
+<LI><TT>DATE_STRING</TT>
+</LI>
+<LI><TT>PAGE_STRING</TT>
+</LI>
+<LI><TT>OF_STRING</TT>
+</LI>
+<LI><TT>NEWSGROUPS_STRING</TT>
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION00050000000000000000">
+Programas necesarios</A>
+</H1>
+
+<P>
+Muttprint fue programado utilizando el lenguaje Perl. Entonces necesitas un
+configuración de Perl 5 funcional, aunque si ya no lo tienes éste está
+disponible en todos los sistemas Linux estándar. Además, algunos programas son
+utilizados para proveer diferentes funciones. Así que cerciórate de que estos
+programas estén diponibles en tu sistema:
+
+<P>
+
+<UL>
+<LI><I>teTeX</I> u otra distribución L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X. Muttprint fue probado con 
+<I>teTeX</I>, versión 1.x. 
+
+<P>
+</LI>
+<LI><TT>fmt</TT>, parte del paquete <I>Textutils</I>, por ejemplo del
+proyecto GNU.
+
+<P>
+</LI>
+<LI><TT>psnup</TT> y <TT>psselect</TT>, parte del paquete <I>PS-Utils</I>
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION00060000000000000000">
+Notas</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION00061000000000000000">
+Autor, Licencia</A>
+</H2>
+El script fue escrito por Bernhard Walle <TT>Bernhard.Walle@gmx.de</TT>.
+
+<P>
+Este programa es software libre; puedes redistribuirlo y/o modificarlo bajo
+los condiciones de la Licencia Pública General GNU como fue publicada por la
+Fundación por el Software Libre (Free Software Foundation); ya sea la versión
+2 de la Licencia, o (a tu elección) cualquier versión posterior.
+
+<P>
+Este manual es distribuido con la esperanza de que sea útil, pero
+<I>sin garantía alguna</I>; incluso sin la garantía implícita de 
+<I>mercantibilidad</I> o <I>aptitud para un propósito particular</I>. Ver
+la Licencia Pública General GNU para más detalles.
+
+<P>
+Has recibido una copia de la  GNU General Public License junto con éste
+programa (archivo <TT>COPYING</TT>.
+
+<P>
+Por favor envíame notas, comentarios, propuestas de mejoras ... por correo
+electrónico.
+
+<P>
+
+<H2><A NAME="SECTION00062000000000000000">
+Descarga</A>
+</H2>
+
+<P>
+Puedes descargar la versión más nueva desde
+<TT><A NAME="tex2html7"
+  HREF="http://bwalle.exit.mytoday.de/muttprint/">http://bwalle.exit.mytoday.de/muttprint/</A></TT>.
+
+<P>
+Las versiones nuevas son anunciadas en Freshmeat (<TT><A NAME="tex2html8"
+  HREF="http://www.freshmeat.net">http://www.freshmeat.net</A></TT>).
+
+<P>
+
+<H2><A NAME="SECTION00063000000000000000">
+Agradecimientos</A>
+</H2>
+
+<P>
+a todos los usuarios que han reportado fallos. Ellos me ayudarón mucho a
+mejorar Muttprint. Especialmente quiero agradecer a R<SMALL>OMAN </SMALL>B<SMALL>EIGELBECK</SMALL>
+por proveer imágenes adicionales, a R<SMALL>OBERTO </SMALL>V<SMALL>ALLONE</SMALL> por la traducción
+Italiana, a M<SMALL>ARCELO </SMALL>R<SMALL>AMOS</SMALL> por la traducción Española y a los
+mantenedores de Debian D<SMALL>R. </SMALL>G<SMALL>UENTER </SMALL>B<SMALL>ECHLY</SMALL> y C<SMALL>HANOP </SMALL>S<SMALL>ILPA-</SMALL>A<SMALL>NAN</SMALL>.
+
+<P>
+
+<H2><A NAME="SECTION00064000000000000000">
+Traducción</A>
+</H2>
+La traducción de este documento al idioma español a partir del documento en
+inglés del autor y la generación de los correspondientes formatos pdf, dvi,
+ps, txt y html fueron realizados por Marcelo Ramos <TT>mramos@adinet.com.uy</TT>.
+
+<P>
+Cualquier comentario o propuesta para mejorar ésta traducción será bienvenida.
+
+<P>
+ 
+<H2><A NAME="SECTION00070000000000000000">
+Bibliograf&#237;a</A>
+</H2><DL COMPACT><DD><P></P><DT><A NAME="maxrpm">1</A>
+<DD> Maximum-RPM, <TT><A NAME="tex2html9"
+  HREF="http://www.rpm.org/maximum-rpm.ps.gz">http://www.rpm.org/maximum-rpm.ps.gz</A></TT><P></P><DT><A NAME="deb">2</A>
+<DD> Debian ``developer's corner'' <TT><A NAME="tex2html10"
+  HREF="http://www.debian.org/devel/">http://www.debian.org/devel/</A></TT></DL>
+
+<P>
+
+<H1><A NAME="SECTION00080000000000000000">
+Sobre este documento...</A>
+</H1>
+ <STRONG>Muttprint - Manual del Usuario</STRONG><P>
+This document was generated using the
+<A HREF="http://www-dsed.llnl.gov/files/programs/unix/latex2html/manual/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 99.2beta8 (1.43)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Computer Based Learning Unit, University of Leeds.
+<BR>Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>-no_navigation -no_subdir -split 0 -noshow_section_number manual-es.tex</TT>
+<P>
+The translation was initiated by Bernhard Walle on 2001-10-05<BR><HR>
+<ADDRESS>
+Bernhard Walle
+2001-10-05
+</ADDRESS>
+</BODY>
+</HTML>
