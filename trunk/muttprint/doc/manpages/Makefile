@@ -13,7 +13,7 @@ TITLE_EN = "Muttprint Short Manual"
 TITLE_DE = "Muttprint Kurzanleitung"
 TITLE_ES = "Manual Corto de Muttprint"
 TITLE_IT = "Breve manuale di Muttprint"
-TITLE_CS = "Muttprint Short Manual"
+TITLE_CS = "Krátký manuál Muttprintu"
 
 
 all: german english spanish italian czech
