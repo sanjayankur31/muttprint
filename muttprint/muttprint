@@ -1,14 +1,12 @@
 #!/usr/bin/perl -w
 #
 # Hinweis:	Tabulatorbreite: 4 Zeichen
-#			(automatische Einstellung für ViM durch letzte Zeile)
 # Notice:   tab width: 4 characters
-#			(this is done for ViM automatically through the	last line)
 #
 ########################################################################
 #                                                                      #
 #    Muttprint - pretty printing of mails with Mutt                    #
-#    Copyright © 2000-03, Bernhard Walle <bernhard.walle@gmx.de>       #
+#    Copyright (c) 2000-03, Bernhard Walle <bernhard.walle@gmx.de>     #
 #                                                                      #
 #    This program is free software; you can redistribute it and/or     #
 #    modify it under the terms of the GNU General Public License as    #
@@ -56,7 +54,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72pre7";
+our $VERSION = "0.72pre8";
 my $PACKAGE = "Muttprint";
 
 
@@ -90,7 +88,7 @@ sub utf2native ($);
 sub getLocaleInformation($);
 sub convert_init ();
 
-######## 'private' Variablen für den Rest
+######## 'private' variables for the rest
 %Config = (
 	PRINTER			=> 	'',
 	PRINT_COMMAND	=>	'lpr -P$PRINTER',
@@ -159,20 +157,20 @@ my %EuroSign = (
 	'AvantGarde'	=>		'\EURhv{}',
 );
 my @print;									# ob Hilfe / Version angezeigt werden soll
-my %Temp;									# temporäre Dateien und Verzeichn.
+my %Temp;									# temporaere Dateien und Verzeichn.
 my %Header;									# Header ...
 my @PrintedMailheaders;						# Mailheader so wie er gedruckt wird (LaTeX-Code)
 my $childPid;								# PID des Kinds
-my $DVIopts;								# Optionen für DVI - Aufruf
-my @Command;								# Kommando zum Drucken; für Druck in Datei
-my $Laenge = "0";							# zum Ermitteln der längsten Zeile
-my $MaxLaenge = "0";						# die länste Zeile
+my $DVIopts;								# Optionen fuer DVI - Aufruf
+my @Command;								# Kommando zum Drucken; fuer Druck in Datei
+my $Laenge = "0";							# zum Ermitteln der laengsten Zeile
+my $MaxLaenge = "0";						# die laengste Zeile
 my $QP = 0;									# quoted printable encoded body
 my @LastHeader = ("", 0);					# letzter gefundener Header
 											# (Header, Zeilen#)
 my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
 my @headers;
-my $image_height = "20mm";					# Höhe des gedruckten Bildes
+my $image_height = "20mm";					# Hoehe des gedruckten Bildes
 my $startworkingdir = getcwd();				# Arbeitsverzeichnis, wenn Muttprint
 											# gestartet wird
 my $signature;								# Signatur (Inhalt)
@@ -303,7 +301,7 @@ if ($Config{PRINTER}) {
 }
 
 #
-# Formatierung für Header
+# Formatierung fuer Header
 foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	my $unformated = $_;
 	my $formats = "";
@@ -419,7 +417,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	}
 
 	#
-	# wenn die Header nicht ausgelesen werden können: so drucken!		
+	# wenn die Header nicht ausgelesen werden koennen: so drucken!		
 	unless ($Header{From} || $Header{To} || $Header{Subject}) { 
 
 		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS//g;
@@ -554,7 +552,7 @@ foreach $type (@headers) {
 				s/\0//g;
 
 				# euro
-				s/Â¤/$EuroSign/g;
+				s/¤/$EuroSign/g;
 			}
 		}
 
@@ -836,7 +834,7 @@ sub readConfig (@) {
 
 sub readOpts () {
 
-	# wird für die Optionen benötigt (gehört zum Standardumfang von Perl 5)
+	# wird fuer die Optionen benoetigt (gehoert zum Standardumfang von Perl 5)
 	use Getopt::Long; 
 	Getopt::Long::Configure ("no_ignore_case");
 
@@ -845,7 +843,7 @@ sub readOpts () {
 	my $error = 0;								# Beenden mit Fehler
 	
 	#
-	# Optionen einlesen und der zugehörigen Variablen zuordnen
+	# Optionen einlesen und der zugehoerigen Variablen zuordnen
 	
 	GetOptions (
 	
@@ -928,7 +926,7 @@ sub readOpts () {
 		}			
 	}
 	
-	# Rückgabe: Wahrheitswerte für 
+	# Rueckgabe: Wahrheitswerte fuer 
 	# I Hilfe, II Version, III Locale
 
 	return ($opt{help}, $opt{version}, $opt{print_locale}, $error);
@@ -1208,8 +1206,8 @@ sub changeForXface ($) {
 
 sub createLatex () {
 
-	my $PengCode = "";						# Kommando für den Pinguin
-	my $PengTab;			 				# restl. Größe für Pinguin
+	my $PengCode = "";						# Kommando fuer den Pinguin
+	my $PengTab;			 				# restl. Groesse fuer Pinguin
 	my $BeforeHeader;
 	my $sansserif = '';
 	my $AfterHeader;
@@ -1275,7 +1273,7 @@ EOF
 		$PengTab += 6;			# Letter ist breiter
 	}
 
-	$PengTab .= "mm";			# Maßeinheit anhängen
+	$PengTab .= "mm";			# Masseinheit anhaengen
 
 	#
 	# Frontstyle:
@@ -1657,7 +1655,7 @@ sub convertDate ($) {
 	my $date = shift;
 
 	#
-	# Überprüfen, ob das Modul installiert ist. Wenn nicht, Fehler
+	# Check if the module is installed
 	eval "use Date::Parse";
 	
 	if ($@) {
@@ -1706,7 +1704,7 @@ EOF
 	close READ_PSFILE;
 	
 	#
-	# notwendige Kommentare hinzufügen!
+	# add comments that are necessary
 	
 	$Postscript =~ s#\%\%EndComments#$DuplexCommand#;
 	
@@ -1975,7 +1973,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
-       Reads from file instad of STDIN.
+       Reads from file instead of STDIN.
 
 -p [printername], --printer [printername]
        Uses a specific printer.
@@ -1987,7 +1985,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        printer name.
        CUPS support is turned on by "CUPS" (or set it to any command
        which containes the string "\$CUPS_OPTIONS").
-
+	 
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
 
@@ -1998,7 +1996,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        Time in seconds which the printer needs for one page.
 		   
 -w [number], --wait [number]
-       Time between printing odd and even pages for duplex printing.
+       Time between printing odd and even pages for manual duplex printing.
 
 -F [fontname], --font [fontname]
        Font family for printing. Possible values are:
@@ -2028,7 +2026,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        local:    converts to local time zone and language
 
 -E [string], --date-format [string]
-       date format string; see strftime(3) for details
+       date format string: see strftime(3) for details
 
 -A [string], --addressformat [string]
        Specifies the format of the mail address in the header,
@@ -2053,19 +2051,20 @@ PLEASE NOTICE: These options override the corresponding settings in
        Enables or disables duplex printing.
 
 -g [number], --topmargin [number]
-       Top margin in millimeter
+       Top margin in millimeters
 
 -G [number], --bottommargin [number]
-       Bottom margin in millimeter
+       Bottom margin in millimeters
 
 -j [number], --leftmargin [number]
-       Left margin in millimeter
+       Left margin in millimeters
 
 -J [number], --rightmargin [number]
-       Right margin in millimeter
+       Right margin in millimeters
 
 -2 | -1
-       Prints two pages on one sheet. Corresponds to "papersave mode".
+       Print one or two pages of text on one side of a sheet.
+       Corresponds to "papersave mode".
 
 -s, --rem_sig | -nos, --norem_sig
        Removes the signature (separated by "-- ") in the printing.
@@ -2074,16 +2073,16 @@ PLEASE NOTICE: These options override the corresponding settings in
        Specifies the regular expression used to recognize the signature.
 
 -q, --rem_quote | -noq, --norem_quote
-       Remove the quoted paragraph from the printing.
+       Remove quoted paragraphs from the printed text.
 
 -z [size], --fontsize [size]
-       Font size: 10pt, 11pt, 12pt (only this values)
+       Font size: 10pt, 11pt, 12pt (only these values are accepted)
 
 -W [number], --wrapmargin [number]
-       Specifies how long lines could be.
+       Specifies the maximum length of a line before it gets wrapped.
 	   
 -r [file], --rcfile [file]
-       Specifies a additional configuration file.
+       Specifies an additional configuration file.
 
 EOF
 
@@ -2102,8 +2101,7 @@ $String{PageOf} = "page %s of %s";
 
 }
 
-# Rückwärtskompatiblität
-# wird irgendwann entfernt!!
+# backward compatibility, will be removed in future
 $Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'} 
 			if defined $Config{'NEWSGROUP_STRING'};
 

@@ -26,7 +26,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        Prints out information about the current locale environment and exits.
 
 -f [file], --file [file]
-       Reads from file instad of STDIN.
+       Reads from file instead of STDIN.
 
 -p [printername], --printer [printername]
        Uses a specific printer.
@@ -49,7 +49,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        Time in seconds which the printer needs for one page.
 		   
 -w [number], --wait [number]
-       Time between printing odd and even pages for duplex printing.
+       Time between printing odd and even pages for manual duplex printing.
 
 -F [fontname], --font [fontname]
        Font family for printing. Possible values are:
@@ -79,7 +79,7 @@ PLEASE NOTICE: These options override the corresponding settings in
        local:    converts to local time zone and language
 
 -E [string], --date-format [string]
-       date format string; see strftime(3) for details
+       date format string: see strftime(3) for details
 
 -A [string], --addressformat [string]
        Specifies the format of the mail address in the header,
@@ -104,19 +104,20 @@ PLEASE NOTICE: These options override the corresponding settings in
        Enables or disables duplex printing.
 
 -g [number], --topmargin [number]
-       Top margin in millimeter
+       Top margin in millimeters
 
 -G [number], --bottommargin [number]
-       Bottom margin in millimeter
+       Bottom margin in millimeters
 
 -j [number], --leftmargin [number]
-       Left margin in millimeter
+       Left margin in millimeters
 
 -J [number], --rightmargin [number]
-       Right margin in millimeter
+       Right margin in millimeters
 
 -2 | -1
-       Prints two pages on one sheet. Corresponds to "papersave mode".
+       Print one or two pages of text on one side of a sheet.
+       Corresponds to "papersave mode".
 
 -s, --rem_sig | -nos, --norem_sig
        Removes the signature (separated by "-- ") in the printing.
@@ -125,16 +126,16 @@ PLEASE NOTICE: These options override the corresponding settings in
        Specifies the regular expression used to recognize the signature.
 
 -q, --rem_quote | -noq, --norem_quote
-       Remove the quoted paragraph from the printing.
+       Remove quoted paragraphs from the printed text.
 
 -z [size], --fontsize [size]
-       Font size: 10pt, 11pt, 12pt (only this values)
+       Font size: 10pt, 11pt, 12pt (only these values are accepted)
 
 -W [number], --wrapmargin [number]
-       Specifies how long lines could be.
+       Specifies the maximum length of a line before it gets wrapped.
 	   
 -r [file], --rcfile [file]
-       Specifies a additional configuration file.
+       Specifies an additional configuration file.
 
 EOF
 
