@@ -47,6 +47,9 @@ it      Italian         Manpage, User's guide,       Roberto Vallone
                         translation file             <roberto.vallone@gmx.net>
                         -- up to date --
 
+nl      Dutch           translation file,            hdv@dto.tudelft.nl
+                        sample-muttprintrc
+
 es      Spanish         Manpage, User's guide        Fernando Pereda
                         translation file,            <ferdy@ferdyx.org>
                         sample-muttprintrc,
