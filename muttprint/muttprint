@@ -49,7 +49,7 @@ use Cwd;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.62a";
+$VERSION = "0.62b";
 my $PACKAGE = "Muttprint";
 
 
@@ -606,7 +606,7 @@ elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
 
 		# erst in PS-Datei drucken
 		system ("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung "
-			." | psnup -2 -q > $Temp{'ps'} 2>>$Umleitung");
+			." | psnup -p$PaperPS -2 -q > $Temp{'ps'} 2>>$Umleitung");
 		
 		# dann auswählen
 		if (!defined($child_pid = fork())) {
@@ -1231,7 +1231,7 @@ sub PrintNormal ($) {
 
 sub PrintPaperSave ($) {
 
-	system("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung | psnup -2 -q "
+	system("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung | psnup -p$PaperPS -2 -q "
 	  ."$_[0] 2>>$Umleitung") && die "Unable to print: $!";
 }
 
