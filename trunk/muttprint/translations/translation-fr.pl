@@ -2,14 +2,15 @@ use bytes;
 
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
 
+
 $String{"Benutzung"} = <<EOF;
 
-Usage:   muttprint [options]... [-f fichier]
+Usage:   muttprint [option]... [-f fichier]
  
 Options:
 
-ATTENTION: Ces options sont prioritaires sur les paramètres correspondants 
-dans ~/.muttprintrc et /etc/Muttprintrc.
+ATTENTION: Ces options prennent le pas sur les réglages correspondants
+dans les fichiers ~/.muttprintrc et /etc/Muttprintrc.
 
 -h, --help
        Cette aide.
@@ -18,12 +19,18 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
        Affiche la version actuelle de Muttprint.
 
 -f [fichier], --file [fichier]
-       Lit à partir du fichier spécifié au lieu de l'entrée standard.
+       Lit depuis le fichier indiqué plut
 
 -p [imprimante], --printer [imprimante]
        Utilise une imprimante particulière.
        "-" signifie la sortie standard
        Pour imprimer vers un fichier : TO_FILE:/chemin/fichier
+
+-C [commande], --printcommand [commande]
+       Indique quelle est la commande pour imprimer. "\$PRINTER" est
+       remplacé par le nom de l'imprimante.
+       Le support pour CUPS est activé en indiquant "CUPS" (ou n'importe
+       quelle commande qui contient la chaîne "\$CUPS_OPTIONS").
 
 -i [fichier], --penguin [fichier]
        Indique quelle image utiliser sur la première page.
@@ -41,7 +48,7 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 -F [fonte], --font [fonte]
        Fonte à utiliser pour l'impression. Les valeurs possibles sont :
        Latex, Latex-bright, Times, Utopia, Palatino, Charter et Bookman
-
+	   
 -H, --headrule | -noH, --noheadrule
        Imprime ou non un trait horizontal après l'entête.
 
@@ -67,7 +74,8 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 
 -c [charset], --charset [charset]
        Table de caractères en entrée: latin1, latin2, latin3, latin4,
-       latin5, latin9, auto (lire le manuel avant d'utiliser "auto").
+       latin5, latin9, koi8-r, utf8, auto (lire le manuel avant d'utiliser 
+       "auto" ou "utf8").
 
 -e [chaîne], --date [chaîne]
        original: imprime la date telle qu'elle est dans les entêtes
@@ -79,6 +87,14 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 -A [chaîne], --addressformat [chaîne]
        Indique le format de l'adresse email dans les entêtes,
        voir la page de manuel ou la documentation pour les détails.
+
+-n [chaine], --verbatimnormal [chaine]
+       Permet d'indiquer quel formatage utiliser pour le texte du corps du
+       message. Voir le guide de l'utilisateur et la page de manuel pour
+       plus de détails.
+
+-V [chaine], --verbatimsig [chaine]
+       Comme pour --verbatimnormal, mais pour la signature.
 
 -D, --debug | -noD, --nodebug
        Envoie des informations utiles vers le fichier /tmp/muttprint.log.
@@ -118,10 +134,9 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 
 EOF
 
-$String{"Lizenz"} = <<EOF;
-Ce programme est distribué selon les termes de la licence GPL 
+$String{"Lizenz"} = "Ce programme est distribué selon les termes de la licence GPL 
 et peut être redistribué librement.
-EOF
+";
 
 $String{"Bugs"} = "Envoyez les rapports de bugs à <Bernhard.Walle\@gmx.de>.\n";
 
