@@ -1,0 +1,277 @@
+=head1 JMÉNO
+
+muttprint - ti¹tìní pìkných mailù s Muttem
+
+
+=head1 SYNTAXE
+
+muttprint [I<volby>]... [-f I<soubor>]
+
+
+=head1 POPIS
+
+Tato manuálová stránka seznamuje s utilitou B<Muttprint>. Tato manuálová
+stránka byla napsaná pùvodnì pro distribuci Debian GNU/Linux, proto¾e
+pùvodní program nemìl manuálovou stránku. Teï u¾ je a byla vytvoøena
+pomocí POD-formátu.
+
+B<POZNÁMKA:> Cesta F</usr/share/doc/packages/muttprint> mù¾e být
+F</usr/doc/packages/muttprint> nebo F</usr/share/doc/muttprint>
+na Va¹em systému!
+
+B<Muttprint> je utilita, která formátuje tisk z Muttu a ostatních mailových
+klientù jako jsou XFMail nebo PINE, aby byl více podobný tisku z Netscape
+Messengeru nebo Kmailu. Mù¾e tisknout malého tuèòáka na první stránce a
+hlavièku na ka¾dé dal¹í stránce. V hlavièce zprávy se tisknou pouze dùle¾ité
+údaje.
+
+Detailní informace o Muttprintu získá¹ v U¾ivatelké pøíruèce v PDF a HTML
+formátu v F</usr/share/muttprint>.
+
+Musíte vlo¾it následující rádek do Va¹eho F</etc/Muttrc> nebo
+F<~/.muttrc>:
+
+	set print_command="muttprint"
+
+Jestli¾e si pøejete upravit nastavení B<Muttprintu>, jen zkopírujte
+F</usr/share/doc/packages/muttprint/sample-muttprintrc>
+do F</etc/Muttprintrc> nebo F<~/.muttprintrc> závislosti na tom,
+jestli chcete mìnit nastavení celého systému nebo nastavení jednoho
+u¾ivatele.
+
+B<Muttprint> je dafaultnì nastaven na anglický tisk, pokud není nastavena
+promìnná I<LANG> ve Va¹em prostøedí. Napøíklad pro èeský tisk mìlo by být
+prostøedí nastaveno na:
+
+	export LANG=cs_CZ
+
+Toto mù¾e být napøíklad nastaveno vlo¾ením do Va¹eho lokálního F<~/.bashrc>.
+
+Jestli¾e B<Muttprint> nemù¾e tisknout a vypisuje zprávu
+C<lpr: unable to print file: ...>, mìli by jste zkusit jinou tiskárnu
+ne¾ I<lp>, napø. I<lp5> nebo I<tp0> (jestli¾e pou¾íváte TurboPrint).
+
+B<POZNÁMKA PRO U®IVATELE CUPS:> Nastavení C<PRINTER="lp"> nebude fungovat,
+musíte nastavit místo toho jméno tiskárny v CUPS (napø. I<LaserJer>),
+toto jméno mù¾ete jednodu¹e zjistit pøíkazem I<lpq> v pøíkazové øádce.
+
+
+=head1 VOLBY
+
+B<POZNÁMKA:> Tyto volby pøenastavují odpovídající nastavevé hodnoty
+v F<~/.muttprintrc> a F</etc/Muttprintrc>.
+
+A tady je popis v¹ech voleb na pøíkazovém øádku (popis nastavení v rc-souboru
+obsahuje soubor F<sample-muttprintrc-cs> distribuovaný s B<Muttprintem>):
+
+=over 7
+
+=item B<-h, --help>
+
+Tiskne seznam v¹ech mo¾ných voleb.
+
+
+=item B<-v, --version>
+
+Tiskne souèasnou verzi B<Muttprintu>.
+
+
+=item B<-f> I<soubor>B<, --file> I<soubor>
+
+Ète soubor ze souboru místo ze STDIN. U¾iteèné pro po¹tovní klienty jako
+I<XFMail>. Jestli¾e I<soubor> je I<->, B<Muttprint> ète ze STDIN.
+
+
+=item B<-p> I<jméno_tiskárny>B<, --printer> I<jméno_tiskárny>
+
+Pou¾ívá jinou tiskárnu ne¾ je defaultní I<lp> nebo nastavení v rc-souboru.
+Mù¾ete také B<tisknout do souboru> pomocí F<TO_FILE:/cesta/k/souboru> jako
+jméno tiskárny. Pokud chce mít výstup do B<STDOUT>, nastavte jméno tiskárny
+na I<->.
+
+
+=item B<-i> I<soubor>B<, --penguin> I<soubor>
+
+Bere F<soubor> jako obrázek tisknutý v pravým horním rohu listu. F<soubor>
+musí obsahovat plnou cestu. Nastavení F<soubor> na I<off> vypne tisk
+obrázku. 
+
+
+=item B<-t> I<èíslo>B<, --speed> I<èíslo>
+
+Toto je doba v sekundách, kterou Va¹e tiskárna potøebuje k tisku jedné
+stránky. Je to potøebné pouze u duplexního tisku. Implicitnì je to
+30 (sekund).
+
+
+=item B<-w> I<number>B<, --wait> I<number>
+
+Amount of time in seconds which B<Muttprint> should wait between
+printing odd and even pages for duplex printing.
+
+
+=item B<-F> I<fontname>B<, --font> I<fontname>
+
+Here you can choose a nice font family for your printing. Possible are:
+I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> and
+I<Bookman>. If all fonts are available on your system depends of
+your installed LaTeX-system. Default is I<Latex-bright>.
+
+
+=item B<-H, --headrule> | B<-noH, --noheadrule>
+
+Here you can choose whether it should be printed a rule after
+the topline on pages greater than 2 or not.
+
+
+=item B<-b, --footrule> | B<-nob, --nofootrule>
+
+Here you can choose whether it should be printed a rule over the
+footline or not.
+
+
+=item B<-S> I<Style>B<, --frontstyle> I<Style>
+
+Choose a style for the printing of the mailheaders on the first page:
+I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailled description
+of this values.
+
+=item B<-a> I<headers>B<, --printed-headers> I<headers>
+
+Specify the headers that should be printed. Separate each header with
+C<_>. Headers that are embedded in I<*> are printed bold; use
+I</> for italic printing. If a header does not exist, it will be omitted.
+The given order is the same as on the printing.
+
+Two examples:
+
+	Date_To_From_CC_Newsgroups_*Subject*   (default)
+	/Date/_To_From_X-Mailer_*/Subject/*
+
+
+
+=item B<-P> I<paperformat>B<, --paper> I<paperformat>
+
+Choose your paper format: I<A4> in most countries ("DIN A4" in Germany)
+and I<letter> in the U.S.
+
+
+=item B<-l> I<language>B<, --lang> I<language>
+
+Give the short form of your language. Currently are supported: 
+I<de> (German), I<en> (English) and I<it> (Italian), I<fr> (French),
+I<es> (Spanish) and I<cs> (Czech).
+Default is the I<LANG> environment, fallback is English.
+
+
+
+=item B<-D, --debug> | B<-noD, --nodebug>
+
+Choose whether B<Muttprint> writes to a logfile F</tmp/muttprint.log>.
+Useful to ask some other about help if B<Muttprint> doesn't work.
+
+
+=item B<-d, --duplex> | B<-nod, --noduplex>
+
+Enables or disables duplex printing. If enabled, B<Muttprint>
+prints only odd pages and waits some time before it prints
+even pages.
+
+
+=item B<-2> | B<-1>
+
+Prints two pages on one sheet as shown here:
+
+	+----------+----------+
+	|          |          |
+	|          |          |
+	|    1     |     2    |
+	|          |          |
+	|          |          |
+	|          |          |	
+	+----------+----------+
+	
+This feature is called I<papersave mode> in the manual and in
+the rcfile.
+
+
+=item B<-s, --rem_sig> | B<-nos, --norem_sig>
+
+Removes the signature (separated by C<-- >) in the 
+printing. This is useful for very long signatures. But more and more people 
+(or mail clients) doesn't separate the signature correctly so this
+feature works not always.
+
+
+=item B<-q, --rem_quote> | B<-noq, --norem_quote>
+
+Remove the quoted paragraph from the printing. 
+
+B<Muttprint> detects the quoting with the same regular expression as Mutt, 
+so it should work.
+
+=back
+
+
+
+=head1 FILES
+
+=over 7
+
+=item F</etc/Muttprintrc>
+
+System-wide configuration file.
+
+
+=item F<~/.muttprintrc>
+
+User configuration file.
+
+
+=item F</tmp/muttprint-XXXXX>
+
+Temporary files created by B<Muttprint>.
+
+
+=item F</usr/share/doc/packages/muttprint/>
+
+B<Muttprint> manual files in different languages and formats.
+
+
+=item F</usr/share/muttprint/>
+
+Some pictures which can be used for printing on the
+first page of your mail.
+
+=item F</usr/lib/muttprint>
+
+Translation files.
+
+=back
+
+
+=head1 SEE ALSO
+
+mutt(1)
+
+Homepage: I<http://muttprint.sourceforge.net>
+
+
+
+=head1 COPYRIGHT
+
+(c) 2000-2001 Bernhard Walle
+
+
+This is free software; see the source for  copying  conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. 
+
+
+=head1 AUTHOR
+
+Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=cut
+
