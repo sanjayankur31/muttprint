@@ -135,4 +135,4 @@ CHANGES
           (use this carefully!) 
           [Normally you should set $charset in dependence of
           the Mutt $charset variable]
-
+        - new options: $DATE, $DATE_FORMAT

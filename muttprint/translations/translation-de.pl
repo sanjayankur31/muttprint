@@ -64,7 +64,14 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -c [Zeichensatz], --charset [Zeichensatz]
        Eingabezeichensatz: latin1, latin2, latin3, latin4, latin5, latin9,
        auto (lesen Sie das Benutzerhandbuch, bevor Sie "auto" verwenden).
-       
+
+-e [Zeichenkette], --date [Zeichenkette]
+       original: druckt das Datum wie im Mailheader
+       local:    rechnet in lokale Zeitzone und Sprache um
+
+-E [Zeichenkette], --date-format [Zeichenkette]
+       Datumformatstring; siehe strftime(3) für Details
+
 -D, --debug | -noD, --nodebug
        Schreibt nützliche Informationen in eine Logdatei /tmp/muttprint.log.
 

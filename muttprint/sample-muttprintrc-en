@@ -99,3 +99,18 @@ FONTSIZE="10pt"
 # Longest line
 WRAPMARGIN="80"
 
+#
+# Charset
+# latin1, latin2, latin3, latin4, latin5, latin9, auto
+CHARSET="latin1"
+
+#
+# Date (format of printed date)
+# original, local
+DATE="local"
+
+#
+# Date format string (only if DATE=local)
+# See strftime(3) for details
+DATE_FORMAT="%A, %d. %B %Y %H:%M:%S"
+

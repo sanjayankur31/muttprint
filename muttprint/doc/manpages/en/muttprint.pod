@@ -195,6 +195,34 @@ the charset of the mail. This works only under specific
 circumstances, so use this carefully.
 
 
+=item B<-e> I<String>B<, --date> I<String>
+
+This option accepts two settings: I<original> and I<local>. If you
+use I<original>, the date will be printed unchanged as it appears
+in the mailheader, i. e. in English and in the sender's time zone.
+If set to I<local>, the date will be printed in the local
+language and in the system's time zone. See the options
+I<--date-format> and I<--lang>.
+
+Examples:
+
+        original: Tue, 15 Jan 2002 21:43:49 +0100
+        local:    Dienstag, 15. Januar 2002 21:43:49 
+		          (German locale)
+
+
+
+=item B<-E> I<String>B<, --date-format> I<String>
+
+This options allows you to change the date format (if you've
+choosen I<local> before). The argument is a format string
+according to strftime(3), e. g.:
+
+        "%A, %d. %B %Y %H:%M:%S" (standard in Germany)
+        "%a, %d.%m.%y %H:%M"     (shorten form)
+        "%Y-%m-%d %H:%M:%S"      (ISO format)
+
+
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Choose whether B<Muttprint> writes to a logfile F</tmp/muttprint.log>.

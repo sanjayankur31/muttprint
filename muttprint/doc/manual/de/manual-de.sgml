@@ -70,6 +70,37 @@
 			Ihrem System verf&uuml;gbar sind. Letztere sind nur n&ouml;tig, wenn Sie
 			Duplexdruck und/oder Papiesparmodus nutzen wollen.</para>
 
+		<para>Zum Auslesen des Datums ben&ouml;tigt Muttprint
+			das Perl-Modul <application>Date::Parse</application><footnote>
+			<para>
+				<ulink url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
+			</para>
+		</footnote>
+		<footnote><para>Angaben zur Installation befinden 
+			sich in dieser Datei, in der Regel l&auml;ft es folgenderma&szlig;en
+			ab:</para>
+			
+			<para>
+				<prompt>$ </prompt><userInput>tar xvfz Time-Date-1.10.tar.gz</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make test</userinput> 
+			</para>
+			<para>
+				<prompt># </prompt><userinput>make install</userinput>
+			</para>
+			
+			</footnote>. Wird das Modul nicht installiert, funktioniert
+			Muttprint ohne Probleme bis auf die Funktion, die Zeitzone zu
+			konvertieren und das Datum in der Landessprache auszudrucken,
+			siehe <xref linkend="date">.</para>
+
 	</sect2>
 	<sect2>
 		<title>Installation der Dateien auf dem Rechner</title>
@@ -678,6 +709,35 @@ set printer_name "muttprint"
 				eigene Einstellung &uuml;berschreiben jedoch diese.</para>
 
 		</sect3>
+		<sect3 id="date">
+			<title>Datum</title>
+
+			<para>Die <literal>DATE</literal>-Option erlaubt zwei Einstellungen:
+				<literal>original</literal> und <literal>local</literal>. Bei
+				<literal>original</literal> druckt Muttprint das Datum
+				unver&auml;ndert so, wie es im Date-Header der Mail erscheint,
+				d.&nbsp;h. auf English und in der Zeitzone des Absenders.</para>
+
+			<para>Wird diese Option auf <literal>local</literal> gesetzt,
+				konvertiert Muttprint die Zeitzone in Systemzeitzone und
+				gibt das Datum in der Landessprache aus<footnote>
+					<para>Dies funktioniert unabh&auml;ngig von den
+						Muttprint-&Uuml;bersetzungsdateien &uuml;ber die
+						Betriebssystemfunktionen. Trotzdem beeinflusst
+						die Variable <literal>LANG</literal> (siehe <xref linkend="lang">)
+						in der Konfigurationsdatei die Datumssprache.</para>
+				</footnote>.</para>
+
+			<para>Das Format des Datums kann &uuml;ber die Variable
+				<literal>DATE_FORMAT</literal> beeinflusst werden. Als Argument
+				wird ein Formatstring akzeptiert, z.&nbsp;B. 
+				<literal>"%A, %d. %B %Y %H:%M:%S"</literal>. Die Anf&uuml;hrungszeichen sind
+				notwendig, weil der String Leerzeichen enth&auml;lt. Die 
+				<citerefentry><refentrytitle>strftime</refentrytitle>
+				<manvolnum>3</manvolnum></citerefentry>-Manpage enth&auml;lt
+				Details dar&uuml;ber.</para>
+
+		</sect3>
 		<sect3>
 			<title>Signatur abschneiden</title>
 			
@@ -771,7 +831,7 @@ set printer_name "muttprint"
 
 
 	</sect2>
-	<sect2>
+	<sect2 id="lang">
 		<title>Verschiedene Sprachen</title>
 		
 		<para>Das Skript unterst&uuml;tzt die Sprachen
@@ -997,8 +1057,7 @@ set printer_name "muttprint"
 			per e-Mail an mich.</para>
 			
 		<para>Die &Uuml;bersetzungen stehen unter dem Copyright des jeweiligen
-			&Uuml;bersetzers. F&uuml;r dessen Namen lesen Sie
-			<filename>README.translations</filename>.</para>
+			&Uuml;bersetzers, siehe <filename>README.translations</filename>.</para>
 
 	</sect2>
 	<sect2>
@@ -1008,7 +1067,7 @@ set printer_name "muttprint"
 			m&uuml;sste Muttprint die rohe MIME-Nachricht einlesen und dekodieren. Dies
 			ist ziemlich aufw&auml;ndig. Zum Beispiel m&uuml;sste Muttprint  eine
 			eventuelle PGP-Entschl&uuml;sselung selbst vornehmen, die richtige
-			Alternative bei <literal>multipart/alternative</literal> w&auml;hlen und
+			Wahl bei <literal>multipart/alternative</literal> treffen und
 			bei <literal>message/*</literal> rekursiv arbeiten -- um nur einige
 			Sachen zu nennen. Kurz: In Muttprint m&uuml;ssten wesentliche Teile eines
 			Mailclients integriert und viele Einstellungen (wie die PGP-spezifischen)

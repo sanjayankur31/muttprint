@@ -65,6 +65,9 @@ uninstall:
 tags: muttprint
 	pltags.pl muttprint
 
+validate: muttprint
+	perl -c muttprint
+
 clean:
 	@echo -e "\nNothing to clean. \n\n"
 	@echo "\"make clean\" in the doc/* subdirectories"
