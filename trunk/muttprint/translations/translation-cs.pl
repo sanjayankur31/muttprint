@@ -69,7 +69,7 @@ v ~/.muttprintrc a /etc/Muttprintrc.
        Odstraní podpis (oddìlený "-- ") z tisku.
 
 -q, --rem_quote | -noq, --norem_quote
-       Odstraní kvótované odstavce z tisku.
+       Odstraní odstavce s citacemi z tisku.
 	   
 EOF
 
