@@ -1,0 +1,139 @@
+# MUTTPRINT configuratiebestand
+#
+# ~/.muttprintrc of /etc/Muttprintrc
+
+#
+# Hier kunt u de te gebruiken printer opgeven.
+# Om naar een bestand te printen gebruikt u de 
+# volgende instelling: "TO_FILE:<bestandsnaam>".
+# Bijvoorbeeld: PRINTER="TO_FILE:/home/berwal/test.ps"
+PRINTER="lp"
+
+#
+# Hier geeft u aan welk print commando gebruikt 
+# moet worden. De tekst $PRINTER wordt vervangen
+# door de waarde van de variabele PRINTER.
+# CUPS gebruikers kunnen hier de tekst "CUPS" of 
+# een willekeurig commando dat de tekst "$CUPS_OPTIONS"
+# bevat invullen. Deze tekst wordt vervangen door de 
+# opties die zijn ingesteld voor CUPS.
+PRINT_COMMAND="lpr -P$PRINTER"
+
+#
+# Hier kunt u het pad naar het te gebruiken plaatje
+# opegeven.
+PENGUIN="off"
+
+#
+# (De)activeer het printen van X-Face afbeeldingen.
+XFACE="off"
+
+#
+# (De)activeer dubbelzijdig afdrukken. De waarde van
+# deze variabele kan "on", "off" of "printer" zijn.
+# Deze laatste kunt u gebruiken voor Postscript printers
+# met ingebouwde duplex capaciteit, zodat de printer
+# zelf bepaalt of er dubbelzijdig wordt afgedrukt of niet.
+DUPLEX="off"
+
+#
+# (De)activeer de papierbesparings modus. Als deze optie
+# is geactiveerd worden 2 pagina's tekst afgedrukt op 1 
+# zijde van een velletje papier. Kies "optional" om deze
+# modus uitsluitend te activeren als er meer dan 1 pagina
+# afgedrukt wordt.
+PAPERSAVE="off"
+
+#
+# Hier kunt u het afdruktempo in seconden per pagina
+# opgeven.
+SPEED="30"
+
+#
+# Kies het lettertype dat gebruikt wordt bij het afdrukken
+# van de e-mail header en de optionele kop- en 
+# staartteksten op iedere pagina.
+# - Latex (EC-Fonts)
+# - Latex-bright (CM-bright)
+# - Times
+# - Utopia
+# - Palatino
+# - Charter
+# - Bookman
+# - AvantGarde
+# - CentSchool
+# - Chancery
+# - Helvetica
+FONT="Latex"
+
+#
+# Kies een stijl voor de eerste pagina. Dit bepaalt hoe de
+# header van het bericht worden voorzien van opmaak.
+# - plain       geen lijnen
+# - border      een enkele lijn na de header
+# - fbox        een simpel kader om de header
+# - shadowbox   een kader met shaduw om de header
+# - ovalbox     een kader met ronde hoeken om de header
+# - Ovalbox     hetzelfde als "ovalbox" maar met een dikke rand
+# - doublebox   een kader met dubbele lijnen om de header
+# - grey        een grijze achtergrond achter de header
+# - greybox     een kader met een grijze achtergrond om de header
+FRONTSTYLE="border"
+
+#
+# Kies hier of er een lijn na de koptekst op iedere pagina moet 
+# worden afgedrukt. Dit geldt uitsluitend voor de pagina's die 
+# volgen na de eerste.
+HEADRULE="off"
+
+#
+# Kies hier of er een lijn voor de staarttekst op iedere pagina
+# moet worden afgedrukt.
+FOOTRULE="off"
+
+#
+# Kies het te gebruiken papierformaat (A4 of letter):
+PAPER="A4"
+
+#
+# Druk onderschriften (alle tekst die volgt na '-- ') niet af.
+REM_SIG="off"
+
+#
+# Druk aangehaalde tekst niet af.
+REM_QUOTE="off"
+
+#
+# Kies de af te drukken headervelden. Geef de namen van de velden
+# in de gewenste volgorde op, gescheiden door een liggend streepje
+# ('_'). Omgeef de naam van het veld met schuine streepjes ('/')
+# als u wilt dat die tekst cursief wordt afgedrukt. Gebruik 
+# asterixen ('*') als u wilt dat de tekst vet wordt afgedrukt. Als
+# het aangegeven veld niet aanwezig is in dit bericht wordt het 
+# niet afgedrukt.
+PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
+
+# 
+# Sla foutmeldingen van LaTex en dvips op in /tmp/muttprint.log
+DEBUG="0"
+
+#
+# Kies hier de gewenste lettergrootte: 10pt, 11pt of 12pt
+FONTSIZE="10pt"
+
+#
+# Kies hier de maximale lengte van een regel tekst.
+WRAPMARGIN="80"
+
+#
+# Kies hier of het datumveld wordt afgedrukt als de tijd zoals 
+# die geldt voor de verzender of dat deze wordt afgedrukt ten
+# opzichte van de lokale tijd. Mogelijke waarden: 'original' en
+# 'local'.
+DATE="local"
+
+#
+# Het te gebruiken datumformaat als gekozen is voor 'DATE=local'.
+# Zie strftime(3) voor details.
+DATE_FORMAT="%c"
+
