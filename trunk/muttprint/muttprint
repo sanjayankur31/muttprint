@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre7";
+$VERSION = "0.63pre8";
 my $PACKAGE = "Muttprint";
 
 
@@ -454,7 +454,7 @@ foreach $type (@headers) {
 						}
 						else {
 							if ($count == $Config{MAXADDR})  {
-								$newheader .= " \0\\ldots ";
+								$newheader .= " \n \0\\ldots ";
 								$count++;
 							}
 						}
@@ -470,6 +470,12 @@ foreach $type (@headers) {
 					
 				s/(?<!\0)\{/\\\{/g;
 				s/(?<!\0)\}/\\\}/g;
+
+				if ($type =~ /from|to|cc/i) {
+					s/(?<!\0)\\\)/\)/g;
+					s/(?<!\0)\\\(/\(/g;
+				}
+
 				s/(?<!\0)\\/\\textbackslash\{\}/g;
 				s/\n/\\newline/;
 				s/\"/\\textquotedbl\{\}/g;
