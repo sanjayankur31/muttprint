@@ -37,6 +37,7 @@ use strict;
 use vars qw($VERSION %Config $LPack $charset $texFontenc %String);
 use sigtrap qw(die INT QUIT TERM);
 use POSIX;
+use File::Temp qw(tempdir);
 
 
 # richtig und falsch
@@ -164,15 +165,6 @@ my $signature;								# Signatur (Inhalt)
 
 ############# END VARIABLES ##################################################
 
-# Dateien am Ende löschen
-END {
-	# kein fork() => Hauptprozess löscht
-	# fork        => Kindprozess löscht, da er länger läuft
-	if (!$childPid && $Temp{'dir'}) {
-		unlink (<$Temp{"dir"}/*>);
-		rmdir ($Temp{'dir'});
-	}
-}
 
 
 #
@@ -966,9 +958,8 @@ sub getPaperConfig () {
 sub createTemp () {
 	#
 	# temp directory / temp files
-
-	mkdir ("/tmp/muttprint-$$", 0700) || die "Unable to create temp-folder: $!";
-	$Temp{dir} = "/tmp/muttprint-$$";
+	my $dir = defined $ENV{TMPDIR} ? $ENV{TMPDIR} : '/tmp';
+	$Temp{dir} = tempdir("muttprint-XXXXXX", TMPDIR => 1, CLEANUP => 1);
 	$Temp{content} = "$Temp{dir}/content";
 	$Temp{latex} = "$Temp{dir}/mail.tex";
 	$Temp{logf} = "/tmp/muttprint.log";
