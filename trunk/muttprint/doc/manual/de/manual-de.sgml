@@ -15,7 +15,7 @@
 
 	<pubdate>2001-09-02</pubdate>
 	
-	<releaseinfo>Version 0.60</releaseinfo>   
+	<releaseinfo>Version 0.61</releaseinfo>   
 	
 		
 	
@@ -64,10 +64,11 @@
 			sein. </para>
 
 		<para>Stellen Sie au&szlig;erdem sicher, dass zum einen eine
-			LaTeX-Distribution (ich empfehle teTeX ab Version 1.0) und zum
-			anderen die Programme <emphasis>psselect</emphasis> und
-			<emphasis>psnup</emphasis> aus den  <emphasis>PS-Utils</emphasis>
-			auf Ihrem System verf&uuml;gbar sind.</para>
+			LaTeX-Distribution (ich empfehle teTeX ab Version 1.0) und zum anderen
+			die Programme <emphasis>psselect</emphasis> und
+			<emphasis>psnup</emphasis> aus den  <emphasis>PS-Utils</emphasis> auf
+			Ihrem System verf&uuml;gbar sind. Letztere sind nur n&ouml;tig, wenn Sie
+			Duplexdruck und/oder Papiesparmodus nutzen wollen.</para>
 
 	</sect2>
 	<sect2>
@@ -308,8 +309,7 @@ set print_split
 
 			<ItemizedList spacing="compact">
 				<listitem>	
-					<Para>Das Ausgabeformat muss reiner ASCII-Text sein (bzw. 
-					ISO Latin 1).</Para>
+					<Para>Das Ausgabeformat muss reiner Text ohne Formatierungen sein.</Para>
 				</listitem>
 				<listitem>
 					<Para>Das Druckkommando muss sich beliebig w&auml;hlen 
@@ -405,6 +405,10 @@ set print_split
 				Ort des Pinguins selbst herauszufinden. (Lesen Sie den
 				Quellcode, wenn es  Sie interessiert, wo Muttprint sucht.) Dies
 				ist die Standardeinstellung. </para>
+
+			<para>Zus&auml;tzlich werden noch Beispielbilder mitgeliefert, die schon
+				in das EPS-Format konvertiert vorliegen. Sie befinden sich nach der
+				Installation in <filename>/usr/share/muttprint</filename>.</para>
 
 			<para>Soll der Druck der Grafik ganz ausgeschaltet werden, so kann
 				<literal>PENGUIN</literal> auf den Wert <literal>off</literal> 
@@ -567,6 +571,10 @@ set print_split
 				<literal>PAPER</literal> zu verwenden. Momentan k&ouml;nnen
 				die  Werte <literal>A4</literal> und <literal>letter</literal>
 				verwendet werden.</para>
+				
+			<para>Eine evtl. vorhandene Datei <filename>/etc/papersize</filename>,
+				wie sie auf Debian-Systemen &uuml;blich ist, wird auch ausgelesen. Eine
+				eigene Einstellung &uuml;berschreiben jedoch diese.</para>
 
 		</sect3>
 		<sect3>
@@ -602,6 +610,32 @@ set print_split
 				werden, was einem <emphasis>toggle quote</emphasis>
 				(<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>)
 				von Mutt auf dem Bildschirm entspricht.</para>
+		</sect3>
+		<sect3 id="printedheaders">
+			<title>Gedruckte Header</title>
+			
+			<para>Standardm&auml;&szlig;ig werden die &uuml;blichen f&uuml;r einen
+				Ausdruck interessanten Header gedruckt. Gef&auml;llt Ihnen diese
+				Einstellung nicht, so k&ouml;nnen Sie mit Hilfe der Variablen 
+				<literal>PRINTED_HEADERS</literal> eine eigene festlegen. Geben Sie
+				alle zu druckenden Header durch einen Unterstrich
+				(<literal>_</literal>) getrennt an.</para> 
+				
+			<para>Die Reihenfolge ist dabei entscheidend f&uuml;r den Ausdruck.
+				Gro&szlig;-/Kleinschreibung wird nicht beachtet. In der Mail nicht
+				vorhandene Header werden einfach ignoriert. F&uuml;r Fettdruck
+				schlie&szlig;en Sie den Namen des Headers in Sternchen
+				(<literal>*</literal>), f&uuml;r Kursivdruck in Schr&auml;gstriche
+				(<literal>/</literal>) ein.</para>
+
+			<para>Die Standardeinstellung lautet:</para>
+			
+			<programlisting>PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"</programlisting>
+			
+			<para>Ein weiteres Beispiel f&uuml;r eine sinnvolle Einstellung:</para>
+			
+			<programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
+
 		</sect3>
 		<sect3>
 			<title>Fehlermeldungen</title>
@@ -690,7 +724,54 @@ set print_split
 				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
 				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
 			</ItemizedList>
-		
+			
+			<para>Zus&auml;tzliche f&uuml;r den Ausdruck eingestellte Header (siehe
+				<xref linkend="printedheaders">) k&ouml;nnen nicht &uuml;bersetzt
+				werden.</para>
+
+		</sect3>
+		<sect3>
+			<title>Zeichens&auml;tze</title>
+			
+			<para>Verschiedene Sprachen erfordern verschiedene Zeichens&auml;tze. Der
+				Standardzeichensatz von Muttprint beim Ausdruck ist 
+				<emphasis>ISO-8859-1</emphasis> (auch ISO Latin 1). Damit sind die
+				Sprachen Afrikaans, Baskisch, D&auml;nisch, Deutsch, Englisch,
+				F&auml;r&ouml;erisch, Finnisch, Franz&ouml;sisch, Gallisch,
+				Holl&auml;ndisch, Isl&auml;ndisch, Irisch, Italienisch, Katalanisch,
+				Norwegisch, Portugisisch, Schottisch, Schwedisch und Spanisch
+				abgedeckt. Zus&auml;tzlich ersetzt Muttprint noch die Zeichen 128 bis
+				159 im Windowszeichensatz <emphasis>cp1252</emphasis> durch sinnvolle
+				ASCII-Zeichen.</para>
+
+			<para>Eine Unterst&uuml;tzung f&uuml;r <emphasis>ISO-8859-15</emphasis>
+				(entspricht ISO Latin 9) ist nicht m&ouml;glich, weil er in den
+				enstprechenden LaTeX-Paketen fehlt. Deshalb wird das Eurozeichen
+				(Zeichen 164) durch die Zeichenfolge <literal>EUR</literal>
+				ersetzt.</para>
+				
+			<para>F&uuml;r die Unterst&uuml;tzung von Tschechisch wurde der
+				Zeichensatz <emphasis>ISO-8859-2</emphasis> (ISO Latin 2) n&ouml;tig.
+				Bei einer tschechischen Umgebung wird dieser automatisch
+				gesetzt. Andernfalls kann die Variable <literal>charset</literal>
+				entweder auf <literal>latin1</literal> oder <literal>latin2</literal>
+				gesetzt werden.</para>
+							
+			<para>ISO Latin 2 unterst&uuml;tzt die Sprachen Albanisch, Bosnisch,
+				Kroatisch, Tschechisch, Englisch, Deutsch, Ungarisch, Irisch, Polnisch,
+				Rum&auml;nisch, Slowakisch, Slowenisch und Sorbisch. (Da die deutschen
+				Sonderzeichen in Latin 1 und 2 an gleicher Stelle liegen, k&ouml;nnen
+				deutsche Mails mit beiden Einstellungen korrekt ausgedruckt werden.)
+				Au&szlig;erdem erfolgt bei Mazedonisch und Serbisch eine richtige
+				Transliteration von der kyrillischen in die lateinische Schrift.
+				</para>
+
+			<para>Ein Druck von Zeichen aus beiden Zeichens&auml;tzen in einer Mail
+				ist prinzipbedingt nicht m&ouml;glich. Dies w&uuml;rde Unicode
+				erfordern. Eine Unicode-Unterst&uuml;tzung von LaTeX existiert meines
+				Wissens nicht.</para>
+
+				
 		</sect3>
 		<sect3>
 			<title>&Uuml;bersetzungsdatei</title>
@@ -745,11 +826,57 @@ set print_split
 
 		<para>Anmerkungen, Kommentare, Verbesserungsvorschl&auml;ge etc. bitte
 			per e-Mail an mich.</para>
+			
+		<para>Die &Uuml;bersetzungen stehen unter dem Copyright des jeweiligen
+			&Uuml;bersetzers. F&uuml;r dessen Namen lesen Sie
+			<filename>README.translations</filename>.</para>
 
 	</sect2>
 	<sect2>
-		<title>Download</title>
+		<title>Druck von Attachments</title>
 		
+		<para>Muttprint kann keine Anh&auml;nge drucken. Um dies zu erreichen,
+			m&uuml;sste Mutt die rohe MIME-Nachricht einlesen und dekodieren. Dies
+			ist ziemlich aufw&auml;ndig. Zum Beispiel m&uuml;sste Muttprint  eine
+			eventuelle PGP-Entschl&uuml;sselung selbst vornehmen, die richtige
+			Alternative bei <literal>multipart/alternative</literal> w&auml;hlen und
+			bei <literal>message/*</literal> rekursiv arbeiten -- um nur einige
+			Sachen zu nennen. Kurz: In Muttprint m&uuml;ssten wesentliche Teile eines
+			Mailclients integriert und viele Einstellungen (wie die PGP-spezifischen)
+			erneut vorgenommen werden. Zudem d&uuml;rften die wenigsten Mailclients
+			die &Uuml;bergabe der rohen Nachricht beim Druckkommando
+			unterst&uuml;tzen.</para>
+
+		<para>Mutt bietet jedoch selbst eine komfortable Funktion, um einzelne
+			Attachments auszudrucken. F&uuml;r jeden MIME-Typ kann dabei ein eigenes
+			Druckkommando festgelegt werden. Dies kann in der
+			<filename>~/.mailcap</filename> festgelegt werden. N&auml;here
+			Informationen im Mutt-Handbuch, Abschnitt 5.3.3.1.</para>
+			
+		<para>Zum Druck von Bildern k&ouml;nnte ein Skript
+			<filename>imageprint</filename> verwendet werden (falls der verwendete
+			Druckerfilter zu wenige Formate unterst&uuml;tzt). Hier ein
+			Beispiel:</para>
+
+		<programlisting>
+#!/bin/sh
+target=/tmp/imageprint-$$.ps
+
+convert -page A4 $1 $target
+lpr $target
+
+rm $target</programlisting>
+		
+		<para>Damit kann (fast) jedes Bildformat im Attachmentmen&uuml; ausgedruckt
+		werden (Taste <keycap>p</keycap>).</para>
+		
+		<para>Benuzter anderer Mailclients lesen bitte die Dokumentation zu ihrem
+			Programm &uuml;ber den Druck von Anh&auml;ngen.</para>
+
+	</sect2>
+	<sect2> 
+		<title>Download</title>
+
 		<para>Die aktuelle Version kann von <ulink
 			url="http://muttprint.sourceforge.net"></ulink> heruntergeladen
 			werden. Hier befindet sich auch die Homepage und alle alten
@@ -768,7 +895,8 @@ set print_split
 			Beigelbeck f&uuml;r die zus&auml;tzlichen  Bilder, Roberto Vallone
 			f&uuml;r die italienische &Uuml;bersetzung, Vincent Bernat f&uuml;r
 			die franz&ouml;sische &Uuml;bersetzung, Marcelo Ramos f&uuml;r die
-			spanische &Uuml;bersetzung und den Debian-Maintainern Dr. Guenter
+			spanische &Uuml;bersetzung, Dominik Form&aacute;nek f&uuml;r die 
+			tschechische &Uuml;bersetzung und den Debian-Maintainern Dr. Guenter
 			Bechly sowie Chanop Silpa-Anan danken. </para>
 
 		<para>Schlie&szlig;lich geht mein Dank an alle, die zu freier Software
