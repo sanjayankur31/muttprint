@@ -26,7 +26,7 @@ page. Furthermore, it only prints the most important headers, but not the
 whole plethora of them.
 
 For detailed informations about Muttprint look read the User's guide in PDF 
-and HTML format at F</usr/share/muttprint>.
+and HTML format at F</usr/share/doc/packages/muttprint/>.
 
 Anyway, you have to put the following line in your F</etc/Muttrc> or 
 F<~/.muttrc>:
