@@ -11,7 +11,7 @@ PRINTER="lp"
 
 #
 # Aquí puedes establecer la ruta a la imágen
-PENGUIN="off"
+PENGUIN=""
 
 #
 # Aquí puedes activar o desactivar la impresión 
@@ -43,24 +43,26 @@ FONT="Latex-bright"
 
 
 #
-# Choose a style for the first page
-# - plain       no rules
-# - border      rule after the headers
-# - fbox        simple box around the mailheaders
-# - shadowbox   shadowbox arount the header
-# - ovalbox     box with rounded corners arount the header (thin lines)
-# - Ovalbox     same as "ovalbox" but thicker lines
-# - doublebox   box with double lines around the header
-# - grey        grey background behind the headers
-# - greybox     same as "grey" but with a additional black box
+# Elige un estilo para la primera página
+# - plain       sin líneas divisorias
+# - border      línea divisoria después de las cabeceras
+# - fbox        recuadro simple alrededor de las cabeceras
+# - shadowbox   recuadro con sombra alrededor de las cabeceras
+# - ovalbox     recuadro con esquinas redondeadas alrededor de las cabeceras
+# 		(líneas delgadas)
+# - Ovalbox     idéntico a "ovalbox" pero con líneas más gruesas
+# - doublebox   recuadro con líneas dobles alrededor de la cabecera
+# - grey        fondo gris detras de las cabeceras
+# - greybox     idéntico a "grey" pero con un recuadro negro adicional
 FRONTSTYLE="border"
 
 #
-# Should there be a rule after the header (not first page)
+# Debería haber un línea divisoria después de la cabecera?  
+# (excepto en la primera página)
 HEADRULE="off"
 
 #
-# Should there be a rule over the footer
+# Deberá haber una línea divisoria sobre el pie de página?
 FOOTRULE="off"
 
 

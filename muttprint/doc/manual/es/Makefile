@@ -1,67 +1,70 @@
-# Muttprint Manual 
-# Makefile by B. Walle
+#
+# Makefile for Muttprint-Documentation  
+# (c) B. Walle
+#
 
-LATEX = latex
-LATEX2HTML = latex2html -no_navigation -no_subdir -split 0 -noshow_section_number
-HTML2TEXT = w3m -dump -cols 80
-DVIPS = dvips
-gzip = gzip -f
-PDFLATEX = pdflatex
+#
+# The stylesheet is necessary for A4 paper format
+# (we're in Europe, not in U.S.A.)
+
+lang = es
+doc = manual-$(lang).sgml
+
+db2html = /usr/bin/db2html
+sgmltools = /usr/bin/sgmltools
+stylesheet = ../stylesheet.dsl
+nsgmls = /usr/bin/nsgmls
+catalog = /usr/share/sgml/CATALOG.docbook_4
+gzip = /usr/bin/gzip
 
 prefix = /usr
 docdir = $(prefix)/share/doc/packages
-INSTALL = install -m 0644 
-
-all: 		pdf html
-make doc:	all remtemp
-
-dvi: 	manual-*.dvi
-ps:	manual-*.ps.gz
-pdf:	manual-*.pdf
-html:	manual-*.html
-text: 	manual-*.txt.gz
+INSTALL = install -m 0644
+INSTALLDIR = install -d 
 
 
-manual-*.dvi: manual-*.tex
+#
+# we will not make 'all' but only the 'standard' by default
+default: pdf html
+all: ps dvi pdf html txt rtf
+ps: manual-$(lang).ps
+pdf: manual-$(lang).pdf
+dvi: manual-$(lang).dvi
+html: manual-$(lang)/*
+txt: manual-$(lang).txt
+rtf: manual-$(lang).rtf
 
-	$(LATEX) manual-es.tex
-	$(LATEX) manual-es.tex
+manual-$(lang).pdf: manual-$(lang).sgml
+	$(sgmltools) -b pdf -j '-d $(stylesheet) -V tex-backend' $(doc)
 
 
-manual-*.ps.gz: manual-*.dvi
+manual-$(lang).ps: manual-$(lang).sgml
+	$(sgmltools) -b ps -j '-d $(stylesheet) -V tex-backend' $(doc)
 
-	$(DVIPS) -o manual-es.ps manual-es.dvi
-		
-	$(gzip) *.ps
-		
+manual-$(lang).dvi: manual-$(lang).sgml
+	$(sgmltools) -b dvi -j '-d $(stylesheet) -V tex-backend' $(doc)
 
-manual-*.pdf: manual-*.tex
+manual-$(lang)/*: manual-$(lang).sgml
+	$(sgmltools) -b html -j '-d $(stylesheet)\#html' $(doc)
 
-	$(PDFLATEX) manual-es.tex
-	$(PDFLATEX) manual-es.tex
+manual-$(lang).txt: manual-$(lang).sgml
+	$(sgmltools) -b txt  $(doc)
+
 	
+manual-$(lang).rtf: manual-$(lang).sgml
+	$(sgmltools) -b rtf -j '-d $(stylesheet)' $(doc)
 
-manual-*.html: manual-*.tex
+validate:
+	$(nsgmls) -s -c $(catalog) $(doc)	
 
-	$(LATEX2HTML) manual-es.tex > /dev/null 2>/dev/null
+install: *.pdf manual-$(lang)/*
+	$(INSTALL) *.pdf $(docdir)/muttprint
+	mkdir -p $(docdir)/muttprint/manual-$(lang)
+	$(INSTALL) manual-$(lang)/* $(docdir)/muttprint/manual-$(lang)/
+
+
+gzip:
+	$(gzip) *.ps *.txt
 	
-
-manual-*.txt.gz: manual-*.html
-
-	$(HTML2TEXT) manual-es.html > manual-es.txt	
-	
-	$(gzip) manual-*.txt
-
-
-install:  *.pdf *.html 
-	$(INSTALL) *.pdf *.html $(docdir)/muttprint
-
-
-clean: 
-	rm -f *.aux *.log *.pl *.toc *.css *.out images.tex index.html WARNINGS \
-	*.dvi *.ps* *.pdf *.html *.txt.gz *.png 2>/dev/null || exit 0
-	
-remtemp:
-	rm -f *.aux *.log *.pl *.toc *.css *.out images.tex index.html WARNINGS \
-	*.png 2>/dev/null || exit 0
-	
+clean:
+	rm -rf *.dvi *.rtf *.pdf *.ps *.txt *.gz manual-$(lang)/
