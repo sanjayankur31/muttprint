@@ -1,147 +1,147 @@
-# Polish translation by Radek Kaczorowski <kaczor@mail.desy.de>
-#
+# Translated to Polish by Piotr A. Fratczak (piotr@piotr.toya.net.pl)
+# Przetłumaczone na Polski przez Piotr A. Frątczak (piotr@piotr.toya.net.pl)
 # (c) 2001, Bernhard Walle <Bernhard.Walle@gmx.de>
+
 
 $String{Usage} = <<EOF;
 
-Usage:   muttprint [option]... [-f file]
+Składnia:   muttprint [opcja]... [-f plik]
  
-Options:
+Opcje:
 
-PLEASE NOTICE: These options override the corresponding settings in 
-~/.muttprintrc and /etc/Muttprintrc.
+UWAGA: Poniższe opcje zastępują odpowiednie ustawienia w ~/.muttprintrc and /etc/Muttprintrc.
 
 -h, --help
-       This help.
+       Niniejsza Pomoc.
 
 -v, --version
-       Prints the current version of Muttprint.
+       Drukuje bieżąca wersję Muttprint'a.
 
 --print-locale
-       Prints out information about the current locale environment and exits.
+       Drukuje informacje o bieżącym środowisku narodowym (locale) i wychodzi.
 
--f [file], --file [file]
-       Reads from file instad of STDIN.
+-f [plik], --file [plik]
+       Czyta z pliku zamiast z STDIN.
 
--p [printername], --printer [printername]
-       Uses a specific printer.
-       "-" stands for STDOUT
-       For printing to a file use TO_FILE:/path/to/file
+-p [nazwa_drukarki], --printer [nazwa_drukarki]
+       Używa określonej drukarki.
+       "-" oznacza STDOUT
+       Aby drukować do pliku użyj TO_FILE:/ścieżka/do/pliku
 
--C [print command], --printcommand [print command]
-       Sets the printing command. "\$PRINTER" is substituted by the
-       printer name.
-       CUPS support is turned on by "CUPS" (or set it to any command
-       which containes the string "\$CUPS_OPTIONS").
+-C [polecenie drukowania], --printcommand [polecenie drukowania]
+       Ustawia polecenie drukowania. "\$PRINTER" jest zastępowane nazwą drukarki.
+       Wsparcie CUPS jest włączane przez "CUPS" (lub ustawienie na jakiekolwiek polecenie
+       zawierające ciąg "\$CUPS_OPTIONS").
 	 
--i [file], --penguin [file]
-       Sets the picture printed on the first page.
+-i [plik], --penguin [plik]
+       Ustawia obrazek drukowany na pierwszej stronie.
 
 -x, --x-face | -nox, --nox-face
-       Turn printing of X-Faces on/off.
+       Włącza/wyłącza drukowanie X-Faces.
 
--t [number], --speed [number]
-       Time in seconds which the printer needs for one page.
+-t [liczba], --speed [liczba]
+       Czas w sekundach potrzebny drukarce na wydruk 1 strony.
 		   
--w [number], --wait [number]
-       Time between printing odd and even pages for duplex printing.
+-w [liczba], --wait [liczba]
+       Odstęp czasu pomiędzy drukowanie stron parzystych i nieparzystych dla ręcznego dwustronnego drukowania.
 
--F [fontname], --font [fontname]
-       Font family for printing. Possible values are:
-       Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
+-F [nazwa_czcionki], --font [nazwa_czcionki]
+       Rodzina czcionek do drukowania. Możliwe wartości to:
+       Latex, Latex-bright, Times, Utopia, Palatino, Charter i Bookman
 	   
 -H, --headrule | -noH, --noheadrule
-       Turn printing of the headrule on or off.
+       Włączanie/wyłączanie drukowania reguł nagłówka.
 	   
 -b, --footrule | -nob, --nofootrule
-       Turn printing of the footrule on or off.
+       Włączanie/wyłączanie drukowania reguł stopki.
 	   
--S Style | --frontstyle Style
-       Choose a style for the headers on the first page:
-       plain, border (default), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+-S Styl | --frontstyle Styl
+       Wybór stylu dla nagłówka na pierwszej stronie:
+       plain, border (domyślnie), Border, fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
-       Read the manual for a detailed description of this values.
+       Przeczytaj manual by uzyskać szczegółowe opisy ww. wartości.
 
--a [headers], --printed-headers [headers]
-       Headers that should be printed. See manpage/manual for details.
-       Example: /Date/_To_From_*Subject*
+-a [nagłówki], --printed-headers [nagłówki]
+       Nagłówki które powinny być wydrukowane. Patrz strony man/manuala dla szczegółów.
+       Przykład: /Date/_To_From_*Subject*
 
--P [paperformat], --paper [paperformat]
-       Paper format: "letter" (US) or "A4" (Europe).
+-P [format_papieru], --paper [format_papieru]
+       Format papieru: "letter" (USA) or "A4" (Europa).
 
--e [string], --date [string]
-       original: prints the date as it is in the header
-       local:    converts to local time zone and language
+-e [ciąg], --date [ciąg]
+       original: wydrukowuje date taką jaka jest w nagłówku
+       local:    konwertuje do lokalnej strefy czasowej i języka
 
--E [string], --date-format [string]
-       date format string; see strftime(3) for details
+-E [ciąg], --date-format [ciąg]
+       ciąg formatu daty: patrz strftime(3) by uzyskać szczegóły
 
--A [string], --addressformat [string]
-       Specifies the format of the mail address in the header,
-       see manpage or documentation for details.
+-A [ciąg], --addressformat [ciąg]
+       Określa format adresu e-mail w nagłówku,
+       patrz strony man lub w dokumentacji by uzyskać szczegóły.
 
--n [string], --verbatimnormal [string]
-       Is used for setting the formating of the normal mail text. Read
-       the user's guide and the manpage for details.
+-n [ciąg], --verbatimnormal [ciąg]
+       	Używany do ustawiania formatowania normalnego tekstu e-mail. 
+	Czytaj przewodnik użytkownika i strony man by uzyskać szczegóły.
 
--V [string], --verbatimsig [string]
-       Same as --verabtimnormal, but this sets the formating
-       of the signature.
+-V [ciąg], --verbatimsig [ciąg]
+       Tak samo jak --verabtimnormal, ale ustawia formatowanie podpisu.
 
 -D, --debug | -noD, --nodebug
-       Writes useful information to a logfile /tmp/muttprint.log.
+       Zapisuje użyteczne informacje to pliku dziennika /tmp/muttprint.log.
 
 -B, --background | -noB, --nobackground
-       Puts Muttprint in the background after reading the mail data.
-       (prints no error messages anymore)
+       Ustawia Muttprint w tle po odczytaniu danych poczty.
+       (już nie drukuje wiadomości o błędach)
 
 -d, --duplex | -nod, --noduplex
-       Enables or disables duplex printing.
+       Włącza/wyłącza drukowanie dwustronne.
 
--g [number], --topmargin [number]
-       Top margin in millimeter
+-g [liczba], --topmargin [liczba]
+       Górny margines w milimetrach
 
--G [number], --bottommargin [number]
-       Bottom margin in millimeter
+-G [liczba], --bottommargin [liczba]
+       Dolny margines w milimetrach
 
--j [number], --leftmargin [number]
-       Left margin in millimeter
+-j [liczba], --leftmargin [liczba]
+       Lewy  margines w milimetrach
 
--J [number], --rightmargin [number]
-       Right margin in millimeter
+-J [liczba], --rightmargin [liczba]
+       Prawy  margines w milimetrach
 
 -2 | -1
-       Prints two pages on one sheet. Corresponds to "papersave mode".
+       Drukuj 1 lub 2 strony tekstu na jednej stronie papieru.
+       Odpowiednik "trybu pracy oszczędzanie papieru".
 
 -s, --rem_sig | -nos, --norem_sig
-       Removes the signature (separated by "-- ") in the printing.
+       Usuwa podpisy (odseparowane przez "-- ") podczas drukowania.
+
+--sig_regexp [wyrażenie regularne]
+       Określa wyrażenie regularne używane do rozpoznawania podpisu.
 
 -q, --rem_quote | -noq, --norem_quote
-       Remove the quoted paragraph from the printing.
+       Usuwa cytaty z drukowanego tekstu.
 
--z [size], --fontsize [size]
-       Font size: 10pt, 11pt, 12pt (only this values)
+-z [rozmiar], --fontsize [rozmiar]
+       Rozmiar czcionki: 10pt, 11pt, 12pt (tylko te wartości są akceptowane)
 
--W [number], --wrapmargin [number]
-       Specifies how long lines could be.
+-W [liczba], --wrapmargin [liczba]
+       Określa maksymalną długość linii zanim zostanie zawinięta do drugiej linii.
 	   
--r [file], --rcfile [file]
-       Specifies a additional configuration file.
+-r [plik], --rcfile [plik]
+       Określa dodatkowy plik konfiguracyjny.
 
 EOF
 
-
-$String{License} = "Ten program jest dystrybuowany według zasad licencji GPL
-i jako taki może być swobodnie kopiowany.
+$String{License} = "Ten program jest rozprowadzany na zasadach
+GPL i może być kopiowany bez ograniczeń.
 ";
 
-$String{Bugs} = "Wszelkie błędy zgłaszać do <Bernhard.Walle\@gmx.de>.
-Błędy polskiego tłumaczenia zgłaszać do <radek.kaczorowski\@desy.de>.";
+$String{Bugs} = "Wszelkie błędy zgłaszać do <Bernhard.Walle\@gmx.de>. Błędy lub sugestie zmian w polskim tłumaczeniu zgłaszaj do <piotr\@piotr.toya.net.pl>.\n";
 
-$String{FileNotFound} = "Nie znaleziono podanego pliku.";
+$String{FileNotFound} = "Określony plik nie został znaleziony.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Newsgroups"} =
-("Od:", "Do:", "Temat:", "Kopia do:", "Data:", "Listy dyskusyjne:");
+@String{"From", "To", "Subject", "CC", "Date", "Newsgroups", "Organization"} =
+("Od:", "Do:", "Temat:", "Kopia:", "Data:", "Grupa dyskusyjna:", "Organizacja:");
 
-$String{PageOf} = "Strona %s z %s";
+$String{PageOf} = "strona %s z %s";
 
