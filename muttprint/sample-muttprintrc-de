@@ -54,8 +54,11 @@ SPEED="30"
 # - Palatino
 # - Charter
 # - Bookman
+# - AvantGarde
+# - CentSchool
+# - Chancery
+# - Helvetica
 FONT="Latex"
-
 
 #
 # Wählen Sie einen Style für die erste Seite aus
@@ -113,7 +116,7 @@ WRAPMARGIN="80"
 
 #
 # Zeichensatz
-# latin1, latin2, latin3, latin4, latin5, latin9, utf8, auto
+# latin1, latin2, latin3, latin4, latin5, latin9, koi8-r, utf8, auto
 CHARSET="latin1"
 
 #

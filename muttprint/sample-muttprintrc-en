@@ -53,6 +53,10 @@ SPEED="30"
 # - Palatino
 # - Charter
 # - Bookman
+# - AvantGarde
+# - CentSchool
+# - Chancery
+# - Helvetica
 FONT="Latex"
 
 
