@@ -122,23 +122,23 @@ depende de tu sistema LaTeX. Por defecto es I<Latex-bright>.
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
 
-Here you can choose whether it should be printed a rule after
-the topline on pages greater than 2 or not.
+Aquí puedes decidir si se imprimirá o no una línea separadora después de la
+línea superior a partir de la página 2.
 
 
 =item B<-b, --footrule> | B<-nob, --nofootrule>
 
-Here you can choose whether it should be printed a rule over the
-footline or not.
+Aquí puedes decidir si se imprimirá o no una línea separadora sobre el pie de
+página.
 
 
-=item B<-S> I<Style> | B<--frontstyle> I<Style>
+=item B<-S> I<estilo> | B<--frontstyle> I<estilo>
 
-Choose a style for the printing of the mailheaders on the first page:
-I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
-I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailled description
-of this values.
-
+Elige un estilo para la impresión de las cabeceras del mensaje en la primera
+página:
+I<plain>, I<border> (por defecto), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Consulta el manual para una descripción 
+detallada de ésos valores.
 
 
 =item B<-P> I<formatopapel>B<, --paper> I<formatopapel>
@@ -228,8 +228,7 @@ Archivos temporales creados por B<Muttprint>.
 
 =item F</usr/share/doc/packages/muttprint/>
 
-Manuales de B<Muttprint> en Inglés, Alemán y Español
-(diferentes formatos).
+Manuales de B<Muttprint> en diferentes idiomas y formatos.
 
 
 =item F</usr/share/muttprint/>
@@ -247,7 +246,6 @@ mutt(1), abook(1)
 
 Página Web: I<http://bwalle.exit.mytoday.de/muttprint/>
 
-La Licencia Pública General GNU.
 
 =head1 COPYRIGHT
 

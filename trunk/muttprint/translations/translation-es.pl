@@ -8,17 +8,17 @@ ADVERTENCIA: Estas opciones tienen preferencia sobre las opciones en
 ~/.muttprintrc y /etc/Muttprintrc.
 
 -h, --help
-       Ésta ayuda.
+       Muestra ésta ayuda.
 
 -v, --version
        Muestra en pantalla la versión actual de Muttprint.
 
 -f [archivo], --file [archivo]
-       Lee desde archivo en vez de STDIN.
+       Lee desde [archivo] en vez de STDIN.
 
 -p [nombreimpresora], --printer [nombreimpresora]
        Usa una impresora específica.
-       "-" significa STDOUT
+       "-" significa STDOUT (salida estándar).
        Para imprimir en un archivo usa TO_FILE:/ruta/al/archivo
 	   
 -i [archivo], --penguin [archivo]
@@ -30,35 +30,35 @@ ADVERTENCIA: Estas opciones tienen preferencia sobre las opciones en
 		   
 -w [número], --wait [número]
        Intervalo de tiempo en segundos entre la impresión de las páginas pares
-       e impares para impresión dúplex.
+       e impares para impresión dúplex (ambas caras).
 
 -F [fuente], --font [fuente]
-       Familia de fuentes para la impresión. Los posibles valores son:
+       Familia de fuentes para la impresión. Los valores posibles son:
        Latex, Latex-bright, Times, Utopia, Palatino, Charter y Bookman
 	   
 -H, --headrule | -noH, --noheadrule
-       Turn printing of the headrule on or off.
+       Activar o desactivar la impresión del separador de cabecera.
 	   
 -b, --footrule | -nob, --nofootrule
-       Turn printing of the footrule on or off.
+       Activar o desactivar la impresión del separador del pie de página..
 	   
--S Style | --frontstyle Style
-       Choose a style for the headers on the first page:
-	   plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
-	   grey, greybox. 
-	   Read the manual for a detailled description of this values.
+-S estilo | --frontstyle estilo
+       Elige un estilo para las cabeceras en la primera página:
+	   plain, border (por defecto), fbox, shadowbox, ovalbox, Ovalbox,
+           doublebox, grey, greybox. 
+	   Consulta el manual para una descripción detallada de éstos valores.
 
 -P [formatopapel], --paper [formatopapel]
-       Formato del papel: "letter" (US) or "A4" (Europa).
+       Formato del papel: "letter" (US) o "A4" (Europa).
 
 -l [idioma], --lang [idioma]
        Idioma para los mensajes y la impresión.
 
 -D, --debug | -noD, --nodebug
-       Escribe información útil en un archivo log /tmp/muttprint.log.
+       Escribe información útil en un archivo de traza /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
-       Activa o desactiva la impresión dúplex.
+       Activa o desactiva la impresión dúplex (ambas caras).
 	   
 -2 | -1
        Imprime dos páginas en una carilla. Corresponde al "modo ahorro de
@@ -68,7 +68,7 @@ ADVERTENCIA: Estas opciones tienen preferencia sobre las opciones en
        No imprime la firma (separada por "-- ".
 
 -q, --rem_quote | -noq, --norem_quote
-       No imprime texto citado.
+       No imprime el texto citado.
 	   
 EOF
 
@@ -81,12 +81,12 @@ $String{"Bugs"} = <<EOF;
 Por favor reporta los errores del programa a <Bernhard.Walle\@gmx.de>.
 EOF
 
-$String{"FileNotFound"} = "El archivo especificado no fué encontrado.";
+$String{"FileNotFound"} = "El archivo especificado no fué hallado.";
 
 @String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
 ("Desde:", "Para:", "Asunto:", "Copia Carbón:", "Fecha:", "Página", "de",
 "Grupo de Noticias:");
 
 $LPack = "spanish";
-$charset = "latin1";
+
 
