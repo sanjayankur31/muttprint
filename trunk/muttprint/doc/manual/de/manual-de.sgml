@@ -555,6 +555,9 @@ set print_split
 				</tbody>
 				</tgroup>
 			</informaltable>
+			
+			<para>Setzen Sie die Variable <literal>FRONTSTYLE</literal> auf
+				einen Wert aus der obigen Tabelle.</para>
 				
 		</sect3>
 		<sect3>
