@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-02-16</pubdate>
+	<pubdate>2002-05-01</pubdate>
 	
 	<releaseinfo>Version 0.63</releaseinfo>   
 	
@@ -455,7 +455,25 @@ set printer_name "muttprint"
 				<FileName>test.ps2</FileName>.</para>
 				
 		</sect3>
+		<sect3>
+			<title>Druckkommando</title>
 
+			<para>Standardm&auml;&szlig;ig verwendet Muttprint
+				<application>lpr</application> zum Drucken. Soll stattdessen
+				ein anderes Programm benutzt werden, kann die Variable
+				<literal>PRINT_COMMAND</literal> gesetzt werden. Hierbei
+				wird <literal>$PRINTER</literal> durch den angegebenen
+				Drucker ersetzt. Der Standard lautet <literal>lpr -P$PRINTER</literal>.
+			</para>
+
+			<tip>
+				<para>Sie k&ouml;nnen <literal>gv -</literal> verwenden, um sich
+					eine Druckvorschau anzuzeigen. Diese Option eignet sich gut zum
+					Testen der verschiedenen Einstellungen.
+				</para>
+			</tip>
+
+		</sect3>
 		<sect3>
 			<title>Pinguin</title>
 			
