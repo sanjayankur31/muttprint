@@ -54,7 +54,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72a";
+our $VERSION = "0.72b";
 my $PACKAGE = "Muttprint";
 
 
@@ -551,9 +551,6 @@ foreach $type (@headers) {
 				s/_/\\_/g;
 				s/-/{-}/g;
 				s/\0//g;
-
-				# euro
-				s/€/$EuroSign/g;
 			}
 		}
 
