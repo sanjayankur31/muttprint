@@ -5,7 +5,7 @@
 #
 # Tab =^= 8 characters
 
-%define			version		0.60
+%define			version		0.61
 
 Summary: 		pretty printing of mails with Mutt
 Summary(de):		schöner Ausdruck von Mails mit Mutt
@@ -97,6 +97,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Dec 15 2001 Bernhard Walle <Bernhard.Walle@gmx.de>
+- new version
 * Fri Oct 05 2001 Bernhard Walle <Bernhard.Walle@gmx.de>
 - new version
 - new URL: http://muttprint.sourceforge.net
