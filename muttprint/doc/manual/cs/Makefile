@@ -7,7 +7,7 @@
 # The stylesheet is necessary for A4 paper format
 # (we're in Europe, not in U.S.A.)
 
-lang = cz
+lang = cs
 doc = manual-$(lang).sgml
 
 db2html = /usr/bin/db2html
