@@ -120,7 +120,7 @@ a sudých stránek pøi duplexním tisku.
 Zde si mù¾ete vybrat rodinu fontù pro tisk. Mo¾nosti jsou:
 I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> a
 I<Bookman>. Jestli¾e v¹echny fonty jsou pøístupné na Va¹em systému závisí na
-Va¹em nainstalovaném LaTeX-systému. Defaultní je I<Latex-bright>.
+Va¹em nainstalovaném LaTeX-systému. Defaultní je I<Latex>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>

@@ -500,10 +500,23 @@ set printer_name "muttprint"
 			
 			<para>You could use different fonts for the printing. The
 				correspondent variable is names <literal>FONT</literal>.
-				<literal>Latex</literal> means the standard LaTeX font
+				<literal>Latex</literal> (standard steting) means the standard LaTeX font
 				of the EC family. <literal>Latex-bright</literal>
-				(standard setting) uses <emphasis>Computer Modern Bright</emphasis>.
-				</para>
+				uses <emphasis>Computer Modern Bright</emphasis>. This font is not
+				available on current Debian systems because of its license<footnote>
+				<!-- Footnote -->
+					<para>You can download this font and install it on your computer from
+						the CTAN. You find the fonts in
+						CTAN:/tex-archive/nonfree/fonts/cmbright/ (CTAN =
+						<emphasis>Comprehensive TeX Archive Network</emphasis> consists of a
+						network of several servers. The CTAN server in Germany is
+						<ulink url="ftp://ftp.dante.de"></ulink>, in the United Kingdom
+						<ulink url="ftp://cam.ctan.org"></ulink> and in the United States
+						<ulink url="ftp://tug.ctan.org"></ulink>).
+					</para>
+				<!-- /Footnote -->
+				</footnote>
+			</para>
 			
 			<para>There are several Postscript fonts which are possible here: 
 				<literal>Times</literal>, <literal>Palatino</literal>,
