@@ -11,6 +11,9 @@ PRINTER="lp"
 #
 # Vous pouvez spécifier la commande à utiliser pour l'impression
 # où $PRINTER est remplacée par la variable PRINTER
+# CUPS: Indiquez soit "CUPS" soit une commande arbitraire qui
+# contient $CUPS_OPTIONS qui sera alors remplacée par les
+# options utilisées pour CUPS
 PRINT_COMMAND="lpr -P$PRINTER"
 
 #
@@ -26,7 +29,7 @@ XFACE="off"
 # Les valeurs possibles son "off" ou "on"
 #
 # Pour l'impression recto verso sur les imprimantes Postscript,
-# utilisez plutôt le champ PRINTER.
+# mettez plutôt "printer".
 DUPLEX="off"
 
 #
@@ -110,7 +113,7 @@ WRAPMARGIN="80"
 
 #
 # Table de caractères
-# latin1, latin2, latin3, latin4, latin5, latin9, auto
+# latin1, latin2, latin3, latin4, latin5, latin9, utf8, auto
 CHARSET="latin1"
 
 #
