@@ -1,0 +1,113 @@
+Muttprint - Translation
+===========================================================================
+
+
+Some things in Muttprint are translated into different languages.
+This are:
+
+
+---------------------------------------------------------------------------
+Files               Content/Description
+---------------------------------------------------------------------------
+translation/*.pl    - Output strings
+                    - Printed Header
+                    - LaTeX-package for the printing ($LPack)
+                    - charset for the printing ($charset)
+                    
+doc/manpage/*       - manpage
+
+doc/manual/*        - User's guide
+---------------------------------------------------------------------------
+
+
+
+The languages are:
+
+
+---------------------------------------------------------------------------
+ISO     Language        State                           Translator [1]
+---------------------------------------------------------------------------
+en      English         Complete.                       Bernhard Walle
+
+de      German          Manpage, User's guide,          Bernhard Walle
+                        translation file
+                        
+it      Italian         Manpage, User's guide,          Roberto Vallone
+                        translation file
+                        
+es      Spanish         Manpage + translation file      Marcelo Ramos
+                        (some additions in English),
+                        User's guide (state of
+                        Muttprint 0.53)
+
+fr      French          translation file                Vincent Bernat
+
+cs      Czech           headers + $charset/$LPack only  Dominik Formanek
+---------------------------------------------------------------------------
+
+
+
+Some notes to the translations:
+
+
+English:
+~~~~~~~~
+
+Because my native language is German, the English is not perfect. But there
+was no way to avoid this because the other translators need the English
+files to translate. And if you release a German-only software, you have a
+very small audience. I hope you understand it :)
+
+
+Spanish:
+~~~~~~~~
+
+Because the translator was unavailable the last weeks, I released Muttprint
+0.60 without a full translation of Spanish. Read the English files for
+up to date informations.
+
+
+Czech:
+~~~~~~
+
+This translation file changes the charset to ISO-8859-2 as used in Eastern
+Europe. This works fine to print mails written in following languages:
+Albanian, Bosnian,   Croatian, Czech,  English,  Finnish,  German,
+Hungarian, Irish, Polish, Romanian, Slovak, Slovenian  and Sorbian.
+
+If you would like to print mails written in a Western European language (e.
+g. French), you may change the charset in your ~/.muttprintrc:
+
+        charset=latin1
+    
+There's no command-line option. You can also change this in the translation
+file, but that's not the prefered way. 
+
+Because the support for Czech was included a short time before release,
+this hint is not in the documentation. This changes in feature versions.
+But I thought that's better than not including it.
+
+
+
+
+Finally, I would like to thank _all_ translators for their provided work.
+Translations are very important for OpenSource! But the price is that all
+developers must speek (and write) English well.
+
+
+
+---------------------------------------------------------------------------
+
+
+Footnotes:
+~~~~~~~~~~
+
+[1]     For comments to the translations, please mail to:
+
+        * Bernhard Walle <Bernhard.Walle@gmx.de>
+        * Roberto Vallone <jval@libero.it>
+        * Marcello Ramos <mramos@montevideo.com.uy>
+        * Vincent Bernat <bernat@free.fr>
+        * Dominik Formanek <dominik@formanek.cz>
+
+

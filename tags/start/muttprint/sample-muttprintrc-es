@@ -1,0 +1,84 @@
+# MUTTPRINT archivo de configuración
+#
+# ~/.muttprintrc o /etc/Muttprintrc
+
+#
+# Aquí puedes configurar tu impresora
+#
+# Para imprimir en un archivo, usa la siguiente entrada:
+# PRINTER="TO_FILE:/home/berwal/test.ps"
+PRINTER="lp"
+
+#
+# Aquí puedes establecer la ruta a la imágen
+PENGUIN="off"
+
+#
+# Aquí puedes activar o desactivar la impresión 
+# dúplex. Los valores posibles son "off" u "on".
+#
+# Para una impresora Postscript dúplex utiliza "printer".
+DUPLEX="off"
+
+#
+# Aquí puedes activar o desactivar el modo de ahorro de 
+# papel (imprimir 2 páginas en 1 página)
+PAPERSAVE="off"
+
+#
+# Aquí puedes establecer la velocidad de impresión en 
+# segundos por página
+SPEED="30"
+
+#
+# Elige una fuente:
+# - Latex (EC-Fonts)
+# - Latex-bright (CM-bright)
+# - Times
+# - Utopia
+# - Palatino
+# - Charter
+# - Bookman
+FONT="Latex-bright"
+
+
+#
+# Choose a style for the first page
+# - plain       no rules
+# - border      rule after the headers
+# - fbox        simple box around the mailheaders
+# - shadowbox   shadowbox arount the header
+# - ovalbox     box with rounded corners arount the header (thin lines)
+# - Ovalbox     same as "ovalbox" but thicker lines
+# - doublebox   box with double lines around the header
+# - grey        grey background behind the headers
+# - greybox     same as "grey" but with a additional black box
+FRONTSTYLE="border"
+
+#
+# Should there be a rule after the header (not first page)
+HEADRULE="off"
+
+#
+# Should there be a rule over the footer
+FOOTRULE="off"
+
+
+#
+# Elige un formato de papel:
+# - A4
+# - letter
+PAPER="A4"
+
+#
+# no imprimir las firmas que fueron separadas con "-- "
+REM_SIG="off"
+
+#
+# no imprimir el texto citado
+REM_QUOTE="off"
+
+# 
+# Escribe los mensajes de error de LaTeX y dvips en /tmp/muttprint.log
+DEBUG="0"
+
