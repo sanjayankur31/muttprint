@@ -1,6 +1,8 @@
 CHANGES
 =======================================================================
 
+0.72    - added Finish translation
+
 0.71	- changed shebang line to #!/usr/bin/env perl because it works
           on all system regardless where perl is installed (only in
           release, not in CVS)
