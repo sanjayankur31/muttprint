@@ -551,11 +551,13 @@ elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
 
 sub ReadConfig () {
 
-	foreach ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc") {
+	my $rcfile;
 	
-		next unless (-r $_);
+	foreach $rcfile ("/etc/Muttprintrc", "$ENV{HOME}/.muttprintrc") {
+
+		next unless (-r $rcfile);
 	
-		open (RCFILE, $_) || die "Could not open $_: $!";
+		open (RCFILE, $rcfile) || die "Could not open $rcfile: $!";
 
 		while (<RCFILE>) {
 			if (/^([^#=\s]+)=(["']?)(\S*)\2\s+$/) { 
@@ -563,7 +565,7 @@ sub ReadConfig () {
 			}
 		}
 			
-		close RCFILE || die "Could not close $_: $!";
+		close RCFILE || die "Could not close $rcfile: $!";
 		
 	}
 }
