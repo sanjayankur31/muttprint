@@ -1,4 +1,4 @@
-# MUTTPRINT archivo de configuración
+# Archivo de configuración de MUTTPRINT
 #
 # ~/.muttprintrc o /etc/Muttprintrc
 
@@ -6,12 +6,16 @@
 # Aquí puedes configurar tu impresora
 #
 # Para imprimir en un archivo, usa la siguiente entrada:
-# PRINTER="TO_FILE:/home/berwal/test.ps"
+# PRINTER="TO_FILE:/home/berwal/prueba.ps"
 PRINTER="lp"
 
 #
-# Aquí puedes establecer la ruta a la imágen
-PENGUIN=""
+# Aquí puedes establecer la ruta a la imágen del pingüino
+PENGUIN="off"
+
+#
+# Activar/desactivar la impresión de la imágen X-Face (on/off)
+XFACE="off"
 
 #
 # Aquí puedes activar o desactivar la impresión 
@@ -79,6 +83,13 @@ REM_SIG="off"
 #
 # no imprimir el texto citado
 REM_QUOTE="off"
+
+#
+# Elige las cabeceras a imprimir, separación con "_"
+# /Cabecera/ : impresión en itálica
+# *Cabecera* : impresión en negrita
+# Si la cabecera no existe, no es impresa.
+PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
 
 # 
 # Escribe los mensajes de error de LaTeX y dvips en /tmp/muttprint.log
