@@ -1,0 +1,82 @@
+# MUTTPRINT konfiguraèní soubor
+#
+# ~/.muttprintrc nebo /etc/Muttprintrc
+
+#
+# Zde nastavujeme va¹i tiskárnu
+# Pro tisk do souboru pou¾ij následující øádek:
+# PRINTER="TO_FILE:/home/berwal/test.ps"
+PRINTER="lp"
+
+#
+# Zde mù¾ete nastavit cestu k obrázku v hlavièce zprávy
+PENGUIN="off"
+
+#
+# Zde mù¾ete nastavit duplexní tisk.
+# Mo¾né hodnoty jsou "off" nebo "on"
+#
+# Pro Postscriptový duplexní tisk nastav na "printer"
+DUPLEX="off"
+
+#
+# Zde mù¾ete nastavit tisk "paper save mod"
+# (tisk 2 stran na 1 stranku)
+PAPERSAVE="off"
+
+#
+# Zde mù¾ete nastavit dobu tisku jedné stránky
+#
+SPEED="30"
+
+#
+# Vyber font:
+# - Latex (EC-Fonts)
+# - Latex-bright (CM-bright)
+# - Times
+# - Utopia
+# - Palatino
+# - Charter
+# - Bookman
+FONT="Latex-bright"
+
+
+#
+# Vyber styl první stránky
+# - plain       ¾ádné èáry
+# - border      èára pod hlavièkou
+# - fbox        jednoduchý rámeèek okolo hlavièky zprávy
+# - shadowbox   rámeèek se stínem okolo hlavièky zprávy
+# - ovalbox     rámeèek s kulatými rohy okolo hlavièky zprávy (tenké linky)
+# - Ovalbox     stejné jako "ovalbox", ale tlust¹í linky
+# - doublebox   dvojitý rámeèek okolo hlavièky zprávy
+# - grey        ¹edé pozadí pod hlavièkou zprávy
+# - greybox     stejné jako "grey", ale s èerným rámeèkem
+FRONTSTYLE="border"
+
+#
+# Mìla by být hlavièka strany oddìlena èarou (ne na první stranì)
+HEADRULE="off"
+
+#
+# Mìla by být patièka strany oddìlena èarou
+FOOTRULE="off"
+
+#
+# Vyber formát papíru:
+# - A4
+# - letter
+PAPER="A4"
+
+#
+# Odstranit podpis oddìlený "-- " z ti¹tìné zprávy
+REM_SIG="off"
+
+#
+# Odstranit citace pùvodní zprávy
+REM_QUOTE="off"
+
+# 
+# Tisk chybových hlá¹ení LaTeXu a dvips do /tmp/muttprint.log
+DEBUG="0"
+
