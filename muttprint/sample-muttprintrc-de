@@ -78,6 +78,13 @@ REM_SIG="off"
 # Druckt kein Quoting (zitierte Textstellen)
 REM_QUOTE="off"
 
+#
+# Auswahl der gedruckten Header, Trennung mit "_"
+# /Header/ : Kursivdruck
+# *Header* : Fettdruck
+# Nicht vorhandene Header werden nicht gedruckt
+PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
+
 # 
 # Protokolliert Fehlermeldungen in /tmp/muttprint.log
 DEBUG="0"

@@ -76,6 +76,13 @@ REM_SIG="off"
 # prints no quoting
 REM_QUOTE="off"
 
+#
+# Choose of the printed headers, separation with "_"
+# /Header/ : italic printing
+# *Header* : bold printing
+# If the header does not exist, it is not printed.
+PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
+
 # 
 # Writes error messages of LaTeX and dvips to /tmp/muttprint.log
 DEBUG="0"
