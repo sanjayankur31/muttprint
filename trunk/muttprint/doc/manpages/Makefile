@@ -19,14 +19,12 @@ TITLE_EN = "Muttprint Short Manual"
 TITLE_DE = "Muttprint Kurzanleitung"
 TITLE_ES = "Manual Corto de Muttprint"
 TITLE_IT = "Breve manuale di Muttprint"
-TITLE_CS = "Krátký manuál Muttprintu"
 
 
-all: german english spanish italian czech
+all: german english spanish italian
 german: de/muttprint.1.gz
 english: en/muttprint.1.gz
 italian: it/muttprint.1.gz
-czech: cs/muttprint.1.gz
 spanish: es/muttprint.1.gz
 
 ############################# GERMAN #################################
@@ -93,31 +91,14 @@ it/muttprint.1.gz: it/muttprint
 	$(gzip) it/muttprint.1
 
 
-########################### CZECH #####################################
-
-cs/muttprint: cs/muttprint.pod
-	cat cs/muttprint.pod | sed -e s%\#\#DOCDIR\#\#%$(docdir)%g | \
-		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
-		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
-		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
-		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \
-		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
-		> cs/muttprint
-
-cs/muttprint.1.gz: cs/muttprint
-	$(POD2MAN) --center=$(TITLE_CS) cs/muttprint cs/muttprint.1
-	$(gzip) cs/muttprint.1
-
-
 ########################### GENERAL ###################################
 
 install: de/muttprint.1.gz en/muttprint.1.gz es/muttprint.1.gz \
- 			it/muttprint.1.gz cs/muttprint.1.gz
+ 			it/muttprint.1.gz 
 	$(INSTALL) en/muttprint.1.gz $(mandir)/man1/
 	$(INSTALL) de/muttprint.1.gz $(mandir)/de/man1/
 	$(INSTALL) es/muttprint.1.gz $(mandir)/es/man1/
 	$(INSTALL) it/muttprint.1.gz $(mandir)/it/man1/
-	$(INSTALL) cs/muttprint.1.gz $(mandir)/cs/man1/
 
 uninstall:
 	rm -f $(mandir)/man1/muttprint.1.gz
