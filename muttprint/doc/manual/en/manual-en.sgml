@@ -517,7 +517,10 @@ set print_split
 				</tbody>
 				</tgroup>
 			</informaltable>
-				
+			
+			<para>Set the variable <literal>FRONTSTYLE</literal> to a value
+				from the table above.</para>
+			
 		</sect3>
 		
 		
