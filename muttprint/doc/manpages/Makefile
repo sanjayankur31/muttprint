@@ -98,8 +98,11 @@ it/muttprint.1.gz: it/muttprint
 
 ########################### GENERAL ###################################
 
-install: de/muttprint.1.gz en/muttprint.1.gz es/muttprint.1.gz \
- 			it/muttprint.1.gz 
+# removing dependencies, see Makefiles for documentation for an
+# explation
+##install: de/muttprint.1.gz en/muttprint.1.gz es/muttprint.1.gz \
+## 			it/muttprint.1.gz 
+install:
 	$(INSTALL) en/muttprint.1.gz $(mandir)/man1/
 	$(INSTALL) de/muttprint.1.gz $(mandir)/de/man1/
 	$(INSTALL) es/muttprint.1.gz $(mandir)/es/man1/
