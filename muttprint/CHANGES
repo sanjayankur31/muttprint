@@ -140,3 +140,10 @@ CHANGES
 	  adresses in the mailheader
 	- new option: $RCFILE (additional configuration file)
 
+0.62a   - updated Italian and French translation
+
+0.62b   - updated Spanish translation
+        - '-w' flag instead of 'use warnings;' for Perl 5.005-
+          compatibility
+
+
