@@ -4,9 +4,9 @@
 
 $String{"Benutzung"} = <<EOF;
 
-Pou¾ití:   muttprint [parametry]... [-f soubor]
+Pou¾ití:   muttprint [volby]... [-f soubor]
  
-Parametry:
+Volby:
 
 UPOZORNÌNÍ: Tyto parametry pøenastavují odpovídající nastavení 
 v ~/.muttprintrc a /etc/Muttprintrc.
