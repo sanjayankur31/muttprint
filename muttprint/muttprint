@@ -960,7 +960,6 @@ sub getPaperConfig () {
 sub createTemp () {
 	#
 	# temp directory / temp files
-	my $dir = defined $ENV{TMPDIR} ? $ENV{TMPDIR} : '/tmp';
 	$Temp{dir} = tempdir("muttprint-XXXXXX", TMPDIR => 1, CLEANUP => 1);
 	$Temp{content} = "$Temp{dir}/content";
 	$Temp{latex} = "$Temp{dir}/mail.tex";
@@ -1804,8 +1803,8 @@ $String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
 
 $String{"FileNotFound"} = "The specified file was not found.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:");
+@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization"} =
+("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:", "Organization:");
 
 }
 
@@ -1814,7 +1813,7 @@ $String{"FileNotFound"} = "The specified file was not found.\n";
 $Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'} 
 			if defined $Config{'NEWSGROUP_STRING'};
 
-	foreach ("From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups") {
+	foreach ("From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization") {
 		$String{$_}	= $Config{"\U$_"."_STRING"} if defined $Config{"\U$_"."_STRING"};
 	}
 }

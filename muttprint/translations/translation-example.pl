@@ -148,8 +148,8 @@ $String{"Bugs"} = "Please report bugs to <Bernhard.Walle\@gmx.de>.\n";
 
 $String{"FileNotFound"} = "The specified file was not found.\n";
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
-("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:");
+@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization"} =
+("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:", "Organization:");
 
 $LPack = "english";
 $charset = "latin1";

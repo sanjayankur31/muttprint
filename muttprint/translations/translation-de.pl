@@ -142,8 +142,8 @@ $String{"FileNotFound"} = <<EOF;
 Die angegebene Datei existiert nicht oder es wurde keine angegeben.
 EOF
 
-@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} = 
-("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Seite", "von", "Newsgruppen:");
+@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups", "Organization"} = 
+("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Seite", "von", "Newsgruppen:", "Organisation:");
 
 $LPack = "ngerman";
 $charset = "latin9";
