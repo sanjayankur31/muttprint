@@ -443,13 +443,16 @@ foreach $type (@headers) {
 				}
 			}
 		}
+
+		my $ftype = "\L\u$type";
+		$ftype = "Message-ID" if ($ftype eq "Message-id");
 		
-		unless (defined $String{"\L\u$type"}) {
-			$String{"\L\u$type"} = "\L\u$type:";
+		unless (defined $String{$ftype}) {
+			$String{$ftype} = "$ftype:";
 		}
 		
 		push @PrintedMailheaders,
-			"{ $HeaderFormatAttr{$type} $String{\"\L\u$type\"}} \& \\raggedright { $HeaderFormatAttr{$type} $Header{$type} } & \\\\";
+			"{ $HeaderFormatAttr{$type} $String{$ftype}} \& \\raggedright { $HeaderFormatAttr{$type} $Header{$type} } & \\\\";
 				
 	}
 }
