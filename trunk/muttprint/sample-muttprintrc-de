@@ -11,6 +11,12 @@
 PRINTER="lp"
 
 #
+# Hier kann das Druckkommando angegeben werden
+# $PRINTER wird automatisch durch die PRINTER-
+# Variable ersetzt
+PRINT_COMMAND="lpr -P$PRINTER"
+
+#
 # Hier kann der Pfad zum Pinguin angegeben werden
 PENGUIN="off"
 

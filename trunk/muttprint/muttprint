@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre6";
+$VERSION = "0.63pre7";
 my $PACKAGE = "Muttprint";
 
 
@@ -113,6 +113,12 @@ my %Config = (
 	VERBATIMSIG		=>	'fontshape=it',
 	RCFILE			=>	'',
 	ADDRESSFORMAT	=>	'%r <%a>,\n',
+	LATEXCODE		=>	'',
+	LATEXCODE1		=>	'',
+	LATEXCODE2		=>	'',
+	LATEXCODE3		=>	'',
+	LATEXCODE4		=>	'',
+	LATEXCODE5		=>	'',
 );
 my %Fontpackage = (
 	'Latex'    		=>		'',
@@ -1086,6 +1092,12 @@ $headerrule_first
 \\addtolength{\\footskip}{12pt}
 \\addtolength{\\footskip}{5mm}
 \\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}}
+$Config{LATEXCODE}
+$Config{LATEXCODE1}
+$Config{LATEXCODE2}
+$Config{LATEXCODE3}
+$Config{LATEXCODE4}
+$Config{LATEXCODE5}
 \\begin{document}
 \\thispagestyle{plain}
 $BeforeHeader
