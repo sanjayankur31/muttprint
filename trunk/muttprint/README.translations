@@ -45,9 +45,12 @@ fr      French          translation file,               Vincent Bernat
                         sample-muttprintrc
                         -- up to date --
 
-si      Slovenian       translation file,               Bo¨tjan Müller
+sl      Slovenian       translation file,               Bo¨tjan Müller
                         sample-muttprintrc
                         -- up to date --
+        NOTE: In earlier releases the translation was named 'si' but this
+              is wrong because we need the language code (ISO 639-1) and not
+              the country code (ISO 3166-1)
 
 es      Spanish         Manpage, User's guide           Marcelo Ramos
                         translation file,
