@@ -21,7 +21,7 @@ Source: 		muttprint-%{version}.tar.gz
 BuildArch: 		noarch
 URL: 			http://muttprint.sourceforge.net
 Packager: 		Bernhard Walle <Bernhard.Walle@gmx.de>
-Requires:		tetex >= 1.0 psutils perl
+Requires:		tetex >= 1.0 psutils perl >= 5.8
 BuildRoot:		%{_tmppath}/%{name}-%{version}-root
 Prefix:			%{_prefix}
 
@@ -71,7 +71,6 @@ make
 %setup
 
 %install
-
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{prefix}/bin
 mkdir -p $RPM_BUILD_ROOT/%{prefix}/share/muttprint/translations
@@ -81,13 +80,14 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 
 make prefix=$RPM_BUILD_ROOT/%{prefix} mandir=$RPM_BUILD_ROOT/%{_mandir} \
 		docdir=$RPM_BUILD_ROOT/%{_docdir} install
+rm $RPM_BUILD_ROOT/%{prefix}/bin/muttprint-langinfo
 
 %clean 
 rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%{prefix}/bin/muttprint*
+%{_bindir}/*
 %{prefix}/share/muttprint
 %{_mandir}/man1/muttprint.1.gz
 %{_mandir}/*/man1/muttprint.1.gz
@@ -95,6 +95,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr 05 2004 Bernhard Walle <bernhard.walle@gmx.de>
+- Removed muttprint-langinfo, use i18n module
 * Mon Jul 28 2003 Bernhard Walle <Bernhard.Walle@gmx.de>
 - added rule to build muttprint-langinfo
 * Mon Apr 14 2003 Bernhard Walle <Bernhard.walle@gmx.de>
