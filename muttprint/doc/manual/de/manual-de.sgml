@@ -777,7 +777,8 @@ set print_split
 			<title>&Uuml;bersetzungsdatei</title>
 		
 			<para>Die Muttprint-&Uuml;bersetzungdateien befinden sich im
-				<Filename>share</Filename>-Verzeichnis und haben den Namen
+				Verzeichnis <Filename>/usr/lib/muttprint</Filename> und haben
+				den Namen
 				<filename>translation-<replaceable>Sprache</replaceable>.pl</filename>.
 				Es k&ouml;nnen ohne &Auml;nderungen am Skript neue Dateien
 				hinzugef&uuml;gt werden. In der Datei werden nicht nur einige
