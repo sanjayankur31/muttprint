@@ -362,7 +362,7 @@ Manuales de B<Muttprint> en diferentes idiomas y formatos.
 Algunas imágenes que pueden utilizarse para ser impresas en la
 primera página de tu mensaje de correo.
 
-=item F<##LIBDIR##/muttprint>
+=item F<##LIBDIR##/muttprint/translations>
 
 Archivos de traducciones.
 

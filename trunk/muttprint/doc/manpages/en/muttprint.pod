@@ -184,6 +184,7 @@ This option sets the input charset:
 	ISO-8859-4      latin4
 	ISO-8859-9      latin5
 	ISO-8859-15     latin9
+	KOI8-R			koi8-r
 	Windows-1252    latin1
 	Windows-1250    latin2
 	UTF-8*          utf8
@@ -386,7 +387,7 @@ B<Muttprint> manual files in different languages and formats.
 Some pictures which can be used for printing on the
 first page of your mail.
 
-=item F<##SHAREDIR##/muttprint/translations>
+=item F<##LIBDIR##/muttprint/translations>
 
 Translation files.
 
