@@ -48,6 +48,12 @@ fr      French          translation file,               Vincent Bernat
 si      Slovenian       translation file                Bo¨tjan Müller
                         -- up to date --
 
+es      Spanish         Manpage, User's guide           Marcelo Ramos
+                        translation file,
+			sample-muttprintrc,
+			README, INSTALL
+                        -- up to date 
+
 cs      Czech           Manpage, translation file       Dominik Formánek
                         -- version 0.61 --
 
@@ -56,11 +62,6 @@ pl      Polish          translation file                Radek Kaczorowski
 
 sv      Swedish         translation file                Simon Josefsson
                         -- version 0.61 --
-
-es      Spanish         Manpage, User's guide           Marcelo Ramos
-                        translation file,
-			sample-muttprintrc
-                        -- version 0.60 --
 ---------------------------------------------------------------------------
 
 
