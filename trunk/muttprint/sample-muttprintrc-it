@@ -69,6 +69,13 @@ FOOTRULE="off"
 PAPER="A4"
 
 #
+# Scelta degli headers da stampare separati con "_"
+# /Header/ : italic printing
+# *Header* : bold printing
+# Se l'header non c'è non verrà stampato.
+PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
+
+#
 # Non stampa la firma separata da "-- "
 REM_SIG="off"
 
@@ -80,3 +87,6 @@ REM_QUOTE="off"
 # Scrive i messaggi di errore di LaTeX e dvips in /tmp/muttprint.log
 DEBUG="0"
 
+#
+# Abilita o disabilita la stampa dell'immagine indicata in X-Face
+XFACE="off"

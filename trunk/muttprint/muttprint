@@ -39,12 +39,16 @@ use warnings;
 use vars qw($VERSION %String $LPack $charset);
 use sigtrap qw(die INT QUIT);
 
+# for working directory -- Perl 5 standard module
+use Cwd;
+
+
 
 
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.61-pre4";
+$VERSION = "0.61-pre5";
 my $PACKAGE = "Muttprint";
 
 
@@ -70,7 +74,6 @@ sub WriteFormated ($*);
 sub DecodeHeader();
 sub GetDefaultPrinterCDE();
 sub ChangeForXface($);
-
 
 ######## 'private' Variablen für den Rest
 my %Config = (
@@ -125,6 +128,8 @@ my $lib_dir = FindCommonDir('lib');
 my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
 my @headers;
 my $image_height = "20mm";					# Höhe des gedruckten Bildes
+my $startworkingdir = cwd;					# Arbeitsverzeichnis, wenn Muttprint
+											# gestartet wird
 
 
 ############# END VARIABLES ##################################################
@@ -325,6 +330,8 @@ foreach (@headers) {
 				s/\&/\\&/g;
 				s/_/\\_/g;
 				s/%/\\%/g;
+				s/¤/EUR/g;
+				s/\200/EUR/g;
 				
 				
 			}
@@ -415,7 +422,11 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 	$File = $Config{'PRINTER'};
 	$File =~ s/(TO_FILE|file)://;
 
-	
+	# if not an absoute path
+	if ($File !~ /\//) {
+		$File = "$startworkingdir/$File";
+	}
+
 	$DVIopts[0] = "-o $File -t $PaperPS";
 	$DVIopts[1] = "-o ${File}2 -t $PaperPS";
 	
