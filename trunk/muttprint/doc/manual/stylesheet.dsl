@@ -3,7 +3,7 @@
 <!ENTITY print-ss PUBLIC "-//Norman Walsh//DOCUMENT DocBook Print Stylesheet//EN" CDATA dsssl>]>
    
 <!--
-;;	This is the Stylesheet for my manual.
+;;  This is the Stylesheet for my manual.
 ;;  Most of them is borrowed from the Linux Documentation Project.
 ;;  You can get their style sheet from http://metalab.unc.edu/gferg/ldp/ldp.dsl
 ;;  Read also their HOWTO (http://www.ibiblio.org/pub/Linux/docs/HOWTO/HOWTO-HOWTO)
@@ -109,3 +109,6 @@
 	<external-specification id="print-stylesheet" document="print-ss">
 	<external-specification id="html-stylesheet" document="html-ss">
 </style-sheet>
+
+<!-- vim:ts=4 sw=4
+-->

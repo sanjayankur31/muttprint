@@ -15,6 +15,10 @@ PRINTER="lp"
 PENGUIN="off"
 
 #
+# Druck von X-Face ein-/ausschalten
+XFACE="off"
+
+#
 # Hier kann der Duplexdruck ein- oder ausgeschaltet
 # werden. Entweder "off" oder "on".
 #

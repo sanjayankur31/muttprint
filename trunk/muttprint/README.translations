@@ -35,14 +35,13 @@ de      German          Manpage, User's guide,          Bernhard Walle
 it      Italian         Manpage, User's guide,          Roberto Vallone
                         translation file
                         
-es      Spanish         Manpage + translation file      Marcelo Ramos
-                        (some additions in English),
-                        User's guide (state of
-                        Muttprint 0.53)
+es      Spanish         Manpage, User's guide           Marcelo Ramos
+                        translation file
+
+cs	Czech           Manpage, User's guide           Dominik Formánek
+                        translation file
 
 fr      French          translation file                Vincent Bernat
-
-cs      Czech           headers + $charset/$LPack only  Dominik Formánek
 ---------------------------------------------------------------------------
 
 
@@ -57,14 +56,6 @@ Because my native language is German, the English is not perfect. But there
 was no way to avoid this because the other translators need the English
 files to translate. And if you release a German-only software, you have a
 very small audience. I hope you understand it :)
-
-
-Spanish:
-~~~~~~~~
-
-Because the translator was unavailable the last weeks, I released Muttprint
-0.60 without a full translation of Spanish. Read the English files for
-up to date informations.
 
 
 Czech:
@@ -91,10 +82,10 @@ Footnotes:
 
 [1]     For comments to the translations, please mail to:
 
-        * Bernhard Walle <Bernhard.Walle@gmx.de>
-        * Roberto Vallone <jval@libero.it>
-        * Marcello Ramos <mramos@montevideo.com.uy>
-        * Vincent Bernat <bernat@free.fr>
-        * Dominik Formánek <dominik@formanek.cz>
+        * Vincent Bernat        <bernat@free.fr>
+        * Dominik Formánek      <dominik@formanek.cz>
+        * Marcello Ramos        <mramos@montevideo.com.uy>
+        * Roberto Vallone       <jval@libero.it>
+        * Bernhard Walle        <Bernhard.Walle@gmx.de>
 
 

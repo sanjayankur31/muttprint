@@ -42,7 +42,7 @@ use vars qw($VERSION %String $LPack $charset);
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.61-pre1";
+$VERSION = "0.61-pre3";
 my $PACKAGE = "Muttprint";
 
 
@@ -68,6 +68,8 @@ sub SIGINT_handler ();
 sub Setze_String ();
 sub WriteFormated ($*);
 sub DecodeHeader();
+sub GetDefaultPrinterCDE();
+sub ChangeForXface($);
 
 
 ######## 'private' Variablen für den Rest
@@ -86,6 +88,7 @@ my %Config = (
 	HEADRULE		=>	'off',
 	FOOTRULE		=>	'off',
 	FRONTSTYLE		=>	'border',
+	XFACE			=>	'off',
 	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
 );
 my %Fontpackage = (
@@ -121,6 +124,7 @@ my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für
 my $lib_dir = FindCommonDir('lib');
 my %HeaderFormatAttr;						# Formatauszeichnungen in LaTeX-Code
 my @headers;
+my $image_height = "20mm";					# Höhe des gedruckten Bildes
 
 
 ############# END VARIABLES ##################################################
@@ -140,6 +144,7 @@ $SIG{'QUIT'} = 'SIGINT_handler';
 # Konfiguration einlesen
 
 $Config{'PRINTER'} = $ENV{'PRINTER'} if defined $ENV{'PRINTER'};
+$Config{'PRINTER'} = GetDefaultPrinterCDE if GetDefaultPrinterCDE;
 
 ReadPaperConfig ();
 ReadConfig ();
@@ -229,7 +234,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 			my $aktHeader;
 		
 			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
-			foreach $aktHeader (@headers) {
+			foreach $aktHeader (@headers, "X-Face") {
 			
 				if (/^${aktHeader}:[\t ]+/i) {
 					@LastHeader = ($aktHeader, $.);
@@ -335,6 +340,13 @@ foreach (@headers) {
 	}
 }
 
+
+#
+# XFACE-Support
+
+if ($Config{'XFACE'} eq "on" && exists $Header{'X-Face'}) {
+	ChangeForXface($Header{'X-Face'});
+}
 
 #
 # Papierformat
@@ -591,6 +603,7 @@ sub ReadOpts () {
 
 		'l|lang=s'				=>	\$opt{'LANG'},
 		'd|duplex!'				=>	\$opt{'DUPLEX'},
+		'x|x-face!'				=>	\$opt{'XFACE'},
 		'H|headrule!'			=>	\$Config{'HEADRULE'},
 		'b|footrule!'			=>	\$Config{'FOOTRULE'},
 		'1'						=> 	\$opt{'paper1'},
@@ -606,7 +619,7 @@ sub ReadOpts () {
 	#
 	# Logische Optionen => on/off
 	
-	foreach (qw (DUPLEX REM_SIG REM_QUOTE HEADRULE FOOTFULE)) {
+	foreach (qw /DUPLEX REM_SIG REM_QUOTE HEADRULE FOOTFULE XFACE/) {
 		next unless defined $opt{$_};
 		
 		if ($opt{$_}) {
@@ -676,11 +689,14 @@ sub CreateTemp () {
 
 	mkdir ("/tmp/muttprint-$$", 0700) || die "Unable to create temp-folder: $!";
 	$Temp{'dir'} = "/tmp/muttprint-$$";
-	$Temp{'content'} = "$Temp{'dir'}/content";
-	$Temp{'latex'} = "$Temp{'dir'}/mail.tex";
+	$Temp{'content'} = "$Temp{dir}/content";
+	$Temp{'latex'} = "$Temp{dir}/mail.tex";
 	$Temp{'log'} = "/tmp/muttprint.log";
-	$Temp{'dvi'} = "$Temp{'dir'}/mail.dvi";
-	$Temp{'ps'} = "$Temp{'dir'}/mail.ps";
+	$Temp{'dvi'} = "$Temp{dir}/mail.dvi";
+	$Temp{'ps'} = "$Temp{dir}/mail.ps";
+	$Temp{'xf_raw'} = "$Temp{dir}/xface.raw";
+	$Temp{'xf_xbm'} = "$Temp{dir}/xface.xbm";
+	$Temp{'xf_eps'} = "$Temp{dir}/xface.eps";
 }
 
 
@@ -699,6 +715,23 @@ sub FindCommonDir ($) {
 
 }
 
+sub ChangeForXface ($) {
+
+	open (RAW, ">$Temp{'xf_raw'}") || die "Could not create XF-Raw file: $!";
+	print RAW @_;
+	close RAW;
+
+	system ("uncompface -X $Temp{xf_raw} $Temp{xf_xbm}") 
+		&& die "Could not convert XF-Raw into XF-XBM: Maybe 'uncompface' not installed: $!";
+	
+	system ("convert $Temp{xf_xbm} $Temp{xf_eps}")
+		&& die "Could not convert XF-XBM into XF-EPS: Maybe 'convert' not installed: $!";
+	
+	$Config{'PENGUIN'} = $Temp{xf_eps};
+
+	$image_height = "15mm";
+
+}
 
 sub SubstituteVerbatim ($) {
 	
@@ -790,7 +823,7 @@ sub CreateLatex () {
 \\begin{minipage}[t]{20mm}
 \\begin{flushright}
 ~ \\\\
-\\includegraphics[height=2cm]{$Config{'PENGUIN'}}
+\\includegraphics[height=$image_height]{$Config{'PENGUIN'}}
 \\end{flushright}
 \\end{minipage}}
 EOF
@@ -1115,10 +1148,30 @@ EOF
 	
 	$Postscript =~ s#\%\%EndComments#$DuplexCommand#;
 	
-	open(WRITE_PSFILE, "> $Temp{'ps'}") || die "$!";
+  	open(WRITE_PSFILE, "> $Temp{'ps'}") || die "$!";
 	print WRITE_PSFILE $Postscript;
 	close WRITE_PSFILE;
 
+}
+
+##############################################################################
+
+sub GetDefaultPrinterCDE () {
+
+	my $configfile = "$ENV{HOME}/.printers";
+	my $printer;
+	
+	return unless (-r $configfile);
+
+	open (CDEPRINTER, $configfile) 
+		or die "Could not open CDE printer configuration file: $!";
+	
+	while (<CDEPRINTER>) {
+		last if (($printer) = /^_default\s+(\w*)/);
+	}
+
+	close CDEPRINTER or die "Could not close CDE printer configuration file: $!";
+	return $printer if defined $printer;
 }
 
 
@@ -1126,6 +1179,7 @@ EOF
 
 sub DeleteTemp () {
 
+	return unless (defined $Temp{dir});
 	unlink (<$Temp{"dir"}/*>);
  	rmdir ($Temp{'dir'});
 
@@ -1183,6 +1237,9 @@ PLEASE NOTICE: This options override the corresponding settings in
 	   
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
+
+-x, --x-face | -nox, --nox-face
+       Turn printing of X-Faces on/off.
 
 -t [number], --speed [number]
        Time in seconds which the printer needs for one page.

@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2001-09-02</pubdate>
+	<pubdate>2001-11-17</pubdate>
 	
 	<releaseinfo>Version 0.61</releaseinfo>   
 	
@@ -171,7 +171,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 			independently of Mutt in future, too.</para>
 		
 		
-		<sect3>
+		<sect3 id="muttconfig">
 			<title>Mutt</title>
 		
 			<para>You have to add or change following line in the file
@@ -180,29 +180,31 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 
 			<ProgramListing>set print_command="muttprint"</ProgramListing>
 
-			<para>Moreover you must make sure that following headers appear on
-				the screen and are delivered to Muttprint:
-				<ComputerOutput>From:</ComputerOutput>, 
-				<ComputerOutput>Date:</ComputerOutput>,
-				<ComputerOutput>To:</ComputerOutput>, 
-				<ComputerOutput>CC:</ComputerOutput> und
-				<ComputerOutput>Subject:</ComputerOutput>.  That's the only way
-				Muttprint can get the information and print to print correctly.
-				The order is not important and other headers are allowed, too.
-				</para>
+			<para>Moreover you must make sure that all necessary headers
+				are dumped when the mail is printed out. The easiest way
+				is to write a small macro (in your <filename>~/.muttrc</filename>)
+				which makes sure that all headers are dumped. Only the
+				most important headers are really printed (see 
+				<xref linkend="printedheaders">).</para>
 
+			<para>Here's the macro:</para>
 
-			<para>A suitable configuration out of my <filename>~/.muttrc</filename> 
-				could be:</para>
+			<programlisting>
+# Dump all headers
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+			</programlisting>
 
-			<ProgramListing>
-# Ignore all headers ...
-ignore * 
+			<para>At first, the macro switches to the mode where all headers are
+				shown, then the mail is printed and finally it switches back. It
+				is necessary to turn the confirmation of printing off so that
+				the macro works right:</para>
 
-# ... but not this one
-unignore        from: subject to cc date
-			</ProgramListing>
-			
+			<programlisting>
+# No confirmation before printing
+set print="yes"
+			</programlisting>
+
 			<para>To print more than one mail sensible in one step, you
 				should add following entry:</para>
 
@@ -226,6 +228,13 @@ set print_split
 % Use Muttprint for printing
 set printer_name "muttprint"
 	      </programlisting>
+
+				<para>If Muttprint should print more headers than this which are
+					displayed on the screen, you have to use instead of the
+					normal printing command <keycap>y</keycap> the combination
+					<keycap>Esc</keycap>, <keycap>1</keycap>, <keycap>y</keycap>
+					(one after another). This is important for printing the
+					X-Face header, see <xref linkend="xface">.</para>
 
 		</sect3>
 		<sect3>
@@ -402,7 +411,49 @@ set printer_name "muttprint"
 				</para>
 			
 		</sect3>
+		<sect3 id="xface">
+			<title>Printing of X-Faces</title>
 
+			<para>X-Faces are black and white pictures with a size of 48 x 48 pixels,
+				that could be included as mailheader (the <literal>X-Face:</literal>
+				header) in each message. This is no <quote>official</quote> standard
+				but it is spread especially in news articles.</para>
+
+			<para>Muttprint supports the printing of this picture instead of the
+				image specified with the <literal>PENGUIN</literal> varaible. To do
+				this, set <literal>XFACE</literal> to <literal>on</literal>. If there's
+				no such header, the <literal>PENGUIN</literal> picture (or nothing)
+				is printed.</para>
+
+			<para>To work right, following two programs are required:</para>
+			
+			<itemizedlist spacing="compact">
+				<listitem>
+					<para>
+						<application>convert</application> from the
+						<ulink url="http://www.imagemagick.org"><application>Image 
+							Magick</application> package</ulink>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<ulink 
+							url="http://www.ibiblio.org/pub/Linux/apps/graphics/convert/compface-1.4.tar.gz"><application>uncompface</application></ulink>
+					</para>
+				</listitem>
+
+			</itemizedlist>
+
+		<para>Both programs should be part of common Linux distributions and
+			can simply be installed.</para>
+		
+		<para>In any case you must make sure that this header is really dumped
+			to Muttprint. If you use Mutt, see <xref linkend="muttconfig"> for a
+			correct configuration. Otherwise read the documentation of your mail
+			software.</para>
+
+
+		</sect3>
 		<sect3>
 			<title>Duplex printing</title>
 			

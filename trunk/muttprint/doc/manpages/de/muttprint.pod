@@ -97,6 +97,11 @@ Druckt F<Datei> als Bild oben rechts auf das Blatt. F<Datei> muss den
 vollständigen Pfad beinhalten. Wenn Sie F<Datei> auf I<off> setzen wird kein
 Bild gedruckt.
 
+=item B<-x, --x-face> | B<-nox, --nox-face>
+
+Schaltet den Druck des im I<X-Face:>-Header übermittelten Bildes
+ein oder aus. Ausführliche Erklärung in der Dokumentation.
+
 
 =item B<-t> I<Zahl>B<, --speed> I<Zahl>
 

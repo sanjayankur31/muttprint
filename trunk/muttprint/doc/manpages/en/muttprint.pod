@@ -99,6 +99,12 @@ must contain the full path. Set F<file> to I<off> if you wouldn't
 like to print a picture.
 
 
+=item B<-x, --x-face> | B<-nox, --nox-face>
+
+Turns on or off the printing of the picture which was transmitted in the
+I<X-Face:> header. Read the documentation for a detailed explanation.
+
+
 =item B<-t> I<number>B<, --speed> I<number>
 
 This is the amount of time in seconds which your printer needs to
