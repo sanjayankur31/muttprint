@@ -71,21 +71,8 @@ Czech:
 ~~~~~~
 
 This translation file changes the charset to ISO-8859-2 as used in Eastern
-Europe. This works fine to print mails written in following languages:
-Albanian, Bosnian,   Croatian, Czech,  English,  Finnish,  German,
-Hungarian, Irish, Polish, Romanian, Slovak, Slovenian  and Sorbian.
-
-If you would like to print mails written in a Western European language (e.
-g. French), you may change the charset in your ~/.muttprintrc:
-
-        charset=latin1
-    
-There's no command-line option. You can also change this in the translation
-file, but that's not the prefered way. 
-
-Because the support for Czech was included a short time before release,
-this hint is not in the documentation. This changes in feature versions.
-But I thought that's better than not including it.
+Europe. For details to this topic, read the User's guide, section
+3.3.2 Charsets.
 
 
 
