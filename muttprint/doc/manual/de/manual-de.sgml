@@ -70,6 +70,12 @@
 			Ihrem System verf&uuml;gbar sind. Letztere sind nur n&ouml;tig, wenn Sie
 			Duplexdruck und/oder Papiesparmodus nutzen wollen.</para>
 
+		<para>Alle ben&ouml;tigten LaTeX-Pakete sind in teTeX enthalten. Sollten Sie
+			eine andere LaTeX-Distribution verwenden, lesen Sie die Datei
+			<filename>README.latex</filename>, die Informationen dar&uuml;ber
+			enth&auml;lt, welche Pakete von Muttprint ben&ouml;tigt werden. Nicht
+			vorhandene Pakete m&uuml;ssen nachinstalliert werden.</para>
+
 		<para>Zum Auslesen des Datums ben&ouml;tigt Muttprint
 			das Perl-Modul <application>Date::Parse</application><footnote>
 			<para>
@@ -615,6 +621,20 @@ set printer_name "muttprint"
 				der Variable <literal>FONTSIZE</literal> konfiguriert werden.
 				M&ouml;glich sind die drei Werte <literal>10pt</literal>,
 				<literal>11pt</literal> und <literal>12pt</literal>.</para>
+
+		</sect3>
+		<sect3>
+			<title>Randeinstellungen</title>
+
+			<para>Die R&auml;nder k&ouml;nnen mit vier Variablen eingestellt werden:
+				<literal>TOPMARGIN</literal> (oberer Rand),
+				<literal>BOTTOMMARGIN</literal> (unterer Rand),
+				<literal>LEFTMARGIN</literal> (linker Rand) und
+				<literal>RIGHTMARGIN</literal> (rechter Rand).</para>
+
+			<para>Die Variablen sind auf eine ganze Zahl zu setzen, die den Rand in
+				Millimetern (mm) angibt. Andere Ma&szlig;einheiten sind nicht
+				m&ouml;glich; 25,4&nbsp;mm entsprechen 1&nbsp;Inch.</para>
 
 		</sect3>
 		<sect3>

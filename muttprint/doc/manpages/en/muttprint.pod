@@ -274,6 +274,24 @@ Prints two pages on one sheet as shown here:
 This feature is called I<papersave mode> in the manual and in
 the rcfile.
 
+=item B<-g> I<number>B<, --topmargin> I<number>
+
+Sets the top margin in millimeters.
+
+
+=item B<-G> I<number>B<, --bottommargin> I<number>
+
+Sets the bottom margin in millimeters.
+
+
+=item B<-j> I<number>B<, --leftmargin> I<number>
+
+Sets the left margin in millimeters.
+
+=item B<-J> I<number>B<, --rightmargin> I<number>
+
+Sets the right margin in millimeters.
+
 
 =item B<-s, --rem_sig> | B<-nos, --norem_sig>
 

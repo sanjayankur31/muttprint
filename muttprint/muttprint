@@ -94,6 +94,10 @@ my %Config = (
 	REM_SIG			=>	'off',
 	REM_QUOTE		=>	'off',
 	WAIT			=>	'30',
+	TOPMARGIN		=>	'19',
+	BOTTOMMARGIN	=>	'22',
+	LEFTMARGIN		=>	'20',
+	RIGHTMARGIN		=>	'20',
 	HEADRULE		=>	'off',
 	FOOTRULE		=>	'off',
 	FRONTSTYLE		=>	'border',
@@ -711,6 +715,10 @@ sub ReadOpts () {
 		'E|date-format=s'		=>	\$Config{DATE_FORMAT},
 		'r|rcfile=s'			=>	\$Config{RCFILE},
 		'A|addressformat=s'		=>	\$Config{ADDRESSFORMAT},
+		'g|topmargin=s'			=>	\$Config{TOPMARGIN},
+		'G|bottommargin=s'		=>	\$Config{BOTTOMMARGIN},
+		'j|leftmargin=s'		=>	\$Config{LEFTMARGIN},
+		'J|rightmargin=s'		=>	\$Config{RIGHTMARGIN},
 
 
 		'l|lang=s'				=>	\$opt{LANG},
@@ -865,8 +873,8 @@ sub get_charset ($) {
 
 sub CreateLatex () {
 
-	my $PengCode = "";							# Kommando für den Pinguin
-	my $PengTab = "130 mm"; 					 # restl. Größe für Pinguin
+	my $PengCode = "";						# Kommando für den Pinguin
+	my $PengTab;			 				# restl. Größe für Pinguin
 	my $BeforeHeader;
 	my $AfterHeader;
 	my $LatexPackages = "$Fontpackage,fancyhdr,lastpage";
@@ -893,8 +901,17 @@ sub CreateLatex () {
 \\end{flushright}
 \\end{minipage}}
 EOF
-		$PengTab="118 mm";
+		$PengTab = 158 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
 	}
+	else {
+		$PengTab = 170 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
+	}
+
+	if ($Config{PAPER} eq "letter") {
+		$PengTab += 6;			# Letter ist breiter
+	}
+
+	$PengTab .= "mm";			# Maßeinheit anhängen
 
 	#
 	# Frontstyle:
@@ -960,6 +977,10 @@ EOF
 	# if there's no subject:
 	$Header{'Subject'} ||= "(no subject)";
 
+	#
+	# Ränderberechnung
+
+
 
 	open (LATEX, "> $Temp{'latex'}") || die "unable to create $Temp{'latex'}: $!";
 
@@ -975,7 +996,8 @@ print LATEX <<EOF;
 \\usepackage[$LPack]{babel}
 \\usepackage[$charset]{inputenc}
 \\usepackage{$LatexPackages}
-\\usepackage[$PaperTex,left=20mm,right=20mm,top=18mm,bottom=25mm,headsep=5mm]{geometry}
+\\usepackage[$PaperTex,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
+	top=$Config{TOPMARGIN}mm,bottom=$Config{BOTTOMMARGIN}mm,headsep=5mm]{geometry}
 \\usepackage{moreverb,graphicx,marvosym,textcomp,array}
 \\setlength{\\parindent}{0mm}
 $isolatinextensions
@@ -991,8 +1013,10 @@ $footerrule
 $headerrule_first
 \\fancyhf{} 
 \\lfoot{\\today}
-\\setlength{\\headsep}{1mm}
-\\addtolength{\\footskip}{4mm}
+\\setlength{\\headsep}{0mm}
+\\setlength{\\headheight}{0mm}
+\\addtolength{\\footskip}{12pt}
+\\addtolength{\\footskip}{5mm}
 \\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}}
 \\begin{document}
 \\thispagestyle{plain}
@@ -1162,7 +1186,7 @@ sub GetShortFrom ($$) {
 		return "$kind_of_Header $Realname";
 	}
 	else {
-		return $kind_of_Header . (split /,\s/, $Header)[0];
+		return "$kind_of_Header " . (split /,\s/, $Header)[0];
 	}
 }
 	
@@ -1499,6 +1523,18 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
+
+-g [number], --topmargin [number]
+       Top margin in millimeter
+
+-G [number], --bottommargin [number]
+       Bottom margin in millimeter
+
+-j [number], --leftmargin [number]
+       Left margin in millimeter
+
+-J [number], --rightmargin [number]
+       Right margin in millimeter
 
 -d, --duplex | -nod, --noduplex
        Enables or disables duplex printing.
