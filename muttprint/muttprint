@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre3";
+$VERSION = "0.63pre4";
 my $PACKAGE = "Muttprint";
 
 
@@ -85,6 +85,7 @@ sub getISOlatinExtensions($);
 ######## 'private' Variablen für den Rest
 my %Config = (
 	PRINTER			=> 	'lp',
+	PRINT_COMMAND	=>	'lpr -P$PRINTER',
 	PENGUIN			=>	'on',
 	DUPLEX			=>	'off',
 	SPEED			=>	'30',
@@ -143,7 +144,7 @@ my $Fontpackage = "";						# Fontpaket
 my $Umleitung;								# Umleitung
 my $child_pid;								# PID des Kinds
 my $File;									# Datei, in die gedruckt wird
-my @DVIopts;								# Optionen für DVI - Aufruf
+my $DVIopts;								# Optionen für DVI - Aufruf
 my $Seitenzahl;								# Anzahl der Seiten am Ende
 my @Command;								# Kommando zum Drucken; für Druck in Datei
 my $Laenge = "0";							# zum Ermitteln der längsten Zeile
@@ -548,6 +549,9 @@ unless (-e $Temp{'dvi'}) {
 
 ##################################### DRUCKEN ################################
 
+
+$Config{PRINT_COMMAND} =~ s/\$PRINTER/$Config{PRINTER}/g;
+
 #
 # Druck in Datei
 if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
@@ -559,33 +563,35 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 		$File = "$startworkingdir/$File";
 	}
 
-	$DVIopts[0] = "-o $File -t $PaperPS";
-	$DVIopts[1] = "-o ${File}2 -t $PaperPS";
+	$DVIopts = "-o - -t $PaperPS";
 	
 	$Config{'SPEED'} = 0;
 	$Config{'WAIT'} = 0;
 	
+	my $File2 = $File;
+	$File2 =~ s/\.(\w+)$/2.$1/;
+
+	if ($File eq $File2) {
+		$File2 .= "2";
+	}
+	
 	$Command[0] = "> $File";
-	$Command[1] = "> ${File}2";
+	$Command[1] = "> $File2";
 	
 } elsif ($Config{'PRINTER'} =~ /^((TO_FILE|file):-?|-)$/i) {
 	
 	$Config{'DUPLEX'} = "off";
 	
-	$DVIopts[0] = "-f -t $PaperPS";
-	$DVIopts[1] = $DVIopts[0];
+	$DVIopts = "-f -t $PaperPS";
 
-	$Command[0] = "";
-	$Command[1] = $Command[0];
+	$Command[0] = $Command[1] = "";
 
 
 } else {
 	
-	$DVIopts[0] = "-P $Config{'PRINTER'} -t $PaperPS";
-	$DVIopts[1] = $DVIopts[0];
+	$DVIopts = "-f -t $PaperPS";
 		
-	$Command[0] = "| lpr -P$Config{'PRINTER'}";
-	$Command[1] = $Command[0];
+	$Command[0] = $Command[1] = "| $Config{PRINT_COMMAND}";
 	
 
 }
@@ -605,24 +611,24 @@ if ($Config{PAPERSAVE} eq "optional") {
 #
 # erster Fall: normaler Druck
 if (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "off")) {
-	PrintNormal($DVIopts[0]);
+	PrintNormal($DVIopts);
 }
 #
 # zweiter Fall: nur Duplexdruck
 elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
 	
 	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") == 1) {
-		PrintNormal($DVIopts[0]);
+		PrintNormal($DVIopts);
 	
 	} else {
 
 		if (!defined($child_pid = fork())) {
 			die "kann fork nicht ausführen: $!";
 		} elsif ($child_pid) {
-			system ("dvips -A $DVIopts[0] $Temp{'dvi'}  2>> $Umleitung");
+			system ("dvips -A $DVIopts $Temp{'dvi'}  2>> $Umleitung $Command[0]");
 		} else {
 			sleep ($Config{'SPEED'} * $Seitenzahl / 2 + $Config{'WAIT'});
-			system ("dvips -B $DVIopts[1] $Temp{'dvi'}  2>> $Umleitung");	
+			system ("dvips -B $DVIopts $Temp{'dvi'}  2>> $Umleitung $Command[1]");	
 			exit;
 		}
 	}
@@ -1281,7 +1287,7 @@ sub GetSeitenzahl ($) {
 
 sub PrintNormal ($) {
 	
-	system ("dvips $_[0] $Temp{'dvi'} 2>> $Umleitung")
+	system ("dvips $_[0] $Temp{dvi} 2>> $Umleitung $Command[0]")
 	&& die "Unable to print: $!";
 
 }

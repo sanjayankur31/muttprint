@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-02-16</pubdate>
+	<pubdate>2002-05-01</pubdate>
 	
 	<releaseinfo>Version 0.63</releaseinfo>   
 	
@@ -425,6 +425,23 @@ set printer_name "muttprint"
 				with the prefix <filename>2</filename>, e.&nbsp;g.
 				<filename>test.ps2</filename>.</para>
 				
+		</sect3>
+		<sect3>
+			<title>Printing command</title>
+
+			<para>Muttprint uses <application>lpr</application> to print in its
+				default setting. If you would like to use another printing command,
+				set <literal>PRINT_COMMAND</literal> to the program you would like
+				to use. The string <literal>$PRINTER</literal> is replaced by the
+				choosed printer. The default is <literal>lpr -P$PRINTER</literal>.
+			</para>
+
+			<tip>
+				<para>You could use the setting <literal>gv -</literal> to have
+					a print preview. This is useful if you test different settings.
+				</para>
+			</tip>
+		
 		</sect3>
 		<sect3>
 			<title>Penguin</title>
