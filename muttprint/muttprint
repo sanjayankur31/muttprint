@@ -1364,7 +1364,7 @@ sub DecodeHeader () {
  		$EncPart =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
  		$EncPart =~ s/_/ /g;
 		
-		s/=\?ISO-8859-[0-9]+\?Q\?.*?\?=/$EncPart/;
+		s/=\?ISO-8859-[0-9]+\?Q\?.*?\?=/$EncPart/i;
 		
 	}
 }
