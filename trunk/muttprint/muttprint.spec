@@ -5,7 +5,7 @@
 #
 # Tab =^= 8 characters
 
-%define			version		0.72c
+%define			version		0.72d
 
 Summary: 		pretty printing of mails with Mutt
 Summary(de):		schöner Ausdruck von Mails mit Mutt
@@ -32,7 +32,8 @@ can print a little penguin on the first page and a headline on every page.
 Furthermore, it only prints the most important headers, but not the whole
 plethora of them.
 
-Author: Bernhard Walle <Bernhard.Walle@gmx.de>
+Author:      Bernhard Walle <Bernhard.Walle@gmx.de>
+Maintainer:  Lukas Ruf <lukas.ruf@lpr.ch>
 
 
 %description -l de
@@ -42,7 +43,8 @@ von Netscape Messenger oder KMail aussieht. Es kann einen kleinen Pinguin auf
 die erste Seite sowie eine Kopfzeile auf jede Seite drucken.  Außerdem druckt
 es nur die wichtigen Header und nicht alle. 
 
-Autor: Bernhard Walle <Bernhard.Walle@gmx.de>
+Author:      Bernhard Walle <Bernhard.Walle@gmx.de>
+Maintainer:  Lukas Ruf <lukas.ruf@lpr.ch>
 
 
 %description -l es
@@ -52,7 +54,8 @@ Messenger o Kmail.  Este puede imprimir un pequeño pingüino en la primera
 página y un encabezado en cada página. Además, sólo imprime las cabeceras más
 importantes, pero no toda la plétora de ellas.
 
-Autor: Bernhard Walle <Bernhard.Walle@gmx.de>
+Author:      Bernhard Walle <Bernhard.Walle@gmx.de>
+Maintainer:  Lukas Ruf <lukas.ruf@lpr.ch>
 
 
 %description -l it
@@ -62,7 +65,9 @@ messenger o kmail. può stampare un piccolo pinguino sulla prima pagina e un
 titolo in ogni pagina. soprattutto, muttprint stampa solamente gli headers più
 importanti scartando tutto ciò che è inutile.
 
-Autore: Bernhard Walle <Bernhard.Walle@gmx.de>
+Author:      Bernhard Walle <Bernhard.Walle@gmx.de>
+Maintainer:  Lukas Ruf <lukas.ruf@lpr.ch>
+
 
 %build
 make
@@ -95,6 +100,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Mar 04 2005 Lukas Ruf <lukas.ruf@lpr.ch>
+- Set current Maintainer with bug reports 
 * Mon Apr 05 2004 Bernhard Walle <bernhard.walle@gmx.de>
 - Removed muttprint-langinfo, use i18n module
 * Mon Jul 28 2003 Bernhard Walle <Bernhard.Walle@gmx.de>

@@ -11,9 +11,9 @@ muttprint [I<options>]... [-f I<file>]
 =head1 DESCRIPTION
 
 This manual page documents briefly the B<Muttprint> utility. This manual 
-page was written orginally written for the Debian GNU/Linux distribution 
+page was written originally written for the Debian GNU/Linux distribution 
 because the original program did not have a manual page, but now I took
-over this manpage in POD-format.
+over this man page in POD-format.
 
 B<Muttprint> is a utility that formats the printing of Mutt and other 
 mail clients like XFMail or PINE to be like the printing of Netscape Messenger 
@@ -21,7 +21,7 @@ or Kmail. It can print a little penguin on the first page and a headline on ever
 page. Furthermore, it only prints the most important headers, but not the 
 whole plethora of them.
 
-For detailed informations about Muttprint look read the User's guide in PDF 
+For detailed information about Muttprint look read the User's guide in PDF 
 and HTML format at F<##DOCDIR##/muttprint/>.
 
 Anyway, you have to put the following line in your F<##SYSCONFDIR##/Muttrc> or 
@@ -34,7 +34,7 @@ F<##DOCDIR##/muttprint/sample-muttprintrc-en>
 to F<##SYSCONFDIR##/Muttprintrc> or F<~/.muttprintrc> in reliance
 if you want change the settings for the whole system or one user.
 
-B<Muttprint> defaults to English lanuage settings if the environment 
+B<Muttprint> defaults to English language settings if the environment 
 variable I<LANG> is not set.  For example in a German environment 
 you should set:
 
@@ -73,7 +73,7 @@ Prints out information about the current locale environment and exits.
 
 =item B<-f> I<file>B<, --file> I<file>
 
-Reads from file instad of STDIN. Useful for some mail clients as I<XFMail>.
+Reads from file instead of STDIN. Useful for some mail clients as I<XFMail>.
 If I<file> is I<->, B<Muttprint> reads from STDIN.
 
 
@@ -130,18 +130,18 @@ installed LaTeX-system. Default is I<Latex>.
 =item B<-H, --headrule> | B<-noH, --noheadrule>
 
 Here you can choose whether it should be printed a rule after
-the topline on pages greater than 2 or not.
+the top line on pages greater than 2 or not.
 
 
 =item B<-b, --footrule> | B<-nob, --nofootrule>
 
 Here you can choose whether it should be printed a rule over the
-footline or not.
+foot line or not.
 
 
 =item B<-S> I<style>B<, --frontstyle> I<style>
 
-Choose a style for the printing of the mailheaders on the first page: I<plain>,
+Choose a style for the printing of the mail headers on the first page: I<plain>,
 I<border> (default), I<Border>, I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
 I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailed description of
 this values.
@@ -170,7 +170,7 @@ and I<letter> in the U.S.
 
 This option accepts two settings: I<original> and I<local>. If you
 use I<original>, the date will be printed unchanged as it appears
-in the mailheader, i. e. in English and in the sender's time zone.
+in the mail header, i. e. in English and in the sender's time zone.
 If set to I<local>, the date will be printed in the local
 language and in the system's time zone. See the options
 I<--date-format> and I<--lang>.
@@ -186,7 +186,7 @@ Examples:
 =item B<-E> I<String>B<, --date-format> I<String>
 
 This options allows you to change the date format (if you've
-choosen I<local> before). The argument is a format string
+chosen I<local> before). The argument is a format string
 according to strftime(3), e. g.:
 
         "%A, %d. %B %Y %H:%M:%S" (standard in Germany)
@@ -197,7 +197,7 @@ according to strftime(3), e. g.:
 
 =item B<-A> I<String>B<, --addressformat> I<String>
 
-With this option you can set how mail adresses are printed. The value
+With this option you can set how mail addresses are printed. The value
 I<original> does not change the header. Otherwise you have to specify
 a format string; following substitutions are done:
 
@@ -220,7 +220,7 @@ splits the string into two parts.
 =item B<-n> I<String>B<, --verbatimnormal> I<String>
 
 This sets the options which are passed to the I<Verbatim> environment
-that is necessary to print the normal mail text. Detailled explanations
+that is necessary to print the normal mail text. Detailed explanations
 are in the user's guide. Some examples:
 
 
@@ -242,7 +242,7 @@ between normal text and signature.
 
 =item B<-D, --debug> | B<-noD, --nodebug>
 
-Choose whether B<Muttprint> writes to a logfile F<##TEMPDIR##/muttprint.log>.
+Choose whether B<Muttprint> writes to a log file F<##TEMPDIR##/muttprint.log>.
 Useful to ask some other about help if B<Muttprint> doesn't work.
 
 
@@ -326,7 +326,7 @@ and I<12pt>.
 =item B<-W> I<number>B<, --wrapmargin> I<number>
 
 Controls how long the longest line could be. Longer lines
-are wraped automatically and the paragraph will be reformated.
+are wrapped automatically and the paragraph will be reformatted.
 
 
 =item B<-r> I<file>B<, --rcfile> I<file>
@@ -408,6 +408,10 @@ A PARTICULAR PURPOSE.
 =head1 AUTHOR
 
 Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=head1 MAINTAINER
+
+Lukas Ruf E<lt>lukas.ruf@lpr.ch<gt>
 
 =cut
 

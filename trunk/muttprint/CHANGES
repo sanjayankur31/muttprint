@@ -1,6 +1,9 @@
 CHANGES
 =======================================================================
 
+0.72d   - 2005-03-04:2011 - Lukas Ruf <lukas.ruf@lpr.ch>
+          New Maintainer
+
 0.72c   - Added "looking for a new maintainer" info
 
 0.72b   - fixed some errors (utf-8)

@@ -2,7 +2,7 @@ Muttprint - Translation
 ==============================================================================
 
 
-Localization is now completely new implemented sinde 0.72. If you have *any*,
+Localization is now completely new implemented since 0.72. If you have *any*,
 problems please read the documentation and the CHANGES file. If it still
 does not work, please send me a mail with all information about your system!
 
@@ -93,7 +93,7 @@ very small audience. I hope you understand it :)
 Russian:
 ~~~~~~~~
 
-Not all TeX systems support cyrillic characters in encodings KOI8-R or UTF-8.
+Not all TeX systems support Cyrillic characters in encodings KOI8-R or UTF-8.
 Please use teTeX 2.0 if you have any problems. Also, not all fonts contains
 the required characters, so you may have to use the LaTeX default fonts
 (Computer Modern). For details read the User's guide.
@@ -101,5 +101,5 @@ the required characters, so you may have to use the LaTeX default fonts
 
 Finally, I would like to thank _all_ translators for their provided work.
 Translations are very important for OpenSource! But the price is that all
-developers must speek (and write) English well.
+developers must speak (and write) English well.
 

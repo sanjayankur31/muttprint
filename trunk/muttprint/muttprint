@@ -6,7 +6,8 @@
 ########################################################################
 #                                                                      #
 #    Muttprint - pretty printing of mails with Mutt                    #
-#    Copyright (c) 2000-03, Bernhard Walle <bernhard.walle@gmx.de>     #
+#    Copyright (c) 2000-04, Bernhard Walle <bernhard.walle@gmx.de>     #
+#    Copyright (c) 2005,    Lukas Ruf <lukas.ruf@lpr.ch>               #
 #                                                                      #
 #    This program is free software; you can redistribute it and/or     #
 #    modify it under the terms of the GNU General Public License as    #
@@ -54,7 +55,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72c";
+our $VERSION = "0.72d";
 my $PACKAGE = "Muttprint";
 
 
@@ -128,7 +129,7 @@ sub convert_init ();
 	LATEXCODE2		=>	'',
 	LATEXCODE3		=>	'',
 	LATEXCODE4		=>	'',
-	MAINT_SEARCH    =>  'on',
+	MAINT_SEARCH    =>  'off',
 	LATEXCODE5		=>	'',
 	BACKGROUND		=>	0,
 	ICONV_EXTERNAL	=> 'off',
@@ -265,7 +266,7 @@ if ($Config{MAINT_SEARCH} eq 'on') {
 		       ."Muttprint is looking for a new maintainer. "
 			   ."If you want to takeover Muttprint developement, "
 			   ."contact\n\n"
-			   ."      bernhard.walle\@gmx.de\n\n"
+			   ."      lukas.ruf\@lpr.ch\n\n"
 			   ."Thanks!\n\n"
 			   ."This message is disabled automatically.\n"
 		   );
@@ -1765,8 +1766,8 @@ sub fatalError ($) {
 		"======================================================================\n\n".
 		 $message . 
 		"\n\n\----------------------------------------------------------------------\n".
-		"If this message does not help you, write to the author of Muttprint\n".
-		"(bernhard.walle\@gmx.de) and include a detailed error description.\n".
+		"If this message does not help you, write to the maintainer of Muttprint\n".
+		"(lukas.ruf\@lpr.ch) and include a detailed error description.\n".
 		"Please make sure that you've read the whole documentation and checked \n".
 		"for updates before you write! ******* Press Ctrl-L after terminating \n".
 		"this process if the screen is not redrawed correctly!\n";
@@ -2156,7 +2157,7 @@ $String{"License"} = "This program is distributed under the terms of the
 GPL and can be freely copied.
 ";
 
-$String{"Bugs"} = "Please report bugs to <bernhard.walle\@gmx.de>.\n";
+$String{"Bugs"} = "Please report bugs to <lukas.ruf\@lpr.ch>.\n";
 
 $String{"FileNotFound"} = "The specified file was not found.\n";
 

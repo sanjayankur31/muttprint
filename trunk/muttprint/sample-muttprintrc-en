@@ -64,7 +64,7 @@ FONT="Latex"
 # Choose a style for the first page
 # - plain       no rules
 # - border      rule after the headers
-# - fbox        simple box around the mailheaders
+# - fbox        simple box around the mail headers
 # - shadowbox   shadowbox around the header
 # - ovalbox     box with rounded corners around the header (thin lines)
 # - Ovalbox     same as "ovalbox" but thicker lines
@@ -88,7 +88,7 @@ FOOTRULE="off"
 PAPER="A4"
 
 #
-# prints no signatures which were seperated by "-- "
+# prints no signatures which were separated by "-- "
 REM_SIG="off"
 
 #
