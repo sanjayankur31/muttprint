@@ -1010,7 +1010,7 @@ sub getPaperConfig () {
 			de_AT	=> "naustrian",
 			gr		=> "greek",
 			iw		=> "hebrew",
-			hu		=> "hungarian",
+			hu		=> "magyar",
 			is		=> "icelandic",
 			ga		=> "irish",
 			it		=> "italian",
