@@ -71,7 +71,14 @@ PLEASE NOTICE: This options override the corresponding settings in
 -c [charset], --charset [charset]
        Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
        auto (read the manual before you use "auto").
-	   
+
+-e [string], --date [string]
+       original: prints the date as it is in the header
+       local:    converts to local time zone and language
+
+-E [string], --date-format [string]
+       date format string; see strftime(3) for details
+
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 

@@ -191,6 +191,32 @@ zu finden, der den Zeichensatz enthält. Dies funktioniert nur
 unter bestimmten Umständen korrekt und sollte mit Vorbehalt benutzt
 werden.
 
+
+=item B<-e> I<Zeichenkette>B<, --date> I<Zeichenkette>
+
+Diese Option erlaubt zwei Einstellungen: I<original> und I<local>. Bei
+I<original> wird das Datum unverändert wie im Mailheader gedruckt, d. h. auf English
+und in der Zeitzone des Absenders. Bei I<local> konvertiert Muttprint
+das Datum und die Uhrzeit in die Systemzeitzone und gibt das Datum in der
+Systemprache aus. Vgl. die Optionen I<--date-format> und I<--lang>.
+
+Beispiele:
+
+	original: Tue, 15 Jan 2002 21:43:49 +0100
+	local:    Dienstag, 15. Januar 2002 21:43:49
+
+
+=item B<-E> I<Zeichenkette>B<, --date-format> I<Zeichenkette>
+
+Über diese Option lässt sich das Datumsformat (falls I<local> gewählt
+wurde) genauer definieren. Als Argumente werden Format-Strings
+nach strftime(3) akzeptiert, z. B. 
+	
+	"%A, %d. %B %Y %H:%M:%S" (üblich in Deutschland)
+	"%a, %d.%m.%y %H:%M"     (verkürzte Form)
+	"%Y-%m-%d %H:%M:%S"      (nach ISO)
+
+
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Wählen Sie, ob B<Muttprint> in eine Logdatei F</tmp/muttprint.log> schreiben

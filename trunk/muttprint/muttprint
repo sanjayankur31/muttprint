@@ -38,6 +38,9 @@ use warnings;
 # Deklaration nach Perl-5.005-Art
 use vars qw($VERSION %String $LPack $charset);
 use sigtrap qw(die INT QUIT);
+use POSIX;
+
+
 
 # for working directory -- Perl 5 standard module
 use Cwd;
@@ -74,6 +77,7 @@ sub DecodeHeader();
 sub GetDefaultPrinterCDE();
 sub ChangeForXface($);
 sub get_charset($);
+sub convert_date($);
 sub getISOlatinExtensions($);
 
 ######## 'private' Variablen für den Rest
@@ -92,6 +96,8 @@ my %Config = (
 	HEADRULE		=>	'off',
 	FOOTRULE		=>	'off',
 	FRONTSTYLE		=>	'border',
+	DATE			=>	'original',
+	DATE_FORMAT		=>	'%c',
 	XFACE			=>	'off',
 	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
 	FONTSIZE		=>	'10pt',
@@ -189,7 +195,7 @@ if ($Config{DEBUG}) {
 
 $Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
 $Lang = $Config{'LANG'} if defined $Config{'LANG'};
-
+POSIX::setlocale(&POSIX::LC_ALL, $Lang);
 
 Setze_String();
 
@@ -360,6 +366,12 @@ foreach (@headers) {
 		
 		if ($_ eq "Date") {
 			$Header{$_} =~ s/-/--/;
+
+			#
+			# Datum konvertieren
+			if ($Config{DATE} eq "local") {
+				$Header{Date} = convert_date($Header{Date});
+			}
 		}
 		else {
 			for ($Header{$_}) {
@@ -605,7 +617,7 @@ sub ReadConfig () {
 		open (RCFILE, $rcfile) || die "Could not open $rcfile: $!";
 
 		while (<RCFILE>) {
-			if (/^([^#=\s]+)=(["']?)(\S*)\2\s+$/) { 
+			if (/^([^#=\s]+)=(["']?)(.*)\2\s+$/) { 
 				$Config{$1} = $3; 
 			}
 		}
@@ -649,6 +661,8 @@ sub ReadOpts () {
         'W|wrapmargin=s'        =>  \$Config{WRAPMARGIN},
 		'c|charset=s'			=>	\$Config{CHARSET},
 		'D|debug!'				=>	\$Config{DEBUG},
+		'e|date=s'				=>	\$Config{DATE},
+		'E|date-format=s'		=>	\$Config{DATE_FORMAT},
 
 
 		'l|lang=s'				=>	\$opt{LANG},
@@ -1246,6 +1260,25 @@ sub WriteFormated ($*$) {
 
 ##############################################################################
 
+sub convert_date ($) {
+	my $date = shift;
+
+	#
+	# Überprüfen, ob das Modul installiert ist. Wenn nicht, Warnung
+	# ausgeben und so verwenden.
+	eval "use Date::Parse";
+	
+	if ($@) {
+		warn "It seems that you don't have installed ".
+			"the module \"Date::Parse\" on your system. Please install it or ".
+			"use the setting \"DATE=original\" in your ~/.muttprintrc.\n";
+		return $date;
+	}
+	
+	return strftime($Config{DATE_FORMAT}, localtime(str2time($date)));
+
+}
+
 sub ModifyPS ($) {
 
 	my $Tumble;
@@ -1396,6 +1429,8 @@ PLEASE NOTICE: This options override the corresponding settings in
        Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
 	   auto (read the manual before you use "auto").
 
+-e
+	   
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 

@@ -66,6 +66,38 @@
 			are available on your system. The last are only necessary if you
 			want to use paper save mode and/or duplex printing.</para>
 
+
+		<para>For parsing the date, Muttprint uses the Perl module
+			<application>Date::Parse</application><footnote>
+			<para>
+				<ulink url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
+			</para>
+		</footnote>
+		<footnote><para>You find details about the installation in this file.
+			Normally, using the following procedure should work:</para>
+			
+			<para>
+				<prompt>$ </prompt><userInput>tar xvfz Time-Date-1.10.tar.gz</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make</userinput>
+			</para>
+			<para>
+				<prompt>$ </prompt><userinput>make test</userinput> 
+			</para>
+			<para>
+				<prompt># </prompt><userinput>make install</userinput>
+			</para>
+			
+			</footnote>. If the module is not installed, Muttprint works without 
+			problems except the function to convert the time zone and print the date
+			in the local language, see <xref linkend="date">.</para>
+
+
+
 	</sect2>
 	<sect2>
 		<title>Installation of the files on your computer</title>
@@ -485,7 +517,35 @@ set printer_name "muttprint"
 			<para>To enable this mode, set <literal>PAPERSAVE</literal> to
 				<literal>on</literal>.</para>				
 		</sect3>
-		
+	
+		<sect3 id="date">
+			<title>Date</title>
+
+			<para>The <literal>DATE</literal> option allows two settings:
+				<literal>original</literal> and <literal>local</literal>. If
+				set to <literal>original</literal>, Muttprint print the date
+				unchanged as it is in the mail header, i.&nbsp;e. in English
+				and in the sender's time zone.</para>
+
+			<para>If you set this option to <literal>local</literal>,
+				Muttprint converts the time zone in the time zone of the system and
+				prints the date in the local language <footnote>
+					<para>This works independent from the translation file
+						by using the functions of the operating system. Despite this, the
+						<literal>LANG</literal> (see <xref linkend="lang">) in the
+						configuration file affects the language of the date.</para>
+				</footnote>.</para>
+
+			<para>The format of the date could be specified with the
+				<literal>DATE_FORMAT</literal> variable. The argument
+				is a format string, e.&nbsp;g. 
+				<literal>"%A, %d. %B %Y %H:%M:%S"</literal>. The quotation
+				marks are necessary because the string contains spaces.
+				The <citerefentry><refentrytitle>strftime</refentrytitle>
+				<manvolnum>3</manvolnum></citerefentry> manpage contains
+				details about it.</para>
+
+		</sect3>
 		<sect3 id="speed">
 			<title>Printing speed</title>
 			
@@ -717,7 +777,7 @@ set printer_name "muttprint"
 
 
 	</sect2>
-	<sect2>
+	<sect2 id="lang">
 		<title>Different languages</title>
 		
 		<para>Muttprint supports the languages <emphasis>German</emphasis>, 
