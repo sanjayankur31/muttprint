@@ -74,6 +74,14 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
      Poda format e-naslova v glavi e-pisma, poglejte si navodila 
      programa ali dokumentacijo za natanènej¹i opis.
 
+-n [niz], --verbatimnormal [niz]
+     Za oblikovanje normalnega teksta sporoèila elektronske po¹te. Za natanènej¹i
+		 opis si preberite uporabni¹ki priroènik.
+
+-V [niz], --verbatimsig [niz]
+     Enako kot --verbatimnormal, toda ta nastavi 
+		 oblikovanje podpisa.
+
 -D, --debug | -noD, --nodebug
        Izpi¹e uporabne podatke v datoteko za dnevnik /tmp/muttprint.log.
 
