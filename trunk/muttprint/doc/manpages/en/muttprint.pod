@@ -324,7 +324,12 @@ Sets the right margin in millimeters.
 Removes the signature (separated by C<-- >) in the 
 printing. This is useful for very long signatures. But more and more people 
 (or mail clients) doesn't separate the signature correctly so this
-feature works not always.
+feature works not always, see also the next option.
+
+=item B<--sig_regexp> I<Regular Expression>
+
+Sets the regular expression (in Perl syntax) used to recognize signatures.
+The default is I<^-- $>.
 
 
 =item B<-q, --rem_quote> | B<-noq, --norem_quote>

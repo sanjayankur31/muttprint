@@ -321,7 +321,12 @@ Stellt den rechten Rand in Millimetern ein.
 Löscht die Signatur (abgetrennt durch C<-- >) im Ausdruck. 
 Dies ist bei sehr langen Signaturen nützlich. Aber immer mehr Menschen
 (oder Mailprogramme) trennen die Signatur nicht korrekt ab, so dass dieses
-Feature nicht immer richtig funktioniert.
+Feature nicht immer richtig funktioniert, siehe auch die nächste Option.
+
+=item B<--sig_regexp> I<Regulärer Ausdruck>
+
+Setzt den Regulären Ausdruck (in Perl-Syntax), der für Signaturerkennung
+verwendet wird.  Die Standardeinstellung ist I<^-- $>.
 
 
 =item B<-q, --rem_quote> | B<-noq, --norem_quote>
