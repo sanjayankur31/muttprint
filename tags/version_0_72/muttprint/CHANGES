@@ -1,0 +1,210 @@
+CHANGES
+=======================================================================
+
+0.72    - added Finnish translation
+        - changed internationalization completely, read the manual for
+          more information, it is all documented
+          · requires Perl 5.8 or Linux or external C program 
+            "muttprint-langinfo"
+          · requires Text::Iconv or (but this is NOT required) external
+            iconv
+          · conviguration by the locale environment
+        - removed LANG and CHARSET configuration option and command
+          line switches
+        - output error messages using 'dialog' if installed
+        - running in foreground by default, new variable BACKGROUND
+        - changed translation "API" to English names (changed all
+          distributed translations so there sould be no problem)
+        - improved layout
+        - Replaced \renewcommand{\tt}{\rm} by 
+          \renewcommand{\ttfamily}{\rmfamily} (Fixed #892382)
+
+0.71	- changed shebang line to #!/usr/bin/env perl because it works
+          on all system regardless where perl is installed (only in
+          release, not in CVS)
+        - new configuration option SIG_REGEXP which specifies the
+          regular expression used to recognize the signature
+        - translated `Organization:' header
+        - added Gentoo pictures
+        - added `docdirname' variable in Makefiles which specifies the
+          name of the directory created in `docdir'. The naming scheme
+          is a bit confusing but I didn't want to break compatibility.
+        - no translation adaptions because changes are small and I
+          wanted to release it quickly because of Gentoo
+
+0.70    - changed fontpackage for Times to `mathptm' and the package
+          for Palatino to `mathpazo' because `times' and `palatino' are
+          obsolte (according to de.comp.text.tex)
+        - added font options `AvantGarde', `CentSchool', `Chancery' and
+          `Helvetica'
+        - code cleanup
+        - complete rewrite of printing code
+        - supporting the CUPS printing system (set PRINT_COMMAND to `CUPS'),
+          i.e. when using this setting the `psnup' and `psselect' programs
+          are not needed and when setting DUPLEX to `printer' CUPS is
+          responsible for duplex printing
+        - removed detection of geometry.sty version by making `compat2' to
+          a global option [closes Debian-Bug #180615]
+        - added UTF-8 support (experimental)
+        - reversed this CHANGES file (first entry is most current version)
+        - added KOI8-R support (experimental); this works not on all LaTeX
+          systems, so use teTeX 2.0 if you have problems
+        - added Russian translation, thanks to Alex Semenyaka
+        - changed translation directory to /usr/share/muttprint/translations
+          according to FHS
+        - creating temporary dir using File::Temp module which honors the
+          TMPDIR environment
+        - removed *png and *jpg from the distribution because it's not needed
+          by Muttprint -- you find this files still in the CVS if you need it
+        - removed temporary *sed files from distribution (by changing Makefiles)
+
+0.64    - add compatibility option for new geometry.sty
+        - fixed bug with '_' in e-mail address in the headline
+        - limited size of subject in the headline to 60 chars
+
+0.63a   - replaced absolute paths in the documentation with variables;
+          the variables are replaced before building the documentation
+        - applied some Debian patches:
+          . replaced cwd() from Cwd with getcwd() from POSIX
+          . replaced sgmltools -j ... option with the -s option
+
+0.63    - new options VERBATIMNORMAL and VERBATIMSIG for changing the
+          formating of text and signature
+        - new option PAPERSAVE="optional"
+        - new variable PRINT_COMMAND to change the print command
+        - new option LATEXCODE (and LATEXCODE1 ... LATEXCODE5)
+        - fixing some small bugs
+
+0.62b   - updated Spanish translation
+        - '-w' flag instead of 'use warnings;' for Perl 5.005-
+          compatibility
+
+0.62a   - updated Italian and French translation
+
+0.62    - printing Euro sign works ($charset must be set to "latin9")
+        - more ASCII charaters are escaped -> printing the header
+          should work now with *all* ASCII chars
+        - new options: $FONTSIZE and $WRAPMARGIN
+        - full support of Windows-1252 and Windows-1250 charsets
+          as superset of latin1 and latin2
+        - simple automatic detection of charset if $charset=auto
+          (use this carefully!) 
+          [Normally you should set $charset in dependence of
+          the Mutt $charset variable]
+        - new options: $DATE, $DATE_FORMAT
+        - new option: $ADDRESSFORMAT (specifies the format of the
+          adresses in the mailheader
+        - new option: $RCFILE (additional configuration file)
+
+0.61    - Czech translation
+        - fixed $charset-bug in Czech translation
+        - printed header can be customized (PRINTED_HEADERS)
+        - declaration of global variables now Perl-5.005 compatible
+        - support of X-Faces (requires 'convert' and 'uncompface')
+        - changes in documentation
+        - Polish translation 
+        - CDE printer configuration is recognized (~/.printers)
+        - better code for deletion of temporary files
+        - fixed bug with reading configuration files
+
+0.60    - translation strings are now in external files
+          (in the $prefix/lib/muttprint directory)
+        - NEWSGROUP_STRING in ~/.muttprintrc changed to
+          NEWSGROUPS_STRING because the RFC header is named
+          "Newsgroups:" and not "Newsgroup:"
+        - solved problem with double output on Perl < 5.6
+        - improved the code for recognizing the Realname in the
+          header up to page 2
+        - the external program "fmt" is not needed any more -- its
+          functionality has been integrated in Muttprint
+          (this should solve problems on plattforms other than
+          Linux which uses not GNU fmt)
+        - moved documentation format from Latex to DocBook
+          (this has no effects for the end user beside of
+          the other layout of the documentation)
+        - Implemented decoding of Quoted Printable in headers and in 
+          the body. This makes it possible to print raw messages
+          (without attachments).		  
+
+0.53a   - Muttprint runs in the background after reading the
+          content -> seems to be faster
+        - bug in Latex-code fixed (the footer was not on the same
+          position every page)
+
+0.53    - changed the path structure of the Tarball
+        - wrote Makefiles for easier installation and building of 
+          documentation
+        - full Spanish translation (thanks to Marcelo Ramos)
+        - full Italian translation (thanks to Roberto Vallone)
+        - shorten output of -h/--help
+        - Manpage translated to German
+        - header with Autor and Subject printed on every page
+        - new French support
+        - fixed options: -P for paper format and -F for font
+        - support for /etc/papersize (thanks to Chanop Silpa-Anan)
+        - add README.Gnus to the archive in reality (it was missing
+          before because of an missing symlink)
+
+0.52a   - turned off displaying configuration options to STDOUT 
+          (this was for internal testing only)
+
+0.52    - command line options for some features
+        - manpage written using POD (Plain Old Documentation)
+          (the old manpage was of the Debian project)
+        - fixed 'Newsgrop' bug (correct header is 'Newsgroups')
+        - fixed 'header' bug (headers consists of more than one
+          line are parsed correctly)
+        - add README.Gnus (hints for using Muttprint with Gnus)
+
+0.51    - deleted German comments in THIS file because it's useless
+        - add support for real PostScript duplex printers 
+          (thanks to Chanop Silpa-Anan for the help)
+        - small changes
+
+0.50b   - printing of characters out of windows-1252 charset possible
+
+0.50a   - small bug fixed
+
+0.50    - rewritten using perl (before: Bash-shellscript)
+        - Italian support
+        - new functions: REM_SIG and REM_QUOTE -> manual
+
+0.42	- Print in file
+        - mktemp replaced
+
+0.41    - minor bug fixed
+        - distributed more pics
+        - You can turn the penguin off (PENGUIN="off")
+
+0.40	- paper save mode
+        - minor bug fixed
+        - moved penguin from /usr/share/mutt to /usr/share/muttprint/
+
+0.30    - mostly rewritten with LaTeX as base
+
+0.23    - Newsgroups:-header is printed instead of TO, if there's no To:
+
+0.22    - scaling of $PENGUIN is possible; small changes
+
+0.21    - problem with backslash fixed
+
+0.20    - english language support added
+        - installation script added
+        - small corrections
+        - header on alle sides, manual duplex print
+
+0.15    - HTML documentation: little changes
+
+0.14    - HTML documentation created
+
+0.13    - prints little penguin on the right top if you wish
+
+0.12    - line wrap for long lines (> 100 characters)
+
+0.11    - script gets the data via standard input or as file
+        - changes for XFMail-support
+
+0.10    - First release
+
+_______________
+vim:ts=8 et
