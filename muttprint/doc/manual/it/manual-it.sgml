@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2001-09-02</pubdate>
+	<pubdate>2001-12-15</pubdate>
 	
-	<releaseinfo>Versione 0.60</releaseinfo>   
+	<releaseinfo>Versione 0.61</releaseinfo>   
 	
 		
 	
@@ -226,7 +226,6 @@ set print_split
 
 		<sect3>
 
-        <sect3>
             <title>Slrn</title>
 
             <para>Semplicemente aggiungi le seguenti linee al tuo file
@@ -244,7 +243,9 @@ set printer_name "muttprint"
                   (una dopo l'altra). Questo è importante per stampare
                   l'header X-Face, guarda <xref linkend="xface">.</para>
 
-        </sect3>
+    </sect3>
+
+		<sect3>
 
 			<title>XFMail</title>
 
@@ -480,7 +481,7 @@ set printer_name "muttprint"
 				stampante per poter calcolare correttamente il tempo
 				che deve intercorrere tra la stampa delle pagine pari e
 				quelle dispari.
-				Guarda a <xref linkend="velocita">.</para>
+				Guarda a <xref linkend="speed">.</para>
 				
 			<para>Per attivare il duplex printing, imposta <literal>DUPLEX</literal>
 				a <literal>on</literal>.</para>
