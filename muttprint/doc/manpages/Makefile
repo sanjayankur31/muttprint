@@ -14,6 +14,7 @@ libdir = $(prefix)/lib
 mandir = $(prefix)/share/man
 INSTALL = install -m 0644 
 gzip = gzip -f
+rm = rm
 
 TITLE_EN = "Muttprint Short Manual"
 TITLE_DE = "Muttprint Kurzanleitung"
@@ -41,6 +42,7 @@ de/muttprint: de/muttprint.pod
 de/muttprint.1.gz: de/muttprint
 	$(POD2MAN) --center=$(TITLE_DE) de/muttprint de/muttprint.1
 	$(gzip) de/muttprint.1
+	$(rm) de/muttprint
 
 
 ############################# ENGLISH ################################
@@ -57,6 +59,7 @@ en/muttprint: en/muttprint.pod
 en/muttprint.1.gz: en/muttprint
 	$(POD2MAN) --center=$(TITLE_EN) en/muttprint en/muttprint.1
 	$(gzip) en/muttprint.1
+	$(rm) en/muttprint
 
 
 ############################# SPANISH #################################
@@ -73,6 +76,7 @@ es/muttprint: es/muttprint.pod
 es/muttprint.1.gz: es/muttprint
 	$(POD2MAN) --center=$(TITLE_ES) es/muttprint es/muttprint.1
 	$(gzip) es/muttprint.1
+	$(rm) es/muttprint
 
 
 ############################ ITALIAN ##################################
@@ -89,6 +93,7 @@ it/muttprint: it/muttprint.pod
 it/muttprint.1.gz: it/muttprint
 	$(POD2MAN) --center=$(TITLE_IT) it/muttprint it/muttprint.1
 	$(gzip) it/muttprint.1
+	$(rm) it/muttprint
 
 
 ########################### GENERAL ###################################
@@ -105,4 +110,4 @@ uninstall:
 	rm -f $(mandir)/*/man1/muttprint.1.gz
 
 clean: 
-	rm */muttprint.1.gz */muttprint
+	rm */muttprint.1.gz 

@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2003-05-01</pubdate>
+	<pubdate>2003-04-26</pubdate>
 	
 	<releaseinfo>Versione 0.70</releaseinfo>   
 	
@@ -449,7 +449,7 @@ set printer_name "muttprint"
 				Se usi CDE (comune sui sistemi Unix commerciali)
 				il suo file di configurazione viene letto per rilevare la stampante di default.</para>
 				
-			<para>Dalla versione 0.65 Muttprint offre il supporto diretto
+			<para>Dalla versione 0.70 Muttprint offre il supporto diretto
 			 	del nuovo sistema di stampa CUPS. Esso può essere abilitato
 				impostando <literal>PRINT_COMMAND</literal> a <literal>CUPS</literal>.
 				In alternativa è possibile impostarlo ad un comando arbitrario
