@@ -74,7 +74,15 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 
 -A [Zeichenkette], --addressformat [Zeichenkette]
        Gibt das Format für die Mailadresse im Kopf an, siehe
-	   die Manpage oder Dokumentation für Details.
+       die Manpage oder Dokumentation für Details.
+
+-n [Zeichenkette], --verbatimnormal [Zeichenkette]
+       Dient zur Einstellung der Formatierung des normalen Mailtextes.
+       Lesen Sie die Manpage und das Handbuch für Details.
+
+-V [Zeichenkette], --verbatimsig [Zeichenkette]
+       Wie --verbatimnormal, allerdings wird hiermit die Formatierung
+       der Signatur eingestellt.
   
 -D, --debug | -noD, --nodebug
        Schreibt nützliche Informationen in eine Logdatei /tmp/muttprint.log.
