@@ -1126,8 +1126,8 @@ EOF
 
 sub DeleteTemp () {
 
-	# unlink (<$Temp{"dir"}/*>);
-# 	rmdir ($Temp{'dir'});
+	unlink (<$Temp{"dir"}/*>);
+ 	rmdir ($Temp{'dir'});
 
 }
 
