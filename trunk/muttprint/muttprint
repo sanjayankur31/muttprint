@@ -420,8 +420,6 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	#
 	# wenn die Header nicht ausgelesen werden koennen: so drucken!		
 	unless ($Header{From} || $Header{To} || $Header{Subject}) { 
-		print "Test\n";
-
 		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS//g;
         
 		open (PRINTER, "| $Config{PRINT_COMMAND}") 
