@@ -26,6 +26,9 @@ dans ~/.muttprintrc et /etc/Muttprintrc.
 -i [fichier], --penguin [fichier]
        Indique quelle image utiliser sur la première page.
 
+-x, --x-face | -nox, --nox-face
+       Active ou désactive l'impression des X-Faces.
+
 -t [nombre], --speed [nombre]
        Temps en secondes nécessaire pour imprimer une page.
 
