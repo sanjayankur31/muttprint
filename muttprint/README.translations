@@ -34,7 +34,7 @@ en      English         Complete.                       Bernhard Walle
 
 de      German          Manpage, User's guide,          Bernhard Walle
                         translation file,
-			sample-muttprintrc
+			            sample-muttprintrc
                         -- up to date --
                         
 it      Italian         Manpage, User's guide,          Roberto Vallone
@@ -51,9 +51,9 @@ si      Slovenian       translation file,               Bo¨tjan Müller
 
 es      Spanish         Manpage, User's guide           Marcelo Ramos
                         translation file,
-			sample-muttprintrc,
-			README, INSTALL
-                        -- up to date 
+                        sample-muttprintrc,
+                        README, INSTALL
+                        -- version 0.62 --
 
 cs      Czech           Manpage, translation file       Dominik Formánek
                         -- version 0.61 --

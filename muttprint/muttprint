@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # Hinweis:	Tabulatorbreite: 4 Zeichen
 #			(automatische Einstellung für ViM durch letzte Zeile)
@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre8";
+$VERSION = "0.63";
 my $PACKAGE = "Muttprint";
 
 
@@ -120,6 +120,7 @@ my %Config = (
 	LATEXCODE3		=>	'',
 	LATEXCODE4		=>	'',
 	LATEXCODE5		=>	'',
+	FOREGROUND		=>	0,
 );
 my %Fontpackage = (
 	'Latex'    		=>		'',
@@ -267,6 +268,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	my $Content;
 
 	my $signature_mode;
+	my $sig_mod_counter = 0;
 
 	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
 	
@@ -292,9 +294,13 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 				$signature .= $_;
 			}
 
-			# Leerzeile => Ende der Signatur
-			if (/^$/) {
+			# 2 Leerzeilen => Ende der Signatur
+			if (/^$/ and $sig_mod_counter == 0) {
+				$sig_mod_counter++;
+			} elsif (/^$/ and $sig_mod_counter == 1) {
 				$signature_mode = FALSE;
+			} else {
+				$sig_mod_counter = 0;
 			}
 
 			next;
@@ -342,11 +348,9 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 	# ab in den Hintergrund 
 
-    unless ($Config{DEBUG}) {
+    unless ($Config{DEBUG} || $Config{FOREGROUND}) {
     	fork && exit;
     }
-
-    # if ($^V ge v5.6);
 
 	#
 	# wenn die Header nicht ausgelesen werden können: so drucken!		
@@ -427,7 +431,7 @@ foreach $type (@headers) {
 				# Header formatieren nach ADDRESSFORMAT
 				if ($type =~ /^(To|From|CC)/i && $Config{ADDRESSFORMAT} ne "original") {
 					# Adressen 'einrahmen'
-					s/(\S+\@[^\s,]+)/<$1>/g;
+					s/([^<>\s]+\@[^<>\s,]+)/<$1>/g;
 					s/<+/</g;
 					s/>+/>/g;
 					
@@ -786,6 +790,7 @@ sub ReadOpts () {
         'W|wrapmargin=s'        =>  \$Config{WRAPMARGIN},
 		'c|charset=s'			=>	\$Config{CHARSET},
 		'D|debug!'				=>	\$Config{DEBUG},
+		'foreground!'			=>	\$Config{FOREGRUND},
 		'e|date=s'				=>	\$Config{DATE},
 		'E|date-format=s'		=>	\$Config{DATE_FORMAT},
 		'r|rcfile=s'			=>	\$Config{RCFILE},
@@ -1297,7 +1302,7 @@ sub GetRealname ($) {
 	
 	for ($Header) {
 
-		if (/^\s*["']*(.+?)["']* <.+\@.+>/ || /^.+\@.+ \((.+)\)$/) {
+		if (/^\s*["']*(.+?)["']*\s*<.+\@.+>/ || /^.+\@.+ \((.+)\)$/) {
 			return $1;
 		}
 
