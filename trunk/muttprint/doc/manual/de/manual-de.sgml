@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-06-01</pubdate>
+	<pubdate>2002-09-10</pubdate>
 	
-	<releaseinfo>Version 0.63</releaseinfo>   
+	<releaseinfo>Version 0.63a</releaseinfo>   
 	
 		
 	
@@ -221,7 +221,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 			<title>Mutt</title>
 		
 			<para>In der Datei <Filename>$HOME/.muttrc</Filename> oder
-				systemweit  in <Filename>/etc/Muttrc</Filename> muss folgende
+				systemweit  in <Filename>##SYSCONFDIR##/Muttrc</Filename> muss folgende
 				Zeile hinzugef&uuml;gt  bzw. ge&auml;ndert werden:</para>
 
 			<ProgramListing>set print_command="muttprint"</ProgramListing>
@@ -263,7 +263,7 @@ set print_split
 
 			<para>N&auml;here Informationen entnehmen Sie bitte der
 				Dokumentation zu Mutt (normalerweise befindet sich diese unter
-				<Filename>/usr/share/doc/packages/mutt/manual.txt</Filename>).</para>
+				<Filename>##DOCDIR##/manual.txt(.gz)</Filename>).</para>
 
 		</sect3>
 		<sect3>
@@ -293,7 +293,7 @@ set printer_name "muttprint"
 			<para>Im Dialog <GUImenu>Misc</GUImenu>, <GUImenuItem>Config
 				Misc</GUImenuItem> muss beim Eintrag <GUIlabel>Print
 				Command</GUIlabel> das Skript folgenderma&szlig;en eingetragen
-				werden:  <literal>/usr/bin/muttprint -f $f</literal>.</para>
+				werden:  <literal>##BINDIR##/muttprint -f $f</literal>.</para>
 
 			<Note>
 				
@@ -347,7 +347,7 @@ set printer_name "muttprint"
 			<para>Den Code habe ich in <FileName>README.Gnus</FileName>
 				integriert und  m&ouml;chte hier auf diese Datei verweisen.
 				Falls Sie Pakete verwenden,  sollte sich diese Datei in
-				<FileName>/usr/share/doc/packages/muttprint/</FileName>
+				<FileName>##DOCDIR##/muttprint/</FileName>
 				befinden.</para>
 
 		</sect3>
@@ -402,7 +402,7 @@ set printer_name "muttprint"
 		<para>Einige Dinge k&ouml;nnen an dem Programm konfiguriert werden.
 			Dies geschieht dauerhaft &uuml;ber die Konfigurationsdatei
 			<Filename>$HOME/.muttprintrc</Filename> oder systemweit
-			<filename>/etc/Muttprintrc</filename>. Benutzereinstellungen
+			<filename>##SYSCONFDIR##/Muttprintrc</filename>. Benutzereinstellungen
 			&uuml;berschreiben systemweite Einstellungen.</para>
 			
 		<para>Zus&auml;tzlich kann mit der Option 
@@ -426,7 +426,7 @@ set printer_name "muttprint"
 			(<FileNAme>sample-muttprintrc</FileNAme>) wird  mit dem Skript
 			verteilt. Bei der Installtion der RPM oder Debian-Pakete ist sie 
 			bei der Dokumentation, also unter 
-			<FileName>/usr/share/doc/packages/muttprint/</FileName>, zu
+			<FileName>##DOCDIR##/muttprint/</FileName>, zu
 			finden.</para>
 
 		<para>Ein Beispiel f&uuml;r eine korrekte Zuweisung:</para>
@@ -495,7 +495,7 @@ set printer_name "muttprint"
 
 			<para>Zus&auml;tzlich werden noch Beispielbilder mitgeliefert, die schon
 				in das EPS-Format konvertiert vorliegen. Sie befinden sich nach der
-				Installation in <filename>/usr/share/muttprint</filename>.</para>
+				Installation in <filename>##SHAREDIR##/muttprint</filename>.</para>
 
 			<para>Soll der Druck der Grafik ganz ausgeschaltet werden, so kann
 				<literal>PENGUIN</literal> auf den Wert <literal>off</literal> 
@@ -805,7 +805,7 @@ set printer_name "muttprint"
 				die  Werte <literal>A4</literal> und <literal>letter</literal>
 				verwendet werden.</para>
 				
-			<para>Eine evtl. vorhandene Datei <filename>/etc/papersize</filename>,
+			<para>Eine evtl. vorhandene Datei <filename>##SYSCONFDIR##/papersize</filename>,
 				wie sie auf Debian-Systemen &uuml;blich ist, wird auch ausgelesen. Eine
 				eigene Einstellung &uuml;berschreiben jedoch diese.</para>
 
@@ -1176,7 +1176,7 @@ set printer_name "muttprint"
 			<title>&Uuml;bersetzungsdatei</title>
 		
 			<para>Die Muttprint-&Uuml;bersetzungdateien befinden sich im
-				Verzeichnis <Filename>/usr/lib/muttprint</Filename> und haben
+				Verzeichnis <Filename>##LIBDIR##/muttprint</Filename> und haben
 				den Namen
 				<filename>translation-<replaceable>Sprache</replaceable>.pl</filename>.
 				Es k&ouml;nnen ohne &Auml;nderungen am Skript neue Dateien
@@ -1296,7 +1296,7 @@ rm $target</programlisting>
 			die franz&ouml;sische &Uuml;bersetzung, Marcelo Ramos f&uuml;r die
 			spanische &Uuml;bersetzung, Dominik Form&aacute;nek f&uuml;r die 
 			tschechische &Uuml;bersetzung und den Debian-Maintainern Dr. Guenter
-			Bechly sowie Chanop Silpa-Anan danken. </para>
+			Bechly, Chanop Silpa-Anan sowie Ren&eacute; Engelhard danken. </para>
 
 		<para>Schlie&szlig;lich geht mein Dank an alle, die zu freier Software
 			beigetragen haben, die meisten in Ihrer Freizeit, ohne je einen

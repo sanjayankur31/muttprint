@@ -27,6 +27,7 @@ MAKE = make
 sharedir = $(prefix)/share
 libdir = $(prefix)/lib
 bindir = $(prefix)/bin
+sysconfdir = /etc
 
 #####################################################
 #####################################################

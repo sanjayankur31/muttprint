@@ -2,9 +2,15 @@
 # Makefile by B. Walle
 
 
-VERSION = 0.63
+VERSION = 0.63a
 POD2MAN = pod2man --section=1 --release=$(VERSION)
 prefix = /usr
+bindir = $(prefix)/bin
+tempdir = /tmp
+sysconfdir = /etc
+docdir = /usr/share/doc/packages
+sharedir = $(prefix)/share
+libdir = $(prefix)/lib
 mandir = $(prefix)/share/man
 INSTALL = install -m 0644 
 gzip = gzip -f
@@ -23,31 +29,87 @@ italian: it/muttprint.1.gz
 czech: cs/muttprint.1.gz
 spanish: es/muttprint.1.gz
 
+############################# GERMAN #################################
 
-de/muttprint.1.gz: de/muttprint.pod
+de/muttprint: de/muttprint.pod
+	cat de/muttprint.pod | sed -e s%\#\#DOCDIR\#\#%$(docdir)%g | \
+		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
+		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
+		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
+		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \
+		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
+		> de/muttprint
 
-	$(POD2MAN) --center=$(TITLE_DE) de/muttprint.pod de/muttprint.1
+de/muttprint.1.gz: de/muttprint
+	$(POD2MAN) --center=$(TITLE_DE) de/muttprint de/muttprint.1
 	$(gzip) de/muttprint.1
 
-en/muttprint.1.gz: en/muttprint.pod
 
-	$(POD2MAN) --center=$(TITLE_EN) en/muttprint.pod en/muttprint.1
+############################# ENGLISH ################################
+
+en/muttprint: en/muttprint.pod
+	cat en/muttprint.pod | sed -e s%\#\#DOCDIR\#\#%$(docdir)%g | \
+		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
+		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
+		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
+		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \
+		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
+		> en/muttprint
+
+en/muttprint.1.gz: en/muttprint
+	$(POD2MAN) --center=$(TITLE_EN) en/muttprint en/muttprint.1
 	$(gzip) en/muttprint.1
-	
-es/muttprint.1.gz: es/muttprint.pod
 
+
+############################# SPANISH #################################
+
+es/muttprint: es/muttprint.pod
+	cat es/muttprint.pod | sed -e s%\#\#DOCDIR\#\#%$(docdir)%g | \
+		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
+		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
+		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
+		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \		
+		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
+		> es/muttprint
+
+es/muttprint.1.gz: es/muttprint
 	$(POD2MAN) --center=$(TITLE_ES) es/muttprint.pod es/muttprint.1
 	$(gzip) es/muttprint.1
 
-it/muttprint.1.gz: it/muttprint.pod
 
-	$(POD2MAN) --center=$(TITLE_IT) it/muttprint.pod it/muttprint.1
+############################ ITALIAN ##################################
+
+it/muttprint: it/muttprint.pod
+	cat it/muttprint.pod | sed -e s%\#\#DOCDIR\#\#%$(docdir)%g | \
+		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
+		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
+		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
+		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \
+		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
+		> it/muttprint
+
+it/muttprint.1.gz: it/muttprint
+	$(POD2MAN) --center=$(TITLE_IT) it/muttprint it/muttprint.1
 	$(gzip) it/muttprint.1
 
-cs/muttprint.1.gz: cs/muttprint.pod
 
-	$(POD2MAN) --center=$(TITLE_CS) cs/muttprint.pod cs/muttprint.1
+########################### CZECH #####################################
+
+cs/muttprint: cs/muttprint.pod
+	cat cs/muttprint.pod | sed -e s%\#\#DOCDIR\#\#%$(docdir)%g | \
+		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
+		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
+		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
+		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \
+		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
+		> cs/muttprint
+
+cs/muttprint.1.gz: cs/muttprint
+	$(POD2MAN) --center=$(TITLE_CS) cs/muttprint cs/muttprint.1
 	$(gzip) cs/muttprint.1
+
+
+########################### GENERAL ###################################
 
 install: de/muttprint.1.gz en/muttprint.1.gz es/muttprint.1.gz \
  			it/muttprint.1.gz cs/muttprint.1.gz
@@ -62,4 +124,4 @@ uninstall:
 	rm -f $(mandir)/*/man1/muttprint.1.gz
 
 clean: 
-	rm */*gz
+	rm */muttprint.1.gz */muttprint

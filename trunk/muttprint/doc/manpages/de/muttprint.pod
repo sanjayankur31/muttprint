@@ -15,9 +15,6 @@ wurde sie für die Debian GNU/Linux-Distribution geschrieben, weil das
 Originalprogramm keine Manpage hatte, nun habe ich die Seite in das POD-Format
 konvertiert.
 
-B<HINWEIS:> Der Pfad F</usr/share/doc/packages/muttprint> kann auf Ihrem System
-auch F</usr/doc/packages/muttprint> oder F</usr/share/doc/muttprint>  lauten!
-
 B<Muttprint> ist ein Hilfsprogramm, das den Ausdruck von Mutt und anderen
 Mailprogrammen wie XFMail oder PINE so konvertiert, dass er wie der Ausdruck
 von Netscape Messenger oder KMail aussieht. Es kann einen kleinen Pinguin auf
@@ -25,16 +22,16 @@ die erste Seite sowie eine Kopfzeile auf jede Seite drucken. Außerdem druckt es
 nur die wichtigen Header und nicht alle.
 
 Eine ausfürliche Benutzeranleitung finden Sie in 
-F</usr/share/doc/packages/muttprint/> im PDF- und HTML-Format.
+F<##DOCDIR##/muttprint/> im PDF- und HTML-Format.
 
-Wie auch immer, Sie müssen folgende Zeile in Ihre F</etc/Muttrc> oder
+Wie auch immer, Sie müssen folgende Zeile in Ihre F<##SYSCONFDIR##/Muttrc> oder
 F<~/.muttrc> eintragen:
 
 	set print_command="muttprint"
 
 Wenn Sie die Einstellungen von B<Muttprint> anpassen wollen, kopieren Sie
-einfach F</usr/share/doc/packages/muttprint/sample-muttprintrc-de> nach
-F</etc/Muttprintrc> oder F<~/.muttprintrc> in Abhängigkeit davon, ob Sie die
+einfach F<##DOCDIR##/muttprint/sample-muttprintrc-de> nach
+F<##SYSCONFDIR##/Muttprintrc> oder F<~/.muttprintrc> in Abhängigkeit davon, ob Sie die
 Einstellungen für das ganze System oder nur für einen Benutzer ändern möchten.
 
 B<Muttprint> besitzt standardmäßig die englische Spracheinstellung, wenn die
@@ -58,7 +55,7 @@ kann.
 =head1 OPTIONEN
 
 B<BITTE BEACHTEN:> Diese Optionen überschreiben die zugehörigen Einstellungen
-in F<~/.muttprintrc> und F</etc/Muttprintrc>.
+in F<~/.muttprintrc> und F<##SYSCONFDIR##/Muttprintrc>.
 
 Hier finden Sie eine Beschreibung aller Kommandozeilenoptionen. Eine
 Beschreibung der Einstellungen in der Konfigurationsdatei finden Sie in
@@ -340,7 +337,7 @@ umgebrochen und der Absatz wird neu formatiert.
 
 =item B<-r> I<Datei>B<, --rcfile> I<Datei>
 
-Gibt eine weitere Konfigurationsdatei an, die zusätzlich zur F</etc/Muttprintrc> und
+Gibt eine weitere Konfigurationsdatei an, die zusätzlich zur F<##SYSCONFDIR##/Muttprintrc> und
 F<~/.muttprintrc> gelesen wird. Diese Datei überschreibt alle anderen Einstellungen,
 auch Kommandozeilenparameter. (Es hat also wenig Sinn, zusätzlich noch weitere 
 Optionen außer I<-f> anzugeben.)
@@ -352,7 +349,7 @@ Optionen außer I<-f> anzugeben.)
 
 =over 7
 
-=item F</etc/Muttprintrc>
+=item F<##SYSCONFDIR##/Muttprintrc>
 
 Systemweite Konfigurationsdatei.
 
@@ -362,22 +359,22 @@ Systemweite Konfigurationsdatei.
 Konfigurationsdatei für den jeweiligen Benutzer.
 
 
-=item F</tmp/muttprint-XXXXX>
+=item F<##TEMPDIR##/muttprint-XXXXX>
 
 Temporäre Datei, die von B<Muttprint> erstellt wurde.
 
 
-=item F</usr/share/doc/packages/muttprint/>
+=item F<##DOCDIR##/muttprint/>
 
 B<Muttprint>-Hilfedateien in verschiedenen Sprachen und Formaten.
 
 
-=item F</usr/share/muttprint/>
+=item F<##SHAREDIR##/muttprint/>
 
 Einige Bilder, die für den Druck auf der erste Seite der Mail verwendet werden
 können.
 
-=item F</usr/lib/muttprint/>
+=item F<##LIBDIR##/muttprint/>
 
 Die Übersetzungsdateien.
 
@@ -400,7 +397,6 @@ Homepage: I<http://muttprint.sourceforge.net>
 Dies ist freie Software; im Quellcode finden Sie Details über die Kopierbedingungen.
 Es besteht keine Garantie; nicht einmal für MARKTREIFE oder EIGNUNG FÜR EINEN
 BESTIMMTEN ZWECK.
-
 
 
 

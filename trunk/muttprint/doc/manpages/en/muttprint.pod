@@ -15,10 +15,6 @@ page was written orginally written for the Debian GNU/Linux distribution
 because the original program did not have a manual page, but now I took
 over this manpage in POD-format.
 
-B<NOTE:> The path F</usr/share/doc/packages/muttprint> could be
-F</usr/doc/packages/muttprint> or F</usr/share/doc/muttprint> on
-your system!
-
 B<Muttprint> is a utility that formats the printing of Mutt and other 
 mail clients like XFMail or PINE to be like the printing of Netscape Messenger 
 or Kmail. It can print a little penguin on the first page and a headline on every
@@ -26,16 +22,16 @@ page. Furthermore, it only prints the most important headers, but not the
 whole plethora of them.
 
 For detailed informations about Muttprint look read the User's guide in PDF 
-and HTML format at F</usr/share/doc/packages/muttprint/>.
+and HTML format at F<##DOCDIR##/muttprint/>.
 
-Anyway, you have to put the following line in your F</etc/Muttrc> or 
+Anyway, you have to put the following line in your F<##SYSCONFDIR##/Muttrc> or 
 F<~/.muttrc>:
 
 	set print_command="muttprint"
 
 If you want to customize the settings of B<Muttprint>, just copy
-F</usr/share/doc/packages/muttprint/sample-muttprintrc-en>
-to F</etc/Muttprintrc> or F<~/.muttprintrc> in reliance
+F<##DOCDIR##/muttprint/sample-muttprintrc-en>
+to F<##SYSCONFDIR##/Muttprintrc> or F<~/.muttprintrc> in reliance
 if you want change the settings for the whole system or one user.
 
 B<Muttprint> defaults to English lanuage settings if the environment 
@@ -60,7 +56,7 @@ aufgebrochen
 =head1 OPTIONS
 
 B<PLEASE NOTICE:> This options override the corresponding
-settings in F<~/.muttprintrc> and F</etc/Muttprintrc>.
+settings in F<~/.muttprintrc> and F<##SYSCONFDIR##/Muttprintrc>.
 
 And here's the description of all command line options
 (a descriptions of the settings in the rcfile is included in
@@ -271,7 +267,7 @@ between normal text and signature.
 
 =item B<-D, --debug> | B<-noD, --nodebug>
 
-Choose whether B<Muttprint> writes to a logfile F</tmp/muttprint.log>.
+Choose whether B<Muttprint> writes to a logfile F<##TEMPDIR##/muttprint.log>.
 Useful to ask some other about help if B<Muttprint> doesn't work.
 
 
@@ -346,7 +342,7 @@ are wraped automatically and the paragraph will be reformated.
 
 =item B<-r> I<file>B<, --rcfile> I<file>
 
-Specifies another configuration file, which is read additionally to F</etc/Muttprintrc>
+Specifies another configuration file, which is read additionally to F<##SYSCONFDIR##/Muttprintrc>
 and F<~/.muttprintrc>. This file overwrites all other settings, including this one
 which are done by command line parameters. (It makes no sense to include other
 options despite I<-f> if you use this option.)
@@ -360,7 +356,7 @@ options despite I<-f> if you use this option.)
 
 =over 7
 
-=item F</etc/Muttprintrc>
+=item F<##SYSCONFDIR##/Muttprintrc>
 
 System-wide configuration file.
 
@@ -370,22 +366,22 @@ System-wide configuration file.
 User configuration file.
 
 
-=item F</tmp/muttprint-XXXXX>
+=item F<##TEMPDIR##/muttprint-XXXXX>
 
 Temporary files created by B<Muttprint>.
 
 
-=item F</usr/share/doc/packages/muttprint/>
+=item F<##DOCDIR##/muttprint/>
 
 B<Muttprint> manual files in different languages and formats.
 
 
-=item F</usr/share/muttprint/>
+=item F<##SHAREDIR##/muttprint/>
 
 Some pictures which can be used for printing on the
 first page of your mail.
 
-=item F</usr/lib/muttprint>
+=item F<##LIBDIR##/muttprint>
 
 Translation files.
 

@@ -16,10 +16,6 @@ Debian GNU/Linux porque el programa original no tenía una página
 manual, pero ahora me hice cargo de esta página manual en el formato
 POD.
 
-B<NOTA:> La ruta F</usr/share/doc/packages/muttprint> podría ser 
-F</usr/doc/packages/muttprint> o F</usr/share/doc/muttprint> en tu 
-sistema!
-
 B<Muttprint> es una utilidad que da formato a la impresión de Mutt y
 otros clientes de correo como XFMail o PINE para parecerse a la
 impresión de Netscape Messenger o Kmail. Este puede imprimir un
@@ -28,17 +24,17 @@ Además, sólo imprime las cabeceras más importantes, pero no toda la
 plétora de ellas.
 
 Por intrucciones de como usar B<Muttprint> consulta 
-F</usr/share/doc/packages/muttprint/muttprint-doc-es.html>.
+F<##DOCDIR##/muttprint/muttprint-doc-es.html>.
 
 De todos modos, tienes que colocar la siguiente línea en tu
-F</etc/Muttrc> o F<~/.muttrc>:
+F<##SYSCONFDIR##/Muttrc> o F<~/.muttrc>:
 
  	set print_command="muttprint"
 
 Si quieres personalizar la configuración de B<Muttprint>, simplemente
 copia 
-F</usr/share/doc/packages/muttprint/sample-muttprintrc-es>
-a F</etc/Muttprintrc> o F<~/.muttprintrc> con confianza si quieres
+F<##DOCDIR##/muttprint/sample-muttprintrc-es>
+a F<##SYSCONFDIR##/Muttprintrc> o F<~/.muttprintrc> con confianza si quieres
 cambiar la configuración de todo el sistema o de un usuario.
 
 B<Muttprint> por defecto usa la configuración del idioma Inglés si la 
@@ -63,7 +59,7 @@ fácilmente tecleando lpq en la línea de comandos.
 =head1 OPCIONES
 
 B<POR FAVOR CONSIDERA:> Estas opciones tienen preferencia sobre las
-opciones correspondientes en F<~/.muttprintrc> y F</etc/Muttprintrc>.
+opciones correspondientes en F<~/.muttprintrc> y F<##SYSCONFDIR##/Muttprintrc>.
 
 Aquí encontrarás la descripción de todas las opciones de línea de
 comandos (las descripciones de las opciones del archivo de
@@ -248,7 +244,7 @@ otro modo el shell divide la cadena en dos partes.
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Determina si B<Muttprint> escribirá a un archivo log 
-F</tmp/muttprint.log>. Útil para pedir ayuda a otras personas cuando
+F<##TEMPDIR##/muttprint.log>. Útil para pedir ayuda a otras personas cuando
 B<Muttprint> no funciona.
 
 
@@ -325,7 +321,7 @@ reformateado.
 =item B<-r> I<file>B<, --rcfile> I<file>
 
 Especifica otro archivo de configuración, el cual es leído además de
-F</etc/Muttprintrc> y F<~/.muttprintrc>. Este archivo tiene
+F<##SYSCONFDIR##/Muttprintrc> y F<~/.muttprintrc>. Este archivo tiene
 preferencia sobre todas las otras configuraciones, incluyendo ésta,
 que son realizadas con parámetros de línea de comandos. (Tiene
 sentido incluir otros opciones a pesar de I<-f> si se utiliza ésta
@@ -341,7 +337,7 @@ opción.)
 
 =over 7
 
-=item F</etc/Muttprintrc>
+=item F<##SYSCONFDIR##/Muttprintrc>
 
 Archivo de configuración global del sistema.
 
@@ -351,22 +347,22 @@ Archivo de configuración global del sistema.
 Archivo de configuración del usuario.
 
 
-=item F</tmp/muttprint-XXXXX>
+=item F<##TEMPDIR##/muttprint-XXXXX>
 
 Archivos temporales creados por B<Muttprint>.
 
 
-=item F</usr/share/doc/packages/muttprint/>
+=item F<##DOCDIR##/muttprint/>
 
 Manuales de B<Muttprint> en diferentes idiomas y formatos.
 
 
-=item F</usr/share/muttprint/>
+=item F<##SHAREDIR##/muttprint/>
 
 Algunas imágenes que pueden utilizarse para ser impresas en la
 primera página de tu mensaje de correo.
 
-=item F</usr/lib/muttprint>
+=item F<##LIBDIR##/muttprint>
 
 Archivos de traducciones.
 
