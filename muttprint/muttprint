@@ -56,7 +56,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72pre6";
+our $VERSION = "0.72pre7";
 my $PACKAGE = "Muttprint";
 
 
