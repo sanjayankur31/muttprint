@@ -239,7 +239,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 
 			<ProgramListing>
 # Alle Header sollen an Muttprint übergeben werden
-macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt; &lt;exit&gt;"
 macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
 			</ProgramListing>
 
