@@ -34,6 +34,8 @@ DUPLEX="off"
 #
 # Hier kann der Papiersparmodus (2 Seiten auf 1 Seite)
 # ein- und ausgeschaltet werden.
+# Außerdem kann die Variable auf 'optional' gesetzt werden,
+# um den Papiersparmodus nur bei mehr als einer Seite einzuschalten.
 PAPERSAVE="off"
 
 #

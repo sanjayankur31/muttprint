@@ -32,6 +32,8 @@ DUPLEX="off"
 #
 # Here you can turn on or off the paper save mode
 # (printing 2 pages on 1 page)
+# Set it to 'optional' if you only want papersave mode
+# if more than one page is printed.
 PAPERSAVE="off"
 
 #
