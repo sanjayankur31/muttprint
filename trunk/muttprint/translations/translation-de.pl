@@ -48,6 +48,10 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 	   grey, greybox. 
 	   Für eine Beschreibung der Werte siehe Handbuch.
 
+-a [Header], --printed-headers [Header]
+       Mailheader die gedruckt werden sollen. Siehe Manpage/Handbuch für Details.
+       Beispiel: /Date/_To_From_*Subject*
+
 -P [Papierformat], --paper [Papierformat]
        Papierformat: "letter" (USA) oder "A4" (Europa).
 
