@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 $String{"Benutzung"} = <<EOF;
 
 Benutzung:   muttprint [Optionen]... [-f Datei]

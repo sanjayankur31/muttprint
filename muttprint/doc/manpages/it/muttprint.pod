@@ -36,7 +36,7 @@ F</etc/Muttrc> o F<~/.muttrc>:
 B<set print_command="muttprint">
 
 Se vuoi personalizzare le impostazioni di B<Muttprint>, copia
-semplicemente F</usr/share/doc/packages/muttprint/sample-muttprintrc>
+semplicemente F</usr/share/doc/packages/muttprint/sample-muttprintrc-it>
 in to F</etc/Muttprintrc> o in F<~/.muttprintrc> se vuoi cambiare le
 impostazioni solamente per un utente.
 
@@ -66,7 +66,7 @@ le impostazioni fatte in F<~/.muttprintrc> e F</etc/Muttprintrc>.
 
 Ecco una descrizione di tutte le opzioni da linea di comando (una
 descrizione delle impostazioni nell'rcfile è compresa nel file
-F<sample-muttprintrc> distribuito con B<Muttprint>):
+F<sample-muttprintrc-it> distribuito con B<Muttprint>):
 
 =over 7
 

@@ -34,7 +34,7 @@ F<~/.muttrc>:
 	set print_command="muttprint"
 
 If you want to customize the settings of B<Muttprint>, just copy
-F</usr/share/doc/packages/muttprint/sample-muttprintrc>
+F</usr/share/doc/packages/muttprint/sample-muttprintrc-en>
 to F</etc/Muttprintrc> or F<~/.muttprintrc> in reliance
 if you want change the settings for the whole system or one user.
 
@@ -64,7 +64,7 @@ settings in F<~/.muttprintrc> and F</etc/Muttprintrc>.
 
 And here's the description of all command line options
 (a descriptions of the settings in the rcfile is included in
-the F<sample-muttprintrc> distributed with B<Muttprint>):
+the F<sample-muttprintrc-en> distributed with B<Muttprint>):
 
 =over 7
 

@@ -33,7 +33,7 @@ F<~/.muttrc> eintragen:
 	set print_command="muttprint"
 
 Wenn Sie die Einstellungen von B<Muttprint> anpassen wollen, kopieren Sie
-einfach F</usr/share/doc/packages/muttprint/sample-muttprintrc> nach
+einfach F</usr/share/doc/packages/muttprint/sample-muttprintrc-de> nach
 F</etc/Muttprintrc> oder F<~/.muttprintrc> in Abhängigkeit davon, ob Sie die
 Einstellungen für das ganze System oder nur für einen Benutzer ändern möchten.
 
@@ -62,7 +62,7 @@ in F<~/.muttprintrc> und F</etc/Muttprintrc>.
 
 Hier finden Sie eine Beschreibung aller Kommandozeilenoptionen. Eine
 Beschreibung der Einstellungen in der Konfigurationsdatei finden Sie in
-F<sample-muttprintrc>, welche Sie mit B<Muttprint> erhalten haben.
+F<sample-muttprintrc-de>, welche Sie mit B<Muttprint> erhalten haben.
 
 
 =over 7
