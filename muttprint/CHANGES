@@ -120,4 +120,7 @@ CHANGES
         - declaration of global variables now Perl-5.005 compatible
         - support of X-Faces (requires 'convert' and 'uncompface')
         - changes in documentation
+        - Polish translation 
+        - CDE printer configuration is recognized (~/.printers)
+        - better code for deletion of temporary files
 

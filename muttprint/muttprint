@@ -37,6 +37,8 @@ use strict;
 use warnings;
 # Deklaration nach Perl-5.005-Art
 use vars qw($VERSION %String $LPack $charset);
+use sigtrap qw(die INT QUIT);
+
 
 
 ############# BEGIN VARIABLES ################################################
@@ -62,9 +64,7 @@ sub GetSeitenzahl ($);
 sub PrintNormal ($);
 sub PrintPaperSave ($);
 sub ModifyPS ($);
-sub DeleteTemp ();
 sub CreateTemp ();
-sub SIGINT_handler ();
 sub Setze_String ();
 sub WriteFormated ($*);
 sub DecodeHeader();
@@ -129,15 +129,15 @@ my $image_height = "20mm";					# Höhe des gedruckten Bildes
 
 ############# END VARIABLES ##################################################
 
-
-
-################################## SIGNALS ###################################
-
-$SIG{'INT'} = 'SIGINT_handler';
-$SIG{'QUIT'} = 'SIGINT_handler';
-
-##############################################################################
-
+# Dateien am Ende löschen
+END {
+	# kein fork() => Hauptprozess löscht
+	# fork        => Kindprozess löscht, da er länger läuft
+	if (!$child_pid && $Temp{'dir'}) {
+		unlink (<$Temp{"dir"}/*>);
+ 		rmdir ($Temp{'dir'});
+	}
+}
 
 
 #
@@ -402,7 +402,6 @@ foreach (qw(1 2)) {
 
 unless (-e $Temp{'dvi'}) {
 	
-	DeleteTemp() if $Config{'DEBUG'} != 1;
 	die "Latex didn't work.";
 	
 }
@@ -470,7 +469,6 @@ elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
 		} else {
 			sleep ($Config{'SPEED'} * $Seitenzahl / 2 + $Config{'WAIT'});
 			system ("dvips -B $DVIopts[1] $Temp{'dvi'}  2>> $Umleitung");	
-			DeleteTemp();
 			exit;
 		}
 	}
@@ -504,7 +502,6 @@ elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
 		} else {
 			sleep ($Config{'SPEED'} * $Seitenzahl / 4 + $Config{'WAIT'});
 			system ("psselect -q -e $Temp{'ps'} $Command[1] 2>>$Umleitung");	
-			DeleteTemp();
 			exit;
 		}
 	}
@@ -530,11 +527,6 @@ elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
 	
 }
 
-
-unless ($child_pid) {
-
-	DeleteTemp();
-}
 
 
 ################################### ENDE ####################################
@@ -1171,25 +1163,6 @@ sub GetDefaultPrinterCDE () {
 
 ##############################################################################
 
-sub DeleteTemp () {
-
-	return unless (defined $Temp{dir});
-	unlink (<$Temp{"dir"}/*>);
- 	rmdir ($Temp{'dir'});
-
-}
-
-##############################################################################
-
-sub SIGINT_handler () {
-
-	DeleteTemp();
-	exit;
-	
-}
-
-
-##############################################################################
 
 sub Setze_String () {
 
