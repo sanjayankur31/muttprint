@@ -23,6 +23,9 @@ CHANGES
           according to FHS
         - creating temporary dir using File::Temp module which honors the
           TMPDIR environment
+        - removed *png and *jpg from the distribution because it's not needed
+          by Muttprint -- you find this files still in the CVS if you need it
+        - removed temporary *sed files from distribution (by changing Makefiles)
 
 0.64    - add compatibility option for new geometry.sty
         - fixed bug with '_' in e-mail address in the headline
