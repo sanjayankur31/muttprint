@@ -173,6 +173,27 @@ I<es> (Spanish) and I<cs> (Czech).
 Default is the I<LANG> environment, fallback is English.
 
 
+=item B<-c> I<charset>B<, --charset> I<charset>
+
+This option sets the input charset:
+
+	charset		Muttprint option
+	--------------------------------
+	ISO-8859-1	latin1
+	ISO-8859-2	latin2
+	ISO-8859-3	latin3
+	ISO-8859-4	latin4
+	ISO-8859-9	latin5
+	ISO-8859-15	latin9
+	Windows-1252	latin1
+	Windows-1250	latin2
+			auto
+	---------------------------------
+
+The I<auto> setting tries to find a mailheader that contains
+the charset of the mail. This works only under specific
+circumstances, so use this carefully.
+
 
 =item B<-D, --debug> | B<-noD, --nodebug>
 

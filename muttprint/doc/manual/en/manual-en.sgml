@@ -770,80 +770,114 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Charsets</title>
 
-			<sect4>
-				<title>The default charset ISO-8859-1</title>
+			<para>Muttprint supports different charsets for the printing. Here's a 
+				short overview:</para>
 
-				<para>Different languages require different charsets. The default charset
-					of Muttprint is <emphasis>ISO-8859-1</emphasis> (same as ISO
-					Latin&nbsp;1).  Therewith the languages Afrikaans, Basque, Catalan,
-					Danish, Dutch, English, Faeroese, Finnish,  French, Galician, German,
-					Icelandic, Irish, Italian, Norwegian, Portuguese, Scottish, Spanish
-					and Swedish are covered. Additionally, Muttprint replaces the
-					characters 128 to 159 of the charset <emphasis>cp1252</emphasis>
-					(Microsoft Windows) with sensible ASCII characters.</para>
+			<informaltable frame="topbot">
+				<tgroup cols=3 align=left>
+				<colspec colnum="1" colwidth="1in"> 
+				<colspec colnum="2" colwidth="0.8in"> 
+					<thead>
+						<row>
+							<entry>charset</entry>
+							<entry>option</entry>
+							<entry>description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>ISO-8859-1</entry>
+							<entry><literal>latin1</literal></entry>
+							<entry>west European lanuages</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-2</entry>
+							<entry><literal>latin2</literal></entry>
+							<entry>east European languages</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-3</entry>
+							<entry><literal>latin3</literal></entry>
+							<entry>southeast European and miscellaneous languages</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-4</entry>
+							<entry><literal>latin4</literal></entry>
+							<entry>southeast European and miscellaneous languages</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-9</entry>
+							<entry><literal>latin5</literal></entry>
+							<entry>Latin-1 modification for Turkish</entry>
+						</row>
+						<row>
+							<entry>ISO-8859-15</entry>
+							<entry><literal>latin9</literal></entry>
+							<entry>Latin-1 with some modifications, e.&nbsp;g. Euro currency
+								symbol</entry>
+						</row>
+						<row>
+							<entry>Windows-1252</entry>
+							<entry><literal>latin1</literal></entry>
+							<entry>Latin-1 with some enhancements</entry>
+						</row>
+						<row>
+							<entry>Windows-1250</entry>
+							<entry><literal>latin2</literal></entry>
+							<entry>Latin-2 with some enhancements</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
 
-			</sect4>
-			<sect4>
-				<title>Support for the Euro currency symbol</title>
+			<para>This charsets allows you printing of most languages that use
+				latin characters. The charset handling is mostly based on the LaTeX
+				package <filename>inputenc.sty</filename>, but it is extended.</para>
 
-				<para>The new Euro currency symbol is not part of the ISO-8859-1 
-				charset. As a consequence, a new charset
-				<emphasis>ISO-8859-15</emphasis> (<emphasis>Latin&nbsp;9</emphasis>) was
-				defined, in which the general currency symbol was replaced with the Euro
-				symbol. (Additionally, some charaters which are used in French and
-				Finnish were changed, too.) To change Muttprint from Latin&nbsp;1 to
-				Latin&nbsp;9 set the <literal>charset</literal> variable to
-				<literal>latin9</literal>.  Your LaTeX system (exactly:
-				<filename>inputenc.sty</filename>) must have support for this
-				charset.</para>
+			<para>The default charset is Latin-1. If there are translation files,
+				the charset is changed to the Country-specific one. For example,
+				for German the charset Latin-9 is used for printing the Euro 
+				currency sign correctly. For Czech, the charset is changed
+				to Latin-2 because it's a east European language.</para>
 
-				<para>Latin 9 is the standard charset in the translation files for
-					the languages German, Spanish, Italian and French, because
-					the Euro is the official currency unit in the countries which
-					belongs to the languages. (I know that Spanish is also
-					spoken in South America.)</para>
+			<para>Moreover, you can change the charset in the configuration file
+				with the variable <literal>CHARSET</literal>. Normally, you should
+				set this to the charset used for displaying the mail on the
+				screen, see the variable <varname>charset</varname> of Mutt.</para>
 
-				<para>Moreover, the printing of Euro symbols that are on the
-					position 0x80 (of the Windows charset cp1252) works, too.</para>
+			<para>If you set <literal>CHARSET</literal> to the value
+				<literal>auto</literal>, Muttprint tries to find a suitable mail header
+				that contains the charset of the mail. Use this setting carefully. For
+				example, Mutt adapts the output to the screen charset. On the other
+				side, this setting could be useful if you often print mails with
+				different charsets.</para>
 
-			</sect4>
-			<sect4>
-				<title>The ISO-8859-2 charset for Eeastern European languages</title>
+			<para>Aside from the charsets of the ISO-Latin family, Muttprint
+				supports the enhancements of the Windows charsets Windows-1252 (West
+				European) and Windows-1250 (East European). This charsets extends the
+				ISO charsets with some characters, for example typographical quotation
+				marks, per mille sign or the Euro sign. Last one often appears one the
+				place 128 (decimal) because of the wide spread of Windows -- partial
+				declared as ISO-8859-1. Muttprint prints this mails correctly, if the
+				mailclient doesn't change something.</para>
 
-				<para>For Czech support the character set <emphasis>ISO-8859-2</emphasis>
-					(ISO Latin 2) has become necessary. This is set automatically in a Czech
-					environment. Otherwise you could set the variable
-					<literal>charset</literal> to <literal>latin1</literal> or
-					<literal>latin2</literal>.</para>
-			
-				<para>ISO Latin 2 supports the languages Albanian, Bosnian, Croatian,  
-					Czech, English, Finnish, German, Hungarian, Irish, Polish, Romanian,
-					Slovak, Slovenian and Sorbian. (Because the German umlauts are on the
-					same place in Latin 1 and 2, you could use both for printing German
-					mails.) Moreover the Cyrillic-based languages Macedonian and
-					Serbian have one-to-one transliterations to Latin 2.</para>
-			 
-				<para>It is not possible to print characters from both charsets in
-					one mail. To do this, Unicode is needed -- but there's no Unicode
-					support for LaTeX as far as I know.</para>
+			<para>You find a full overview about the charsets from the ISO-8859 family
+				on the website <ulink
+				url="http://czyborra.com/charsets/iso8859.html"></ulink>.</para>
 					
-			</sect4>
-		</sect3>
-		<sect3>
-			<title>Translation file</title>
+		</sect3> <sect3> <title>Translation file</title>
 		
 			<para>The Muttprint translation files are located in the
-				<filename>share</filename> directory and have the name
-				<filename>translation-<replaceable>language</replaceable>.pl</filename>.
-				You could add new files in this directory without any changes
-				on the Muttprint script. Not only the headers mentioned above
-				but also the help message are translated here.</para>
+			<filename>share</filename> directory and have the name
+			<filename>translation-<replaceable>language</replaceable>.pl</filename>.
+			You could add new files in this directory without any changes on the
+			Muttprint script. Not only the headers mentioned above but also the help
+			message are translated here.</para>
 			
-			<para>For new translations take any file as template, copy it
-				and translate it. If you would like to provide your translation
-				to other users, just send me the new file with a e-mail
-				and I'll add it in the next release.</para>
-		</sect3>
+			<para>For new translations take any file as template, copy it and
+			translate it. If you would like to provide your translation to other
+			users, just send me the new file with a e-mail and I'll add it in the next
+			release.</para> </sect3>
 		
 
 	</sect2>

@@ -61,6 +61,10 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -l [Sprache], --lang [Sprache]
        Sprache für Meldungen und Ausdruck.
 
+-c [Zeichensatz], --charset [Zeichensatz]
+       Eingabezeichensatz: latin1, latin2, latin3, latin4, latin5, latin9,
+       auto (lesen Sie das Benutzerhandbuch, bevor Sie "auto" verwenden).
+       
 -D, --debug | -noD, --nodebug
        Schreibt nützliche Informationen in eine Logdatei /tmp/muttprint.log.
 

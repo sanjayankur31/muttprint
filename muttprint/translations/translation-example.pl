@@ -68,6 +68,10 @@ PLEASE NOTICE: This options override the corresponding settings in
 -l [language], --lang [language]
        Language for messages and printing.
 
+-c [charset], --charset [charset]
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
+       auto (read the manual before you use "auto").
+	   
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 
