@@ -54,7 +54,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72";
+our $VERSION = "0.72a";
 my $PACKAGE = "Muttprint";
 
 
@@ -420,6 +420,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	#
 	# wenn die Header nicht ausgelesen werden koennen: so drucken!		
 	unless ($Header{From} || $Header{To} || $Header{Subject}) { 
+		print "Test\n";
 
 		$Config{PRINT_COMMAND} =~ s/\$CUPS_OPTIONS//g;
         
