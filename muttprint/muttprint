@@ -330,6 +330,7 @@ foreach (@headers) {
 				s/\&/\\&/g;
 				s/_/\\_/g;
 				s/%/\\%/g;
+				s/-/{-}/g;
 				s/¤/EUR/g;
 				s/\200/EUR/g;
 				
