@@ -57,6 +57,9 @@ uninstall:
 	rm $(mandir)/es/man1/muttprint*
 	rm -r $(docdir)/muttprint/
 
+tags: muttprint
+	pltags.pl muttprint
+
 clean:
 	@echo -e "\nNothing to clean. \n\n"
 	@echo "\"make clean\" in the doc/* subdirectories"
