@@ -15,6 +15,7 @@ CHANGES
         - running in foreground by default, new variable BACKGROUND
         - changed translation "API" to English names (changed all
           distributed translations so there sould be no problem)
+        - improved layout
 
 0.71	- changed shebang line to #!/usr/bin/env perl because it works
           on all system regardless where perl is installed (only in

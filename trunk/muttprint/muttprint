@@ -54,7 +54,7 @@ use constant TEX_FONTENC			=> 5;
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.72pre9";
+our $VERSION = "0.72pre10";
 my $PACKAGE = "Muttprint";
 
 
@@ -82,6 +82,7 @@ sub getISOlatinExtensions($);
 sub fatalError($);
 sub output (*@);
 sub outputstd (@);
+sub printLog($);
 sub input (*);
 sub native2utf ($);
 sub utf2native ($);
@@ -1383,7 +1384,11 @@ $sansserif
 $isolatinextensions
 \\pagestyle{fancy}
 \\lhead{\\itshape $Header{'ShortFrom'}}
-\\rhead{\\bfseries $Header{'ShortSubject'}}
+\\rhead{\\bfseries";
+
+	output \*LATEX, $Header{'ShortSubject'};
+
+output \*LATEX, " } 
 \\cfoot{}
 \\lfoot{\\today}
 \\rfoot{", $pageString, "}
@@ -1418,7 +1423,7 @@ output \*LATEX, <<EOF;
 $PengCode
 $AfterHeader
 \\VerbatimInput[$Config{VERBATIMNORMAL}]{$Temp{content}}
-\\setlength{\\parskip}{-7mm}
+\\setlength{\\parskip}{-4em}
 $sig_tex
 \\end{document}
 EOF
@@ -1716,6 +1721,13 @@ EOF
 
 ##############################################################################
 
+sub printLog ($) {
+	my $string = shift;
+	open (LFILE, ">>$Temp{logf}") or die "Could not open $Temp{logf}";
+	print LFILE $string;
+	close LFILE or die "Could not close $Temp{logf}";
+}
+
 sub fatalError ($) {
 	
 	my $message = shift;
@@ -1847,6 +1859,7 @@ sub fatalError ($) {
 			close WRITE;
 			return join "", <READ>;
 		} else {
+			printLog("Converting ". $string . "\n\n");
 			return $utf2native->convert($string);
 		}
 	}
@@ -1861,7 +1874,9 @@ sub fatalError ($) {
 			if (defined $result) {
 				print $fh $result;
 			} else {
-				fatalError "Error in charset conversion.";
+				printLog("Error in charset conversion.".
+					"String begin\n\n".  $_ . "String end\n\n" );
+				fatalError "Error in charset conversion, see $Temp{logf}.";
 			}
 		}
 	}
@@ -1898,7 +1913,7 @@ sub fatalError ($) {
 				if (defined $result) {
 					$_ = $result;
 				} else {
-					fatalError "Error in charset conversion.";
+					fatalError "Error in charset conversion.\nString was\n".$_;
 				}
 			}
 			return @text;
