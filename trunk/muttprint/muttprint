@@ -48,7 +48,7 @@ use Cwd;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.62pre3";
+$VERSION = "0.62pre4";
 my $PACKAGE = "Muttprint";
 
 
@@ -61,7 +61,6 @@ sub ReadConfig ();
 sub ReadOpts ();
 sub ReadPaperConfig ();
 sub FindCommonDir ($);
-sub SubstituteVerbatim ($);
 sub CreateLatex ();
 sub GetRealname ($$);
 sub GetSeitenzahl ($);
@@ -74,6 +73,7 @@ sub WriteFormated ($*$);
 sub DecodeHeader();
 sub GetDefaultPrinterCDE();
 sub ChangeForXface($);
+sub get_charset($);
 
 ######## 'private' Variablen für den Rest
 my %Config = (
@@ -235,6 +235,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 {
 	my @KompletteMail = <>;
+	my $mail_charset;
 
 	my $Content;
 
@@ -261,6 +262,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 			my $aktHeader;
 		
 			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
+			($mail_charset) = /charset=(["'A-Za-z0-9\-_]*)/ unless $mail_charset;
+			
 			foreach $aktHeader (@headers, "X-Face") {
 			
 				if (/^${aktHeader}:[\t ]+/i) {
@@ -319,13 +322,18 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
 
 	if ($MaxLaenge > $Config{WRAPMARGIN}) {
-		WriteFormated(SubstituteVerbatim($Content), \*CONTENT, $Config{WRAPMARGIN});
+		WriteFormated($Content, \*CONTENT, $Config{WRAPMARGIN});
 	
 	} else {
-		print CONTENT SubstituteVerbatim($Content);
+		print CONTENT $Content;
 	}
 
 	close CONTENT;
+
+	# Zeichensatz automatisch erkennen
+	if ($charset eq "auto" and $mail_charset) {
+		$charset = get_charset($mail_charset) 
+	}
 
 }
 
@@ -374,7 +382,7 @@ foreach (@headers) {
 				s/_/\\_/g;
 				s/-/{-}/g;
 
-				if ($charset eq "latin9") {
+				if ($charset eq "latin9" or $charset eq "latin1") {
 					s/\200/¤/g;
 					s/¤/$EuroSign/g;
 				}
@@ -770,78 +778,22 @@ sub ChangeForXface ($) {
 
 }
 
-sub SubstituteVerbatim ($) {
-	
-	my %SubstituteText = (
-		"×"			=>		"x",
-		"÷"			=>		":",
-		"­"			=>		"-",
-		" "			=>		" ",
-		"\201"		=>		" ",
-		"\202"		=>		",",
-		"\203"		=>		"f",
-		"\204"		=>		",,",
-		"\205"		=>		"...",
-		"\206"		=>		"+",
-		"\207"		=>		"++",
-		"\210"		=>		"^",
-		"\211"		=>		"o/oo",
-		"\212"		=>		"S",
-		"\213"		=>		"<",
-		"\214"		=>		"OE",
-		"\215"		=>		" ",
-		"\216"		=>		"Z",
-		"\217"		=>		" ",
-		"\220"		=>		" ",
-		"\221"		=>		"'",
-		"\222"		=>		"'",
-		"\223"		=>		"``",
-		"\224"		=>		"''",
-		"\225",		=>		"·",
-		"\226",		=>		"--",
-		"\227",		=>		"---",
-		"\230",		=>		"~",
-		"\231",		=>		"[tm]",
-		"\232",		=>		"s",
-		"\233",		=>		">",
-		"\234",		=>		"oe",
-		"\235",		=>		" ",
-		"\236",		=>		"z",
-		"\237",		=>		"Y",
-	);
-	my %SubstituteTextLatin1 = (
-		"¬"			=>		"!-",
-		"±"			=>		"+-",
-		"¹"			=>		"^1",
-		"²"			=>		"^2",
-		"³"			=> 		"^3",
-		"µ"			=>		"Mikro-",
-		"¢"			=>		"ct",
-		"¥"			=>		"YEN",
-		"¦"			=>		"|",		
-	);
-	my %SubstituteTextLatin9 = (
-		"\200"		=>		"¤",
-	);
-	
-	my $Line = shift;
-	
-	foreach (keys(%SubstituteText)) {
-			$Line =~ s/$_/$SubstituteText{$_}/g;
-	}
-	if ($charset eq "latin1" or $charset eq "latin9") {
-		foreach (keys(%SubstituteTextLatin1)) {
-			$Line =~ s/$_/$SubstituteTextLatin1{$_}/g;
-		}
-	}
-	if ($charset eq "latin9") {
-		foreach (keys(%SubstituteTextLatin9)) {
-			$Line =~ s/$_/$SubstituteTextLatin9{$_}/g;
-		}
+sub get_charset ($) {
+	my $mail_charset = shift;
+
+	for ($mail_charset) {
+		/iso[_\-]8859[_\-]1/i 	&& return "latin1";
+		/iso[_\-]8859[_\-]2/i 	&& return "latin2";
+		/iso[_\-]8859[_\-]15/i	&& return "latin9";
+		/cp[_\-]?1252/i 		&& return "latin1";
+		/cp[_\-]?1250/i			&& return "latin2";
+		/windows[_\-]?1252/i	&& return "latin1";
+		/windows[_\-]?1250/i	&& return "latin2";
 	}
 
-	return $Line;
+	return "latin1";		# Latin1 als Fallback
 }
+	
 		
 ##############################################################################
 
@@ -856,7 +808,98 @@ sub CreateLatex () {
 	my $headerrule_first = '\\renewcommand{\\headrulewidth}{0pt}';
 	my $footerrule = "";
 
+	# Sonderzeichen
+	my $latin19extensions = <<'EOF';
+\DeclareInputText{181}{\textmu}
+\DeclareInputText{165}{\textyen}
+\DeclareInputText{185}{\textonesuperior}
+\DeclareInputText{178}{\texttwosuperior}
+\DeclareInputText{179}{\textthreesuperior}
+\DeclareInputText{172}{\textlnot}
+\DeclareInputText{174}{\textregistered}
+\DeclareInputText{176}{\textdegree}
+\DeclareInputText{177}{\textdegree}
+\DeclareInputText{247}{\textdiv}
+\DeclareInputText{215}{\texttimes}
+\DeclareInputText{173}{-}
+EOF
 
+	my $cp1252extensions = <<'EOF';
+\DeclareInputText{128}{\EURcr}
+\DeclareInputText{130}{\quotesinglbase}
+\DeclareInputText{131}{\textflorin}
+\DeclareInputText{132}{\quotedblbase}
+\DeclareInputText{133}{\dots}
+\DeclareInputText{134}{\dag}
+\DeclareInputText{135}{\ddag}
+\DeclareInputText{136}{\^{}}
+\DeclareInputText{137}{\textperthousand}
+\DeclareInputText{138}{\v S}
+\DeclareInputText{139}{\guilsinglleft}
+\DeclareInputText{140}{\OE}
+\DeclareInputText{142}{\v Z}
+\DeclareInputText{145}{\textquoteleft}
+\DeclareInputText{146}{\textquoteright}
+\DeclareInputText{147}{\textquotedblleft}
+\DeclareInputText{148}{\textquotedblright}
+\DeclareInputText{149}{\textbullet}
+\DeclareInputText{150}{\textendash}
+\DeclareInputText{151}{\textemdash}
+\DeclareInputText{152}{\~{}}
+\DeclareInputText{153}{\texttrademark}
+\DeclareInputText{154}{\v s}
+\DeclareInputText{155}{\guilsinglright}
+\DeclareInputText{156}{\oe}
+\DeclareInputText{158}{\v z}
+\DeclareInputText{159}{\"Y}
+EOF
+	
+
+	my $latin2extensions = <<'EOF';
+\DeclareInputText{247}{\textdiv}
+\DeclareInputText{215}{\texttimes}
+EOF
+
+	my $cp1250extensions = <<'EOF';
+\DeclareInputText{128}{\EURcr}
+\DeclareInputText{130}{\quotesinglbase}
+\DeclareInputText{132}{\quotedblbase}
+\DeclareInputText{133}{\dots}
+\DeclareInputText{134}{\dag}
+\DeclareInputText{135}{\ddag}
+\DeclareInputText{137}{\textperthousand}
+\DeclareInputText{138}{\v S}
+\DeclareInputText{139}{\guilsinglleft}
+\DeclareInputText{140}{\@tabacckludge'S}
+\DeclareInputText{141}{\v T}
+\DeclareInputText{142}{\v Z}
+\DeclareInputText{143}{\@tabacckludge'Z}
+\DeclareInputText{145}{\textquoteleft}
+\DeclareInputText{146}{\textquoteright}
+\DeclareInputText{147}{\textquotedblleft}
+\DeclareInputText{148}{\textquotedblright}
+\DeclareInputText{149}{\textbullet}
+\DeclareInputText{150}{\textendash}
+\DeclareInputText{151}{\textemdash}
+\DeclareInputText{153}{\texttrademark}
+\DeclareInputText{154}{\v s}
+\DeclareInputText{155}{\guilsinglright}
+\DeclareInputText{156}{\@tabacckludge's}
+\DeclareInputText{157}{\v t} 
+\DeclareInputText{158}{\v z}
+\DeclareInputText{159}{\@tabacckludge'z}
+EOF
+	
+	my $isolatinextensions = "";
+	
+	if ($charset eq "latin1" or $charset eq "latin9") {
+		$isolatinextensions = $latin19extensions . $cp1252extensions;
+	}
+
+	if ($charset eq "latin2") {
+		$isolatinextensions = $latin2extensions . $cp1250extensions;
+	}
+		
 	# Pinguin drucken?
 
 	if ($Config{'PENGUIN'} ne "off") {
@@ -954,6 +997,7 @@ print LATEX <<EOF;
 \\usepackage{moreverb,graphicx,marvosym,textcomp}
 \\setlength{\\parindent}{0mm}
 \\let \\texteuro=\\EURcr
+$isolatinextensions
 \\pagestyle{fancy}
 \\lhead{\\itshape $Header{'ShortFrom'}}
 \\rhead{\\bfseries $Header{'Subject'}}

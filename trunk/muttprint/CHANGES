@@ -129,3 +129,10 @@ CHANGES
         - more ASCII charaters are escaped -> printing the header
           should work now with *all* ASCII chars
         - new options: $FONTSIZE and $WRAPMARGIN
+        - full support of Windows-1252 and Windows-1250 charsets
+          as superset of latin1 and latin2
+        - simple automatic detection of charset if $charset=auto
+          (use this carefully!) 
+          [Normally you should set $charset in dependence of
+          the Mutt $charset variable]
+
