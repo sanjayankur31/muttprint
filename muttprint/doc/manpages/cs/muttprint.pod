@@ -25,10 +25,10 @@ Messengeru nebo Kmailu. Mù¾e tisknout malého tuèòáka na první stránce a
 hlavièku na ka¾dé dal¹í stránce. V hlavièce zprávy se tisknou pouze dùle¾ité
 údaje.
 
-Detailní informace o Muttprintu získá¹ v U¾ivatelké pøíruèce v PDF a HTML
+Detailní informace o Muttprintu získá¹ v U¾ivatelské pøíruèce v PDF a HTML
 formátu v F</usr/share/muttprint>.
 
-Musíte vlo¾it následující rádek do Va¹eho F</etc/Muttrc> nebo
+Musíte vlo¾it následující øádek do Va¹eho F</etc/Muttrc> nebo
 F<~/.muttrc>:
 
 	set print_command="muttprint"
@@ -58,7 +58,7 @@ toto jméno mù¾ete jednodu¹e zjistit pøíkazem I<lpq> v pøíkazové øádce.
 
 =head1 VOLBY
 
-B<POZNÁMKA:> Tyto volby pøenastavují odpovídající nastavevé hodnoty
+B<POZNÁMKA:> Tyto volby pøenastavují odpovídající nastavené hodnoty
 v F<~/.muttprintrc> a F</etc/Muttprintrc>.
 
 A tady je popis v¹ech voleb na pøíkazovém øádku (popis nastavení v rc-souboru
@@ -97,6 +97,12 @@ musí obsahovat plnou cestu. Nastavení F<soubor> na I<off> vypne tisk
 obrázku. 
 
 
+=item B<-x, --x-face> | B<-nox, --nox-face>
+
+Zapíná (on) nebo vypíná (off) tisk obrázku, který byl poslán v I<X-Face:>
+hlavièce. Ètìte dokumentaci pro detailní informace.
+
+
 =item B<-t> I<èíslo>B<, --speed> I<èíslo>
 
 Toto je doba v sekundách, kterou Va¹e tiskárna potøebuje k tisku jedné
@@ -104,84 +110,85 @@ stránky. Je to potøebné pouze u duplexního tisku. Implicitnì je to
 30 (sekund).
 
 
-=item B<-w> I<number>B<, --wait> I<number>
+=item B<-w> I<èíslo>B<, --wait> I<èíslo>
 
-Amount of time in seconds which B<Muttprint> should wait between
-printing odd and even pages for duplex printing.
+Doba v sekundách, po kterou B<Muttprint> èeká mezi tiskem lichých
+a sudých stránek pøi duplexním tisku.
 
 
-=item B<-F> I<fontname>B<, --font> I<fontname>
+=item B<-F> I<jméno_fontu>B<, --font> I<jméno_fontu>
 
-Here you can choose a nice font family for your printing. Possible are:
-I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> and
-I<Bookman>. If all fonts are available on your system depends of
-your installed LaTeX-system. Default is I<Latex-bright>.
+Zde si mù¾ete vybrat rodinu fontù pro tisk. Mo¾nosti jsou:
+I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> a
+I<Bookman>. Jestli¾e v¹echny fonty jsou pøístupné na Va¹em systému závisí na
+Va¹em nainstalovaném LaTeX-systému. Defaultní je I<Latex-bright>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
 
-Here you can choose whether it should be printed a rule after
-the topline on pages greater than 2 or not.
+Zde se nastavuje, zda se má tisknout v hlavièce oddìlovací èára nebo ne.
+Èára se tiskne od druhé stránky dál.
 
 
 =item B<-b, --footrule> | B<-nob, --nofootrule>
 
-Here you can choose whether it should be printed a rule over the
-footline or not.
+Zde se nastavuje, zda se má tisknout v patièce oddìlovací èára nebo ne.
 
 
-=item B<-S> I<Style>B<, --frontstyle> I<Style>
+=item B<-S> I<styl>B<, --frontstyle> I<styl>
 
-Choose a style for the printing of the mailheaders on the first page:
-I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
-I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailled description
-of this values.
+Vyber styl tisku hlavièky zprávy na první stránce:
+I<plain>, I<border> (implicitní), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Ètìte manuál pro detailní popis tìchto hodnot.
 
-=item B<-a> I<headers>B<, --printed-headers> I<headers>
 
-Specify the headers that should be printed. Separate each header with
-C<_>. Headers that are embedded in I<*> are printed bold; use
-I</> for italic printing. If a header does not exist, it will be omitted.
-The given order is the same as on the printing.
+=item B<-a> I<hlavièky>B<, --printed-headers> I<hlavièky>
 
-Two examples:
+Urèuje hlavièky, které budou tisknuty. Oddìlte jednotlivé hlavièky znakem
+C<_>. Hlavièky mezi znaky I<*> jsou ti¹tìny silnì; znak I</> urèuje tisk kurzívou.
+Jestli¾e hlavièka neexistuje, bude vynechána. Hlavièky jsou ti¹tìny v poøadí,
+ve kterém jsou zapsány.
 
-	Date_To_From_CC_Newsgroups_*Subject*   (default)
+Dva pøíklady:
+
+	Date_To_From_CC_Newsgroups_*Subject*   (implicitní)
 	/Date/_To_From_X-Mailer_*/Subject/*
 
 
 
-=item B<-P> I<paperformat>B<, --paper> I<paperformat>
+=item B<-P> I<formát_papíru>B<, --paper> I<formát_papíru>
 
-Choose your paper format: I<A4> in most countries ("DIN A4" in Germany)
-and I<letter> in the U.S.
+Vyber formát papíru: I<A4> ve vìt¹inì zemí ("DIN A4" v Nìmecku)
+a I<letter> v U.S.
 
 
-=item B<-l> I<language>B<, --lang> I<language>
+=item B<-l> I<jazyk>B<, --lang> I<jazyk>
 
-Give the short form of your language. Currently are supported: 
+Dává výstup ve zvoleném jazyce. Podporované jazyky jsou: 
 I<de> (German), I<en> (English) and I<it> (Italian), I<fr> (French),
-I<es> (Spanish) and I<cs> (Czech).
-Default is the I<LANG> environment, fallback is English.
-
+I<es> (Spanish) and I<cs> (Èesky).
+Implicitnì se nastavuje podle I<LANG> v prostøedí. Není-li nastaveno
+pou¾ívá se English.
 
 
 =item B<-D, --debug> | B<-noD, --nodebug>
 
-Choose whether B<Muttprint> writes to a logfile F</tmp/muttprint.log>.
-Useful to ask some other about help if B<Muttprint> doesn't work.
+
+Vyber, jestli bude B<Muttprint> tisknout do log-souboru
+F</tmp/muttprint.log>. U¾iteèné pøi dotazech na nìkoho jiného o pomoc,
+kdy¾ B<Muttprint> nefunguje.
 
 
 =item B<-d, --duplex> | B<-nod, --noduplex>
 
-Enables or disables duplex printing. If enabled, B<Muttprint>
-prints only odd pages and waits some time before it prints
-even pages.
+Zapíná nebo vypíná duplexní tisk. Je-li zapnuto, B<Muttprint>
+tiskne jenom liché stránky a èeká nìjaký èas a potom tiskne sudé
+stránky.
 
 
 =item B<-2> | B<-1>
 
-Prints two pages on one sheet as shown here:
+Tisk dvou stránek na jeden list je ukázán zde:
 
 	+----------+----------+
 	|          |          |
@@ -192,61 +199,61 @@ Prints two pages on one sheet as shown here:
 	|          |          |	
 	+----------+----------+
 	
-This feature is called I<papersave mode> in the manual and in
-the rcfile.
+Tato volba je nazvaná I<papersave mode> v manuálu a v konfiguraèním
+souboru.
 
 
 =item B<-s, --rem_sig> | B<-nos, --norem_sig>
 
-Removes the signature (separated by C<-- >) in the 
-printing. This is useful for very long signatures. But more and more people 
-(or mail clients) doesn't separate the signature correctly so this
-feature works not always.
+Odstraní podpis (oddìlený s C<-- >) v tisku. Toto je u¾iteèné pro velmi
+dlouhé podpisy. Ale více a více lidí (nebo po¹tovních klientù) neoddìluje
+podpis korektnì, tak¾e tato funkce nepracuje v¾dy.
 
 
 =item B<-q, --rem_quote> | B<-noq, --norem_quote>
 
-Remove the quoted paragraph from the printing. 
+Odstraní odstavce citací z tisku.
 
-B<Muttprint> detects the quoting with the same regular expression as Mutt, 
-so it should work.
+B<Muttprint> rozpozná citace se stejným regulárním výrazem jako Mutt, 
+tak¾e by to mìlo fungovat.
 
 =back
 
 
 
-=head1 FILES
+=head1 SOUBORY
 
 =over 7
 
 =item F</etc/Muttprintrc>
 
-System-wide configuration file.
+Konfiguraèní soubor pro celý systém.
 
 
 =item F<~/.muttprintrc>
 
-User configuration file.
+U¾ivatelský konfiguraèní soubor.
 
 
 =item F</tmp/muttprint-XXXXX>
 
-Temporary files created by B<Muttprint>.
+Doèasné soubory vytvoøeny B<Muttprint>em.
 
 
 =item F</usr/share/doc/packages/muttprint/>
 
-B<Muttprint> manual files in different languages and formats.
+Manuálové soubory B<Muttprint>u v rozdílných jazycích a formátech.
 
 
 =item F</usr/share/muttprint/>
 
-Some pictures which can be used for printing on the
-first page of your mail.
+Nìkteré obrázky, které mù¾ou být vyti¹tìny na první stránce
+zprávy.
+
 
 =item F</usr/lib/muttprint>
 
-Translation files.
+Pøekladové soubory.
 
 =back
 
@@ -255,7 +262,7 @@ Translation files.
 
 mutt(1)
 
-Homepage: I<http://muttprint.sourceforge.net>
+Domácí stránka: I<http://muttprint.sourceforge.net>
 
 
 
@@ -269,9 +276,13 @@ There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR
 A PARTICULAR PURPOSE. 
 
 
-=head1 AUTHOR
+=head1 AUTOR
 
 Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=head1 PØEKLAD DO ÈE©TINY
+
+Dominik Formánek E<lt>dominik@formanek.czE<gt>
 
 =cut
 
