@@ -28,6 +28,7 @@ sharedir = $(prefix)/share
 libdir = $(prefix)/lib
 bindir = $(prefix)/bin
 sysconfdir = /etc
+docdirname = muttprint
 
 #####################################################
 #####################################################
@@ -42,15 +43,15 @@ nothing:
 
 
 install: 
-	mkdir -p $(docdir)/muttprint $(bindir) $(sharedir)/muttprint/translations \
+	mkdir -p $(docdir)/$(docdirname) $(bindir) $(sharedir)/muttprint/translations \
 		$(mandir)/man1 $(mandir)/de/man1 $(mandir)/es/man1 \
 		$(mandir)/cs/man1 $(mandir)/it/man1 
 	$(INSTALLBIN) muttprint $(bindir)/
 	$(INSTALL) CHANGES COPYING INSTALL README* sample-muttprintrc-* \
-		$(docdir)/muttprint/
+		$(docdir)/$(docdirname)
 	$(INSTALL) `find pics -type f -print` $(sharedir)/muttprint/
 	$(INSTALL) `find translations -type f -print` $(sharedir)/muttprint/translations
-	$(MAKE) -C doc/manual docdir=$(docdir) install
+	$(MAKE) -C doc/manual docdir=$(docdir) docdirname=$(docdirname) install
 	$(MAKE) -C doc/manpages mandir=$(mandir) install
 
 uninstall:
@@ -59,7 +60,7 @@ uninstall:
 	rm $(mandir)/man1/muttprint*
 	rm $(mandir)/de/man1/muttprint*
 	rm $(mandir)/es/man1/muttprint*
-	rm -r $(docdir)/muttprint/
+	rm -r $(docdir)/$(docdirname)
 
 tags: muttprint
 	pltags.pl muttprint
