@@ -49,7 +49,7 @@ SPEED="30"
 # - Palatino
 # - Charter
 # - Bookman
-FONT="Latex-bright"
+FONT="Latex"
 
 #
 # Sceglie uno stile per la prima pagina
@@ -118,5 +118,5 @@ DATE="local"
 #
 # Formata della stringa contentente la data (solo se DATE=local)
 # Vedi strftime(3) per i dettagli
-DATE_FORMAT="%A, %d. %B %Y %H:%M:%S"
+DATE_FORMAT="%c"
 

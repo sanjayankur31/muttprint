@@ -50,7 +50,7 @@ SPEED="30"
 # - Palatino
 # - Charter
 # - Bookman
-FONT="Latex-bright"
+FONT="Latex"
 
 
 #
@@ -120,5 +120,5 @@ DATE="local"
 #
 # Date format string (only if DATE=local)
 # See strftime(3) for details
-DATE_FORMAT="%A, %d %B %Y %H:%M:%S"
+DATE_FORMAT="%c"
 

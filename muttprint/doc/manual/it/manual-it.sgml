@@ -857,7 +857,7 @@ set printer_name "muttprint"
                                 Le proprie impostazione prevarranno su quelle di sistema.</para>
 				
 		</sect3>
-		<sect3>
+		<sect3 id="remsig">
 			<title>Elimina la signature</title>
 			
 			<para>Spesso la signature comprende informazioni inutili o

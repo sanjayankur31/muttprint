@@ -68,12 +68,12 @@ es/muttprint: es/muttprint.pod
 		sed -e s%\#\#SHAREDIR\#\#%$(sharedir)%g | \
 		sed -e s%\#\#BINDIR\#\#%$(bindir)%g | \
 		sed -e s%\#\#SYSCONFDIR\#\#%$(sysconfdir)%g | \
-		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \		
+		sed -e s%\#\#TEMPDIR\#\#%$(tempdir)%g | \
 		sed -e s%\#\#LIBDIR\#\#%$(libdir)%g  \
 		> es/muttprint
 
 es/muttprint.1.gz: es/muttprint
-	$(POD2MAN) --center=$(TITLE_ES) es/muttprint.pod es/muttprint.1
+	$(POD2MAN) --center=$(TITLE_ES) es/muttprint es/muttprint.1
 	$(gzip) es/muttprint.1
 
 
