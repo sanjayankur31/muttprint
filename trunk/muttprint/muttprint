@@ -103,6 +103,7 @@ my %Config = (
 	HEADRULE		=>	'off',
 	FOOTRULE		=>	'off',
 	FRONTSTYLE		=>	'border',
+	MAXADDR		=>	'10',
 	DATE			=>	'original',
 	DATE_FORMAT		=>	'%c',
 	XFACE			=>	'off',
@@ -402,6 +403,7 @@ if (exists $Config{FONT} and exists $EuroSign{$Config{FONT}}) {
 
 
 my $type;
+my %Count;
 foreach $type (@headers) {
 	
 	if (defined $Header{$type}) {
@@ -420,6 +422,7 @@ foreach $type (@headers) {
 				
 				DecodeHeader();  # for notes, see the Subroutine!!
 				
+				my $count = 0;
 				#
 				# Header formatieren nach ADDRESSFORMAT
 				if ($type =~ /^(To|From|CC)/i && $Config{ADDRESSFORMAT} ne "original") {
@@ -435,18 +438,28 @@ foreach $type (@headers) {
 						my $format = $Config{ADDRESSFORMAT} || "%r <%a>\n";
 						my $address = ($spezheader =~ /(?<=<)(\S+\@\S+)(?=>)/)[0] || "";
 
-						if ($realname) {
-							$format =~ s/\*(.+)?\*/\0\\textbf\0{$1\0}/g;
-							$format =~ s/\/(.+)?\//\0\\textit\0{$1\0}/g;
-							$format =~ s/%r/$realname/g;
-							$format =~ s/%a/$address/g;
-							$format =~ s/\\n/\n/g;
-							$newheader .= $format;
+						if ($count < $Config{MAXADDR}) {
+							if ($realname) {
+								$format =~ s/\*(.+)?\*/\0\\textbf\0{$1\0}/g;
+								$format =~ s/\/(.+)?\//\0\\textit\0{$1\0}/g;
+								$format =~ s/%r/$realname/g;
+								$format =~ s/%a/$address/g;
+								$format =~ s/\\n/\n/g;
+								$newheader .= $format;
+							}
+							else {
+								$newheader .= $format =~ /\n$/ ? "$address,\n" : "$address,";
+							}
+							$newheader .= " ";
 						}
 						else {
-							$newheader .= $format =~ /\n$/ ? "$address,\n" : "$address,";
+							if ($count == $Config{MAXADDR})  {
+								$newheader .= " \0\\ldots ";
+								$count++;
+							}
 						}
-						$newheader .= " ";
+						
+						$count ++;
 						
 					}
 
@@ -455,10 +468,10 @@ foreach $type (@headers) {
 
 				}
 					
-				s/(?<!\0)\\/\\textbackslash\{\}/g;
-				s/\n/\\newline/g;
 				s/(?<!\0)\{/\\\{/g;
 				s/(?<!\0)\}/\\\}/g;
+				s/(?<!\0)\\/\\textbackslash\{\}/g;
+				s/\n/\\newline/;
 				s/\"/\\textquotedbl\{\}/g;
 				s/>/\\textgreater\{\}/g;
 				s/</\\textless\{\}/g;
