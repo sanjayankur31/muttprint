@@ -1,13 +1,30 @@
-# Muttprint Installation
+# Muttprint Makefile
 # (c) B. Walle
 
+#####################################################
+#      U S E R   S E T T I N G S
+#####################################################
 
+# Change this for local installation, 
+# e. g. /home/user or /usr/local
 prefix = /usr
-docdir = /usr/share/doc/packages
+
+# Change this for some distributions (current setting
+# is OK for SuSE)
+docdir = $(prefix)/share/doc/packages
+
+# Change this to $(prefix)/man for older distributions
+# (current setting is correct according to LSB)
 mandir = $(prefix)/share/man
+
+# Change this three directories only if you're know
+# what you do
 sharedir = $(prefix)/share
 libdir = $(prefix)/lib
 bindir = $(prefix)/bin
+
+#####################################################
+#####################################################
 
 install = install
 INSTALLBIN = $(install) -m 0755 
