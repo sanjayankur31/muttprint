@@ -18,7 +18,7 @@ PRINT_COMMAND="lpr -P$PRINTER"
 
 #
 # Hier kann der Pfad zum Pinguin angegeben werden
-PENGUIN="off"
+PENGUIN="on"
 
 #
 # Druck von X-Face ein-/ausschalten
@@ -52,7 +52,7 @@ SPEED="30"
 # - Palatino
 # - Charter
 # - Bookman
-FONT="Latex-bright"
+FONT="Latex"
 
 
 #
@@ -122,5 +122,5 @@ DATE="local"
 #
 # Datumformatstring (nur wenn DATE=local)
 # Siehe strftime(3) für Details
-DATE_FORMAT="%A, %d. %B %Y %H:%M:%S"
+DATE_FORMAT="%c"
 

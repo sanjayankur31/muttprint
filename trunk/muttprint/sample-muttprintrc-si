@@ -47,7 +47,7 @@ SPEED="30"
 # - Palatino
 # - Charter
 # - Bookman
-FONT="Latex-bright"
+FONT="Latex"
 
 
 #
@@ -117,5 +117,5 @@ DATE="local"
 #
 # Niz za oblikovanje datuma (samo èe je DATE=local)
 # Za natanènej¹i opis si oglejte si strftime(3) 
-DATE_FORMAT="%A, %d. %B %Y %H:%M:%S"
+DATE_FORMAT="%c"
 
