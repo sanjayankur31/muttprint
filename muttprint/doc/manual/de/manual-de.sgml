@@ -570,6 +570,24 @@ set printer_name "muttprint"
 
 		</sect3>
 		<sect3>
+			<title>Schriftgr&ouml;&szlig;e</title>
+			
+			<para>Die Schriftgr&ouml;&szlig; kann in begrenztem Umfang mit
+				der Variable <literal>FONTSIZE</literal> konfiguriert werden.
+				M&ouml;glich sind die drei Werte <literal>10pt</literal>,
+				<literal>11pt</literal> und <literal>12pt</literal>.</para>
+
+		</sect3>
+		<sect3>
+			<title>Zeilenl&auml;nge</title>
+
+			<para>Die maximale Zeilenl&auml;nge kann mit <literal>WRAPMARGIN</literal>
+				eingestellt werden. L&auml;ngere Zeilen werden automatisch umgebrochen
+				und der Absatz wird neu formatiert. K&uuml;rzere Zeilen werden
+				jedoch nicht zusammengezogen.</para>
+
+		</sect3>
+		<sect3>
 			<title>Linien unter/&uuml;ber Kopf- und Fu&szlig;zeile</title>
 			
 			<para>Unter der Kopfzeile bzw. &uuml;ber der Fu&szlig;zeile

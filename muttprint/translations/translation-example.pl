@@ -82,6 +82,12 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.
+
+-z [size], --fontsize [size]
+       Font size: 10pt, 11pt, 12pt (only this values)
+
+-W [number], --wrapmargin [number]
+       Specifies how long lines could be.
 	   
 EOF
 

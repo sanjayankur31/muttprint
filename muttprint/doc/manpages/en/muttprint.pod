@@ -219,6 +219,17 @@ Remove the quoted paragraph from the printing.
 B<Muttprint> detects the quoting with the same regular expression as Mutt, 
 so it should work.
 
+=item B<-z> I<size>B<, --fontsize> I<size>
+
+Specifies the font size. Possible values are I<10pt>, I<11pt>
+and I<12pt>.
+
+
+=item B<-W> I<number>B<, --wrapmargin> I<number>
+
+Controls how long the longest line could be. Longer lines
+are wraped automatically and the paragraph will be reformated.
+
 =back
 
 
