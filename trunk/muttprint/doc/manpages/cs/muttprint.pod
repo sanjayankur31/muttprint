@@ -33,7 +33,7 @@ F<~/.muttrc>:
 	set print_command="muttprint"
 
 Jestli¾e si pøejete upravit nastavení B<Muttprintu>, jen zkopírujte
-F</usr/share/doc/packages/muttprint/sample-muttprintrc>
+F</usr/share/doc/packages/muttprint/sample-muttprintrc-cs>
 do F</etc/Muttprintrc> nebo F<~/.muttprintrc> závislosti na tom,
 jestli chcete mìnit nastavení celého systému nebo nastavení jednoho
 u¾ivatele.

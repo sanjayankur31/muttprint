@@ -35,24 +35,23 @@ txt: manual-$(lang).txt
 rtf: manual-$(lang).rtf
 
 manual-$(lang).pdf: manual-$(lang).sgml
-	$(sgmltools) -b pdf -j '-d $(stylesheet) -V tex-backend' $(doc)
-
+	$(sgmltools) -b pdf -s $(stylesheet) $(doc)
 
 manual-$(lang).ps: manual-$(lang).sgml
-	$(sgmltools) -b ps -j '-d $(stylesheet) -V tex-backend' $(doc)
+	$(sgmltools) -b ps -s $(stylesheet) $(doc)
 
 manual-$(lang).dvi: manual-$(lang).sgml
-	$(sgmltools) -b dvi -j '-d $(stylesheet) -V tex-backend' $(doc)
+	$(sgmltools) -b dvi -s $(stylesheet) $(doc)
 
 manual-$(lang)/*: manual-$(lang).sgml
-	$(sgmltools) -b html -j '-d $(stylesheet)\#html' $(doc)
+	$(sgmltools) -b html -s $(stylesheet)\#html $(doc)
 
 manual-$(lang).txt: manual-$(lang).sgml
 	$(sgmltools) -b txt  $(doc)
 
 	
 manual-$(lang).rtf: manual-$(lang).sgml
-	$(sgmltools) -b rtf -j '-d $(stylesheet)' $(doc)
+	$(sgmltools) -b rtf -s $(stylesheet) $(doc)
 
 validate:
 	$(nsgmls) -s -c $(catalog) $(doc)	
