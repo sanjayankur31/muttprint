@@ -709,7 +709,8 @@ set printer_name "muttprint"
 						<ulink url="ftp://ftp.dante.de"></ulink>).
 					</para>
 					<!-- /Fussnote --> 
-				</footnote>. 
+				</footnote>. Eine andere Wahl ist <literal>Latin-modern</literal> für
+				die <emphasis>lmodern</emphasis>-Schriften (auf wenigen Systemen verfügbar).
 			</para>
 
 			<para>An Postscript-Schriften sind noch auch noch
