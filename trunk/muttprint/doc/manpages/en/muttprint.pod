@@ -121,10 +121,10 @@ printing odd and even pages for duplex printing.
 =item B<-F> I<fontname>B<, --font> I<fontname>
 
 Here you can choose a nice font family for your printing. Possible are:
-I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter>, 
-I<Bookman>, I<CentSchool>, I<Chancery>, I<Helvetica> and I<AvantGarde>.
-If all fonts are available on your system depends of your installed
-LaTeX-system. Default is I<Latex>.
+I<Latex>, I<Latex-bright>, I<Latin-modern>, I<Times>, I<Utopia>, I<Palatino>,
+I<Charter>, I<Bookman>, I<CentSchool>, I<Chancery>, I<Helvetica> and
+I<AvantGarde>.  If all fonts are available on your system depends of your
+installed LaTeX-system. Default is I<Latex>.
 
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>

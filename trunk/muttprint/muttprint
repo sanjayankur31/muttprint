@@ -134,6 +134,7 @@ sub convert_init ();
 my %fontpackages = (
 	'Latex'    		=>		'',
 	'Latex-bright'	=>		'cmbright',
+	'Latin-Modern'  =>      'lmodern',
 	'Times'			=>		'mathptmx,courier',
 	'Charter'		=>		'charter',
 	'Utopia'		=>		'utopia',
@@ -1383,7 +1384,11 @@ $sansserif
 \\setlength{\\parindent}{0mm}
 $isolatinextensions
 \\pagestyle{fancy}
-\\lhead{\\itshape $Header{'ShortFrom'}}
+\\lhead{\\itshape ";
+	
+	output \*LATEX, $Header{ShortFrom};
+
+output \*LATEX, "}
 \\rhead{\\bfseries";
 
 	output \*LATEX, $Header{'ShortSubject'};

@@ -123,10 +123,10 @@ ungeraden Seiten warten soll.
 =item B<-F> I<Schriftname>B<, --font> I<Schriftname>
 
 Hier können Sie eine schöne Schriftfamlilie für den Ausdruck auswählen. Möglich
-sind: I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter>
-und I<Bookman>, I<CentSchool>, I<Chancery>, I<Helvetica> und I<AvantGarde>. Ob
-alle Schriften verfügbar sind hängt von Ihrer LaTeX-Installation ab.
-Voreinstellung ist I<Latex>.
+sind: I<Latex>, I<Latex-bright>, I<Latin-Modern>, I<Times>, I<Utopia>,
+I<Palatino>, I<Charter> und I<Bookman>, I<CentSchool>, I<Chancery>,
+I<Helvetica> und I<AvantGarde>. Ob alle Schriften verfügbar sind hängt von
+Ihrer LaTeX-Installation ab.  Voreinstellung ist I<Latex>.
 
 =item B<-H, --headrule> | B<-noH, --noheadrule>
 

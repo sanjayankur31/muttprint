@@ -733,7 +733,9 @@ set printer_name "muttprint"
 						<ulink url="ftp://tug.ctan.org"></ulink>).
 					</para>
 				<!-- /Footnote -->
-				</footnote>.
+				</footnote>. Another choice is <literal>Latin-modern</literal> for
+				the <emphasis>lmodern</emphasis> fonts (not available on most
+				systems).
 			</para>
 			
 			<para>There are several Postscript fonts which are possible here: 
