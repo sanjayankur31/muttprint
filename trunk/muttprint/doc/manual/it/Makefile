@@ -77,7 +77,13 @@ manual-$(lang).rtf: $(doc-sed)
 validate:
 	$(nsgmls) -s -c $(catalog) $(doc)
 
-install: *.pdf manual-$(lang)/*
+# Abhaengigkeiten geloescht
+# Grund: In Verbindung mit sed-clean wird beim Installieren
+# das Manual neu erzeugt
+# Vielleicht werde ich das Problem in Zukunft loesen,
+# alte Zeile war:
+##install: manual-$(lang).pdf manual-$(lang)/muttprint.html
+install: 
 	$(INSTALL) *.pdf $(docdir)/muttprint
 	mkdir -p $(docdir)/muttprint/manual-$(lang)
 	$(INSTALL) manual-$(lang)/* $(docdir)/muttprint/manual-$(lang)/
