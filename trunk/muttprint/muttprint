@@ -35,20 +35,19 @@
 use strict;
 # for developing and testing only
 use warnings;
-
+# Deklaration nach Perl-5.005-Art
+use vars qw($VERSION %String $LPack $charset);
 
 
 ############# BEGIN VARIABLES ################################################
 
 
-our $VERSION = "0.61-pre1";
+$VERSION = "0.61-pre1";
 my $PACKAGE = "Muttprint";
 
 
 ######## globale Variablen für Übersetzungen
-our %String;								# übersetzte Zeichenketten
-our $LPack;									# Sprachpaket für LaTeX
-our $charset = "latin1";					# Zeichensatz für LaTeX
+$charset = "latin1";						# Zeichensatz für LaTeX
 
 
 ######## Subroutinen mit Prototypes
