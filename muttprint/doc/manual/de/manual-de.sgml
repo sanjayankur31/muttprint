@@ -648,6 +648,12 @@ set printer_name "muttprint"
 				die Signatur in Kursivschrift gedruckt. Es sind auch Rahmenlinien
 				konfigurierbar.</para>
 
+			<para>Wenn Sie keine getrennte Formatierung von Mailbody und Signatur
+				w&uuml;nschen, k&ouml;nnen Sie <literal>VERBATIMSIG</literal>
+				auf <literal>raw</literal> setzen. Dann wird die Signatur ganz normal
+				als Mailtext betrachtet und wie dieser gedruckt (inkl. des
+				Signaturtrenners).</para>
+
 			<para>Hier einige Beispiele:</para>
 
 			<itemizedList spacing="compact">

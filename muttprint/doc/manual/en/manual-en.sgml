@@ -666,6 +666,11 @@ set printer_name "muttprint"
 				<command>texdoc fancyvrb</command>. Normally, the signature is printed
 				in Italics. You can print borders, too.</para>
 
+			<para>If you don't want a separate formating of mail body and signature,
+				just set <literal>VERBATIMSIG</literal> to <literal>raw</literal>.
+				If so, the signature is treated as normal mail text and is printed like
+				this (including the signature separator).</para>
+
 			<para>Here're some examples:</para>
 			
 			<itemizedList spacing="compact">

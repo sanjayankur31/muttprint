@@ -258,7 +258,8 @@ I<fontshape=it,fontseries=b>.
 =item B<-V> I<Zeichenkette>B<, --verbatimsig> I<Zeichenkette>
 
 Wie B<--verbatimnormal>, allerdings bezieht sich die Angabe auf die 
-Signatur.
+Signatur. Wird als Zeichenkette I<raw> angegeben, findet keine Unterscheidung 
+zwischen Signatur und Mailtext statt.
 
 =item B<-D, --debug> | B<-noD, --nodebug>
 

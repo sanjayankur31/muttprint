@@ -265,7 +265,8 @@ I<fontshape=it,fontseries=b>.
 =item B<-V> I<String>B<, --verbatimsig> I<String>
 
 Same as B<--verbatimnormal>, but this sets how the signature
-is printed.
+is printed. If the argument is I<raw>, there is now discrimination
+between normal text and signature.
 
 
 =item B<-D, --debug> | B<-noD, --nodebug>

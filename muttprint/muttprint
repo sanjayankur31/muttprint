@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre1";
+$VERSION = "0.63pre2";
 my $PACKAGE = "Muttprint";
 
 
@@ -269,8 +269,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	
 		#
 		# signature 
-		if ((/^-- $/ && !($Config{REM_SIG} eq "on")) ||
-			$signature_mode) {
+		if (((/^-- $/ && !($Config{REM_SIG} eq "on")) ||
+			$signature_mode) && $Config{VERBATIMSIG} ne "raw") {
 
 			if ($_ eq "-- \n") {
 				$signature_mode = TRUE;
