@@ -1,0 +1,105 @@
+Muttprint - Translation
+==============================================================================
+
+
+Localization is now completely new implemented sinde 0.72. If you have *any*,
+problems please read the documentation and the CHANGES file. If it still
+does not work, please send me a mail with all information about your system!
+
+
+Some things in Muttprint are translated into different languages.
+This are:
+
+------------------------------------------------------------------------------
+Files                 Content/Description
+------------------------------------------------------------------------------
+translation/*.pl      - Output strings
+                      - Printed Header
+                      - LaTeX-package for the printing ($LPack)
+                      - charset for the printing ($charset)
+
+sample-muttprintrc-** - sample configuration file with comments
+
+doc/manpage/*         - manpage
+
+doc/manual/*          - User's guide
+------------------------------------------------------------------------------
+
+
+The languages are:
+
+------------------------------------------------------------------------------
+ISO     Language        State                        Translator
+------------------------------------------------------------------------------
+en      English         Complete.                    Bernhard Walle
+                        -- up to date --             <bernhard.walle@gmx.de>
+
+de      German          Manpage, User's guide,       Bernhard Walle
+                        translation file,            <bernhard.walle@gmx.de>
+			            sample-muttprintrc
+                        -- up to date --
+
+sl      Slovenian       User's guide, translation    Bo¨tjan Müller
+                        file, sample-muttprintrc     <neonatus@neonatus.net>
+                        -- up to date --
+                        
+it      Italian         Manpage, User's guide,       Roberto Vallone
+                        translation file             <roberto.vallone@gmx.net>
+                        -- up to date --
+
+nl      Dutch           translation file,            hdv@dto.tudelft.nl
+                        sample-muttprintrc
+
+pl      Polish          translation file             Piotr
+                        -- up to date --             <piotr@piotr.toya.net.pl>
+
+pt		Portuguese      translation file             Emerson Mello
+                        -- up to date --             <emerson_ml@yahoo.com.br>
+
+es      Spanish         Manpage, User's guide        Fernando Pereda
+                        translation file,            <ferdy@ferdyx.org>
+                        sample-muttprintrc,
+                        README, INSTALL
+                        -- up to date --
+
+ru      Russian         translation file             Alex Semenyaka
+                        -- up to date --             <alexs@ratmir.ru>
+
+fr      French          translation file,            Vincent Bernat
+                        sample-muttprintrc           <bernat@free.fr>
+                        -- up to date --
+
+cs      Czech           translation file (not help)  Dominik Formánek
+                        -- version 0.61 --           <dominik@formanek.cz>
+
+fi      Finnish         translation file             Matti Hiljanen
+                                                     <matti@hiljanen.com>
+
+sv      Swedish         translation file (not help)  Simon Josefsson
+                        -- version 0.61 --           <simon@josefsson.org>
+------------------------------------------------------------------------------
+
+
+Some notes to the translations:
+
+English:
+~~~~~~~~
+Because my native language is German, the English is not perfect. But there
+was no way to avoid this because the other translators need the English
+files to translate. And if you release a German-only software, you have a
+very small audience. I hope you understand it :)
+
+
+Russian:
+~~~~~~~~
+
+Not all TeX systems support cyrillic characters in encodings KOI8-R or UTF-8.
+Please use teTeX 2.0 if you have any problems. Also, not all fonts contains
+the required characters, so you may have to use the LaTeX default fonts
+(Computer Modern). For details read the User's guide.
+
+
+Finally, I would like to thank _all_ translators for their provided work.
+Translations are very important for OpenSource! But the price is that all
+developers must speek (and write) English well.
+
