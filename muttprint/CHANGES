@@ -117,3 +117,7 @@ CHANGES
 0.61    - full Czech translation
         - fixed $charset-bug in Czech translation
         - printed header can be customized (PRINTED_HEADERS)
+        - declaration of global variables now Perl-5.005 compatible
+        - support of X-Faces (requires 'convert' and 'uncompface')
+        - changes in documentation
+

@@ -13,7 +13,7 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2001-09-02</pubdate>
+	<pubdate>2001-11-17</pubdate>
 	
 	<releaseinfo>Version 0.61</releaseinfo>   
 	
@@ -180,7 +180,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 			trotz des Namens unabh&auml;ngig von Mutt bleiben.</para>
 		
 		
-		<sect3>
+		<sect3 id="muttconfig">
 			<title>Mutt</title>
 		
 			<para>In der Datei <Filename>$HOME/.muttrc</Filename> oder
@@ -189,28 +189,32 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 
 			<ProgramListing>set print_command="muttprint"</ProgramListing>
 
-			<para>Au&szlig;erdem muss sichergestellt werden, dass folgende
-				Header am Bildschirm erscheinen und damit auch Muttprint beim
-				Drucken &uuml;bergeben werden:
-				<ComputerOutput>From:</ComputerOutput>, 
-				<ComputerOutput>Date:</ComputerOutput>,
-				<ComputerOutput>To:</ComputerOutput>, 
-				<ComputerOutput>CC:</ComputerOutput> und
-				<ComputerOutput>Subject:</ComputerOutput>.  Nur so kann
-				Muttprint die Header auslesen und damit auch ausdrucken. Die
-				Reihenfolge ist egal, andere Header d&uuml;rfen auch noch
-				vorkommen. </para>
+			<para>Au&szlig;erdem muss sichergestellt werden, dass alle
+				ben&ouml;tigten Header beim Ausdruck an Muttprint
+				&uuml;bergeben werden. Die einfachste M&ouml;glichkeit
+				daf&uuml;r ist ein kleines Makro (in die 
+				<filename>~/.muttrc</filename> geschrieben), das daf&uuml;r
+				sorgt, dass alle Header &uuml;bergeben werden. Gedruckt werden 
+				sowieso nur die wichtigsten, siehe <xref linkend="printedheaders">.
+			</para>
 
-			<para>Eine geeignete Konfiguration aus der
-				<filename>~/.muttrc</filename>  w&auml;re:</para>
+			<para>Das Makro sieht folgenderma&szlig;en aus:</para>
 
 			<ProgramListing>
-# Alle Header ignorieren ...
-ignore * 
-
-# ... nur nicht folgende
-unignore        from: subject to cc date
+# Alle Header sollen an Muttprint übergeben werden
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
 			</ProgramListing>
+
+			<para>Das Makro schaltet zun&auml;chst auf Anzeige aller Header um,
+				druckt und schaltet wieder zur&uuml;ck. Damit das Makro korrekt
+				funktioniert, muss die Druckbesch&auml;tigung abgeschaltet
+				werden:</para>
+
+			<programlisting>
+# Keine R&uuml;ckfrage beim Drucken
+set print="yes"
+			</programlisting>
 			
 			<para>Um mehrere Mails auf einmal sinnvoll zu drucken, sollte
 				au&szlig;erdem  folgender Eintrag vorgenommen werden:</para>
@@ -232,9 +236,17 @@ set print_split
 				folgendes eintragen:</para>
 			
 			<programlisting>
-% Use Muttprint for printing
+% Muttprint zum Drucken verwenden
 set printer_name "muttprint"
 			</programlisting>
+
+			<para>Falls mehr Header gedruckt werden sollen als angezeigt werden,
+				so ist statt des normalen Druckkommandos <keycap>y</keycap>
+				die Tastenkombination <keycap>Esc</keycap>, <keycap>1</keycap>,
+				<keycap>y</keycap> (nacheinander dr&uuml;cken) anzuwenden.
+				Besonders wichtig ist dies f&uuml;r den Druck von X-Faces, siehe
+				<xref linkend="xface">.</para>
+				
 
 		</sect3>
 
@@ -425,6 +437,52 @@ set printer_name "muttprint"
 			<para>Soll der Druck der Grafik ganz ausgeschaltet werden, so kann
 				<literal>PENGUIN</literal> auf den Wert <literal>off</literal> 
 				gesetzt werden.</para>
+		</sect3>
+
+		<sect3 id="xface">
+			<title>Druck von X-Faces</title>
+
+			<para>X-Faces sind 48 x 48 Pixel große Schwarzwei&szlig;bilder, welche in 
+				einem Header (dem <literal>X-Face:</literal>-Header) codiert mit
+				jeder Nachricht verschickt werden k&ouml;nnen. Es handelt sich dabei
+				aber um keinen <quote>offiziellen</quote> Standard, dennoch hat
+				sich dieser Header speziell in Newsartikeln verbreitet.</para>
+
+			<para>Muttprint unterst&uuml;tzt den Druck der Bilder anstelle des
+				in der <literal>PENGUIN</literal>-Variablen spezifizierten Bildes,
+				wenn ein solcher Header existiert. Dazu muss die Variable
+				<literal>XFACE</literal> auf <literal>on</literal> gesetzt werden.
+				Existiert kein solcher Header, dann wird das Bild (bzw. nichts)
+				gedruckt.</para>
+
+			<para>Damit es funktioniert, werden folgende zwei Programme
+				ben&ouml;tigit:</para>
+
+			<ItemizedList spacing="compact">
+				<listitem>
+					<para>
+						<application>convert</application> aus dem 
+						<ulink url="http://www.imagemagick.org"><application>Image 
+							Magick</application>-Paket</ulink>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<ulink 
+						url="http://www.ibiblio.org/pub/Linux/apps/graphics/convert/compface-1.4.tar.gz"><application>uncompface</application></ulink>
+					</para>
+				</listitem>
+			</ItemizedList>
+
+			<para>Beide Pakete sollten in gr&ouml;&szlig;eren Linux-Distributionen
+				enthalten sein und k&ouml;nnen einfach nachinstalliert werden.</para>
+				
+			<para>Auf jeden Fall muss sichergestellt werden, dass dieser Header
+				auch tats&auml;chlich an Muttprint &uuml;bergeben wird. In der
+				oben gezeigten Mutt-Konfiguration (siehe <xref linkend="muttconfig">)
+				wird dies gew&auml;hrleistet. Bei anderen Programmen sehen Sie
+				bitte in der jeweiligen Dokumentation nach.</para>
+
 		</sect3>
 
 		<sect3>

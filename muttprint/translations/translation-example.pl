@@ -33,6 +33,9 @@ PLEASE NOTICE: This options override the corresponding settings in
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
 
+-x, --x-face | -nox, --nox-face
+       Turn printing of X-Faces on/off.
+
 -t [number], --speed [number]
        Time in seconds which the printer needs for one page.
 		   

@@ -13,6 +13,10 @@ PRINTER="lp"
 PENGUIN="off"
 
 #
+# Turn printing of X-Face picture on/off
+XFACE="off"
+
+#
 # Here you can turn the duplex print on or off.
 # Possible values are "off" or "on"
 #

@@ -26,6 +26,9 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -i [Datei], --penguin [Datei]
        Gibt das Bild an, das auf der ersten Seite gedruckt wird.
 
+-x, --x-face | -nox, --nox-face
+       Druck von X-Faces ein-/ausschalten
+
 -t [Zahl], --speed [Zahl]
        Zeit in Sekuden, die der Drucker für eine Seite benötigt.
 		   
