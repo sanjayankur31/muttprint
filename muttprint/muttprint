@@ -1410,10 +1410,13 @@ $Config{LATEXCODE2}
 $Config{LATEXCODE3}
 $Config{LATEXCODE4}
 $Config{LATEXCODE5}
+\\newlength{\\parboxwidth}
+\\setlength{\\parboxwidth}{\\textwidth}
+\\addtolength{\\parboxwidth}{-5pt}
 \\begin{document}
 \\thispagestyle{plain}",
 $BeforeHeader,
-"{\\large
+"\\parbox{\\parboxwidth}{{\\large
 \\begin{tabular}[t]{\@{}r>{\\raggedright}p{$PengTab}\@{}p{0mm}\@{}}";
 
 	output \*LATEX, @PrintedMailheaders;
@@ -1421,7 +1424,7 @@ $BeforeHeader,
 output \*LATEX, <<EOF;
 \\end{tabular}}
 \\hfill
-$PengCode
+$PengCode }
 $AfterHeader
 \\VerbatimInput[$Config{VERBATIMNORMAL}]{$Temp{content}}
 \\setlength{\\parskip}{-4em}
