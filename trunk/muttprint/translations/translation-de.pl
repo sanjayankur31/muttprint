@@ -76,6 +76,12 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -q, --rem_quote | -noq, --norem_quote
        Entfernt zitierte Abschnitte vom Druck.
 
+-z [Größe], --fontsize [Größe]
+       Schriftgröße: 10pt, 11pt, 12pt (nur diese Werte)
+
+-W [Zahl], --wrapmargin [Zahl]
+       Gibt die maximale Zeilenlänge an.
+ 
 
 EOF
 

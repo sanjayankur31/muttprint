@@ -93,3 +93,11 @@ PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
 # Protokolliert Fehlermeldungen in /tmp/muttprint.log
 DEBUG="0"
 
+#
+# Schriftgröße: 10pt, 11pt oder 12pt
+FONTSIZE="10pt"
+
+#
+# Maxmimale Zeilenlänge
+WRAPMARGIN="80"
+

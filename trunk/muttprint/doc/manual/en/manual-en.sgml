@@ -529,6 +529,22 @@ set printer_name "muttprint"
 
 		</sect3>		
 		<sect3>
+			<title>Font size</title>
+
+			<para>You can control the font size with the variable
+				<literal>FONTSIZE</literal>. Only the values <literal>10pt</literal>,
+				<literal>11pt</literal> and <literal>12pt</literal> are possible.
+			</para>
+		</sect3>
+		<sect3>
+			<title>Wrapping long lines</title>
+
+			<para>The length of the longest line is specified with the 
+				<literal>WRAPMARGIN</literal> variable. Longer lines are wrapped
+				automatically but shorter lines are not joined.</para>
+
+		</sect3>
+		<sect3>
 			<title>Rules under/over head- and footline</title>
 			
 			<para>There could be printed a rule under the headline

@@ -216,6 +216,18 @@ Löscht zitierte Absätze vom Ausdruck.
 B<Muttprint> erkennt die Zitate durch den gleichen regulären Ausdruck wie Mutt, 
 es sollte also korrekt funktionieren.
 
+=item B<-z> I<Größe>B<, --fontsize> I<Größe>
+
+Gibt die Schriftgröße an. Möglich sind I<10pt>, I<11pt> und
+I<12pt>.
+
+
+=item B<-W> I<Zahl>B<, --wrapmargin> I<Zahl>
+
+Einstellung der maximalen Zeilenlänge. Längere Zeilen werden automatisch
+umgebrochen und der Absatz wird neu formatiert. 
+
+
 
 =back
 

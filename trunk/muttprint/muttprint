@@ -48,7 +48,7 @@ use Cwd;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.61";
+$VERSION = "0.62pre1";
 my $PACKAGE = "Muttprint";
 
 
@@ -70,7 +70,7 @@ sub PrintPaperSave ($);
 sub ModifyPS ($);
 sub CreateTemp ();
 sub Setze_String ();
-sub WriteFormated ($*);
+sub WriteFormated ($*$);
 sub DecodeHeader();
 sub GetDefaultPrinterCDE();
 sub ChangeForXface($);
@@ -93,6 +93,8 @@ my %Config = (
 	FRONTSTYLE		=>	'border',
 	XFACE			=>	'off',
 	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
+	FONTSIZE		=>	'10pt',
+	WRAPMARGIN		=>	80,
 );
 my %Fontpackage = (
 	'Latex'    		=>		'',
@@ -234,7 +236,7 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	
 		#
 		# Do sth with the header
-		if (my $x = 0 ... /^$/) {
+		if (0 ... /^$/) {
 	
 			my $aktHeader;
 		
@@ -267,8 +269,11 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 
 	# ab in den Hintergrund 
 
-	fork && exit;
-	# if ($^V ge v5.6);
+    unless ($Config{DEBUG}) {
+    	fork && exit;
+    }
+
+    # if ($^V ge v5.6);
 
 	#
 	# wenn die Header nicht ausgelesen werden können: so drucken!		
@@ -293,8 +298,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	CreateTemp();
 	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
 
-	if ($MaxLaenge > 80) {
-		WriteFormated(SubstituteVerbatim($Content), \*CONTENT);
+	if ($MaxLaenge > $Config{WRAPMARGIN}) {
+		WriteFormated(SubstituteVerbatim($Content), \*CONTENT, $Config{WRAPMARGIN});
 	
 	} else {
 		print CONTENT SubstituteVerbatim($Content);
@@ -598,6 +603,8 @@ sub ReadOpts () {
 		'P|paper=s'				=>	\$Config{'PAPER'},
 		'S|frontstyle=s'		=>	\$Config{'FRONTSTYLE'},
 		'a|printed-headers=s'	=>	\$Config{'PRINTED_HEADERS'},
+        'z|fontsize=s'          =>  \$Config{'FONTSIZE'},
+        'W|wrapmargin=s'        =>  \$Config{'WRAPMARGIN'},
 		'D|debug!'				=>	\$Config{'DEBUG'},
 
 
@@ -904,7 +911,7 @@ EOF
 # statt Backslash [\] : \\ -> keine Maskierung nötig !
 
 print LATEX <<EOF;
-\\documentclass{article}
+\\documentclass[$Config{FONTSIZE}]{article}
 \\usepackage[T1]{fontenc}
 \\usepackage[$LPack]{babel}
 \\usepackage[$charset]{inputenc}
@@ -1047,19 +1054,25 @@ sub DecodeHeader () {
 # This is some like 'fmt', but better for our needs. We do not use 'fmt',
 # because its -s Option is *not* available on all systems!
 
-sub WriteFormated ($*) {
+sub WriteFormated ($*$) {
 
 	local $_ = shift;
 	my $fh = shift;
+	my $wrapmargin = shift;
+	
 	$^L = "";
 	my $oldfh = select $fh;
 	$~ = "CONTENT";
+
+	#
+	# only wrap if 20 < $wrapmargin < 120
+	if ($wrapmargin > 120 || $wrapmargin < 20) {
+		print;
+		return;
+	}
 	
-format CONTENT =
-^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
-$_
-.
-	
+	eval("format CONTENT = \n^" . '<' x ($wrapmargin - 1) . " ~~ \n\$_\n.");
+
 	#
 	# at first, we split each paragraph
 	
@@ -1067,7 +1080,7 @@ $_
 	
 		#
 		# then, we look if *every* line is too long
-		if ((() = /^.{80,}$/gm) == tr/\n//) {
+		if ((() = /^.{$wrapmargin,}$/gmo) == tr/\n//) {
 		
 			#
 			# if so, we fill it! (as a normal fmt does)
@@ -1083,7 +1096,7 @@ $_
 			
 			for (split /\n/) {
 				
-				if (/^.{80,}$/) {
+				if (/^.{$wrapmargin,}$/o) {
 					write;
 				} 
 				else {
@@ -1268,7 +1281,13 @@ PLEASE NOTICE: This options override the corresponding settings in
 
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.
-	   
+
+-z [size], --fontsize [size]
+       Font size: 10pt, 11pt, 12pt (only this values)
+
+-W [number], --wrapmargin [number]
+       Specifies how long lines could be.
+
 EOF
 
 $String{"Lizenz"} = "This program is distributed under the terms of the

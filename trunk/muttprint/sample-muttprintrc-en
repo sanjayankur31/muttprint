@@ -91,3 +91,11 @@ PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
 # Writes error messages of LaTeX and dvips to /tmp/muttprint.log
 DEBUG="0"
 
+#
+# Font size: 10pt, 11pt or 12pt
+FONTSIZE="10pt"
+
+#
+# Longest line
+WRAPMARGIN="80"
+
