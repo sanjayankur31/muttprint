@@ -51,7 +51,7 @@ use Cwd;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.62pre5";
+$VERSION = "0.62pre6";
 my $PACKAGE = "Muttprint";
 
 
@@ -162,7 +162,7 @@ END {
 	# fork        => Kindprozess löscht, da er länger läuft
 	if (!$child_pid && $Temp{'dir'}) {
 		unlink (<$Temp{"dir"}/*>);
- 		rmdir ($Temp{'dir'});
+		rmdir ($Temp{'dir'});
 	}
 }
 
@@ -399,8 +399,8 @@ foreach $type (@headers) {
 						my $address = ($spezheader =~ /(?<=<)(\S+\@\S+)(?=>)/)[0] || "";
 
 						if ($realname) {
-							$format =~ s/\*(.+)?\*/\0\\textbf{$1}/g;
-							$format =~ s/\/(.+)?\//\0\\textit{$1}/g;
+							$format =~ s/\*(.+)?\*/\0\\textbf\0{$1\0}/g;
+							$format =~ s/\/(.+)?\//\0\\textit\0{$1\0}/g;
 							$format =~ s/%r/$realname/g;
 							$format =~ s/%a/$address/g;
 							$format =~ s/\\n/\n/g;
@@ -418,10 +418,10 @@ foreach $type (@headers) {
 
 				}
 					
-				s/(:!\0)\\/\\textbackslash\{\}/g;
+				s/(?<!\0)\\/\\textbackslash\{\}/g;
 				s/\n/\\newline/g;
-				s/(:!\0)\{/\\\{/g;
-				s/(:!\0)\}/\\\}/g;
+				s/(?<!\0)\{/\\\{/g;
+				s/(?<!\0)\}/\\\}/g;
 				s/\"/\\textquotedbl\{\}/g;
 				s/>/\\textgreater\{\}/g;
 				s/</\\textless\{\}/g;
@@ -434,6 +434,7 @@ foreach $type (@headers) {
 				s/\%/\\\%/g;
 				s/_/\\_/g;
 				s/-/{-}/g;
+				s/\0//g;
 
 				if ($charset eq "latin1" or $charset eq "latin9") {
 					s/\200/$EuroSign/g;
@@ -452,7 +453,8 @@ foreach $type (@headers) {
 		}
 		
 		push @PrintedMailheaders,
-			"{ $HeaderFormatAttr{$type} $String{$ftype}} \& \\raggedright { $HeaderFormatAttr{$type} $Header{$type} } & \\\\";
+			"{ $HeaderFormatAttr{$type} $String{$ftype}} \& ".
+			"$HeaderFormatAttr{$type} $Header{$type}  \& \\\\ \n";
 				
 	}
 }
@@ -974,7 +976,7 @@ print LATEX <<EOF;
 \\usepackage[$charset]{inputenc}
 \\usepackage{$LatexPackages}
 \\usepackage[$PaperTex,left=20mm,right=20mm,top=18mm,bottom=25mm,headsep=5mm]{geometry}
-\\usepackage{moreverb,graphicx,marvosym,textcomp}
+\\usepackage{moreverb,graphicx,marvosym,textcomp,array}
 \\setlength{\\parindent}{0mm}
 $isolatinextensions
 \\pagestyle{fancy}
@@ -996,7 +998,7 @@ $headerrule_first
 \\thispagestyle{plain}
 $BeforeHeader
 {\\large
-\\begin{tabular}[t]{\@{}rp{$PengTab}\@{}l\@{}}
+\\begin{tabular}[t]{\@{}r>{\\raggedright}p{$PengTab}\@{}p{0mm}\@{}}
 @PrintedMailheaders
 \\end{tabular}}
 \\hfill
