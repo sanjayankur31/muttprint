@@ -13,9 +13,9 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2002-02-16</pubdate>
+	<pubdate>2002-06-01</pubdate>
 	
-	<releaseinfo>Versione 0.62</releaseinfo>   
+	<releaseinfo>Versione 0.63</releaseinfo>   
 	
 		
 	
@@ -440,7 +440,23 @@ set printer_name "muttprint"
 				<filename>test.ps2</filename>.</para>
 				
 		</sect3>
-		<sect3>
+    <sect3>
+      <title>Printing command</title>
+			  <para>Muttprint richiama <application>lpr</application> per stampare
+				      come default. Se vuoi usare un altro comando di stampa imposta
+							<literal>PRINT_COMMAND</literal> al programma che vuoi usare.
+	            La stringa <literal>$PRINTER</literal>
+							viene sostituita dalla stampante scelta. Il default è
+							<literal>lpr -P$PRINTER</literal>.
+				</para>
+		      <tip>
+		        <para>Puoi usare l'impostazione <literal>gv -</literal> per
+						avere un'anteprima di stampa. Questo è utile per testare diverse
+						impostazioni.
+		        </para>
+		      </tip>
+        </sect3>
+		   	<sect3>
 			<title>Pinguino</title>
 			
 			<para>Per default verrà stampato un piccolo pinguino sulla parte in
@@ -552,7 +568,10 @@ set printer_name "muttprint"
 				due pagine ridotte entrano esattamente in un foglio.</para>
 			
 			<para>Per abilitare questa funzione setta <literal>PAPERSAVE</literal> a
-				<literal>on</literal>.</para>				
+				<literal>on</literal>.</para>
+			<para>Se si vuole attivare il modo <literal>PAPERSAVE</literal> solo
+			  quando si ha più di una pagina da stampare, impostare questa voce a
+				<literal>optional</literal>.</para>
 		</sect3>
 
     <sect3 id="date">
@@ -678,6 +697,54 @@ set printer_name "muttprint"
         <literal>11pt</literal> e <literal>12pt</literal>.
       </para>
     </sect3>
+
+    <sect3>
+      <title>Formatting of the mail body</title>
+
+      <para>Il corpo della mail viene diviso in due parti: testo e firma.
+						Se c'è una firma e non deve essere rimossa (vedi <xref
+						linkend="remsig">), queste due parti possono essere formattate
+						separatamente.</para>
+		  <para>Muttprint usa il pacchetto LaTeX <filename>fancyvrb.sty</filename>
+		        per stampare il corpo. Esso offre molteplici opzioni di. Le
+						opzioni che vengono passate all'ambiente <literal>Verbatim</literal>
+						possono essere impostate attraverso la variabile
+						<literal>VERBATIMNORMAL</literal> (per il testo normale) e					
+						<literal>VERBATIMSIG</literal> (per la firoma).</para>
+
+			<para>Troverai l'esatta sintassi nella documentazione di
+		        <filename>fancyvrb.sty</filename>, che può essere consultata
+						con il comando <command>texdoc fancyvrb</command>. Normalmentehe
+						la firma viene stampata in corsivo. Puoi stampare anche dei bordi.
+						</para>
+			 <para>Se non vuoi separare il corpo della mail dalla firma
+						imposta <literal>VERBATIMSIG</literal> a
+						<literal>raw</literal>. Così facendo, la firma verrà trattata
+						come normale testo della lettera e verrà così stampato (separatore
+						della sign incluso).</para>
+
+       <para>Ecco alcuni esempi:</para>
+       <itemizedList spacing="compact">
+         <listitem>
+           <para>
+	            <literal>fontshape=it,frame=topline</literal>:
+              italic font, bordo al di sopra del blocco
+           </para>
+	       </listitem>
+	       <listitem>
+	         <para>
+	           <literal>fontfamily=helvetica,fontseries=b</literal>:
+							 Helvetica font, grassetto
+					 </para>
+				 </listitem>
+				 <listitem>
+				   <para>
+					   <literal>numbers=left,stepnumber=5</literal>:
+  						  Numerazione delle linee ogni quinta
+				   </para>
+				 </listitem>
+			 </itemizedlist>
+		</sect3>
     <sect3>
       <title>Impostazione dei margini</title>
 
@@ -847,6 +914,26 @@ stampato.
                         <programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
 
         </sect3>
+		    <sect3>
+   	      <title>Padroneggiare il codice LaTeXode</title>
+			      <para>La variabile <literal>LATEXCODE</literal> è per
+  								coloro che sono in confidenza con LaTeX e vogliono
+									personalizzare la stampa senza cambiare il codice
+					        sorgente di Muttprint. Per esempio, potrebbe essere
+									utile utilizzare proprio fonts.</para>
+			      <para>Dietro <literal>LATEXCODE</literal> ci sono
+									cinque variabili addizionali (<literal>LATEXCODE1</literal>
+									fino a <literal>LATEXCODE5</literal>) per dividere il codice
+									LaTeX in maniera carina.
+									Queste variabili sono integrate nel codice in questo
+									ordine.</para>
+				      <tip>
+							  <para>Puoi stampare il testo della mail con un font
+								proporzional (invece di un font typewriter) con le seguenti
+								impostazioni:</para>
+				          <programlisting>LATEXCODE="\renewcommand{\ttdefault}{\rmdefault}"</programlisting>
+				      </tip>
+  	    </sect3>
 
 		<sect3>
 			<title>Messaggi di errore</title>
