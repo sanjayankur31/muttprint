@@ -42,6 +42,8 @@ cs	Czech           Manpage, User's guide           Dominik Formánek
                         translation file
 
 fr      French          translation file                Vincent Bernat
+
+pl      Polish          translation file                Radek Kaczorowski 
 ---------------------------------------------------------------------------
 
 
@@ -58,10 +60,10 @@ files to translate. And if you release a German-only software, you have a
 very small audience. I hope you understand it :)
 
 
-Czech:
-~~~~~~
+Czech/Polish:
+~~~~~~~~~~~~~
 
-This translation file changes the charset to ISO-8859-2 as used in Eastern
+This translation files changes the charset to ISO-8859-2 as used in Eastern
 Europe. For details to this topic, read the User's guide, section
 3.3.2 Charsets.
 
@@ -87,5 +89,6 @@ Footnotes:
         * Marcello Ramos        <mramos@montevideo.com.uy>
         * Roberto Vallone       <jval@libero.it>
         * Bernhard Walle        <Bernhard.Walle@gmx.de>
+        * Radek Kaczorowski     <kaczor@mail.desy.de>
 
 
