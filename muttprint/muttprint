@@ -1,0 +1,1261 @@
+#!/usr/bin/perl
+#
+# Hinweis: Tabulatorbreite auf 4 Zeichen einstellen, um die
+#          Datei sinnvoll zu betrachten
+# Notice:  Set tab with to 4 characters to see this file correct.
+#
+########################################################################
+#                                                                      #
+#    Muttprint - erleichtert das Drucken von Mails                     #
+#    Copyright © 2000/01  Bernhard Walle <bernhard.walle@gmx.de>       #
+#                                                                      #
+#    This program is free software; you can redistribute it and/or     #
+#    modify it under the terms of the GNU General Public License as    #
+#    published by the Free Software Foundation; either version 2 of    #
+#    the License, or (at your option) any later version.               #
+#                                                                      #
+#    This program is distributed in the hope that it will be useful,   #
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of    #
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU  #
+#    General Public License for more details.                          #
+#                                                                      #
+#    You should have received a copy of the GNU General Public License #
+#    along with this program; if not, write to the Free Software       #
+#    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.         #
+#                                                                      #
+#    You find the GPL in the file "COPYING" which was distributed      #
+#    with Muttprint. For a German tranlation look at                   #
+#                                                                      #
+#    http://www.suse.de/de/linux/gpl/index.html                        #
+#                                                                      #
+########################################################################
+
+# Deklaration erzwingen
+use strict;
+# for developing and testing only
+use warnings;
+
+
+
+############# BEGIN VARIABLES ################################################
+
+
+our $VERSION = "0.60";
+my $PACKAGE = "Muttprint";
+
+
+######## globale Variablen für Übersetzungen
+our %String;								# übersetzte Zeichenketten
+our $LPack;									# Sprachpaket für LaTeX
+our $charset = "latin1";					# Zeichensatzf für LaTeX
+
+
+######## Subroutinen mit Prototypes
+sub ReadConfig ();
+sub ReadOpts ();
+sub ReadPaperConfig ();
+sub FindCommonDir ($);
+sub SearchPenguin ();
+sub SubstituteVerbatim ($);
+sub CreateLatex ();
+sub GetRealname ($$);
+sub GetSeitenzahl ($);
+sub PrintNormal ($);
+sub PrintPaperSave ($);
+sub ModifyPS ($);
+sub DeleteTemp ();
+sub CreateTemp ();
+sub SIGINT_handler ();
+sub Setze_String ();
+sub WriteFormated ($*);
+sub DecodeHeader();
+
+
+######## 'private' Variablen für den Rest
+my %Config = (
+	PRINTER		=> 	'lp0',
+	PENGUIN		=>	'on',
+	DUPLEX		=>	'off',
+	SPEED		=>	'30',
+	PAPERSAVE	=>	'off',
+	FONT		=>	'Latex-bright',
+	PAPER		=>	'A4',
+	DEBUG		=>	'0',
+	REM_SIG		=>	'off',
+	REM_QUOTE	=>	'off',
+	WAIT		=>	'30',
+);
+my %Fontpackage = (
+	'Latex'    		=>		'',
+	'Latex-bright'	=>		'cmbright',
+	'Times'			=>		'times',
+	'Charter'		=>		'charter',
+	'Utopia'		=>		'utopia',
+	'Palatino'		=>		'palatino',
+	'Bookman'		=>		'bookman',
+);
+my $Lang = "en";							# Sprache
+my @print;									# ob Hilfe / Version angezeigt werden soll
+my %Temp;									# temporäre Dateien und Verzeichn.
+my %Header;									# Header ...
+my %PrintHeader;							# LaTeX-Code für einen Header
+my $PaperPS;								# Papierformat für dvips-Aufruf
+my $PaperTex;								# Papierformat für Latex-Aufruf
+my $Fontpackage;							# Fontpaket
+my $Umleitung;								# Umleitung
+my $child_pid;								# PID des Kinds
+my $File;									# Datei, in die gedruckt wird
+my @DVIopts;								# Optionen für DVI - Aufruf
+my $Seitenzahl;								# Anzahl der Seiten am Ende
+my @Command;								# Kommando zum Drucken; für Druck in Datei
+my $Laenge = "0";							# zum Ermitteln der längsten Zeile
+my $MaxLaenge = "0";						# die länste Zeile
+my $QP = 0;									# quoted printable encoded body
+my @LastHeader = ("", 0);					# letzter gefundener Header
+											# (Header, Zeilen#)
+my $share_dir = FindCommonDir('share');		# /usr/share/muttprint etc.: für 
+											# Pinguin + Übersetzungen!
+
+my $lib_dir = FindCommonDir('lib');
+
+
+############# END VARIABLES ##################################################
+
+
+
+################################## SIGNALS ###################################
+
+$SIG{'INT'} = 'SIGINT_handler';
+$SIG{'QUIT'} = 'SIGINT_handler';
+
+##############################################################################
+
+
+
+#
+# Konfiguration einlesen
+
+$Config{'PRINTER'} = $ENV{'PRINTER'} if defined $ENV{'PRINTER'};
+
+ReadPaperConfig ();
+ReadConfig ();
+
+@print = ReadOpts ();
+
+if ($Config{'PENGUIN'} eq "on") {
+	$Config{'PENGUIN'} = SearchPenguin() ? SearchPenguin() : "off";
+}
+
+
+# USE FOR DEBUG ONLY
+if (0) {
+	foreach (keys %Config) {
+		print STDERR "$_  \t\t => \t $Config{$_} \n";
+	}
+}
+  
+
+
+################ MULIT LANGUAGE SUPPORT #######################################
+
+$Lang = $ENV{'LANG'} if defined $ENV{'LANG'};
+$Lang = $Config{'LANG'} if defined $Config{'LANG'};
+
+Setze_String();
+
+#
+# Show help and version
+#
+# 0 => help (return 0)
+# 1 => version
+# 2 => error -> help (return 1)
+
+if ($print[0]) {
+	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
+	exit 0;
+} elsif ($print[1]) {
+	print "\n"."Muttprint $VERSION"."\n\n".$String{'Lizenz'}."\n\n";
+	exit 0;
+} elsif ($print[2]) {
+	print "\n".$String{'Benutzung'}."\n\n".$String{'Bugs'}."\n\n";
+	exit 1;
+}
+	
+
+
+{
+	my @KompletteMail = <>;
+	my $Content;
+
+	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
+	
+		$. = $i;
+	
+		#
+		# Should the signature be printed?
+		last if (/^-- $/ && ($Config{'REM_SIG'} eq "on"));
+	
+		#
+		# and what's about Quoting?
+		next if (($Config{'REM_QUOTE'} eq "on") && (/^([\t]*[|>:}#])+/));
+	
+	
+		#
+		# Do sth with the header
+		if (my $x = 0 ... /^$/) {
+	
+			my $aktHeader;
+		
+			$QP = 1 if /^Content-Transfer-Encoding:[\t ]+quoted-printable/i;
+			foreach $aktHeader ("From", "To", "Date", "Newsgroups", "CC", "Subject") {
+			
+				if (/^${aktHeader}:[\t ]+/i) {
+					@LastHeader = ($aktHeader, $.);
+					chomp($Header{$aktHeader} = $');
+				} 
+				elsif (/^[\t ]+/i && ($LastHeader[1] + 1 == $.)) {
+					chomp($Header{"$LastHeader[0]"} .= " $'");
+					$LastHeader[1] ++;
+				}
+			}
+		}
+	
+	
+		#
+		# ... and do sth with the body
+		else {
+	
+			$Content .= $_;
+				
+			$Laenge = length($_);
+			$MaxLaenge = $Laenge if ($Laenge > $MaxLaenge);
+		
+		}
+	}
+
+
+	# ab in den Hintergrund 
+
+	fork && exit;
+	# if ($^V ge v5.6);
+
+	#
+	# wenn die Header nicht ausgelesen werden können: so drucken!		
+	unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) { 
+	
+		open (PRINTER, "| lpr -P$Config{'PRINTER'}") 
+			|| die "unable to print with lpr: $!";
+		print PRINTER @KompletteMail;
+		close PRINTER;
+		exit;
+	
+	}
+
+
+	# formatieren
+	
+	# Body dekodieren
+	if ($QP) {
+		$Content =~ s/=([A-Fa-f0-9]{2})/chr(hex($1))/eg;
+	}
+
+	CreateTemp();
+	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
+
+	if ($MaxLaenge > 80) {
+		WriteFormated(SubstituteVerbatim($Content), \*CONTENT);
+	
+	} else {
+		print CONTENT SubstituteVerbatim($Content);
+	}
+
+	close CONTENT;
+
+}
+
+
+
+# Realname
+$Header{'ShortFrom'} = GetRealname ($Header{'From'}, $Header{'To'});
+
+
+foreach ("From", "To", "Date", "Newsgroups", "CC", "Subject") {
+	
+	if (defined $Header{$_}) {
+		
+		if ($_ eq "Date") {
+			$Header{$_} =~ s/-/--/;
+		} else {
+			for ($Header{$_}) {
+				
+				DecodeHeader();  # for notes, see the Subroutine!!
+				
+				s/\\/\\textbackslash\{\}/g;
+				s/\"/\\textquotedbl\{\}/g;
+				s/>,/>, \\newline /g;
+				s/>/\\textgreater\{\}/g;
+				s/</\\textless\{\}/g;
+				s/\#/\\\#/g;
+				s/\&/\\&/g;
+				s/_/\\_/g;
+				s/%/\\%/g;
+				
+				
+			}
+		}
+		
+		
+		next if /^Subject/i;
+		
+		$PrintHeader{$_} = "$String{$_} & \\raggedright $Header{$_} & \\\\";
+				
+	}
+	else {
+		$PrintHeader{$_} = "";
+	}
+}
+
+
+
+#
+# Papierformat
+
+if ($Config{'PAPER'} eq "A4") {
+		
+	$PaperPS = "a4";
+	$PaperTex = "a4paper";
+	
+} elsif ($Config{'PAPER'} eq "letter") {
+
+	$PaperPS = "letter";
+	$PaperTex = "letterpaper";
+
+} 
+
+#
+# Fontpaket
+$Fontpackage = $Fontpackage{$Config{'FONT'}};
+
+#
+# Umleitung ins Nirwana oder in Datei ?
+if ($Config{'DEBUG'} == 1) {
+	$Umleitung = $Temp{'log'};
+} else {
+	$Umleitung = "/dev/null";
+}
+
+
+#
+# Sprachpaket (Auswahl von vorher überschreiben, falls in Konfigdatei
+# anders)
+
+$LPack = $Config{'LPack'} if defined $Config{'LPack'};
+
+#
+# Zeichensatz (Auswahl von vorher überschreiben, falls in Konfigdatei
+# anders)
+$charset = $Config{'charset'} if defined $Config{'charset'};
+
+#
+# LaTeX-Datei erzeugen
+CreateLatex();
+
+chdir($Temp{'dir'});
+
+#
+# LaTeX zweimal laufen lassen, da sonst die Seitenzahl nicht ermittelt
+# werden kann
+foreach (qw(1 2)) {
+	system("latex -interaction=nonstopmode mail.tex >> $Umleitung 2>&1");
+}
+
+unless (-e $Temp{'dvi'}) {
+	
+	DeleteTemp() if $Config{'DEBUG'} != 1;
+	die "Latex didn't work.";
+	
+}
+
+
+##################################### DRUCKEN ################################
+
+#
+# Druck in Datei
+if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
+	$File = $Config{'PRINTER'};
+	$File =~ s/(TO_FILE|file)://;
+
+	
+	$DVIopts[0] = "-o $File -t $PaperPS";
+	$DVIopts[1] = "-o ${File}2 -t $PaperPS";
+	
+	$Config{'SPEED'} = 0;
+	$Config{'WAIT'} = 0;
+	
+	$Command[0] = "> $File";
+	$Command[1] = "> ${File}2";
+	
+} elsif ($Config{'PRINTER'} =~ /^((TO_FILE|file):-?|-)$/i) {
+	
+	$Config{'DUPLEX'} = "off";
+	
+	$DVIopts[0] = "-f -t $PaperPS";
+	$DVIopts[1] = $DVIopts[0];
+
+	$Command[0] = "";
+	$Command[1] = $Command[0];
+
+
+} else {
+	
+	$DVIopts[0] = "-P $Config{'PRINTER'} -t $PaperPS";
+	$DVIopts[1] = $DVIopts[0];
+		
+	$Command[0] = "| lpr -P$Config{'PRINTER'}";
+	$Command[1] = $Command[0];
+	
+
+}
+
+
+#
+# erster Fall: normaler Druck
+if (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "off")) {
+	PrintNormal($DVIopts[0]);
+}
+#
+# zweiter Fall: nur Duplexdruck
+elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "off")) {
+	
+	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") == 1) {
+		PrintNormal($DVIopts[0]);
+	
+	} else {
+
+		if (!defined($child_pid = fork())) {
+			die "kann fork nicht ausführen: $!";
+		} elsif ($child_pid) {
+			system ("dvips -A $DVIopts[0] $Temp{'dvi'}  2>> $Umleitung");
+		} else {
+			sleep ($Config{'SPEED'} * $Seitenzahl / 2 + $Config{'WAIT'});
+			system ("dvips -B $DVIopts[1] $Temp{'dvi'}  2>> $Umleitung");	
+			DeleteTemp();
+			exit;
+		}
+	}
+}
+
+#
+# dritter Fall: nur Papiersparmodus
+elsif (($Config{'DUPLEX'} eq "off") && ($Config{'PAPERSAVE'} eq "on")) {
+	PrintPaperSave($Command[0]);
+}
+#
+# vierter Fall: Papiersparmodus und Duplexdruck
+elsif (($Config{'DUPLEX'} eq "on") && ($Config{'PAPERSAVE'} eq "on")) {
+
+	if (GetSeitenzahl("$Temp{'dir'}/mail.aux") <= 2) {
+		PrintPaperSave($Command[0]);
+
+	
+	} else {
+
+		# erst in PS-Datei drucken
+		system ("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung "
+			." | psnup -2 -q > $Temp{'ps'} 2>>$Umleitung");
+		
+		# dann auswählen
+		if (!defined($child_pid = fork())) {
+			die "kann fork nicht ausführen: $!";
+		} elsif ($child_pid) {
+			system ("psselect -q -o $Temp{'ps'} $Command[0] 2>>$Umleitung");
+		
+		} else {
+			sleep ($Config{'SPEED'} * $Seitenzahl / 4 + $Config{'WAIT'});
+			system ("psselect -q -e $Temp{'ps'} $Command[1] 2>>$Umleitung");	
+			DeleteTemp();
+			exit;
+		}
+	}
+
+}
+#
+# fünfter Fall: echter (!) Duplexdruck
+elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "off")) {
+
+	PrintNormal("-o mail.ps -t $PaperPS");
+	
+	ModifyPS("portrait");
+	system "cat $Temp{'ps'} $Command[0]";
+
+}
+
+elsif (($Config{'DUPLEX'} eq "printer") && ($Config{'PAPERSAVE'} eq "on")) {
+
+	PrintPaperSave("> $Temp{'ps'}");
+
+	ModifyPS("landscape");
+	system "cat $Temp{'ps'} $Command[0]";
+	
+}
+
+
+unless ($child_pid) {
+
+	DeleteTemp();
+}
+
+
+################################### ENDE ####################################
+
+
+
+##################### UNTERFUNKTIONEN ########################################
+
+#
+# Liest die Konfigurationsdatei ein
+
+sub ReadConfig () {
+
+	my $Variable;
+	my $Wert;
+	my @Dateien;
+	
+	@Dateien = ("/etc/Muttprintrc", "$ENV{'HOME'}/.muttprintrc");
+	
+	
+	foreach (@Dateien) {
+	
+		if (-r $_) {
+	
+			open (RCFILE, $_);
+
+			while (<RCFILE>) {
+				
+				if (/=/ && ! /#/) {				
+					($Variable, undef, $Wert) = /^(\S+)=(['"]?)(\S+?)\2$/;
+					$Config{$Variable} = $Wert;
+				}
+			}
+			
+			close RCFILE;
+		}
+	}
+}
+
+
+sub ReadOpts () {
+
+	# wird für die Optionen benötigt (gehört zum Standardumfang von Perl 5)
+	use Getopt::Long; 
+	Getopt::Long::Configure ("no_ignore_case");
+
+	
+	my %opt;									# Aufrufoptionen	
+	my $error = 0;								# Beenden mit Fehler
+	
+	#
+	# Optionen einlesen und der zugehörigen Variablen zuordnen
+	
+	GetOptions (
+	
+		'h|help' 			=> 	\$opt{'help'},
+		'v|version'			=>	\$opt{'version'},
+
+		'p|printer=s' 		=>	\$Config{'PRINTER'},
+		'i|penguin=s'		=>	\$Config{'PENGUIN'},
+		't|speed=i'			=>	\$Config{'SPEED'},
+		'w|wait=i'			=>	\$Config{'WAIT'},
+		'F|font=s'			=>	\$Config{'FONT'},
+		'P|paper=s'			=>	\$Config{'PAPER'},
+		'S|frontstyle=s'	=>	\$Config{'FRONTSTYLE'},
+		'D|debug!'			=>	\$Config{'DEBUG'},
+
+
+		'l|lang=s'			=>	\$opt{'LANG'},
+		'd|duplex!'			=>	\$opt{'DUPLEX'},
+		'H|headrule!'		=>	\$Config{'HEADRULE'},
+		'b|footrule!'		=>	\$Config{'FOOTRULE'},
+		'1'					=> 	\$opt{'paper1'},
+		'2'					=>	\$opt{'paper2'},
+		's|rem_sig!'		=>	\$opt{'REM_SIG'},
+		'q|rem_quote!'		=>	\$opt{'REM_QUOTE'},
+		
+		'f|file=s'			=>	\$opt{'file'},
+		
+	) or $error = 1;
+	
+	
+	#
+	# Logische Optionen => on/off
+	
+	foreach ("DUPLEX", "REM_SIG", "REM_QUOTE", "HEADRULE", "FOOTFULE") {
+		if (defined $opt{$_}) {
+			if ($opt{$_}) {
+				$Config{$_} = "on";
+			} else {
+				$Config{$_} = "off";
+			}
+		}
+	}
+	
+	#
+	# Papiersparmodus
+	
+	$Config{'PAPERSAVE'} 	= "off"			if $opt{'paper1'};
+	$Config{'PAPERSAVE'}	= "on"			if $opt{'paper2'};
+
+	#
+	# andere Sprache
+	$Config{'LANG'} 		= $opt{'LANG'}	if defined $opt{'LANG'};
+
+	# aus Datei lesen
+
+	if (defined $opt{'file'}) {
+		if ($opt{'file'} eq "-") {
+			@ARGV = "-";
+		}
+		else {
+			unless (-e $opt{'file'}) {		
+				die "Could not open $opt{'file'}. Maybe the file does not exist.\n";
+			}
+			@ARGV = $opt{'file'};
+		}			
+	}
+	else {
+		@ARGV = "-";
+	}
+	
+	
+	# Rückgabe: Wahrheitswerte für 
+	# I Hilfe, II Version
+
+	return ($opt{'help'}, $opt{'version'}, $error);
+
+
+}
+
+sub ReadPaperConfig () {
+
+	my $DebianPaper;
+	my $Papersize = "/etc/papersize";
+
+
+	if (-r $Papersize) {
+
+		open (RCFILE, $Papersize);
+		chomp($DebianPaper = <RCFILE>);
+
+		if ($DebianPaper eq "a4") {
+			$Config{"PAPER"} = "A4";
+		}
+        elsif ($DebianPaper eq "letter") {
+			$Config{"PAPER"} = "letter";
+		}
+	}
+}
+
+
+sub CreateTemp () {
+	#
+	# temp directory / temp files
+
+	mkdir ("/tmp/muttprint-$$", 0700) || die "Unable to create temp-folder: $!";
+	$Temp{'dir'} = "/tmp/muttprint-$$";
+	$Temp{'content'} = "$Temp{'dir'}/content";
+	$Temp{'latex'} = "$Temp{'dir'}/mail.tex";
+	$Temp{'log'} = "/tmp/muttprint.log";
+	$Temp{'dvi'} = "$Temp{'dir'}/mail.dvi";
+	$Temp{'ps'} = "$Temp{'dir'}/mail.ps";
+}
+
+
+sub FindCommonDir ($) {
+
+	my $sort = shift;
+	my $common_dir;
+	my ($prefix) = $0 =~ m#(.*)/bin/muttprint#;
+	
+	foreach ($prefix, "/usr/", "/usr/local") {
+	
+		$common_dir = "$_/$sort/muttprint/";
+		return $common_dir if (-d $common_dir);
+	
+	}
+
+}
+
+sub SearchPenguin () {
+
+	
+	
+	my $penguin;
+	my ($prefix) = $0 =~ m#(.*)/bin/muttprint#;
+	
+	foreach ($prefix, "/usr", "/usr/local") {
+		$penguin = "$_/share/muttprint/penguin.eps";
+		return $penguin if -r $penguin;
+	}
+
+}
+
+sub SubstituteVerbatim ($) {
+	
+	my %SubstituteText = (
+		"¤"			=>		"EUR",
+		"×"			=>		"x",
+		"÷"			=>		":",
+		"­"			=>		"-",
+		" "			=>		" ",
+		"\200"		=>		"EUR",
+		"\201"		=>		" ",
+		"\202"		=>		",",
+		"\203"		=>		"f",
+		"\204"		=>		",,",
+		"\205"		=>		"...",
+		"\206"		=>		"+",
+		"\207"		=>		"++",
+		"\210"		=>		"^",
+		"\211"		=>		"o/oo",
+		"\212"		=>		"S",
+		"\213"		=>		"<",
+		"\214"		=>		"OE",
+		"\215"		=>		" ",
+		"\216"		=>		"Z",
+		"\217"		=>		" ",
+		"\220"		=>		" ",
+		"\221"		=>		"'",
+		"\222"		=>		"'",
+		"\223"		=>		"``",
+		"\224"		=>		"''",
+		"\225",		=>		"·",
+		"\226",		=>		"--",
+		"\227",		=>		"---",
+		"\230",		=>		"~",
+		"\231",		=>		"[tm]",
+		"\232",		=>		"s",
+		"\233",		=>		">",
+		"\234",		=>		"oe",
+		"\235",		=>		" ",
+		"\236",		=>		"z",
+		"\237",		=>		"Y",
+	);
+	my %SubstituteTextLatin1 = (
+		"¬"			=>		"!-",
+		"±"			=>		"+-",
+		"¹"			=>		"^1",
+		"²"			=>		"^2",
+		"³"			=> 		"^3",
+		"µ"			=>		"Mikro-",
+		"¢"			=>		"ct",
+		"¥"			=>		"YEN",
+		"¦"			=>		"|",		
+	);
+
+	my $Line = shift;
+	
+	foreach (keys(%SubstituteText)) {
+			$Line =~ s/$_/$SubstituteText{$_}/g;
+	}
+	if ($charset eq "latin1") {
+		foreach (keys(%SubstituteTextLatin1)) {
+			$Line =~ s/$_/$SubstituteTextLatin1{$_}/g;
+		}
+	}
+
+
+	return $Line;
+}
+		
+##############################################################################
+
+sub CreateLatex () {
+
+	my $PengCode = "";							# Kommando für den Pinguin
+	my $PengTab = "130 mm"; 					 # restl. Größe für Pinguin
+	my $BeforeHeader;
+	my $AfterHeader;
+	my $LatexPackages = "$Fontpackage,fancyhdr,lastpage";
+	my $headerrule_other = '\\renewcommand{\\headrulewidth}{0pt}';
+	my $headerrule_first = '\\renewcommand{\\headrulewidth}{0pt}';
+	my $footerrule = "";
+
+
+	# Pinguin drucken?
+
+	if ($Config{'PENGUIN'} ne "off") {
+		$PengCode = <<"EOF";
+\\raisebox{4mm}{
+\\begin{minipage}[t]{2cm}
+\\begin{flushright}
+~ \\\\
+\\includegraphics[height=2cm]{$Config{'PENGUIN'}}
+\\end{flushright}
+\\end{minipage}}
+EOF
+		$PengTab="115 mm";
+	}
+	
+	
+	#
+	# Frontstyle:
+	for ($Config{'FRONTSTYLE'}) {
+		/^plain$/i 			&& do {		
+			$BeforeHeader = "";
+			$AfterHeader = "\\vspace{8mm}";				
+		last; };
+			
+		/^fbox$/i 			&& do {
+			$BeforeHeader = '\\fbox{';
+			$AfterHeader = '} \\vspace{5mm}';
+		last; };
+		/^shadowbox$/i		&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\shadowbox{';
+			$AfterHeader = '} \\vspace{3mm}';
+		last; };
+		/^(?-i:o)valbox$/i	&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\ovalbox{';
+			$AfterHeader = '} \\vspace{6mm}';
+		last; };
+		/^(?-i:O)valbox$/i	&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\Ovalbox{';
+			$AfterHeader = '} \\vspace{6mm}';
+		last; };
+		/^doublebox$/i		&& do {
+			$LatexPackages .= ",fancybox";
+			$BeforeHeader = '\\doublebox{';
+			$AfterHeader = '} \\vspace{5mm}';
+		last; };
+		/^grey$/i			&& do {
+			$LatexPackages .= ",color";
+			$BeforeHeader = '\\colorbox[gray]{0.85}{';
+			$AfterHeader = '} \\vspace{8mm}';
+		last; };
+		/^greybox$/i		&& do {
+			$LatexPackages .= ",color";
+			$BeforeHeader = '\\definecolor{light}{gray}{0.85} \\fcolorbox{black}{light}{';
+			$AfterHeader = '} \\vspace{6mm}';
+		last; };
+	
+
+			$BeforeHeader = "";
+			$AfterHeader = '\\vspace{5mm} \\hrule \\vspace{5mm}';	
+	}
+	
+	#
+	# Headerrule
+	if ($Config{'HEADRULE'} eq "on") {
+		$headerrule_other = '\\renewcommand{\\headrulewidth}{0.5pt}';
+	}
+	
+	#
+	# Footerrule
+	if ($Config{'FOOTRULE'} eq "on") {
+		$footerrule = '\\renewcommand{\\footrulewidth}{0.5pt}';
+	}
+	
+	
+	# if there's no subject:
+	$Header{'Subject'} ||= "(no subject)";
+
+
+	open (LATEX, "> $Temp{'latex'}") || die "unable to create $Temp{'latex'}: $!";
+
+
+#
+# hier wird die eigentliche LaTeX-Quelldatei erzeugt
+# statt Backslash [\] : \\ -> keine Maskierung nötig !
+
+print LATEX <<EOF;
+\\documentclass{article}
+\\usepackage[T1]{fontenc}
+\\usepackage[$LPack]{babel}
+\\usepackage[$charset]{inputenc}
+\\usepackage{$LatexPackages}
+\\usepackage[$PaperTex,left=20mm,right=20mm,top=18mm,bottom=25mm,headsep=5mm]{geometry}
+\\usepackage{moreverb,graphicx}
+\\setlength{\\parindent}{0mm}
+\\pagestyle{fancy}
+\\lhead{\\itshape $Header{'ShortFrom'}}
+\\rhead{\\bfseries $Header{'Subject'}}
+\\cfoot{}
+\\lfoot{\\today}
+\\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}
+$headerrule_other
+$footerrule
+\\fancypagestyle{plain}{%
+$headerrule_first
+\\fancyhf{} 
+\\lfoot{\\today}
+\\setlength{\\headsep}{1mm}
+\\addtolength{\\footskip}{4mm}
+\\rfoot{$String{'Page'} \\thepage\\ $String{'of'} \\pageref{LastPage}}}
+\\begin{document}
+\\thispagestyle{plain}
+$BeforeHeader
+{\\large
+\\begin{tabular}[t]{rp{$PengTab}l}
+$PrintHeader{'Date'}
+$PrintHeader{'From'}
+$PrintHeader{'To'}
+$PrintHeader{'CC'}
+$PrintHeader{'Newsgroups'}
+{\\bfseries $String{'Subject'}} \& {\\bfseries $Header{'Subject'} }
+\\end{tabular}}
+\\hfill
+$PengCode
+$AfterHeader
+\\verbatiminput{$Temp{'content'}}
+\\end{document}
+EOF
+
+	close LATEX;
+
+}
+
+##############################################################################
+
+sub GetRealname ($$) {
+
+	my $Header;
+	my $kind_of_Header;
+	my $Realname;
+	
+	if ($Header = shift) {
+		$kind_of_Header = $String{'From'};		
+	} 
+	elsif ($Header = shift) {
+		$kind_of_Header = $String{'To'};
+	}
+	else {
+		return ""; 
+	}
+	
+	
+	for ($Header) {
+		
+		/^"*(.*?)"* <.*\@.*>.*$/ || /^.*\@.* \((.*)\)$/ || /<(.*\@.*)>/;
+
+		if ($1) {
+			return "$kind_of_Header $1";
+		}
+		else {
+			return $kind_of_Header . (split /,\s/, $Header)[0];
+		}
+	}
+}
+
+
+##############################################################################
+
+sub GetSeitenzahl ($) {
+
+	open (AUX, "$_[0]");
+	
+	while (<AUX>) {
+		($Seitenzahl) = /\\newlabel{LastPage}{{}{(\d+)}}/;
+	}
+	
+	close AUX;
+	
+	return $Seitenzahl;
+}
+
+##############################################################################
+
+sub PrintNormal ($) {
+	
+	system ("dvips $_[0] $Temp{'dvi'} 2>> $Umleitung")
+	&& die "Unable to print: $!";
+
+}
+
+##############################################################################
+
+sub PrintPaperSave ($) {
+
+	system("dvips -f -t $PaperPS $Temp{'dvi'} 2>>$Umleitung | psnup -2 -q "
+	  ."$_[0] 2>>$Umleitung") && die "Unable to print: $!";
+}
+
+##############################################################################
+
+#
+# Here we decode HEADER
+# This is useful for printing raw mails / usenet articles
+# See RFC 2047 for MIME encoding. I would not say that this code decodes
+# all correct, but when I tested it, it worked :)
+#
+# Tipp:
+# For printing with KNode (KDE newsreader) save the article to a file and
+# execute   muttprint -f /tmp/some_file.txt
+# [This decoding stuff was done for KNode ;)]
+
+sub DecodeHeader () {
+	
+	my $EncPart;
+	
+	foreach $EncPart ($_ =~ /=\?ISO-8859-[0-9]+\?Q\?(.*?)\?=/gi) {		
+		
+ 		$EncPart =~ s/=([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+ 		$EncPart =~ s/_/ /g;
+		
+		s/=\?ISO-8859-[0-9]+\?Q\?.*?\?=/$EncPart/;
+		
+	}
+}
+
+##############################################################################
+
+
+
+
+#
+# Because lots of mail clients do not break the lines, we must do it here.
+# This is some like 'fmt', but better for our needs. We do not use 'fmt',
+# because its -s Option is *not* available on all systems!
+
+sub WriteFormated ($*) {
+
+	local $_ = shift;
+	my $fh = shift;
+	$^L = "";
+	my $oldfh = select $fh;
+	$~ = "CONTENT";
+	
+format CONTENT =
+^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ~~
+$_
+.
+	
+	#
+	# at first, we split each paragraph
+	
+	for (split /(?:\s*\n\s*){2,}/) {
+	
+		#
+		# then, we look if *every* line is too long
+		if ((() = /^.{80,}$/gm) == tr/\n//) {
+		
+			#
+			# if so, we fill it! (as a normal fmt does)
+			
+			s/\s*\n\s*/ /g;
+			write;
+		} 
+		else {
+		
+			#
+			# and if not, we break every line separately
+			# (as fmt -s does)
+			
+			for (split /\n/) {
+				
+				if (/^.{80,}$/) {
+					write;
+				} 
+				else {
+					print $_, "\n";
+				}
+			
+			}
+		}
+		
+		#
+		# finally, we print a Newline on the end of each
+		# paragraph
+		
+		print "\n";		
+	}
+	
+	$| = 1;
+	select $oldfh;
+}
+
+# .. so this is some like 'fmt' and 'fmt -s' in one
+
+##############################################################################
+
+sub ModifyPS ($) {
+
+	my $Tumble;
+	my $Postscript;
+	my $DuplexCommand;
+	
+	# 
+	# /Tumble true will use a short edge binding while false will use a long
+	# ledge binding.
+	# long edge binding makes a duplex printing looks right for portrait page.
+	# short edge binding makes a duplex printing looks right for landscape
+	# page.
+	#
+
+	
+	if ($_[0] eq "portrait") {
+		$Tumble = "false";	
+	}
+	elsif ($_[0] eq "landscape") {
+		$Tumble = "true";
+	}
+	
+	$DuplexCommand = <<EOF;
+%%BeginFeature: *Duplex DuplexTumble
+
+    2 dict dup /Duplex true put dup /Tumble $Tumble  put setpagedevice
+
+%%EndFeature
+EOF
+	
+	
+	open(READ_PSFILE, "$Temp{'ps'}") || die "$!";
+	$Postscript = join("", (<READ_PSFILE>));	
+	close READ_PSFILE;
+	
+	#
+	# notwendige Kommentare hinzufügen!
+	
+	$Postscript =~ s#\%\%EndComments#$DuplexCommand#;
+	
+	open(WRITE_PSFILE, "> $Temp{'ps'}") || die "$!";
+	print WRITE_PSFILE $Postscript;
+	close WRITE_PSFILE;
+
+}
+
+
+##############################################################################
+
+sub DeleteTemp () {
+
+	unlink (<$Temp{"dir"}/*>);
+	rmdir ($Temp{'dir'});
+
+}
+
+##############################################################################
+
+sub SIGINT_handler () {
+
+	DeleteTemp();
+	exit;
+	
+}
+
+
+##############################################################################
+
+sub Setze_String () {
+
+for ($Lang) {
+
+	/^(\w{2})/i	
+	
+		and do { 
+		
+			if (-r "$lib_dir/translation-$1.pl") {
+				do("$lib_dir/translation-$1.pl"); 
+				last;
+			}
+		};
+				
+
+$String{"Benutzung"} = <<EOF;
+
+Usage:   muttprint [option]... [-f file]
+ 
+Options:
+
+PLEASE NOTICE: This options override the corresponding settings in 
+~/.muttprintrc and /etc/Muttprintrc.
+
+-h, --help
+       This help.
+
+-v, --version
+       Prints the current version of Muttprint.
+
+-f [file], --file [file]
+       Reads from file instad of STDIN.
+
+-p [printername], --printer [printername]
+       Uses a specific printer.
+       "-" stands for STDOUT
+       For printing in a file use TO_FILE:/path/to/file
+	   
+-i [file], --penguin [file]
+       Sets the picture printed on the first page.
+
+-t [number], --speed [number]
+       Time in seconds which the printer needs for one page.
+		   
+-w [number], --wait [number]
+       Time between printing odd and even pages for duplex printing.
+
+-F [fontname], --font [fontname]
+       Font family for printing. Possible values are:
+       Latex, Latex-bright, Times, Utopia, Palatino, Charter and Bookman
+	   
+-H, --headrule | -noH, --noheadrule
+       Turn printing of the headrule on or off.
+	   
+-b, --footrule | -nob, --nofootrule
+       Turn printing of the footrule on or off.
+	   
+-S Style | --frontstyle Style
+       Choose a style for the headers on the first page:
+	   plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+	   grey, greybox. 
+	   Read the manual for a detailled description of this values.
+
+-P [paperformat], --paper [paperformat]
+       Paper format: "letter" (US) or "A4" (Europe).
+
+-l [language], --lang [language]
+       Language for messages and printing.
+
+-D, --debug | -noD, --nodebug
+       Writes useful information to a logfile /tmp/muttprint.log.
+
+-d, --duplex | -nod, --noduplex
+       Enables or disables duplex printing.
+	   
+-2 | -1
+       Prints two pages on one sheet. Corresponds to "papersave mode".
+
+-s, --rem_sig | -nos, --norem_sig
+       Removes the signature (separated by "-- ") in the printing.
+
+-q, --rem_quote | -noq, --norem_quote
+       Remove the quoted paragraph from the printing.
+	   
+EOF
+
+$String{"Lizenz"} = "This program is distributed unter the terms of the
+GPL und can be freely copied.
+";
+
+$String{"Bugs"} = "Please report bugs on <Bernhard.Walle\@gmx.de>.\n";
+
+$String{"FileNotFound"} = "The specified file was not found.\n";
+
+@String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} =
+("From:", "To:", "Subject:", "Carbon Copy:", "Date:", "page", "of", "Newsgroups:");
+
+$LPack = "english";
+$charset = "latin1";
+}
+
+# Rückwärtskompatiblität
+# wird irgendwann entfernt!!
+$Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'} 
+			if defined $Config{'NEWSGROUP_STRING'};
+
+	foreach ("From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups") {
+		$String{$_}	= $Config{"\U$_"."_STRING"} if defined $Config{"\U$_"."_STRING"};
+	}
+}
+
+#######################################################################################
