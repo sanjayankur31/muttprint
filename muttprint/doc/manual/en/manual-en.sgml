@@ -544,6 +544,12 @@ set printer_name "muttprint"
 			
 			<para>To enable this mode, set <literal>PAPERSAVE</literal> to
 				<literal>on</literal>.</para>				
+
+			<para>If you only want to activate the papersave mode if more
+				than one page is printed, set <literal>PAPERSAVE</literal>
+				to <literal>optional</literal>.
+
+			</para>
 		</sect3>
 	
 		<sect3 id="date">
