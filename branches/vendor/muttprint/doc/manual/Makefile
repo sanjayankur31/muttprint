@@ -1,0 +1,36 @@
+#
+# This is the main makefile for documentation
+
+prefix = /usr
+docdir = $(prefix)/share/doc/packages
+INSTALL = install -m 0644
+INSTALLDIR = install -d 
+
+
+
+default: 
+	make -C de
+	make -C es
+	make -C en
+	make -C it
+
+all:
+	make -C de all
+	make -C es all
+	make -C en all
+	make -C it all
+
+install:
+	make -C de install
+	make -C es install
+	make -C en install
+	make -C it install
+
+clean:
+	make -C de clean
+	make -C es clean
+	make -C en clean
+	make -C it clean
+	
+
+	
