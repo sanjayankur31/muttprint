@@ -171,7 +171,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 		
 	<sect2>
 	
-		<title>Integration von Muttprint in Mailprogramme</title>
+		<title>Integration von Muttprint in Mail- und Newsprogramme</title>
 
 		<para>Urspr&uuml;nglich wurde Muttprint ausschlie&szlig;lich f&uuml;r
 			Mutt entwickelt. Trotzdem kann es ohne Probleme in die folgenden
@@ -223,6 +223,18 @@ set print_split
 			<para>N&auml;here Informationen entnehmen Sie bitte der
 				Dokumenatation zu Mutt (normalerweise befindet sich diese unter
 				<Filename>/usr/share/doc/packages/mutt/manual.txt</Filename>).</para>
+
+		</sect3>
+		<sect3>
+			<title>Slrn</title>
+
+			<para>Einfach in die Konfigurationsdatei <filename>~/.slrnrc</filename>
+				folgendes eintragen:</para>
+			
+			<programlisting>
+% Use Muttprint for printing
+set printer_name "muttprint"
+			</programlisting>
 
 		</sect3>
 
