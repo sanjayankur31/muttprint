@@ -466,7 +466,7 @@ foreach $type (@headers) {
 				# Header formatieren nach ADDRESSFORMAT
 				if ($type =~ /^(To|From|CC)/i && $Config{ADDRESSFORMAT} ne "original") {
 					# Adressen 'einrahmen'
-					s/(\s+?!['"]+)([^<>\s\\]+\@[^<>\s,]+)/<$1>/g;
+					s/(?:^|\s)([^<>'"\s]+\@[^<>\s,'"]+)/<$1>/g;
 					s/<+/</g;
 					s/>+/>/g;
 
