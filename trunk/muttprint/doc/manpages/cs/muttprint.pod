@@ -1,6 +1,6 @@
 =head1 JMÉNO
 
-muttprint - ti¹tìní pìkných mailù s Muttem
+muttprint - ti¹tìní pìkných mailù z Muttu
 
 
 =head1 SYNTAXE
@@ -10,10 +10,9 @@ muttprint [I<volby>]... [-f I<soubor>]
 
 =head1 POPIS
 
-Tato manuálová stránka seznamuje s utilitou B<Muttprint>. Tato manuálová
-stránka byla napsaná pùvodnì pro distribuci Debian GNU/Linux, proto¾e
-pùvodní program nemìl manuálovou stránku. Teï u¾ je a byla vytvoøena
-pomocí POD-formátu.
+Tato manuálová stránka seznamuje s utilitou B<Muttprint>. 
+Stránka byla napsaná pùvodnì pro distribuci Debian GNU/Linux, byla
+vytvoøena pomocí POD-formátu.
 
 B<POZNÁMKA:> Cesta F</usr/share/doc/packages/muttprint> mù¾e být
 F</usr/doc/packages/muttprint> nebo F</usr/share/doc/muttprint>
@@ -99,7 +98,7 @@ obrázku.
 
 =item B<-x, --x-face> | B<-nox, --nox-face>
 
-Zapíná (on) nebo vypíná (off) tisk obrázku, který byl poslán v I<X-Face:>
+Zapíná nebo vypíná tisk obrázku, který byl poslán v I<X-Face:>
 hlavièce. Ètìte dokumentaci pro detailní informace.
 
 
@@ -137,7 +136,7 @@ Zde se nastavuje, zda se má tisknout v patièce oddìlovací èára nebo ne.
 
 =item B<-S> I<styl>B<, --frontstyle> I<styl>
 
-Vyber styl tisku hlavièky zprávy na první stránce:
+Výbìr stylu tisku hlavièky zprávy na první stránce:
 I<plain>, I<border> (implicitní), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
 I<doublebox>, I<grey>, I<greybox>. Ètìte manuál pro detailní popis tìchto hodnot.
 
@@ -158,24 +157,23 @@ Dva pøíklady:
 
 =item B<-P> I<formát_papíru>B<, --paper> I<formát_papíru>
 
-Vyber formát papíru: I<A4> ve vìt¹inì zemí ("DIN A4" v Nìmecku)
+Výbìr formátu papíru: I<A4> ve vìt¹inì zemí ("DIN A4" v Nìmecku)
 a I<letter> v U.S.
 
 
 =item B<-l> I<jazyk>B<, --lang> I<jazyk>
 
 Dává výstup ve zvoleném jazyce. Podporované jazyky jsou: 
-I<de> (German), I<en> (English) and I<it> (Italian), I<fr> (French),
-I<es> (Spanish) and I<cs> (Èesky).
+I<de> (German), I<en> (English), I<it> (Italian), I<fr> (French),
+I<es> (Spanish) a I<cs> (Èesky).
 Implicitnì se nastavuje podle I<LANG> v prostøedí. Není-li nastaveno
 pou¾ívá se English.
 
 
 =item B<-D, --debug> | B<-noD, --nodebug>
 
-
-Vyber, jestli bude B<Muttprint> tisknout do log-souboru
-F</tmp/muttprint.log>. U¾iteèné pøi dotazech na nìkoho jiného o pomoc,
+Volba urèuje, jestli bude B<Muttprint> tisknout do log-souboru
+F</tmp/muttprint.log>. U¾iteèné pøi dotazech o pomoc,
 kdy¾ B<Muttprint> nefunguje.
 
 
@@ -258,7 +256,7 @@ Pøekladové soubory.
 =back
 
 
-=head1 SEE ALSO
+=head1 ODKAZY
 
 mutt(1)
 
