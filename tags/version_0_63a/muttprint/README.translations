@@ -1,0 +1,115 @@
+Muttprint - Translation
+===========================================================================
+
+
+Some things in Muttprint are translated into different languages.
+This are:
+
+
+---------------------------------------------------------------------------
+Files                 Content/Description
+---------------------------------------------------------------------------
+translation/*.pl      - Output strings
+                      - Printed Header
+                      - LaTeX-package for the printing ($LPack)
+                      - charset for the printing ($charset)
+
+sample-muttprintrc-** - sample configuration file with comments
+
+doc/manpage/*         - manpage
+
+doc/manual/*          - User's guide
+---------------------------------------------------------------------------
+
+
+
+The languages are:
+
+
+---------------------------------------------------------------------------
+ISO     Language        State                           Translator [1]
+---------------------------------------------------------------------------
+en      English         Complete.                       Bernhard Walle
+                        -- up to date --
+
+de      German          Manpage, User's guide,          Bernhard Walle
+                        translation file,
+			            sample-muttprintrc
+                        -- up to date --
+                        
+it      Italian         Manpage, User's guide,          Roberto Vallone
+                        translation file
+                        -- up to date --
+                        
+fr      French          translation file,               Vincent Bernat
+                        sample-muttprintrc
+                        -- up to date --
+
+si      Slovenian       translation file,               Bo¨tjan Müller
+                        sample-muttprintrc
+                        -- up to date --
+
+es      Spanish         Manpage, User's guide           Marcelo Ramos
+                        translation file,
+                        sample-muttprintrc,
+                        README, INSTALL
+                        -- version 0.62 --
+
+cs      Czech           Manpage, translation file       Dominik Formánek
+                        -- version 0.61 --
+
+pl      Polish          translation file                Radek Kaczorowski 
+                        -- version 0.61 --
+
+sv      Swedish         translation file                Simon Josefsson
+                        -- version 0.61 --
+---------------------------------------------------------------------------
+
+
+
+Some notes to the translations:
+
+
+English:
+~~~~~~~~
+
+Because my native language is German, the English is not perfect. But there
+was no way to avoid this because the other translators need the English
+files to translate. And if you release a German-only software, you have a
+very small audience. I hope you understand it :)
+
+
+Czech/Polish:
+~~~~~~~~~~~~~
+
+This translation files changes the charset to ISO-8859-2 as used in Eastern
+Europe. For details to this topic, read the User's guide, section
+3.3.2 Charsets.
+
+
+
+
+Finally, I would like to thank _all_ translators for their provided work.
+Translations are very important for OpenSource! But the price is that all
+developers must speek (and write) English well.
+
+
+
+---------------------------------------------------------------------------
+
+
+Footnotes:
+~~~~~~~~~~
+
+[1]     For comments to the translations, please mail to:
+
+        * Vincent Bernat        <bernat@free.fr>
+        * Dominik Formánek      <dominik@formanek.cz>
+        * Marcello Ramos        <mramos@montevideo.com.uy>
+        * Roberto Vallone       <roberto.vallone@gmx.net>
+        * Bernhard Walle        <Bernhard.Walle@gmx.de>
+        * Radek Kaczorowski     <kaczor@mail.desy.de>
+        * Simon Josefsson       <simon@josefsson.org>
+        * Bo¨tjan Müller        <neonatus@neonatus.net>
+
+

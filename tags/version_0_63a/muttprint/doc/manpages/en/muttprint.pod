@@ -1,0 +1,414 @@
+=head1 NAME
+
+muttprint - pretty printing of mails with Mutt
+
+
+=head1 SYNOPSIS
+
+muttprint [I<options>]... [-f I<file>]
+
+
+=head1 DESCRIPTION
+
+This manual page documents briefly the B<Muttprint> utility. This manual 
+page was written orginally written for the Debian GNU/Linux distribution 
+because the original program did not have a manual page, but now I took
+over this manpage in POD-format.
+
+B<Muttprint> is a utility that formats the printing of Mutt and other 
+mail clients like XFMail or PINE to be like the printing of Netscape Messenger 
+or Kmail. It can print a little penguin on the first page and a headline on every
+page. Furthermore, it only prints the most important headers, but not the 
+whole plethora of them.
+
+For detailed informations about Muttprint look read the User's guide in PDF 
+and HTML format at F<##DOCDIR##/muttprint/>.
+
+Anyway, you have to put the following line in your F<##SYSCONFDIR##/Muttrc> or 
+F<~/.muttrc>:
+
+	set print_command="muttprint"
+
+If you want to customize the settings of B<Muttprint>, just copy
+F<##DOCDIR##/muttprint/sample-muttprintrc-en>
+to F<##SYSCONFDIR##/Muttprintrc> or F<~/.muttprintrc> in reliance
+if you want change the settings for the whole system or one user.
+
+B<Muttprint> defaults to English lanuage settings if the environment 
+variable I<LANG> is not set.  For example in a German environment 
+you should set:
+
+	export LANG=de_DE
+
+This can for instance be done in in your local F<~/.bashrc>.
+
+If B<Muttprint> should not print with the message 
+C<lpr: unable to print file: ...>, you should try to use
+another printer than I<lp>, e. g. I<lp5> or I<tp0> (if you
+use TurboPrint).
+
+B<CUPS USERS NOTE:> The setting C<PRINTER="lp"> will not
+work, and you have to set the Cups printer name instead
+(e. g. I<LaserJet>), which you can easily check by typing I<lpq>
+on the commandline.
+
+aufgebrochen
+=head1 OPTIONS
+
+B<PLEASE NOTICE:> This options override the corresponding
+settings in F<~/.muttprintrc> and F<##SYSCONFDIR##/Muttprintrc>.
+
+And here's the description of all command line options
+(a descriptions of the settings in the rcfile is included in
+the F<sample-muttprintrc-en> distributed with B<Muttprint>):
+
+=over 7
+
+=item B<-h, --help>
+
+Prints a list of all possible options.
+
+
+=item B<-v, --version>
+
+Prints the current version of B<Muttprint>.
+
+
+=item B<-f> I<file>B<, --file> I<file>
+
+Reads from file instad of STDIN. Useful for some mail clients as I<XFMail>.
+If I<file> is I<->, B<Muttprint> reads from STDIN.
+
+
+=item B<-p> I<printername>B<, --printer> I<printername>
+
+Uses another printer than the default I<lp> or the setting in the rcfile.
+You can also B<print in file> using F<TO_FILE:/path/to/file> as printer 
+name. If you would like to have the result in B<STDOUT>, set
+the printer name to I<->.
+
+
+=item B<-i> I<file>B<, --penguin> I<file>
+
+Takes F<file> as picture printed on the right top of the sheet. F<file>
+must contain the full path. Set F<file> to I<off> if you wouldn't 
+like to print a picture.
+
+
+=item B<-x, --x-face> | B<-nox, --nox-face>
+
+Turns on or off the printing of the picture which was transmitted in the
+I<X-Face:> header. Read the documentation for a detailed explanation.
+
+
+=item B<-t> I<number>B<, --speed> I<number>
+
+This is the amount of time in seconds which your printer needs to
+print one page. It is only necessary if you use duplex printing.
+Default is 30 (seconds).
+
+
+=item B<-w> I<number>B<, --wait> I<number>
+
+Amount of time in seconds which B<Muttprint> should wait between
+printing odd and even pages for duplex printing.
+
+
+=item B<-F> I<fontname>B<, --font> I<fontname>
+
+Here you can choose a nice font family for your printing. Possible are:
+I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> and
+I<Bookman>. If all fonts are available on your system depends of
+your installed LaTeX-system. Default is I<Latex>.
+
+
+=item B<-H, --headrule> | B<-noH, --noheadrule>
+
+Here you can choose whether it should be printed a rule after
+the topline on pages greater than 2 or not.
+
+
+=item B<-b, --footrule> | B<-nob, --nofootrule>
+
+Here you can choose whether it should be printed a rule over the
+footline or not.
+
+
+=item B<-S> I<style>B<, --frontstyle> I<style>
+
+Choose a style for the printing of the mailheaders on the first page:
+I<plain>, I<border> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailed description
+of this values.
+
+=item B<-a> I<headers>B<, --printed-headers> I<headers>
+
+Specify the headers that should be printed. Separate each header with
+C<_>. Headers that are embedded in I<*> are printed bold; use
+I</> for italic printing. If a header does not exist, it will be omitted.
+The given order is the same as on the printing.
+
+Two examples:
+
+	Date_To_From_CC_Newsgroups_*Subject*   (default)
+	/Date/_To_From_X-Mailer_*/Subject/*
+
+
+
+=item B<-P> I<paperformat>B<, --paper> I<paperformat>
+
+Choose your paper format: I<A4> in most countries ("DIN A4" in Germany)
+and I<letter> in the U.S.
+
+
+=item B<-l> I<language>B<, --lang> I<language>
+
+Give the short form of your language. Currently are supported: 
+I<de> (German), I<en> (English), I<it> (Italian), I<fr> (French),
+I<es> (Spanish) and I<cs> (Czech).
+Default is the I<LANG> environment, fallback is English.
+
+
+=item B<-c> I<charset>B<, --charset> I<charset>
+
+This option sets the input charset:
+
+	charset		Muttprint option
+	--------------------------------
+	ISO-8859-1	latin1
+	ISO-8859-2	latin2
+	ISO-8859-3	latin3
+	ISO-8859-4	latin4
+	ISO-8859-9	latin5
+	ISO-8859-15	latin9
+	Windows-1252	latin1
+	Windows-1250	latin2
+			auto
+	---------------------------------
+
+The I<auto> setting tries to find a mailheader that contains
+the charset of the mail. This works only under specific
+circumstances, so use this carefully.
+
+
+=item B<-e> I<String>B<, --date> I<String>
+
+This option accepts two settings: I<original> and I<local>. If you
+use I<original>, the date will be printed unchanged as it appears
+in the mailheader, i. e. in English and in the sender's time zone.
+If set to I<local>, the date will be printed in the local
+language and in the system's time zone. See the options
+I<--date-format> and I<--lang>.
+
+Examples:
+
+        original: Tue, 15 Jan 2002 21:43:49 +0100
+        local:    Dienstag, 15. Januar 2002 21:43:49 
+		          (German locale)
+
+
+
+=item B<-E> I<String>B<, --date-format> I<String>
+
+This options allows you to change the date format (if you've
+choosen I<local> before). The argument is a format string
+according to strftime(3), e. g.:
+
+        "%A, %d. %B %Y %H:%M:%S" (standard in Germany)
+        "%a, %d.%m.%y %H:%M"     (shorten form)
+        "%Y-%m-%d %H:%M:%S"      (ISO format)
+
+
+
+=item B<-A> I<String>B<, --addressformat> I<String>
+
+With this option you can set how mail adresses are printed. The value
+I<original> does not change the header. Otherwise you have to specify
+a format string; following substitutions are done:
+
+	%r		name ("real name")
+	%a		mail address
+	\n		newline
+
+The default setting is I<%r E<lt>%aE<gt>,\n>. Moreover, you can emphasize
+some parts with bold or italic printing. You have to enclose these parts
+with stars (C<*>) for bold or with slashes (C</>) for italics.
+
+Example:
+
+	"/%r/ (%a),"
+
+The quotes are necessary because the string contains spaces. Otherwise the shell
+splits the string into two parts.
+
+
+=item B<-n> I<String>B<, --verbatimnormal> I<String>
+
+This sets the options which are passed to the I<Verbatim> environment
+that is necessary to print the normal mail text. Detailled explanations
+are in the user's guide. Some examples:
+
+
+	fontshape=it           italic fonts
+	frame=topline          border above the block
+	fontfamily=helvetica   Helvetica font
+	fontsize=\Huge         huge font
+
+To combine options, you have to separate each option with a comma, e. g.
+I<fontshape=it,fontseries=b>.
+
+
+=item B<-V> I<String>B<, --verbatimsig> I<String>
+
+Same as B<--verbatimnormal>, but this sets how the signature
+is printed. If the argument is I<raw>, there is now discrimination
+between normal text and signature.
+
+
+=item B<-D, --debug> | B<-noD, --nodebug>
+
+Choose whether B<Muttprint> writes to a logfile F<##TEMPDIR##/muttprint.log>.
+Useful to ask some other about help if B<Muttprint> doesn't work.
+
+
+=item B<-d, --duplex> | B<-nod, --noduplex>
+
+Enables or disables duplex printing. If enabled, B<Muttprint>
+prints only odd pages and waits some time before it prints
+even pages.
+
+
+=item B<-2> | B<-1>
+
+Prints two pages on one sheet as shown here:
+
+	+----------+----------+
+	|          |          |
+	|          |          |
+	|    1     |     2    |
+	|          |          |
+	|          |          |
+	|          |          |	
+	+----------+----------+
+	
+This feature is called I<papersave mode> in the manual and in
+the rcfile.
+
+=item B<-g> I<number>B<, --topmargin> I<number>
+
+Sets the top margin in millimeters.
+
+
+=item B<-G> I<number>B<, --bottommargin> I<number>
+
+Sets the bottom margin in millimeters.
+
+
+=item B<-j> I<number>B<, --leftmargin> I<number>
+
+Sets the left margin in millimeters.
+
+=item B<-J> I<number>B<, --rightmargin> I<number>
+
+Sets the right margin in millimeters.
+
+
+=item B<-s, --rem_sig> | B<-nos, --norem_sig>
+
+Removes the signature (separated by C<-- >) in the 
+printing. This is useful for very long signatures. But more and more people 
+(or mail clients) doesn't separate the signature correctly so this
+feature works not always.
+
+
+=item B<-q, --rem_quote> | B<-noq, --norem_quote>
+
+Remove the quoted paragraph from the printing. 
+
+B<Muttprint> detects the quoting with the same regular expression as Mutt, 
+so it should work.
+
+=item B<-z> I<size>B<, --fontsize> I<size>
+
+Specifies the font size. Possible values are I<10pt>, I<11pt>
+and I<12pt>.
+
+
+=item B<-W> I<number>B<, --wrapmargin> I<number>
+
+Controls how long the longest line could be. Longer lines
+are wraped automatically and the paragraph will be reformated.
+
+
+=item B<-r> I<file>B<, --rcfile> I<file>
+
+Specifies another configuration file, which is read additionally to F<##SYSCONFDIR##/Muttprintrc>
+and F<~/.muttprintrc>. This file overwrites all other settings, including this one
+which are done by command line parameters. (It makes no sense to include other
+options despite I<-f> if you use this option.)
+
+
+=back
+
+
+
+=head1 FILES
+
+=over 7
+
+=item F<##SYSCONFDIR##/Muttprintrc>
+
+System-wide configuration file.
+
+
+=item F<~/.muttprintrc>
+
+User configuration file.
+
+
+=item F<##TEMPDIR##/muttprint-XXXXX>
+
+Temporary files created by B<Muttprint>.
+
+
+=item F<##DOCDIR##/muttprint/>
+
+B<Muttprint> manual files in different languages and formats.
+
+
+=item F<##SHAREDIR##/muttprint/>
+
+Some pictures which can be used for printing on the
+first page of your mail.
+
+=item F<##LIBDIR##/muttprint>
+
+Translation files.
+
+=back
+
+
+=head1 SEE ALSO
+
+mutt(1)
+
+Homepage: I<http://muttprint.sourceforge.net>
+
+
+
+=head1 COPYRIGHT
+
+(c) 2000-2001 Bernhard Walle
+
+
+This is free software; see the source for  copying  conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. 
+
+
+=head1 AUTHOR
+
+Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=cut
+
