@@ -87,7 +87,7 @@ Die angegebene Datei existiert nicht oder es wurde keine angegeben.
 EOF
 
 @String{"From", "To", "Subject", "CC", "Date", "Page", "of", "Newsgroups"} = 
-("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Seite", "von", "Newsgroups:");
+("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Seite", "von", "Newsgruppen:");
 
 $LPack = "ngerman";
 $charset = "latin1";
