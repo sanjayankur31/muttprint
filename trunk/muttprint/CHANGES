@@ -6,6 +6,7 @@ CHANGES
           release, not in CVS)
         - new configuration option SIG_REGEXP which specifies the
           regular expression used to recognize the signature
+        - translated `Organization:' header
 
 0.70    - changed fontpackage for Times to `mathptm' and the package
           for Palatino to `mathpazo' because `times' and `palatino' are

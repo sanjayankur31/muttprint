@@ -1094,6 +1094,7 @@ set printer_name "muttprint"
 				<ListItem><para><literal>PAGE_STRING</literal></para></ListItem>
 				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
 				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
+				<ListItem><para><literal>ORGANIZATION_STRING</literal></para></ListItem>
 			</ItemizedList>
 			
 			<para>Zus&auml;tzliche f&uuml;r den Ausdruck eingestellte Header (siehe
