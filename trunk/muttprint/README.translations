@@ -7,16 +7,18 @@ This are:
 
 
 ---------------------------------------------------------------------------
-Files               Content/Description
+Files                 Content/Description
 ---------------------------------------------------------------------------
-translation/*.pl    - Output strings
-                    - Printed Header
-                    - LaTeX-package for the printing ($LPack)
-                    - charset for the printing ($charset)
-                    
-doc/manpage/*       - manpage
+translation/*.pl      - Output strings
+                      - Printed Header
+                      - LaTeX-package for the printing ($LPack)
+                      - charset for the printing ($charset)
 
-doc/manual/*        - User's guide
+sample-muttprintrc-** - sample configuration file with comments
+
+doc/manpage/*         - manpage
+
+doc/manual/*          - User's guide
 ---------------------------------------------------------------------------
 
 
@@ -31,21 +33,22 @@ en      English         Complete.                       Bernhard Walle
                         -- up to date --
 
 de      German          Manpage, User's guide,          Bernhard Walle
-                        translation file
+                        translation file,
+			sample-muttprintrc
                         -- up to date --
                         
 it      Italian         Manpage, User's guide,          Roberto Vallone
                         translation file
-                        -- version 0.61
+                        -- up to date --
                         
-es      Spanish         Manpage, User's guide           Marcelo Ramos
-                        translation file
-                        -- version 0.60 --
+fr      French          translation file,               Vincent Bernat
+                        sample-muttprintrc
+                        -- up to date --
+
+si      Slovenian       translation file                Bo¨tjan Müller
+                        -- up to date --
 
 cs      Czech           Manpage, translation file       Dominik Formánek
-                        -- version 0.61 --
-
-fr      French          translation file                Vincent Bernat
                         -- version 0.61 --
 
 pl      Polish          translation file                Radek Kaczorowski 
@@ -54,8 +57,10 @@ pl      Polish          translation file                Radek Kaczorowski
 sv      Swedish         translation file                Simon Josefsson
                         -- version 0.61 --
 
-si      Slovenian       translation file                Bo¨tjan Müller
-                        -- up to date --
+es      Spanish         Manpage, User's guide           Marcelo Ramos
+                        translation file,
+			sample-muttprintrc
+                        -- version 0.60 --
 ---------------------------------------------------------------------------
 
 

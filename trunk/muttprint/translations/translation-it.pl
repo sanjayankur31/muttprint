@@ -61,11 +61,41 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 -l [lingua], --lang [lingua]
        Lingua per i messaggi e la stampa
 
+-c [charset], --charset [charset]
+       Input charset: latin1, latin2, latin3, latin4, latin5, latin9,
+       auto (leggi il manuale prima di usare "auto").
+
+-e [stringa, --date [stringa
+       original: stampa la data così come è negli headers
+       local:    converte la data alla time zone e alla lingua locale
+
+-E [stringa, --date-format [stringa
+       formato per la strnga della data; guarda strftime(3) per
+       i dettagli
+
+-A [stringa], --addressformat [stringa]
+       Imposta il formato per l'indirizzo email ed il nome.
+       Guarda la manpage e la documentazione per i dettagli.
+       
+
+
 -D, --debug | -noD, --nodebug
        Scrive informazioni utili in un file di log /tmp/muttprint.log.
 
 -d, --duplex | -nod, --noduplex
        Abilita/disabilita la stampa fronte - retro.
+
+-g [numero], --topmargin [numero]
+       Margine alto in millimetri
+
+-G [numero], --bottommargin [numero]
+       Margine basso in millimetri
+
+-j [numero], --leftmargin [numero]
+       Margine sinistro in millimetri
+
+-J [numero], --rightmargin [numero]
+       Margine destro in millimetri
          
 -2 | -1
        Stampa due pagine su di un foglio. Corrisponde al modo "papersave".
@@ -76,6 +106,15 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.
        Rimuove il testo "quotato" dalla stampa.
+
+-z [grandezza], --fontsize [grandezza]
+       Grandezza del font: 10pt, 11pt, 12pt (solo questi valori)
+
+-W [numero], --wrapmargin [numerp]
+       Specifica la massima lunghezza delle linee.
+       
+-r [file], --rcfile [file]
+       Specifica un file di configurazione addizionale.
          
 
 EOF

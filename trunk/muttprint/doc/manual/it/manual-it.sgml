@@ -13,14 +13,14 @@
 		</affiliation>
 	</author>
 
-	<pubdate>2001-12-15</pubdate>
+	<pubdate>2002-02-16</pubdate>
 	
-	<releaseinfo>Versione 0.61</releaseinfo>   
+	<releaseinfo>Versione 0.62</releaseinfo>   
 	
 		
 	
 	<copyright>
-		<year>2001</year>
+		<year>2002</year>
 		<holder role="mailto:Bernhard.Walle@gmx.de">Bernhard Walle</holder>
 	</copyright>
 
@@ -65,7 +65,46 @@
             versione più recente della 1.0 di teTeX) ed i programmi
             <emphasis>psselect</emphasis> ed <emphasis>psnup</emphasis>
             appartententi al pacchetto <emphasis>PS-Utils</emphasis>
-            disponibile sul tuo sistema.</para>
+            disponibile sul tuo sistema. Questi ultimi sono necessari
+            solamente nel caso tu voglia usare la modalità "risparmio
+            carta" (paper save mode) e/o la stampa fronte-retro.</para>
+    <para>Tutti i pacchetti LaTeX richiesti sono inclusi in teTeX. Se
+            usi un'altra distribuzione di LaTeX leggi il file
+            <filename>README.latex</filename>, che contiene informazioni
+            circa tutti i pacchetti richiesti. Devi installare tutti i
+            pacchetti non presenti nel tuo sistema.</para>
+
+    <para>Per analizzare la data, Muttprint usa il modulo Perl
+      <application>Date::Parse</application><footnote>
+      <para>
+        <ulink
+url="http://www.cpan.org/authors/id/GBARR/TimeDate-1.10.tar.gz"></ulink>
+      </para>
+    </footnote>
+    <footnote><para>Puoi trovare dettagli circa l'installazione in
+             questo file. Normalmente, usando la seguente provedura,
+             dovrebbe funzionare:</para>
+      <para>
+        <prompt>$ </prompt><userInput>>tar xvfz Time-Date-1.10.tar.gz</userinput>
+      </para>
+      <para>
+        <prompt>$ </prompt><userinput>perl Makefile.PL</userinput>
+      </para>
+      <para>
+        <prompt>$ </prompt><userinput>make</userinput>
+      </para>
+      <para>
+        <prompt>$ </prompt><userinput>make test</userinput>
+      </para>
+      <para>
+        <prompt># </prompt><userinput>make install</userinput>
+      </para>
+
+      </footnote>. Se questo modulo non è installato Muttprint funzionerà
+      ugualmente eccetto la funzione di conversione della data, e stamperà la
+      data nel formato locale. Vedi <xref linkend="date">.</para>
+
+
 
 	</sect2>
 	<sect2>
@@ -95,7 +134,7 @@
 				posizioni adattandole al tuo sistema, edita il Makefile col tuo 
 				editor preferito.</para>
 
-			<para>Hai bisogno dei privilegi di root per installare il programma.				Dopo esserlo diventato col comando <command>su</command> inizia
+			<para>Necessiti dei privilegi di root per installare il programma.				Dopo esserlo diventato col comando <command>su</command> inizia
 				l'installazione con</para>
 				
 			<para>
@@ -193,7 +232,7 @@ muttprint-<replaceable>Versione</replaceable>-<replaceable>Release</replaceable>
             <para>Questa è la macro:</para>
 
                         <programlisting>
-# Dump all headers
+# Prendi tutti gli headers
 macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
 macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
                         </programlisting>
@@ -354,8 +393,15 @@ set printer_name "muttprint"
 			Ciò può essere fatto in modo permanente con i files di configurazione
 			<filename>$HOME/.muttprintrc</filename>
 			(solo per l'utente attuale) o <filename>/etc/Muttprintrc</filename>
-			(valido per tutti gli utenti). Le impostazioni utente ignorano le 
-			impostazioni globali.</para>
+			(valido per tutti gli utenti). Le impostazioni utente scavalcano
+			le impostazioni globali.</para>
+
+    <para>Puoi anche specificare un file di configurazione addizionale
+      mediante l'opzione <option>-r <replaceable>filename</replaceable></option>
+      Questo file verrà letto per ultimo ed il suo contenuto scavalcherà
+      tutte le altre impostazioni incluse quelle passate da linea di comando.
+      Questo file addizionale è utile per uare più di una configurazione
+      possibile combinandolo con qualche combinazione di tasti di Mutt.</para>
 			
 		<para>Il file di configurazione è struttrato in modo che dei valori 
 			siano assegnati a diverse variabili -- questo differisce da
@@ -389,7 +435,7 @@ set printer_name "muttprint"
 
 			<ProgramListing>PRINTER="TO_FILE:/foo/bar/test.ps"</ProgramListing>
 			
-			<para>Se è abilitata la duplex printing, Muttprint crea un secondo
+			<para>Se è abilitata la stampa fronte-retro, Muttprint crea un secondo
 				file col prefisso <filename>2</filename>, ad es.
 				<filename>test.ps2</filename>.</para>
 				
@@ -412,6 +458,10 @@ set printer_name "muttprint"
 				trovare la posizione del penguin file. (Leggi il sorgente
 				per vedere dove Muttprint va a cercare). Questa è
 				l'impostazione di default.</para>
+
+      <para>In più, Muttprint viene distribuito con alcune immagini di
+        esempio già convertite nel formato EPS. Dopo l'installazione le
+        troverai in <filename>/usr/share/muttprint</filename>.</para>
 				
 			<para>Se si vuole si può non stampare alcunché:
 				imposta <literal>PENGUIN</literal> al valore <literal>off</literal>.
@@ -438,8 +488,8 @@ set printer_name "muttprint"
                               non c'è verrà stampata l'immagine
                               impostata in <literal>PENGUIN</literal>.</para>
 
-                        <para>Per lavorare correttamente sono necessari
-                              i  seguenti due programmi:</para>
+                        <para>Per funzionare correttamente sono necessari
+                              i seguenti due programmi:</para>
                         
                         <itemizedlist spacing="compact">
                                 <listitem>
@@ -473,7 +523,7 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Duplex printing (Stampa fronte-retro)</title>
 			
-			<para>Muttprint permette il la stampa fronte-retro manuale.
+			<para>Muttprint permette la stampa fronte-retro manuale.
 				Per fare questo esso stampa prima le pagine pari,
 				e dopo un po' stampa le pagine dispari.</para>
 				
@@ -504,6 +554,75 @@ set printer_name "muttprint"
 			<para>Per abilitare questa funzione setta <literal>PAPERSAVE</literal> a
 				<literal>on</literal>.</para>				
 		</sect3>
+
+    <sect3 id="date">
+      <title>Data</title>
+
+      <para>L'opzione <literal>DATE</literal> prevede due impostazioni:
+        <literal>original</literal> e <literal>local</literal>. Se settata
+         a <literal>original</literal>, Muttprint stampa la data invariata rispetto
+         all'header, i.&nbsp;e. in Inglese e con l'orario nel formato usato dal mittente.</para>
+
+      <para>Se imposti questa opzione a <literal>local</literal>,
+        Muttprint converte la data/ora di invio in quelle del sistema e
+        stampa la data secondo la lingua locale <footnote>
+          <para>Questo funziona indipendentemente dal file di traduzione
+            usando le funzioni del sistema oparativo. Malgrado ciò, la variabile
+            <literal>LANG</literal> (vedi <xref linkend="lang">) nel file di
+            configurazione determina la "lingua" della data.</para>
+        </footnote>.</para>
+
+      <para>Il formato della data può essere specificato con la variabile
+        <literal>DATE_FORMAT</literal>. L'argomento è una stringa di formato,
+        e.&nbsp;g. <literal>"%A, %d. %B %Y %H:%M:%S"</literal>. Le virgolette
+        sono necessarie perché la stringa contiene spazi. La
+        <citerefentry><refentrytitle>strftime</refentrytitle><manvolnum>3</manvolnum></citerefentry>
+        manpage contiene maggiori dettagli a riguardo.</para>
+
+    </sect3>
+    <sect3>
+      <title>Formato dell'indirizzo email</title>
+
+      <para>Ci sono modi diversi per scrivere un indirizzo di posta elettronica
+        ed il nome del suo proprietario negli headers.
+        Eccone alcuni esempi:</para>
+
+      <ItemizedList spacing="compact">
+        <ListItem><para><literal>Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+            </literal></para></ListItem>
+        <ListItem><para><literal>"Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+            </literal></para></ListItem>
+        <ListItem><para><literal>Bernhard.Walle@gmx.de (Bernhard Walle)
+            </literal></para></ListItem>
+      </ItemizedList>
+
+      <para>Il formato usato dipende la programma del mittente; sono tutti
+        corretti. Se la variabile <literal>ADDRESSFORMAT</literal> è impostata a
+        <literal>original</literal>, gli indirizzi verranno stampati
+        invariati.</para>
+
+      <para>Se vuoi header uniformi puoi assegnare una stringa di formato
+        a questa variabile. Per default sarà <literal>"%r
+        &lt;%a&gt;,\n"</literal>. Puoi usare tutti i caratteri come stringa di formato
+        <literal>%r</literal> sarà sostituito dal name (<quote>real
+        name</quote>), <literal>%a</literal> dall'indirizzo email e
+        <literal>\n</literal> imposterà un "a capo". Le virgolette sono necessarie
+        a causa degli spazi. Un "a capo" alla fine comporterà che ogni indirizzo
+        sarà stampato in una riga separata se verranno indicati più indirizzi
+        Muttprint rimuove "a capo" e virgole dopo l'ultimo indirizzo automaticamente.</para>
+
+      <para>In più, alcune parti possono essere stampate in grassetto o corsivo.
+        Se una parte è compresa tra asterischi (<literal>*</literal>), il testo
+        sarà in grassetto;
+        slashes (<literal>/</literal>) comportano la stampa in corsivo;
+        è anche possibile la nidificazione dei comandi.</para>
+
+
+      <para>Ecco un altro esempio di stringa di formattazione (è l'unica che
+        uso): <literal>"/%r/ (%a),"</literal>.</para>
+
+    </sect3
+
 		
 		<sect3 id="speed">
 			<title>Velocità di stampa</title>
@@ -524,9 +643,23 @@ set printer_name "muttprint"
 				<literal>Latex</literal> userà il font standard di LaTeX
 				della famiglia EC. <literal>Latex-bright</literal>
 				(standard setting) userà <emphasis>Computer Modern Bright</emphasis>.
+        Questo font non è disponibile sugli attuali sistemi Debian a causa
+        della sua licenza<footnote>
+                <!-- Footnote -->
+          <para>Puoi scaricare questo font ed installarlo sul tuo computer dal
+            CTAN. Trovi i fonts in
+            CTAN:/tex-archive/nonfree/fonts/cmbright/ (CTAN =
+            <emphasis>Comprehensive TeX Archive Network</emphasis> consiste di
+            una rete di diversi servers. Il server CTAN in Germania
+            <ulink url="ftp://ftp.dante.de"></ulink>, in Gran Bretagna
+            <ulink url="ftp://cam.ctan.org"></ulink> negli Stati Uniti
+            <ulink url="ftp://tug.ctan.org"></ulink>).
+          </para>
+        <!-- /Footnote -->
+        </footnote>
 				</para>
 			
-			<para>Sono diversi i fonts Postscript possibili qui: 
+			<para>Sono diversi i fonts Postscript che si possono usare: 
 				<literal>Times</literal>, <literal>Palatino</literal>,
 				<literal>Utopia</literal>, <literal>Charter</literal> and
 				<literal>Bookman</literal>.</para>
@@ -536,7 +669,38 @@ set printer_name "muttprint"
 				LaTeX c'è quasi sempre in un sistema Linux non
 				dovrebbero esserci problemi.</para>
 
-		</sect3>		
+		</sect3>
+    <sect3>
+      <title>Grandezza del font</title>
+
+      <para>Puoi impostare la grandezza del font tramite la variabile
+       <literal>FONTSIZE</literal>. Sono permesse solo le variabili <literal>10pt</literal>,
+        <literal>11pt</literal> e <literal>12pt</literal>.
+      </para>
+    </sect3>
+    <sect3>
+      <title>Impostazione dei margini</title>
+
+      <para>I margini possono essere impostati modificando le variabili
+        <literal>TOPMARGIN</literal> (margine alto),
+        <literal>BOTTOMMARGIN</literal> (margine basso),
+        <literal>LEFTMARGIN</literal> (margine sinistro) e
+        <literal>RIGHTMARGIN</literal> (margine destro).</para>
+
+      <para>Queste variabili devono essere settate con dei numeri interi
+        che si riferiscono ai margini in millimetri (mm). Non sono possibili altre unità di misura;
+        25.4&nbsp;mm sono uguali a 1&nbsp;inch.</para>
+
+    </sect3>
+    <sect3>
+      <title>Tagliare le linee troppo lunghe</title>
+
+      <para>Puoi impostare la massima lunghezza delle righe con la variabile
+        <literal>WRAPMARGIN</literal>. Le righe più lunghe verranno 
+        tagliate e i paragrafi riformattati, ma le linee più corte non
+        verranno unite.</para>
+
+    </sect3>
 		<sect3>
 			<title>Righelli sotto/sopra intestazione/piedipagina</title>
 			
@@ -615,7 +779,7 @@ set printer_name "muttprint"
 		
 		
 		<sect3>
-			<title>Formato carta</title>
+			<title>Formato della carta</title>
 			
 			<para>Per settare il formato della carta imposta <literal>PAPER</literal> al valore corretto.
 				Sono possibili solo <literal>A4</literal> e <literal>letter</literal>.
@@ -717,7 +881,7 @@ stampato.
 
 
 	</sect2>
-	<sect2>
+	<sect2 id="lang">
 		<title>Lingue diverse</title>
 		
 		<para>Muttprint supporta le lingue <emphasis>German</emphasis>, 
@@ -728,7 +892,7 @@ stampato.
 			<literal>de</literal>, <literal>it</literal>,
 			<literal>fr</literal>, <literal>es</literal> o
 			<literal>en</literal>. Solo i primi due caratteri sono rilevati,
-			così <literal>de_DE@euro</literal> va bene. Se il valore è
+			così <literal>it_IT@euro</literal> va bene. Se il valore è
 			sconosciuto Muttprint userà l'inglese.</para>
 
 		<para>Se vuoi usare una lingua diversa per Muttprint rispetto 
@@ -740,7 +904,7 @@ stampato.
 			<title>Lingue sulla stampa</title>
 		
 			<para>L'effetto più importante dell'impostazione della
-				ua riguarda la stampa: l'intestazione della posta e la
+				lingua riguarda la stampa: l'intestazione della posta e la
 				data.</para>
 				
 			<para>Quest'ultima viene creata col pacchetto LaTeX
@@ -769,45 +933,104 @@ stampato.
 
         <sect3>
            <title>Set di caratteri</title>
-                      
-             <para>Diverse lingue richiedono diversi set di
-                   caratteri.
-                   Il caratteri di default di Muttprint è
-                   <emphasis>ISO-8859-1</emphasis> (lo stesso di ISO Latin 1).
-                   Sono supportati anche Afrikaans, Basque,
-                   Catalan, Danish, Dutch, English, Faeroese, Finnish,
-                   French, Galician, German, Icelandic, Irish,
-                   Italian, Norwegian, Portuguese, Scottish, Spanish e Swedish
-                   Addizionalmente,  Muttprint sostituisce il set 128 a 159 del
-                   charset <emphasis>cp1252</emphasis> (Microsoft Windows) con
-                   sensible ASCII characters.</para>
-                         
-             <para>Non è possibile il supporto per <emphasis>ISO-8859-15</emphasis> (also ISO Latin 9)
-                   perché non è supportato dallo stesso pacchetto
-                   LaTeX. Questo perché il simbolo dell' Euro
-                   (carattere 164) è sostituito dalla stringa
-                   <literal>EUR</literal>.</para>
 
-             <para>Per supportare il Ceco è divenuto necessario il set
-                   <emphasis>ISO-8859-2</emphasis> (ISO Latin 2). Dovrebbe essere
-                   impostato automaticamente nell'ambiente Czech.
-                   Altrimenti puoi impostare la variabile 
-                   <literal>charset</literal> a
-                   <literal>latin1</literal> o <literal>latin2</literal>.</para>
-                        
-             <para>ISO Latin 2 supporta le lingue:
-                   Albanian, Bosnian, Croatian, Czech, English, Finnish, German,
-                   Hungarian, Irish, Polish, Romanian, Slovak, Slovenian e Sorbian.
-                   (Dato che le umlaut tedesche sono sia in Latin 1 che
-                   2 puoi usarli entrambi per stampare le mail in
-                   tedesco.
-                   Soprattutto, le lingue basate sul Cirillico: Macedonian e
-                   Serbian hanno una traduzione uno a uno al Latin 2.</para>
-                         
-             <para>Non è possibile stampare caratteri da più set in una
-                   mail. Per fare ciò è necessario Unicode -- ma non c'è il supporto
-                   per Unicode in LaTeX per quanto ne so.</para>
-        </sect3>
+      <para>Muttprint supporta diversi charsets per la stampa. Eccone una
+        breve panoramica:</para>
+
+      <informaltable frame="topbot">
+        <tgroup cols=3 align=left>
+        <colspec colnum="1" colwidth="1in">
+        <colspec colnum="2" colwidth="0.8in">
+          <thead>
+            <row>
+              <entry>charset</entry>
+              <entry>option</entry>
+              <entry>description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>ISO-8859-1</entry>
+              <entry><literal>latin1</literal></entry>
+              <entry>west European lanuages</entry>
+            </row>
+            <row>
+              <entry>ISO-8859-2</entry>
+              <entry><literal>latin2</literal></entry>
+              <entry>east European languages</entry>
+            </row>
+            <row>
+              <entry>ISO-8859-3</entry>
+              <entry><literal>latin3</literal></entry>
+              <entry>southeast European and miscellaneous languages</entry>
+            </row>
+            <row>
+              <entry>ISO-8859-4</entry>
+              <entry><literal>latin4</literal></entry>
+              <entry>southeast European and miscellaneous languages</entry>
+            </row>
+            <row>
+              <entry>ISO-8859-9</entry>
+              <entry><literal>latin5</literal></entry>
+              <entry>Latin-1 modification for Turkish</entry>
+            </row>
+            <row>
+              <entry>ISO-8859-15</entry>
+              <entry><literal>latin9</literal></entry>
+              <entry>Latin-1 with some modifications, e.&nbsp;g. Euro currency
+                symbol</entry>
+            </row>
+            <row>
+              <entry>Windows-1252</entry>
+              <entry><literal>latin1</literal></entry>
+              <entry>Latin-1 with some enhancements</entry>
+            </row>
+            <row>
+              <entry>Windows-1250</entry>
+              <entry><literal>latin2</literal></entry>
+              <entry>Latin-2 with some enhancements</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para>Questi charsets ti permettono di stampare nella maggior parte dei
+        caratteri latini. L'uso dei charsets è per lo più basato sul pacchetto
+        LaTeXe <filename>inputenc.sty</filename>, ma è esteso.</para>
+
+      <para>Il charset di default è Latin-1. Se ci sono files di traduzione,
+        il charset verrà cambiato a quell specifico per il paese. Ad esempio,
+        per il tedesco viene usato Latin-9 per stampare il simbolo dell'Euro 
+        correttamente. Per il Cieco, il charset cambia a
+        Latin-2 perché è una lingua dell'Europa dell'est.</para>
+
+      <para>Soprattutto, puoi cambiuare il charset nel file di configurazione
+        con la variabile <literal>CHARSET</literal>. Normalmente, dovresti
+        impostarla al charset usato per visualizzare la posta a schermo,
+        vedi la variabile <varname>charset</varname> di Mutt.</para>
+
+      <para>Se imposti <literal>CHARSET</literal> al valore
+        <literal>auto</literal>, Muttprint prova a cercare un'header
+        che indica il charset del messaggio. Usa questa impostazione cautamente.
+        Ad esempio, Mutt adatta l'output al charset dello schermo. D'altro canto
+        questa impostazione può essere utile se stampi spesso messaggi con 
+        diversi charsets.</para>
+
+      <para>Oltre ai charsets della famiglia SO-Latin, Muttprint
+        supporta le estensione dei charsets di Windows: Windows-1252 (West
+        European) e Windows-1250 (East European). Questi charsets estendono
+        i charsets ISO aumentandoli di alcuni caratteri, come ad es. caratteri tipgrafici
+        di quoting,  il segno del "er mille", il simbolo dell'Euro.
+        Quest'ultimo appare spesso nel punto 128 (decimal) a causa
+        della grande diffusione di Windows -- parzialmente 
+        dichiarato come ISO-8859-1. Muttprint stampa questi messaggi correttamente,
+        se il client non cambia nulla.</para>
+
+      <para>Puoi trovare una completa descrizione dei charsets ISO-8859-*
+        su <ulink url="http://czyborra.com/charsets/iso8859.html"></ulink>.
+      </para>
+                      
+    </sect3>
 
 		<sect3>
 			<title>File di traduzione</title>
@@ -846,7 +1069,7 @@ stampato.
 			ma <emphasis>senza alcuna garanzia</emphasis>; senza garanzia
 			implicita di <emphasis>commerciabilità</emphasis> o
 			<emphasis>utilità per un particolare uso</emphasis>. Fare
-			erimento alla GNU General Public License per maggiori
+			riferimento alla GNU General Public License per maggiori
 			dettagli.</para>
 
 		<para>Hai ricevuto una copia della GNU General Public License insieme
@@ -854,6 +1077,10 @@ stampato.
 			
 		<para>Si prega di inviare note, commenti, proposte di miglioramenti
 			etc. via e-mail a me.</para>
+
+    <para>Le traduzioni sono copyright dei rispettivi traduttori.
+      Leggi <filename>README.translations</filename> per il nome dei
+traduttori.</para>
 
 	</sect2>
 	<sect2>
@@ -935,7 +1162,7 @@ rm $target</programlisting>
 
 		<para>La traduzione nella lingua di Dante del manuale di
 			Muttprint è a cura di Roberto Vallone
-			<email>roberto.vallone@bigfoot.com</email> partendo dal
+			<email>roberto.vallone@gmx.net</email> partendo dal
 			manuale in inglese scritto dall'autore.
 			Correzioni e commenti su questa traduzione sono ben
 			accetti via e-mail.</para>

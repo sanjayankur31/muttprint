@@ -79,10 +79,10 @@ PLEASE NOTICE: This options override the corresponding settings in
 -E [string], --date-format [string]
        date format string; see strftime(3) for details
 
--A [Zeichenkette], --addressformat [Zeichenkette]
-       Gibt das Format für die Mailadresse im Kopf an, siehe
-	   die Manpage oder Dokumentation für Details.
-	   
+-A [string], --addressformat [string]
+       Specifies the format of the mail address in the header,
+       see manpage or documentation for details.
+
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 
