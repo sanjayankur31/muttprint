@@ -8,7 +8,7 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
 ~/.muttprintrc e /etc/Muttprintrc.
 
 -h, --help
-       Questa videata di aiuto
+       Questa schermata di aiuto
 
 -v, --version
        Stampa la versione corrente di Muttprint.
@@ -23,6 +23,9 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
          
 -i [file], --penguin [file]
        Imposta l'immagine da stampare sulla prima pagina
+
+-x, --x-face | -nox, --nox-face
+       Abilita/disabilita la stampa di X-Faces
 
 -t [numero], --speed [numero]
        Tempo in secondi di cui la stampante ha bisogno per ciascuna pagina.
@@ -46,6 +49,11 @@ NOTA BENE: Queste opzioni passano sopra alle corrispondenti impostazioni in
        grey, greybox.
        Si legga il manuale per una descrizione dettagliata di questi
        valori.
+
+-a [headers], --printed-headers [headers]
+       Headers da stampare. Fai riferimento alla manpage o al manuale
+       per i dettagli
+       Esempio: /Date/_To_From_*Subject*
 
 -P [formato pagina], --paper [formato pagina]
        Formato della pagina: "letter" (US) o "A4" (Europe).

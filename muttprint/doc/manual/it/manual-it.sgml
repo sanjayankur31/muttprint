@@ -166,16 +166,16 @@ muttprint-<replaceable>Versione</replaceable>-<replaceable>Release</replaceable>
 		
 	<sect2>
 	
-		<title>Integrazione di Muttprint nei clients di posta</title>
+		<title>Integrazione di Muttprint nei clients di posta e news</title>
 
 		<para>Muttprint è stato originariamente sviluppato per l'uso combinato
 			con Mutt solamente.
-			Comunque, può essere integrato con i seguenti programmi di posta senza problemi.
+			Comunque, può essere integrato in altri programmi di posta senza problemi.
 			Ho avuto alcuni suggerimenti dagli utenti. Muttprint
 			dovrebbe funzionare anche indipendentemente da Mutt in futuro.</para>
 		
 		
-		<sect3>
+		<sect3 id="muttconfig">
 			<title>Mutt</title>
 		
 			<para>Devi aggiungere o modificare la seguente linea nel file
@@ -184,32 +184,34 @@ muttprint-<replaceable>Versione</replaceable>-<replaceable>Release</replaceable>
 
 			<ProgramListing>set print_command="muttprint"</ProgramListing>
 
-			<para>Soprattutto devi assicurarti che i seguenti headers appaiano
-				sullo schermo e vengano inviati a Muttprint:
-				<ComputerOutput>From:</ComputerOutput>, 
-				<ComputerOutput>Date:</ComputerOutput>,
-				<ComputerOutput>To:</ComputerOutput>, 
-				<ComputerOutput>CC:</ComputerOutput> e
-				<ComputerOutput>Subject:</ComputerOutput>. Questo è l'unico
-				modo che Muttprint ha per avere le informazioni e stampare
-				correttamente.
-				L'ordine non è importante e anche altri headers sono permessi.
-				</para>
+			<para>Soprattutto devi assicurarti tutti gli headers necessari appaiano.
+                  Il modo più semplice è scrivere una piccola macro (nel tuo
+                  <filename>~/.muttrc</filename>) che fa si che tutti gli headers
+                  vengano presi.
+                  Solo gli headers più importanti vengono realmente
+                  stampati (fai riferimento a <xref linkend="printedheaders">).</para>
+            <para>Questa è la macro:</para>
 
+                        <programlisting>
+# Dump all headers
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+                        </programlisting>
 
-			<para>Una possibile configurazione per il mio <filename>~/.muttrc</filename> 
-				può essere:</para>
+                        <para>Innanzitutto la macro passa al modo in
+                              cui gli headers sono mostrati, dopo la
+                              mail viene stampata, ed infine ritorna al
+                              modo iniziale. E` necessario impostare la
+                              conferma di stampa ad "off" affinché la
+                              macro giri correttamente:</para>
 
-			<ProgramListing>
-# Ignora tutti gli headers ...
-ignore * 
-
-# ... ma non questo
-unignore        from: subject to cc date
-			</ProgramListing>
+                        <programlisting>
+# Nessuna conferma prima della stampa
+set print="yes"
+                        </programlisting>
 			
 			<para>Per stampare più di una mail in un solo colpo
-				esti aggiungere la seguente linea:</para>
+				dovrai aggiungere la seguente linea:</para>
 
 			<ProgramListing>
 # Stampa ogni mail extra
@@ -223,6 +225,27 @@ set print_split
 		</sect3>
 
 		<sect3>
+
+        <sect3>
+            <title>Slrn</title>
+
+            <para>Semplicemente aggiungi le seguenti linee al tuo file
+                  di configurazione <filename>~/.slrnrc</filename>:</para>
+
+              <programlisting>
+% Use Muttprint for printing
+set printer_name "muttprint"
+              </programlisting>
+
+            <para>Se Muttprint deve stampare altri headers non
+                  visualizzati sullo schermo devi usare, al posto del
+                  normale comando di stampa <keycap>y</keycap> la
+                  combinazione <keycap>Esc</keycap>, <keycap>1</keycap>, <keycap>y</keycap>
+                  (una dopo l'altra). Questo è importante per stampare
+                  l'header X-Face, guarda <xref linkend="xface">.</para>
+
+        </sect3>
+
 			<title>XFMail</title>
 
 			<para>Nel dialogo <GUImenu>Misc</GUImenu>, <GUImenuItem>Config
@@ -294,7 +317,7 @@ set print_split
 			<title>Altri clients di posta</title>
 			
 			<para>Muttprint può funzionare con tutti i programmi di posta
-			ricamente, basta che soddisfino le seguenti condizioni:</para>
+			teoricamente, basta che soddisfino le seguenti condizioni:</para>
 				
 			<ItemizedList spacing="compact">
 				<listitem>	
@@ -346,7 +369,7 @@ set print_split
 			installato un pacchetto RPM o debian lo troverai in
 			<filename>/usr/share/doc/packages/muttprint/</filename>.</para>
 			
-		<para>Un esemip per una corretta sintassi:</para>
+		<para>Un esempio per una corretta sintassi:</para>
 		
 		<ProgramListing>VARIABLE=value</ProgramListing>
 		
@@ -395,6 +418,57 @@ set print_split
 			
 		</sect3>
 
+                <sect3 id="xface">
+                        <title>Stampa di X-Faces</title>
+
+                        <para>X-Face sono immagini bianco e nero di
+                              48 x 48 pixels, che possono essere
+                              comprese come header nella posta elettronica
+                              (header <literal>X-Face:</literal>
+                              in ogni messaggio. Non è uno standard
+                              <quote>ufficiale</quote> ma è diffuso
+                              specialmente nei messaggi news.</para>
+
+                        <para>Muttprint permette la stampa di questa
+                              immagine al posto di quella specificata
+                              <literal>PENGUIN</literal>. Per farlo
+                              imposta <literal>XFACE</literal> a
+                              <literal>on</literal>. Se quell'header
+                              non c'è verrà stampata l'immagine
+                              impostata in <literal>PENGUIN</literal>.</para>
+
+                        <para>Per lavorare correttamente sono necessari
+                              i  seguenti due programmi:</para>
+                        
+                        <itemizedlist spacing="compact">
+                                <listitem>
+                                        <para>
+                                                <application>convert</application> dal pacchetto
+                                                <ulink url="http://www.imagemagick.org"><application>Image 
+                                                        Magick</application> </ulink>
+                                        </para>
+                                </listitem>
+                                <listitem>
+                                        <para>
+                                                <ulink 
+                                                        url="http://www.ibiblio.org/pub/Linux/apps/graphics/convert/compface-1.4.tar.gz"><application>uncompface</application></ulink>
+                                        </para>
+                                </listitem>
+
+                        </itemizedlist>
+
+                <para>Ambedue i programmi fanno parte delle comuni distribuzioni
+                      Linux e possono essere facilmente installate.</para>
+                
+                <para>Ad ogni modo, devi assicurarti che questo header
+                      venga realmente recepito da Muttprint
+                      Se usi Mutt, guarda <xref linkend="muttconfig"> per una
+                      corretta configurazione. Altrimenti leggi la
+                      documentazione del tuo client di posta.</para>
+
+
+                </sect3>
+
 		<sect3>
 			<title>Duplex printing (Stampa fronte-retro)</title>
 			
@@ -430,7 +504,7 @@ set print_split
 				<literal>on</literal>.</para>				
 		</sect3>
 		
-		<sect3 id="velocita">
+		<sect3 id="speed">
 			<title>Velocità di stampa</title>
 			
 			<para>Come menzionato sopra, Muttprint ha bisogno di conoscere il
@@ -495,7 +569,7 @@ set print_split
 				</row>
 				<row>
 					<entry><literal>border</literal></entry>
-					<entry><para>rrighe dopo gli headers 
+					<entry><para>righe dopo gli headers 
 					(<emphasis>settata per default</emphasis>)
 					</para></entry>
 				</row>
@@ -545,6 +619,10 @@ set print_split
 			<para>Per settare il formato della carta imposta <literal>PAPER</literal> al valore corretto.
 				Sono possibili solo <literal>A4</literal> e <literal>letter</literal>.
 				</para>
+
+            <para>Se è presente un file <filename>/etc/papersize</filename> come
+                                di soliuto nei sistemi Debian, viene anch'esso considerato.
+                                Le proprie impostazione prevarranno su quelle di sistema.</para>
 				
 		</sect3>
 		<sect3>
@@ -564,12 +642,12 @@ set print_split
 		<sect3>
 			<title>Omette quoting</title>
 			
-			<para>Spesso l'autore della mail non quota decentemente, ma
+			<para>Spesso l'autore della mail non cita decentemente, ma
 				allega tutta la mail, tanto che la stampa diventa molto lunga
 				e confusa.</para>
 
 			<para>Se <literal>REM_QUOTE</literal> è impostato a
-				<literal>on</literal>, il testo quotato non sarà
+				<literal>on</literal>, il testo citato non sarà
 stampato.
 				Muttprint intercetta il quoting usando le stesse espressioni
 				regolari che usa Mutt nella sua configurazione standard. Così,
@@ -579,6 +657,32 @@ stampato.
 				(<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>)
 				sullo schermo.</para>
 		</sect3>
+
+        <sect3 id="printedheaders">
+              <title>Headers stampati</title>
+                        
+                <para>Solitamente vengono stampati solo gli
+                      headers più importanti. Puoi cambiare questa
+                      impostazione con la variabile <literal>PRINTED_HEADERS</literal>.
+                      Specifica ogni header separato da una
+                      sottolineatura (<literal>_</literal>).</para>
+                
+                <para>L'ordine è importante per la stampa. La valutazione è
+                      case-insensitive. Gli headers inesistenti verranno ignorati.
+                      Per stampare in grassetto indica il nome dell'header tra
+                      asterischi (<literal>*</literal>), per stampare corsivo fai lo stesso
+                      con le barre (<literal>/</literal>).</para>
+
+                        <para>L'impostazione di default:</para>
+                        
+                        <programlisting>PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"</programlisting>
+                        
+                        <para>Uno o più esempi per una impostazione diversa:</para>
+                        
+                        <programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
+
+        </sect3>
+
 		<sect3>
 			<title>Messaggi di errore</title>
 			
@@ -626,7 +730,7 @@ stampato.
 			così <literal>de_DE@euro</literal> va bene. Se il valore è
 			sconosciuto Muttprint userà l'inglese.</para>
 
-		<para>Se si vuole usare una lingua diverso per Muttprint rispetto 
+		<para>Se vuoi usare una lingua diversa per Muttprint rispetto 
 			al resto del sistema, puoi impostare <literal>LANG</literal> nel
 			tuo <filename>.muttprintrc</filename>.</para>
 
@@ -661,6 +765,49 @@ stampato.
 			</ItemizedList>
 		
 		</sect3>
+
+        <sect3>
+           <title>Set di caratteri</title>
+                      
+             <para>Diverse lingue richiedono diversi set di
+                   caratteri.
+                   Il caratteri di default di Muttprint è
+                   <emphasis>ISO-8859-1</emphasis> (lo stesso di ISO Latin 1).
+                   Sono supportati anche Afrikaans, Basque,
+                   Catalan, Danish, Dutch, English, Faeroese, Finnish,
+                   French, Galician, German, Icelandic, Irish,
+                   Italian, Norwegian, Portuguese, Scottish, Spanish e Swedish
+                   Addizionalmente,  Muttprint sostituisce il set 128 a 159 del
+                   charset <emphasis>cp1252</emphasis> (Microsoft Windows) con
+                   sensible ASCII characters.</para>
+                         
+             <para>Non è possibile il supporto per <emphasis>ISO-8859-15</emphasis> (also ISO Latin 9)
+                   perché non è supportato dallo stesso pacchetto
+                   LaTeX. Questo perché il simbolo dell' Euro
+                   (carattere 164) è sostituito dalla stringa
+                   <literal>EUR</literal>.</para>
+
+             <para>Per supportare il Ceco è divenuto necessario il set
+                   <emphasis>ISO-8859-2</emphasis> (ISO Latin 2). Dovrebbe essere
+                   impostato automaticamente nell'ambiente Czech.
+                   Altrimenti puoi impostare la variabile 
+                   <literal>charset</literal> a
+                   <literal>latin1</literal> o <literal>latin2</literal>.</para>
+                        
+             <para>ISO Latin 2 supporta le lingue:
+                   Albanian, Bosnian, Croatian, Czech, English, Finnish, German,
+                   Hungarian, Irish, Polish, Romanian, Slovak, Slovenian e Sorbian.
+                   (Dato che le umlaut tedesche sono sia in Latin 1 che
+                   2 puoi usarli entrambi per stampare le mail in
+                   tedesco.
+                   Soprattutto, le lingue basate sul Cirillico: Macedonian e
+                   Serbian hanno una traduzione uno a uno al Latin 2.</para>
+                         
+             <para>Non è possibile stampare caratteri da più set in una
+                   mail. Per fare ciò è necessario Unicode -- ma non c'è il supporto
+                   per Unicode in LaTeX per quanto ne so.</para>
+        </sect3>
+
 		<sect3>
 			<title>File di traduzione</title>
 		
@@ -720,6 +867,50 @@ stampato.
 			url="http://www.freshmeat.net">Freshmeat</ulink>.</para>
 
 	</sect2>
+    <sect2>
+      <title>Stampa di allegati</title>
+             
+        <para>Muttprint non è in grado di stampare gli allegati.
+              Per farlo, Muttprint dovrebbe intercettare il messaggio
+              MIME e tradurlo.
+              Questo è realmente difficile. Per esempio Muttprint
+              per decrittare messaggi PGP, scegliere la giusta
+              alternativa in <literal>multipart/alternative</literal>
+              e lavorare ricorsivamente per <literal>message/*</literal>
+              per <literal>message/*</literal> -- questo è
+              solo un esempio.
+              In breve: le parti essenziali di un programma di posta
+              elettronica devono essere integrate e molte impostazioni
+              (come per PGP) devono essere fatte. 
+              Soprattutto, non tutti i clients supportano l'output dei
+              messaggi nudo e crudo per la stampa.</para>
+                        
+        <para>Mutt ha da sè una comoda funzione per stampare gli
+              allegati. Puoi scegliere un comando diverso per ogni tipo
+              MIME. Ciò può essere impostato in <filename>~/.mailcap</filename>.
+              Troverai maggiori informazioni nel manuale di Mutt, alla
+              sezione 5.3.3.1.</para>
+
+        <para>Ho creato uno script molto piccolo che ho chiamato
+<literal>imageprint</literal>
+              per stampare immagini (praticamente ogni formato è
+              supportato). Puoi usarlo come esempio per tuoi propri
+              script. Segue:</para>                 
+        <programlisting>
+#!/bin/sh
+target=/tmp/imageprint-$$.ps
+convert -page A4 $1 $target
+lpr $target
+rm $target</programlisting>
+                
+        <para>Premi solamente il tasto <keycap>p</keycap> nel menu
+              degli allegati di Mutt.</para>
+                
+        <para>Gli utenti di altri clients dovrebbero leggere la
+              documentazione del loro programma per avere informazioni
+              su come stampare gli allegati.</para>
+
+    </sect2>
 	<sect2>
 		<title>Ringraziamenti</title>
 		
@@ -752,3 +943,7 @@ stampato.
 
 </sect1>
 </article>
+
+<!-- ViM settings
+vim:tw=80 sw=2 ts=2
+-->
