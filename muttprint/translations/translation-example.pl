@@ -13,7 +13,7 @@ Usage:   muttprint [option]... [-f file]
  
 Options:
 
-PLEASE NOTICE: This options override the corresponding settings in 
+PLEASE NOTICE: These options override the corresponding settings in 
 ~/.muttprintrc and /etc/Muttprintrc.
 
 -h, --help
@@ -28,7 +28,7 @@ PLEASE NOTICE: This options override the corresponding settings in
 -p [printername], --printer [printername]
        Uses a specific printer.
        "-" stands for STDOUT
-       For printing in a file use TO_FILE:/path/to/file
+       For printing to a file use TO_FILE:/path/to/file
 	   
 -i [file], --penguin [file]
        Sets the picture printed on the first page.
@@ -54,7 +54,7 @@ PLEASE NOTICE: This options override the corresponding settings in
 	   
 -S Style | --frontstyle Style
        Choose a style for the headers on the first page:
-       plain, boder (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
+       plain, border (default), fbox, shadowbox, ovalbox, Ovalbox, doublebox,
        grey, greybox. 
        Read the manual for a detailed description of this values.
 
