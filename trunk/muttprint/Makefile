@@ -7,11 +7,11 @@
 
 # Change this for local installation, 
 # e. g. /home/user or /usr/local
-prefix = /usr
+prefix = /usr/local
 
 # Change this for some distributions (current setting
 # is OK for SuSE)
-docdir = $(prefix)/share/doc/packages
+docdir = /usr/share/doc/packages
 
 # Change this to $(prefix)/man for older distributions
 # (current setting is correct according to LSB)
@@ -43,8 +43,8 @@ install:
 	$(INSTALLBIN) muttprint $(bindir)/
 	$(INSTALL) CHANGES COPYING INSTALL README* sample-muttprintrc-* \
 		$(docdir)/muttprint/
-	$(INSTALL) pics/* $(sharedir)/muttprint/
-	$(INSTALL) translations/* $(libdir)/muttprint/
+	$(INSTALL) `find pics -type f -print` $(sharedir)/muttprint/
+	$(INSTALL) `find translations -type f -print` $(libdir)/muttprint/
 	make -C doc/manual docdir=$(docdir) install
 	make -C doc/manpages mandir=$(mandir) install
 
