@@ -114,3 +114,6 @@ CHANGES
           the body. This makes it possible to print raw messages
           (without attachments).		  
 				  
+0.61    - full Czech translation
+        - fixed $charset-bug in Czech translation
+        - printed header can be customized (PRINTED_HEADERS)
