@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # Hinweis:	Tabulatorbreite: 4 Zeichen
 #			(automatische Einstellung für ViM durch letzte Zeile)
@@ -33,8 +33,6 @@
 
 # Deklaration erzwingen
 use strict;
-# for developing and testing only
-use warnings;
 # Deklaration nach Perl-5.005-Art
 use vars qw($VERSION %String $LPack $charset);
 use sigtrap qw(die INT QUIT);
