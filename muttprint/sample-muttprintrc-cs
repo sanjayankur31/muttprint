@@ -13,6 +13,10 @@ PRINTER="lp"
 PENGUIN="off"
 
 #
+# Nastavení tisku X-Face obrázku on/off
+XFACE="off"
+
+#
 # Zde mù¾ete nastavit duplexní tisk.
 # Mo¾né hodnoty jsou "off" nebo "on"
 #
