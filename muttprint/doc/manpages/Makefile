@@ -2,7 +2,7 @@
 # Makefile by B. Walle
 
 
-VERSION = 0.71
+VERSION = 0.72
 POD2MAN = pod2man --section=1 --release=$(VERSION)
 prefix = /usr
 bindir = $(prefix)/bin
