@@ -8,7 +8,7 @@ This packages are needed for Muttprint
 · inputenc.sty
 · fontenc.sty
 · babel.sty
-· moreverb.sty
+· fancyvrb.sty
 · graphicx.sty
 · marvosym.sty
 · textcomp.sty

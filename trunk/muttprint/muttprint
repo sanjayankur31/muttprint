@@ -44,12 +44,15 @@ use POSIX;
 use Cwd;
 
 
+# richtig und falsch
+use constant TRUE 	=> 1;
+use constant FALSE	=> 0;
 
 
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.62b";
+$VERSION = "0.63pre1";
 my $PACKAGE = "Muttprint";
 
 
@@ -105,6 +108,8 @@ my %Config = (
 	PRINTED_HEADERS	=>	'Date_To_From_CC_Newsgroups_*Subject*',
 	FONTSIZE		=>	'10pt',
 	WRAPMARGIN		=>	80,
+	VERBATIMNORMAL	=>	'',
+	VERBATIMSIG		=>	'fontshape=it',
 	RCFILE			=>	'',
 	ADDRESSFORMAT	=>	'%r <%a>,\n',
 );
@@ -154,6 +159,7 @@ my @headers;
 my $image_height = "20mm";					# Höhe des gedruckten Bildes
 my $startworkingdir = cwd;					# Arbeitsverzeichnis, wenn Muttprint
 											# gestartet wird
+my $signature;								# Signatur (Inhalt)
 
 
 ############# END VARIABLES ##################################################
@@ -246,12 +252,13 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	push @headers, $unformated;
 }
 
-
 {
 	my @KompletteMail = <>;
 	my $mail_charset;
 
 	my $Content;
+
+	my $signature_mode;
 
 	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
 	
@@ -261,8 +268,29 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 		s/\r//g;
 	
 		#
-		# Should the signature be printed?
-		last if (/^-- $/ && ($Config{'REM_SIG'} eq "on"));
+		# signature 
+		if ((/^-- $/ && !($Config{REM_SIG} eq "on")) ||
+			$signature_mode) {
+
+			if ($_ eq "-- \n") {
+				$signature_mode = TRUE;
+
+				# Leerzeile bei 2. Signatur
+				if (defined $signature) {
+					$signature .= "\n";
+				}
+			} 
+			else {
+				$signature .= $_;
+			}
+
+			# Leerzeile => Ende der Signatur
+			if (/^$/) {
+				$signature_mode = FALSE;
+			}
+
+			next;
+		}
 	
 		#
 		# and what's about Quoting?
@@ -331,6 +359,9 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	if ($QP) {
 		$Content =~ s/=([A-Fa-f0-9]{2})/chr(hex($1))/eg;
 	}
+
+	# Tabulator in 8 Leerzeichen umwandeln
+	$Content =~ s/\t/        /;
 
 	CreateTemp();
 	open (CONTENT, "> $Temp{'content'}") || die "unable to create $Temp{'content'}: $!";
@@ -562,6 +593,17 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 
 }
 
+#
+# bei optionalem Papiersparmodus:
+# ermitteln, ob sinnvoll und entsprechend setzen
+if ($Config{PAPERSAVE} eq "optional") {
+	if (GetSeitenzahl("$Temp{dir}/mail.aux") > 1) {
+		$Config{PAPERSAVE} = "on";
+	}
+	else {
+		$Config{PAPERSAVE} = "off";
+	}
+}
 
 #
 # erster Fall: normaler Druck
@@ -717,6 +759,8 @@ sub ReadOpts () {
 		'G|bottommargin=s'		=>	\$Config{BOTTOMMARGIN},
 		'j|leftmargin=s'		=>	\$Config{LEFTMARGIN},
 		'J|rightmargin=s'		=>	\$Config{RIGHTMARGIN},
+		'n|verbatimnormal=s'	=>	\$Config{VERBATIMNORMAL},
+		'V|verbatimsig=s'		=>	\$Config{VERBATIMSIG},
 
 
 		'l|lang=s'				=>	\$opt{LANG},
@@ -905,6 +949,16 @@ EOF
 		$PengTab = 170 - $Config{LEFTMARGIN} - $Config{RIGHTMARGIN};
 	}
 
+	my $sig_tex = "";
+	
+	if (defined $signature) {
+		$sig_tex = <<"EOF";
+\\begin{Verbatim}[$Config{VERBATIMSIG}]
+$signature
+\\end{Verbatim}
+EOF
+	}
+
 	if ($Config{PAPER} eq "letter") {
 		$PengTab += 6;			# Letter ist breiter
 	}
@@ -991,12 +1045,13 @@ EOF
 print LATEX <<EOF;
 \\documentclass[$Config{FONTSIZE}]{article}
 \\usepackage[T1]{fontenc}
+\\renewcommand{\\tt}{\\rm}
 \\usepackage[$LPack]{babel}
 \\usepackage[$charset]{inputenc}
 \\usepackage{$LatexPackages}
 \\usepackage[$PaperTex,left=$Config{LEFTMARGIN}mm,right=$Config{RIGHTMARGIN}mm,%
 	top=$Config{TOPMARGIN}mm,bottom=$Config{BOTTOMMARGIN}mm,headsep=5mm]{geometry}
-\\usepackage{moreverb,graphicx,marvosym,textcomp,array}
+\\usepackage{fancyvrb,graphicx,marvosym,textcomp,array}
 \\setlength{\\parindent}{0mm}
 $isolatinextensions
 \\pagestyle{fancy}
@@ -1026,7 +1081,8 @@ $BeforeHeader
 \\hfill
 $PengCode
 $AfterHeader
-\\verbatiminput{$Temp{'content'}}
+\\VerbatimInput[$Config{VERBATIMNORMAL}]{$Temp{content}}
+$sig_tex
 \\end{document}
 EOF
 
@@ -1519,8 +1575,19 @@ PLEASE NOTICE: This options override the corresponding settings in
        Specifies the format of the mail address in the header,
        see manpage or documentation for details.
 
+-n [string], --verbatimnormal [string]
+       Is used for setting the formating of the normal mail text. Read
+       the user's guide and the manpage for details.
+
+-V [string], --verbatimsig [string]
+       Same as --verabtimnormal, but this sets the formating
+       of the signature.
+
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
+
+-d, --duplex | -nod, --noduplex
+       Enables or disables duplex printing.
 
 -g [number], --topmargin [number]
        Top margin in millimeter
@@ -1534,9 +1601,6 @@ PLEASE NOTICE: This options override the corresponding settings in
 -J [number], --rightmargin [number]
        Right margin in millimeter
 
--d, --duplex | -nod, --noduplex
-       Enables or disables duplex printing.
-	   
 -2 | -1
        Prints two pages on one sheet. Corresponds to "papersave mode".
 

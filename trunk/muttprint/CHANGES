@@ -146,4 +146,7 @@ CHANGES
         - '-w' flag instead of 'use warnings;' for Perl 5.005-
           compatibility
 
+0.63    - new options VERBATIMNORMAL and VERBATIMSIG for changing the
+          formating of text and signature
+        - new option PAPERSAVE="optional"
 

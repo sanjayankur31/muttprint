@@ -245,6 +245,29 @@ Example:
 The quotes are necessary because the string contains spaces. Otherwise the shell
 splits the string into two parts.
 
+
+=item B<-n> I<String>B<, --verbatimnormal> I<String>
+
+This sets the options which are passed to the I<Verbatim> environment
+that is necessary to print the normal mail text. Detailled explanations
+are in the user's guide. Some examples:
+
+
+	fontshape=it           italic fonts
+	frame=topline          border above the block
+	fontfamily=helvetica   Helvetica font
+	fontsize=\Huge         huge font
+
+To combine options, you have to separate each option with a comma, e. g.
+I<fontshape=it,fontseries=b>.
+
+
+=item B<-V> I<String>B<, --verbatimsig> I<String>
+
+Same as B<--verbatimnormal>, but this sets how the signature
+is printed.
+
+
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Choose whether B<Muttprint> writes to a logfile F</tmp/muttprint.log>.

@@ -15,7 +15,7 @@
 
 	<pubdate>2002-02-16</pubdate>
 	
-	<releaseinfo>Version 0.62</releaseinfo>   
+	<releaseinfo>Version 0.63</releaseinfo>   
 	
 		
 	
@@ -567,6 +567,10 @@ set printer_name "muttprint"
 				<literal>PAPERSAVE</literal> auf <literal>on</literal>
 				gesetzt.</para>
 
+			<para>Wenn der Papiersparmodus nur aktiviert werden soll, wenn
+				mehr als eine Seite gedruckt wird, kann die Variable auf den
+				Wert <literal>optional</literal> gesetzt werden.</para>
+
 		</sect3>
 		
 		<sect3 id="speed">
@@ -621,6 +625,51 @@ set printer_name "muttprint"
 				der Variable <literal>FONTSIZE</literal> konfiguriert werden.
 				M&ouml;glich sind die drei Werte <literal>10pt</literal>,
 				<literal>11pt</literal> und <literal>12pt</literal>.</para>
+
+		</sect3>
+		<sect3>
+			<title>Formatierung des Mailtextes</title>
+
+			<para>Der eigentliche Mailtext wird von Muttprint in Text und Signatur
+				aufgespaltet. Wenn eine Signatur vorhanden ist und sie nicht
+				gel&ouml;scht werden soll (siehe <xref linkend="remsig">),
+				k&ouml;nnen beide Bestandteile getrennt formatiert werden.</para>
+
+			<para>Zum Drucken des Mailtextes verwendet Muttprint das LaTeX-Paket
+				<filename>fancyvrb.sty</filename>, das zahlreiche Formatierungsoptionen
+				bietet. Die Optionen, die der <literal>Verbatim</literal>-Umgebung
+				&uuml;bergeben werden, k&ouml;nnen &uuml;ber die beiden Variablen
+				<literal>VERBATIMNORMAL</literal> (f&uuml;r den normalen Text) und
+				<literal>VERBATIMSIG</literal> &uuml;bergeben werden.</para>
+
+			<para>Die genaue Syntax entnehmen Sie der Dokumentation zu
+				<filename>fancyvrb.sty</filename>, die mit <command>texdoc
+				fancyvrb</command> aufgerufen werden kann. Standardm&auml;&szlig;ig wird
+				die Signatur in Kursivschrift gedruckt. Es sind auch Rahmenlinien
+				konfigurierbar.</para>
+
+			<para>Hier einige Beispiele:</para>
+
+			<itemizedList spacing="compact">
+				<listitem>
+					<para>
+						<literal>fontshape=it,frame=topline</literal>: 
+							kursive Schrift, Rahmenlinie &uuml;ber dem Block
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<literal>fontfamily=helvetica,fontseries=b</literal>:
+							Schriftart Helvetica, fett
+					</para>
+				</listitem>
+				<listitem>
+					<para>	
+						<literal>numbers=left,stepnumber=5</literal>:
+							Zeilennummerierung alle 5 Zeilen
+					</para>
+				</listitem>
+			</itemizedList>
 
 		</sect3>
 		<sect3>
@@ -775,7 +824,7 @@ set printer_name "muttprint"
 			<ItemizedList spacing="compact">
 				<ListItem><para><literal>Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
 						</literal></para></ListItem>
-				<ListItem><para><literal>"Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
+				<ListItem><para><literal>"Bernhard Walle" &lt;Bernhard.Walle@gmx.de&gt;
 						</literal></para></ListItem>
 				<ListItem><para><literal>Bernhard.Walle@gmx.de (Bernhard Walle)
 						</literal></para></ListItem>
@@ -809,7 +858,7 @@ set printer_name "muttprint"
 				ausdrucke: <literal>"/%r/ (%a),"</literal>.</para>
 
 		</sect3>	
-		<sect3>
+		<sect3 id="remsig">
 			<title>Signatur abschneiden</title>
 			
 			<para>Oft enth&auml;lt die Sigantur unn&uuml;tze Informationen 
@@ -905,18 +954,19 @@ set printer_name "muttprint"
 	<sect2 id="lang">
 		<title>Verschiedene Sprachen</title>
 		
-		<para>Das Skript unterst&uuml;tzt die Sprachen
-			<emphasis>Deutsch</emphasis>,  <emphasis>Italienisch</emphasis>,
-			<emphasis>Spanisch</emphasis>, 
-			<emphasis>Franz&ouml;sisch</emphasis> und
-			<emphasis>Englisch</emphasis>.  Normalerweise wird die
-			Umgebungsvariable <envar>LANG</envar> auf den jeweiligen Wert
-			gesetzt: <literal>de</literal>, <literal>it</literal>, 
-			<literal>fr</literal>, <literal>es</literal> oder
-			<literal>en</literal>.  Es werden nur die ersten beiden Zeichen
-			beachtet, ein  <literal>de_DE.ISO-8859-15</literal> f&uuml;hrt also
-			zum gew&uuml;nschten Ergebnis. Wird ein unbekannter Wert verwendet,
-			so ist die Voreinstellung English.</para>
+		<para>Das Skript unterst&uuml;tzt verschiedene Sprachen.  Normalerweise wird
+			die Umgebungsvariable <envar>LANG</envar> auf den jeweiligen Wert gesetzt,
+			z. B. <literal>de</literal>, <literal>it</literal>, <literal>fr</literal>,
+			<literal>es</literal> oder <literal>en</literal>, also die jeweilige
+			Abk&uuml;rzung nach ISO 639. Es werden nur die ersten beiden Zeichen
+			beachtet, ein <literal>de_DE.ISO-8859-15</literal> f&uuml;hrt also zum
+			gew&uuml;nschten Ergebnis. Wird ein unbekannter Wert verwendet, so ist die
+			Voreinstellung Englisch.</para>
+
+		<para>Eine &Uuml;bersicht &uuml;ber alle &Uuml;bersetzungen finden
+			Sie in der Datei <filename>README.translations</filename>, die mit der
+			Dokumentation installiert wird und sich im selben Verzeichnis
+			befindet.</para>
 
 		<para>Wenn f&uuml;r Muttprint eine andere Sprache als im restlichen
 			System verwendet werden soll, so kann ganz einfach die Variable

@@ -83,6 +83,14 @@ PLEASE NOTICE: This options override the corresponding settings in
        Specifies the format of the mail address in the header,
        see manpage or documentation for details.
 
+-n [string], --verbatimnormal [string]
+       Is used for setting the formating of the normal mail text. Read
+       the user's guide and the manpage for details.
+
+-V [string], --verbatimsig [string]
+       Same as --verabtimnormal, but this sets the formating
+       of the signature.
+
 -D, --debug | -noD, --nodebug
        Writes useful information to a logfile /tmp/muttprint.log.
 

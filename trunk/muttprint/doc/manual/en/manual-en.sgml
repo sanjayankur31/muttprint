@@ -15,7 +15,7 @@
 
 	<pubdate>2002-02-16</pubdate>
 	
-	<releaseinfo>Version 0.62</releaseinfo>   
+	<releaseinfo>Version 0.63</releaseinfo>   
 	
 		
 	
@@ -648,6 +648,49 @@ set printer_name "muttprint"
 			</para>
 		</sect3>
 		<sect3>
+			<title>Formatting of the mail body</title>
+
+			<para>The mail body is split into two parts: text and signature. If there
+				is a signature and it should not be removed (see <xref
+				linkend="remsig">), this two parts can be formated separately.</para>
+
+			<para>Muttprint uses the LaTeX package <filename>fancyvrb.sty</filename>
+				to print the body, which offers lots of formatting options. The options
+				which are passed to the <literal>Verbatim</literal> environment
+				could be set with the variable <literal>VERBATIMNORMAL</literal>
+				(for the normal text) and <literal>VERBATIMSIG</literal> (for the
+				signature).</para>
+
+			<para>You'll find the exact syntax in the documentation of
+				<filename>fancyvrb.sty</filename>, which could be viewed with the command
+				<command>texdoc fancyvrb</command>. Normally, the signature is printed
+				in Italics. You can print borders, too.</para>
+
+			<para>Here're some examples:</para>
+			
+			<itemizedList spacing="compact">
+				<listitem>
+					<para>
+						<literal>fontshape=it,frame=topline</literal>: 
+							italic font, border above the block
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<literal>fontfamily=helvetica,fontseries=b</literal>:
+							Helvetica font, bold
+					</para>
+				</listitem>
+				<listitem>
+					<para>	
+						<literal>numbers=left,stepnumber=5</literal>:
+							Line nummering each fifth line
+					</para>
+				</listitem>
+			</itemizedList>
+			
+		</sect3>
+		<sect3>
 			<title>Margin settings</title>
 
 			<para>The margins could be set by modifiying following variables:
@@ -758,7 +801,7 @@ set printer_name "muttprint"
 
 
 		</sect3>
-		<sect3>
+		<sect3 id="remsig">
 			<title>Cut signature</title>
 			
 			<para>Often the signature contains unseless information or
@@ -845,15 +888,17 @@ set printer_name "muttprint"
 	<sect2 id="lang">
 		<title>Different languages</title>
 		
-		<para>Muttprint supports the languages <emphasis>German</emphasis>, 
-			<emphasis>Italian</emphasis>, <emphasis>Spanish</emphasis>, 
-			<emphasis>French</emphasis> and <emphasis>English</emphasis>. 
-			Normally the environment variable <envar>LANG</envar> is set to the
-			right value: <literal>de</literal>, <literal>it</literal>,
-			<literal>fr</literal>, <literal>es</literal> or
-			<literal>en</literal>. Only the first two characters are recognized
-			so that <literal>de_DE@euro</literal> is okay. If the value is not
-			known, Muttprint falls back to English.</para>
+		<para>Muttprint supports different languages.  Normally the environment
+			variable <envar>LANG</envar> is set to the right value: e. g.
+			<literal>de</literal>, <literal>it</literal>, <literal>fr</literal>,
+			<literal>es</literal> or <literal>en</literal>, which is the shortcut
+			according to ISO 639.  Only the first two characters are recognized so
+			that <literal>de_DE@euro</literal> is okay. If the value is not known,
+			Muttprint falls back to English.</para>
+
+		<para>You find a overview about all available translations in the
+			file <filename>README.translations</filename>, which is installed
+			with the documentation in the same directory.</para>
 
 		<para>If you would like to use another language for Muttprint than for
 			the remaining system, you could define <literal>LANG</literal> in

@@ -239,6 +239,27 @@ Die Anführungszeichen sind notwendig, damit die Zeichenkette nicht von der
 Shell in mehrere Bestandteile aufgebrochen wird.
 
 
+=item B<-n> I<Zeichenkette>B<, --verbatimnormal> I<Zeichenkette>
+
+Damit können die Optionen festgelegt werden, die der I<Verbatim>-Umgebung
+übergeben werden, in der der normale Mailtext gedruckt wird. Detaillierte
+Erklärungen finden Sie im Handbuch. Einige Beispiele:
+
+
+	fontshape=it           kursive Schrift
+	frame=topline          Rahmen über dem Block
+	fontfamily=helvetica   Schrift Helvetica
+	fontsize=\Huge         riesige Schrift
+
+Einzelne Optionen können mit Kommata getrennt werden, also z. B.
+I<fontshape=it,fontseries=b>.
+
+
+=item B<-V> I<Zeichenkette>B<, --verbatimsig> I<Zeichenkette>
+
+Wie B<--verbatimnormal>, allerdings bezieht sich die Angabe auf die 
+Signatur.
+
 =item B<-D, --debug> | B<-noD, --nodebug>
 
 Wählen Sie, ob B<Muttprint> in eine Logdatei F</tmp/muttprint.log> schreiben
