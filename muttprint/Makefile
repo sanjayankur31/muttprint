@@ -21,7 +21,8 @@ nothing:
 install: 
 	mkdir -p $(docdir)/muttprint $(bindir) $(sharedir)/muttprint $(mandir)/man1 \
 		$(mandir)/de/man1 $(mandir)/es/man1 \
-		$(mandir)/it/man1 $(libdir)/muttprint
+		$(mandir)/cs/man1 $(mandir)/it/man1 \
+		$(libdir)/muttprint
 	$(INSTALLBIN) muttprint $(bindir)/
 	$(INSTALL) CHANGES COPYING INSTALL README* sample-muttprintrc-* \
 		$(docdir)/muttprint/
