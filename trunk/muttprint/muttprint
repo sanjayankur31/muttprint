@@ -52,7 +52,7 @@ use constant FALSE	=> 0;
 ############# BEGIN VARIABLES ################################################
 
 
-$VERSION = "0.63pre2";
+$VERSION = "0.63pre3";
 my $PACKAGE = "Muttprint";
 
 
@@ -1084,6 +1084,7 @@ $BeforeHeader
 $PengCode
 $AfterHeader
 \\VerbatimInput[$Config{VERBATIMNORMAL}]{$Temp{content}}
+\\setlength{\\parskip}{-7mm}
 $sig_tex
 \\end{document}
 EOF
