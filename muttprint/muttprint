@@ -209,6 +209,9 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	for (my $i = 0; $_ = $KompletteMail[$i]; $i++) {
 	
 		$. = $i;
+
+		# for software that outputs \r\n-line-Endings
+		s/\r//g;
 	
 		#
 		# Should the signature be printed?
@@ -252,7 +255,6 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 		}
 	}
 
-
 	# ab in den Hintergrund 
 
 	fork && exit;
@@ -293,7 +295,6 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 }
 
 
-
 # Realname
 $Header{'ShortFrom'} = GetRealname ($Header{'From'}, $Header{'To'});
 
@@ -329,7 +330,7 @@ foreach (@headers) {
 		}
 		
 		push @PrintedMailheaders,
-			"{ $HeaderFormatAttr{$_} $String{$_}} \& { $HeaderFormatAttr{$_} $Header{$_} } & \\\\";
+			"{ $HeaderFormatAttr{$_} $String{$_}} \& \\raggedright { $HeaderFormatAttr{$_} $Header{$_} } & \\\\";
 				
 	}
 }
@@ -786,14 +787,14 @@ sub CreateLatex () {
 	if ($Config{'PENGUIN'} ne "off") {
 		$PengCode = <<"EOF";
 \\raisebox{4mm}{
-\\begin{minipage}[t]{2cm}
+\\begin{minipage}[t]{20mm}
 \\begin{flushright}
 ~ \\\\
 \\includegraphics[height=2cm]{$Config{'PENGUIN'}}
 \\end{flushright}
 \\end{minipage}}
 EOF
-		$PengTab="115 mm";
+		$PengTab="118 mm";
 	}
 	
 	
@@ -897,7 +898,7 @@ $headerrule_first
 \\thispagestyle{plain}
 $BeforeHeader
 {\\large
-\\begin{tabular}[t]{rp{$PengTab}l}
+\\begin{tabular}[t]{\@{}rp{$PengTab}\@{}l\@{}}
 @PrintedMailheaders
 \\end{tabular}}
 \\hfill
