@@ -89,7 +89,9 @@ validate:
 install: 
 	$(INSTALL) *.pdf $(docdir)/$(docdirname)
 	mkdir -p $(docdir)/$(docdirname)/manual-$(lang)
-	$(INSTALL) manual-$(lang)/* $(docdir)/$(docdirname)/manual-$(lang)/
+	# ignore the stylesheet-images/ directory because the files are not needed
+	$(INSTALL) manual-$(lang)/*.html $(docdir)/$(docdirname)/manual-$(lang)/
+	$(INSTALL) manual-$(lang)/*.css $(docdir)/$(docdirname)/manual-$(lang)/
 
 gzip:
 	$(gzip) *.ps *.txt
