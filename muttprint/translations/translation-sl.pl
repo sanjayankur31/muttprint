@@ -22,6 +22,12 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
        Uporabi podani tiskalnik.
        "-" uporabite za STDOUT
        Za tiskanje v datoteko uporabite TO_FILE:/pot/do/datoteke
+
+-C [ukaz za tiskanje], --printcommand [ukaz za tiskanje]
+       Nastavi ukaz za tiskanje. "\$PRINTER" se zamenja z imenom
+       tiskalnika.
+       CUPS podpora je vkljuèena z "CUPS" (ali pa nastavite katerikoli
+       ukaz, ki vsebuje niz "\$CUPS_OPTIONS").
 	   
 -i [datoteka], --penguin [datoteka]
        Nastavi sliko, ki bo natisnjena na prvi strani.
@@ -63,7 +69,7 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
 
 -c [jezikovni_nabor], --charset [jezikovni_nabor]
        Vhodni nabor: latin1, latin2, latin3, latin4, latin5, latin9,
-       auto (preberite manual preden uporabite "auto").
+       utf8, auto (preberite manual preden uporabite "auto" ali "utf8").
 
 -e [niz], --date [niz]
        original: izpi¹e datum, kot ga najde v glavi
@@ -77,12 +83,12 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
      programa ali dokumentacijo za natanènej¹i opis.
 
 -n [niz], --verbatimnormal [niz]
-     Za oblikovanje normalnega teksta sporoèila elektronske po¹te. Za natanènej¹i
-		 opis si preberite uporabni¹ki priroènik.
+     Za oblikovanje normalnega teksta sporoèila elektronske po¹te. Za 
+     natanènej¹i opis si preberite uporabni¹ki priroènik.
 
 -V [niz], --verbatimsig [niz]
-     Enako kot --verbatimnormal, toda ta nastavi 
-		 oblikovanje podpisa.
+     Enako kot --verbatimnormal, toda ta nastavi
+     oblikovanje podpisa.
 
 -D, --debug | -noD, --nodebug
        Izpi¹e uporabne podatke v datoteko za dnevnik /tmp/muttprint.log.
@@ -112,7 +118,7 @@ v datotekah ~/.muttprintrc ter /etc/Muttprintrc.
        Odstrani navedene odstavke pri tiskanju.
 
 -z [velikost], --fontsize [velikost]
-       Velikost èrk: 10pt, 11pt, 12pt (samo vrednosti)
+       Velikost èrk: 10pt, 11pt, 12pt (samo te vrednosti)
 
 -W [¹tevilka], --wrapmargin [¹tevilka]
        Definira, kako dolge naj bodo vrstice.

@@ -41,16 +41,17 @@ it      Italian         Manpage, User's guide,          Roberto Vallone
                         translation file
                         -- up to date --
                         
-fr      French          translation file,               Vincent Bernat
-                        sample-muttprintrc
-                        -- up to date --
-
-sl      Slovenian       translation file,               Bo¨tjan Müller
-                        sample-muttprintrc
+sl      Slovenian       User's guide, translation       Bo¨tjan Müller
+                        file, sample-muttprintrc
                         -- up to date --
         NOTE: In earlier releases the translation was named 'si' but this
               is wrong because we need the language code (ISO 639-1) and not
               the country code (ISO 3166-1)
+
+fr      French          translation file,               Vincent Bernat
+                        sample-muttprintrc
+                        -- up to date --
+
 
 es      Spanish         Manpage, User's guide           Marcelo Ramos
                         translation file,
