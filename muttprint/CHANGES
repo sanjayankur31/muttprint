@@ -1,6 +1,12 @@
 CHANGES
 =======================================================================
 
+0.71	- changed shebang line to #!/usr/bin/env perl because it works
+          on all system regardless where perl is installed (only in
+          release, not in CVS)
+        - new configuration option SIG_REGEXP which specifies the
+          regular expression used to recognize the signature
+
 0.70    - changed fontpackage for Times to `mathptm' and the package
           for Palatino to `mathpazo' because `times' and `palatino' are
           obsolte (according to de.comp.text.tex)
@@ -176,4 +182,4 @@ CHANGES
 0.10    - First release
 
 _______________
-vim: ts=8 et
+vim:ts=8 et

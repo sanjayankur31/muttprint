@@ -110,6 +110,7 @@ sub getISOlatinExtensions($);
 	ADDRESSFORMAT	=>	'%r <%a>,\n',
 	LATEXCODE		=>	'',
 	LATEXCODE1		=>	'',
+	SIG_REGEXP		=>	'^-- $',
 	LATEXCODE2		=>	'',
 	LATEXCODE3		=>	'',
 	LATEXCODE4		=>	'',
@@ -318,10 +319,10 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	
 		#
 		# signature 
-		if (((/^-- $/ && !($Config{REM_SIG} eq "on")) ||
+		if (((/$Config{SIG_REGEXP}/o && !($Config{REM_SIG} eq "on")) ||
 			$signature_mode) && $Config{VERBATIMSIG} ne "raw") {
 
-			if ($_ eq "-- \n") {
+			if (/$Config{SIG_REGEXP}/o) {
 				$signature_mode = TRUE;
 
 				# Leerzeile bei 2. Signatur
@@ -865,6 +866,7 @@ sub readOpts () {
 		'J|rightmargin=s'		=>	\$Config{RIGHTMARGIN},
 		'n|verbatimnormal=s'	=>	\$Config{VERBATIMNORMAL},
 		'V|verbatimsig=s'		=>	\$Config{VERBATIMSIG},
+		'sig_regexp=s'			=>	\$Config{SIG_REGEXP},
 
 
 		'l|lang=s'				=>	\$opt{LANG},
@@ -1776,6 +1778,9 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 -s, --rem_sig | -nos, --norem_sig
        Removes the signature (separated by "-- ") in the printing.
+
+--sig_regexp [Regular expression]
+       Specifies the regular expression used to recognize the signature.
 
 -q, --rem_quote | -noq, --norem_quote
        Remove the quoted paragraph from the printing.

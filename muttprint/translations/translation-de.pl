@@ -115,6 +115,9 @@ in ~/.muttprintrc and /etc/Muttprintrc.
 -s, --rem_sig | -nos, --norem_sig
        Entfernt die Signatur (durch "-- " abgetrennt) im Ausdruck.
 
+--sig_regexp [Regulärer Ausdruck]
+       Gibt den regulären Ausdruck zur Erkennung der Signatur an.
+
 -q, --rem_quote | -noq, --norem_quote
        Entfernt zitierte Abschnitte vom Druck.
 
