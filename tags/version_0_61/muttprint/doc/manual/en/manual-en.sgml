@@ -1,0 +1,893 @@
+<!DOCTYPE ARTICLE PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+
+<article lang="en" id="index">
+	
+<articleinfo>
+	<title>Muttprint -- User's guide</title>
+	
+	<author>
+		<firstname>Bernhard</firstname>
+		<surname>Walle</surname>
+		<affiliation>
+			<address><email>Bernhard.Walle@gmx.de</email></address>
+		</affiliation>
+	</author>
+
+	<pubdate>2001-12-15</pubdate>
+	
+	<releaseinfo>Version 0.61</releaseinfo>   
+	
+		
+	
+	<copyright>
+		<year>2001</year>
+		<holder role="mailto:Bernhard.Walle@gmx.de">Bernhard Walle</holder>
+	</copyright>
+
+</articleinfo>
+
+
+
+<sect1 id="about">
+	<title>About Muttprint</title>
+
+	<para>The printing of mails from Mutt (and lots of other mail clients) is
+		done as ``plain text''. Normally, that's enough, but in my opinion it's
+		not so beautiful like a formatted printing, e.&nbsp;g. from 
+		<application>Netscape</application>.</para>
+
+	<para>Another fact disturbed me: The printing contains all displayed header
+		informations. I've configured Mutt that it displays things like
+		<quote>X-Mailer</quote>, but I don't want to print this. 
+		<application>XFMail</application> is quite worse: It prints all header
+		information, so the printing is in my opinion unusable.</para>
+
+	<para>Sometime I had the idea to write a script myself, which creates a
+		nice printing. And here's the result. I think it looks quite better als
+		plain ASCII text and is comparable with the printing of well-known
+		mail clients under Microsoft Windows.</para>
+
+		
+</sect1>
+<sect1 id="installation">
+	<title>Installation</title>
+	
+	<sect2>
+		<title>System requirements</title>
+	
+		<para>Muttprint was realized in the programming language
+			<emphasis>Perl</emphasis> which requires a functioning Perl interpreter
+			in version 5. This should be true on every Linux systems by
+			default.</para>
+
+		<para>Make sure that a LaTeX distribution (I recommend teTeX higher
+			than version 1.0) plus the programs <emphasis>psselect</emphasis> 
+			and <emphasis>psnup</emphasis> from the <emphasis>PS-Utils</emphasis>
+			are available on your system. The last are only necessary if you
+			want to use paper save mode and/or duplex printing.</para>
+
+	</sect2>
+	<sect2>
+		<title>Installation of the files on your computer</title>
+		
+		<sect3>
+			<title>Manual installation</title>
+			
+			<para>At first, you have to unpack the archive. This could be done
+				by the command</para>
+			
+			<para>
+				<prompt>$  </prompt>
+				<UserInput>tar xvfz 
+					muttprint-<replaceable>Version</replaceable>.tar.gz</UserInput>
+			</para>
+			
+			<para>Change in the directory which was created:</para>
+			
+			<para>
+				<prompt>$  </prompt>
+				<UserInput>cd muttprint-<Replaceable>Version</Replaceable></UserInput>
+			</para>
+			
+			<para>There is distributed a suitable
+				<Filename>Makefile</Filename>  with Muttprint. To adjust the
+				locations on your system,  edit the Makefile with your
+				favourite editor.</para>
+
+			<para>You need Root permissions to install the program. After you have
+				changed with the <command>su</command> command to the superuser,
+				perform the installation with</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>make install</UserInput>
+			</para>
+			
+			<para>The script should work now.</para>
+
+			<para>If you would like to uninstall Muttprint later and all files are
+				still on the same location, execute simply</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>make uninstall</UserInput>
+			</para>
+						
+			<para>as root.</para>
+			
+		</sect3>
+		
+		<sect3>
+			<title>Installation of the packages</title>
+			
+			<para>If your distribution uses a package management system such as
+				RPM or DPKG, it is a good idea to use the correlatively
+				packages. The greatest advantage is the simple uninstallation.</para>
+
+			<para>Most Linux distributions use the RPM package management
+				system. The easiest way to install the package is the command</para>
+
+			<para>
+				<prompt>#  </prompt>
+				<userinput>rpm -Uvh 
+muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.noarch.rpm
+				</userinput>
+			</para>
+			
+			<para>All RPM packages are signed with my GnuPG-Key (ID DDAF6454).
+				You get more detailled information about RPM and verification of
+				signatures in  <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
+				RPM</ULink>.</para>
+
+			<para>The Debian packages are created by Chanop Silpa-Anan 
+				<email>chanop@debian.org</email> and are normally available
+				a few days after a new release of Muttprint. The could be
+				installed by</para>
+				
+			<para>
+				<prompt>#  </prompt>
+				<UserInput>dpkg -i muttprint_[version]-[release]_noarch.deb</UserInput>
+			</para>
+			
+			<para>Take a look at the <ulink
+				url="http://www.debian.org/devel/">Debian  <quote>Developer's
+				Corner</quote></ulink> for more information about Debian
+				packages.</para>
+
+			<para>Another possibility to install Debian packages is
+				<command>apt-get</command>.</para>
+			
+		</sect3>
+		
+	</sect2>
+		
+	<sect2>
+	
+		<title>Integration of Muttprint in mail and news clients</title>
+
+		<para>Muttprint was orginally developed for the use together with Mutt only.
+			However, it could be integrated in following mail programs without problems. 
+			I got some description of users. Muttprint would be work 
+			independently of Mutt in future, too.</para>
+		
+		
+		<sect3 id="muttconfig">
+			<title>Mutt</title>
+		
+			<para>You have to add or change following line in the file
+				<Filename>$HOME/.muttrc</Filename> or system wide in
+				<FileName>/etc/Muttrc</FileName>:</para>
+
+			<ProgramListing>set print_command="muttprint"</ProgramListing>
+
+			<para>Moreover you must make sure that all necessary headers
+				are dumped when the mail is printed out. The easiest way
+				is to write a small macro (in your <filename>~/.muttrc</filename>)
+				which makes sure that all headers are dumped. Only the
+				most important headers are really printed (see 
+				<xref linkend="printedheaders">).</para>
+
+			<para>Here's the macro:</para>
+
+			<programlisting>
+# Dump all headers
+macro index p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+macro pager p "&lt;display-toggle-weed&gt; &lt;print-message&gt; &lt;display-toggle-weed&gt;"
+			</programlisting>
+
+			<para>At first, the macro switches to the mode where all headers are
+				shown, then the mail is printed and finally it switches back. It
+				is necessary to turn the confirmation of printing off so that
+				the macro works right:</para>
+
+			<programlisting>
+# No confirmation before printing
+set print="yes"
+			</programlisting>
+
+			<para>To print more than one mail sensible in one step, you
+				should add following entry:</para>
+
+			<ProgramListing>
+# Print every mail extra
+set print_split
+			</ProgramListing>
+
+			<para>You'll find more information in the documentation of Mutt
+				(<Filename>/usr/share/doc/packages/mutt/manual.txt</Filename>).</para>
+
+		</sect3>
+
+		<sect3>
+				<title>Slrn</title>
+
+				<para>Simply add following lines in your configuration file 
+					<filename>~/.slrnrc</filename>:</para>
+
+	      <programlisting>
+% Use Muttprint for printing
+set printer_name "muttprint"
+	      </programlisting>
+
+				<para>If Muttprint should print more headers than this which are
+					displayed on the screen, you have to use instead of the
+					normal printing command <keycap>y</keycap> the combination
+					<keycap>Esc</keycap>, <keycap>1</keycap>, <keycap>y</keycap>
+					(one after another). This is important for printing the
+					X-Face header, see <xref linkend="xface">.</para>
+
+		</sect3>
+		<sect3>
+			<title>XFMail</title>
+
+			<para>In the dialogue <GUImenu>Misc</GUImenu>, <GUImenuItem>Config
+				Misc</GUImenuItem> you have to do an entry in <GUIlabel>Print
+				Command</GUIlabel>:
+				<literal>/usr/bin/muttprint -f $f</literal>.</para>
+
+			
+			<Note>				
+				<para>With some versions of <Application>XFMail</Application>,
+					problems are reported because XFMail does not add the
+					headers in the printing. This is not a problem of Muttprint.
+					To solve the problem you could look for a new version
+					of XFMail which doesn't have this bug.</para>
+					
+				<para>See also the <ulink
+					url="http://slappy.org/listarchives/xfmail/2001-June/002398.html">
+					XFMail developer mailing list archive</ulink> for a solution.</para>
+			</Note> 
+		</sect3>
+
+		<sect3>
+			<title>Pine</title>
+			
+			<para>Enter the print command <literal>muttprint</literal> in
+				<GUIlabel>Setup</GUIlabel>, <GUIlabel>Printer</GUIlabel>,
+				<GUIlabel>Personally select print command</GUIlabel>. Save the
+				changes.</para>				
+		</sect3>
+		
+		<sect3>
+			<title>Sylpheed</title>
+			
+			<para>To use Muttprint permanently as printing program, call
+				<GUImenu>Configuration</GUImenu>, <GUImenuItem>Common
+				preferences</GUImenuItem>, <GUIlabel>Other</GUIlabel>,
+				<GUIlabel>Printing</GUIlabel> and entry <literal>muttprint -f
+				%s</literal>.</para>
+		</sect3>
+		
+		<sect3>
+			<title>Gnus</title>
+
+
+			<para>Muttprint could be integrated in
+				<application>Gnus</application>, too. I got a Lisp code from a
+				user that realizes the integration. Please ask me no questions
+				about this because I don't know Lisp and don't use
+				<application>(X)Emacs</application> myself.</para>
+				
+			<para>You find the code in <filename>README.Gnus</filename> and I
+				would like to refer to this file in this manual. If you use
+				packages for the installation you should find this file in the
+				<filename>/usr/share/doc/packages/muttprint/</filename>
+				directory.</para>
+		</sect3>
+
+		<sect3>
+			<title>Exmh</title>
+			
+			<para>Choose at first <GUIlabel>Preferences</GUIlabel>, then
+				<GUIlabel>Text Print Command</GUIlabel> and set <GUIlabel>Text
+				Print Command</GUIlabel> to <literal>muttprint -f
+				$file</literal>.</para>
+
+		</sect3>
+		
+		<sect3>
+			<title>Other mail clients</title>
+			
+			<para>Muttprint works with all mail programs theroretically if they
+				comply with following conditions:</para>
+				
+			<ItemizedList spacing="compact">
+				<listitem>	
+					<Para>The output must be plain ASCII text without any
+					  formattings.</Para>
+				</listitem>
+				<listitem>
+					<Para>You must be able to choose the printing command freely.</Para>
+				</listitem>
+			</ItemizedList>
+	
+			<para>Newsreader are also supported because the
+				<ComputerOutput>To</ComputerOutput> header is optional
+				and the
+				<ComputerOutput>Newsgroups</ComputerOutput> header is also
+				evaluated.</para>
+			
+			<para>If you use Muttprint with other programs than mentioned above, please
+				send me a short message in which you describe how you've configured
+				the program. I could add the description here.</para>
+
+		</sect3>
+	</sect2>
+</sect1>
+
+<sect1 id="config">
+	<title>Configuration</title>
+		
+	<sect2>
+		<title>The configuration file</title>
+		
+		<para>Some things could be configured in Muttprint. This is permanently
+			done in  the configuration files <filename>$HOME/.muttprintrc</filename>
+			(only for the current user) or <filename>/etc/Muttprintrc</filename>
+			(global for all users). User settings override global settings.</para>
+			
+		<para>The configuration file is structured in a way that values are
+			assigned to different variables -- this is different from
+			<filename>.muttrc</filename>. The name of the variable stands
+			first and is case sensitive; take over them exactly. Then follows a
+			equal sign (<literal>=</literal>) without any whitespace.
+			At last, there's the value. Quotes (<literal>'</literal> or
+			<literal>"</literal>) are optional.</para>
+		
+		<para>An example for a configuration file is distributed with
+			Muttprint  (<filename>sample-muttprintrc</filename>). If you've
+			installed a RPM  or debian package, you'll find it in
+			<filename>/usr/share/doc/packages/muttprint/</filename>.</para>
+			
+		<para>An example for a correct assignment:</para>
+		
+		<ProgramListing>VARIABLE=value</ProgramListing>
+		
+		<para>Normally the script works without any adapts. But it is
+			recommended to inform about the possibilities you have.</para>
+
+		
+		<sect3>
+			<title>Printer</title>
+			
+			<para>If Muttprint should not print to <emphasis>lp</emphasis>, you can change 
+				this by setting <literal>PRINTER</literal> to the correct value.</para>
+				
+			<para>To print in a file, you could use following syntax, the name
+				(and location) of the file is freely chosable:</para>
+
+			<ProgramListing>PRINTER="TO_FILE:/foo/bar/test.ps"</ProgramListing>
+			
+			<para>If duplex printing is enabled, Muttprint creates a second file
+				with the prefix <filename>2</filename>, e.&nbsp;g.
+				<filename>test.ps2</filename>.</para>
+				
+		</sect3>
+		<sect3>
+			<title>Penguin</title>
+			
+			<para>As a default setting it is printed a little penguin on the right
+				top of the page. If there should be another picture or if the
+				penguin has another location as Muttprint assumes, you can
+				configure this by setting the <literal>PENGUIN</literal> variable
+				to the right value. The picture must be in Encapsulated
+				PostScript (you could use <command>convert</command> from
+				the <application>Image Magick</application> package for
+				converting your favourite picture into EPS) and it is
+				scaled to a height of 2&nbsp;cm (5.08 in). The logo
+				must not have a higher width than height.</para>
+				
+			<para>If <literal>PENGUIN=on</literal>, Muttprint tries to
+				find out the location of the penguin file. (Read the source
+				code to find out, where Muttprint searches.) This is the
+				default setting.</para>
+				
+			<para>Additionally, Muttprint comes with some example pictures that 
+				are already converted into the EPS format. After the installation,
+				you'll find this in <filename>/usr/share/muttprint</filename>.</para>
+				
+			<para>If the printing of the graphic should turned off,
+				set <literal>PENGUIN</literal> to the value <literal>off</literal>.
+				</para>
+			
+		</sect3>
+		<sect3 id="xface">
+			<title>Printing of X-Faces</title>
+
+			<para>X-Faces are black and white pictures with a size of 48 x 48 pixels,
+				that could be included as mailheader (the <literal>X-Face:</literal>
+				header) in each message. This is no <quote>official</quote> standard
+				but it is spread especially in news articles.</para>
+
+			<para>Muttprint supports the printing of this picture instead of the
+				image specified with the <literal>PENGUIN</literal> varaible. To do
+				this, set <literal>XFACE</literal> to <literal>on</literal>. If there's
+				no such header, the <literal>PENGUIN</literal> picture (or nothing)
+				is printed.</para>
+
+			<para>To work right, following two programs are required:</para>
+			
+			<itemizedlist spacing="compact">
+				<listitem>
+					<para>
+						<application>convert</application> from the
+						<ulink url="http://www.imagemagick.org"><application>Image 
+							Magick</application> package</ulink>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<ulink 
+							url="http://www.ibiblio.org/pub/Linux/apps/graphics/convert/compface-1.4.tar.gz"><application>uncompface</application></ulink>
+					</para>
+				</listitem>
+
+			</itemizedlist>
+
+		<para>Both programs should be part of common Linux distributions and
+			can simply be installed.</para>
+		
+		<para>In any case you must make sure that this header is really dumped
+			to Muttprint. If you use Mutt, see <xref linkend="muttconfig"> for a
+			correct configuration. Otherwise read the documentation of your mail
+			software.</para>
+
+
+		</sect3>
+		<sect3>
+			<title>Duplex printing</title>
+			
+			<para>Muttprint allows manual duplex printing. It prints odd pages
+				at first, waits a while and prints then even pages.</para>
+				
+			<para>Muttprint needs the speed of your printer to calculate
+				the time when the printing of even pages will start,
+				see <xref linkend="speed">.</para>
+				
+			<para>To activate the duplex printing, set <literal>DUPLEX</literal>
+				to <literal>on</literal>.</para>
+				
+			<para>If you own a real Postscript printer and if this printer
+				has duplex capabilities, you should set <literal>DUPLEX</literal>
+				to <literal>printer</literal>. This changes the Postscript
+				code in a way that tells your printer to enable automatic duplex
+				printing.</para>				
+		</sect3>
+		
+		<sect3>
+			<title>Paper save mode</title>
+			
+			<para>It's possible to print two pages on one page in landscape.
+				This allows you to save paper and ink and increases the printing
+				speed. This makes only with the paper format DIN A4 sense because
+				two reduced pages fit exactly to one sheet.</para>
+			
+			<para>To enable this mode, set <literal>PAPERSAVE</literal> to
+				<literal>on</literal>.</para>				
+		</sect3>
+		
+		<sect3 id="speed">
+			<title>Printing speed</title>
+			
+			<para>As mentioned above, Muttprint requires the duration which your
+				printer needs to print one page. This setting is done by setting
+				the variable <literal>SPEED</literal> to the value in seconds
+				(only integers are allowed). Default is 30&nbsp;seconds 
+				(<literal>SPEED=30</literal>).</para>
+		</sect3>
+		<sect3>
+			<title>Font</title>
+			
+			<para>You could use different fonts for the printing. The
+				correspondent variable is names <literal>FONT</literal>.
+				<literal>Latex</literal> means the standard LaTeX font
+				of the EC family. <literal>Latex-bright</literal>
+				(standard setting) uses <emphasis>Computer Modern Bright</emphasis>.
+				</para>
+			
+			<para>There are several Postscript fonts which are possible here: 
+				<literal>Times</literal>, <literal>Palatino</literal>,
+				<literal>Utopia</literal>, <literal>Charter</literal> and
+				<literal>Bookman</literal>.</para>
+
+			<para>Of course the fonts has to be installed on your system. As the LaTeX 
+				distribution <emphasis>teTeX</emphasis> is standard on Linux systems,
+				this should be no problem.</para>
+
+		</sect3>		
+		<sect3>
+			<title>Rules under/over head- and footline</title>
+			
+			<para>There could be printed a rule under the headline
+				resp. over the footline. They are turned off
+				as default.</para>
+				
+			<para>Set the variables <literal>HEADRULE</literal>
+				resp. <literal>FOOTRULE</literal> to 
+				<literal>on</literal> or <literal>off</literal>.</para>
+		</sect3>
+		<sect3>
+			<title>Design of the first pages</title>
+			
+			<para>There exists different possibilities to highlight the mailheaders
+				on the first page. Here is a listing of them:</para>
+			
+			<informaltable frame="topbot">
+				<tgroup cols=2 align=left>
+				<colspec colnum="1" colwidth="1.5in"> 
+				<thead>
+				<row>
+					<entry>Style</entry>
+					<entry>Description</entry>
+				</row>
+				</thead>
+				<tbody>
+				<row>
+					<entry><literal>plain</literal></entry>
+					<entry><para>no rules</para></entry>
+				</row>
+				<row>
+					<entry><literal>border</literal></entry>
+					<entry><para>rule after the headers 
+					(<emphasis>default setting</emphasis>)
+					</para></entry>
+				</row>
+				<row>
+					<entry><literal>fbox</literal></entry>
+					<entry><para>simple box around the mailheaders</para></entry>
+				</row>
+				<row>
+					<entry><literal>shadowbox</literal></entry>
+					<entry><para>shadowbox arount the header</para></entry>
+				</row>
+				<row>
+					<entry><literal>ovalbox</literal></entry>
+					<entry><para>box with rounded corners arount the header 
+						(thin lines)</para></entry>
+				</row>
+				<row>
+					<entry><literal>Ovalbox</literal></entry>
+					<entry><para>same as <literal>ovalbox</literal> but thicker
+					 	lines</para></entry>
+				</row>
+				<row>
+					<entry><literal>doublebox</literal></entry>
+					<entry><para>box with double lines around the header</para></entry>
+				</row>
+				<row>
+					<entry><literal>grey</literal></entry>
+					<entry><para>grey background behind the headers</para></entry>
+				</row>
+				<row>
+					<entry><literal>greybox</literal></entry>
+					<entry><para>same as <literal>grey</literal> but with a additional
+						black box</para></entry>
+				</row>
+				</tbody>
+				</tgroup>
+			</informaltable>
+			
+			<para>Set the variable <literal>FRONTSTYLE</literal> to a value
+				from the table above.</para>
+			
+		</sect3>
+		<sect3>
+			<title>Paper format</title>
+			
+			<para>To set the paper format, set <literal>PAPER</literal> to the right
+				value. Possible are only <literal>A4</literal> and
+				<literal>letter</literal>.</para>
+				
+			<para>If there exists a file <filename>/etc/papersize</filename> as
+				usually on Debian systems, it is evaluated, too. Own settings overwrite
+				this system settings.</para>
+
+
+		</sect3>
+		<sect3>
+			<title>Cut signature</title>
+			
+			<para>Often the signature contains unseless information or
+				advertising and should therefore not be printed. Muttprint is
+				able to cut the signature, if it was separated from the mail by
+				using <quote><literal>&ndash;&ndash; </literal></quote> -- take
+				a look at the whitespace (some mail clients don't generate a
+				correct separator).</para>
+				
+			<para>To do this you've to set <literal>REM_SIG</literal> (this means
+				<quote>remove signature</quote> to the value 
+				<literal>on</literal>.</para>
+		</sect3>
+		<sect3>
+			<title>Omit quoting</title>
+			
+			<para>Often the author of the mail does not quote sensibly but
+				attaches the whole mail so that the printing becomes very long
+				and confusing.</para>
+
+			<para>If <literal>REM_QUOTE</literal> is set to
+				<literal>on</literal>, the quoting will not be printed.
+				Muttprint detects the quoting by using the same regular
+				expression that Mutt does in its standard configuration. So the
+				text which is color emphasized from Mutt should omited in the
+				printing. This corresponds to the <emphasis>toggle
+				quote</emphasis> funktion 
+				(<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>)
+				on screen.</para>
+		</sect3>
+		<sect3 id="printedheaders">
+			<title>Printed headers</title>
+			
+			<para>Normally only the interesting headers are printed. You
+				could change this settings with the variable 
+				<literal>PRINTED_HEADERS</literal>. Specify each header
+				separated with a underline (<literal>_</literal>).</para>
+		
+			<para>The order is important for the printing. The evaluation
+				is case-insensitive. Headers that doesn't exist are ignored.
+				For bold printing embed the name of the header in
+				stars (<literal>*</literal>), for italic printing do the
+				same with slashes (<literal>/</literal>).</para>
+
+			<para>The default setting is:</para>
+			
+			<programlisting>PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"</programlisting>
+			
+			<para>One more example for a sensible setting:</para>
+			
+			<programlisting>PRINTED_HEADERS="/Date/_To_From_*Subject*_X-Mailer"</programlisting>
+
+		</sect3>
+		<sect3>
+			<title>Error messages</title>
+			
+			<para>The output of <command>latex</command> and
+				<command>dvips</command> are not displayed. If there are any
+				problems, it would be helpful to read this output. Therefore
+				you should set <literal>DEBUG</literal> to <literal>1</literal>
+				in your  <filename>.muttprintrc</filename>. Now Muttprint
+				creates a logfile named <filename>/tmp/muttprint.log</filename>
+				in the next run so that you can watch the error messages. This
+				could be helpful for all bug reports, too.</para>
+		</sect3>
+	</sect2>
+	<sect2>
+		<title>Command line options</title>
+		
+		<para>Most configuration settings could be made by command line options as well.
+			The advantage is a easier integration in the mail client (e.&nbsp;g. with
+			own macros).</para>
+			
+		<para>You find a detailled description of all options with
+			<command>muttprint</command> <option>-h</option> 
+			oder or in the <citerefentry><refentrytitle>muttprint</refentrytitle>
+			<manvolnum>1</manvolnum></citerefentry> manpage.</para>
+			
+		<para>The effects of this options are the same as in the configuration file
+			but command line settings override all other settings.</para>
+
+
+	</sect2>
+	<sect2>
+		<title>Different languages</title>
+		
+		<para>Muttprint supports the languages <emphasis>German</emphasis>, 
+			<emphasis>Italian</emphasis>, <emphasis>Spanish</emphasis>, 
+			<emphasis>French</emphasis> and <emphasis>English</emphasis>. 
+			Normally the environment variable <envar>LANG</envar> is set to the
+			right value: <literal>de</literal>, <literal>it</literal>,
+			<literal>fr</literal>, <literal>es</literal> or
+			<literal>en</literal>. Only the first two characters are recognized
+			so that <literal>de_DE@euro</literal> is okay. If the value is not
+			known, Muttprint falls back to English.</para>
+
+		<para>If you would like to use another language for Muttprint than for
+			the remaining system, you could define <literal>LANG</literal> in
+			your <filename>.muttprintrc</filename>.</para>
+
+
+		<sect3>
+			<title>Lanuages on the printing</title>
+		
+			<para>The most important effects of language adaption are
+				on the printing: the mail header and the date.</para>
+				
+			<para>The last one is created with the LaTeX package
+				<filename>babel.sty</filename>. Muttprint passes the right
+				option which corresponds to your language to the package. You
+				could set your own value with the variable
+				<literal>LPack</literal>, e.&nbsp;g. to <literal>austrian</literal>,
+				<literal>spanish</literal>. Read <command>texdoc babel</command>
+				for a list of all possible values.</para>
+
+			<para>If you would like to use another strings for the printed
+				header, you could set following variables:</para>
+			
+			<ItemizedList spacing="compact">
+				<ListItem><para><literal>FROM_STRING</literal></para></ListItem>
+				<ListItem><para><literal>TO_STRING</literal></para></ListItem>
+				<ListItem><para><literal>SUBJECT_STRING</literal></para></ListItem>
+				<ListItem><para><literal>CC_STRING</literal></para></ListItem>
+				<ListItem><para><literal>DATE_STRING</literal></para></ListItem>
+				<ListItem><para><literal>PAGE_STRING</literal></para></ListItem>
+				<ListItem><para><literal>OF_STRING</literal></para></ListItem>
+				<ListItem><para><literal>NEWSGROUPS_STRING</literal></para></ListItem>
+			</ItemizedList>
+			
+			<para>Additional headers that are configured for printing (see
+				<xref linkend="printedheaders">) could not be translated.</para>
+		
+		</sect3>
+		<sect3>
+			<title>Charsets</title>
+			
+			<para>Different languages require different charsets. The default charset
+			 of Muttprint is <emphasis>ISO-8859-1</emphasis> (same as ISO Latin 1).
+			 Therewith the languages Afrikaans, Basque, Catalan, Danish, Dutch,
+			 English, Faeroese, Finnish,  French, Galician, German, Icelandic, Irish,
+			 Italian, Norwegian, Portuguese, Scottish, Spanish and Swedish are
+			 covered. Additionally, Muttprint replaces the characters 128 to 159 of
+			 the charset <emphasis>cp1252</emphasis> (Microsoft Windows) with
+			 sensible ASCII characters.</para>
+			 
+			<para>Support for <emphasis>ISO-8859-15</emphasis> (also ISO Latin 9)
+				is not possible because it is missing in the LaTeX packages that are
+				needed. That's why the Euro currency sign (character 164) is replaced by
+				the string <literal>EUR</literal>.</para>
+
+			<para>For Czech support the character set <emphasis>ISO-8859-2</emphasis>
+			(ISO Latin 2) has become necessary. This is set automatically in a Czech
+			environment. Otherwise you could set the variable
+			<literal>charset</literal> to <literal>latin1</literal> or
+			<literal>latin2</literal>.</para>
+			
+			<para>ISO Latin 2 supports the languages Albanian, Bosnian, Croatian,  
+			 Czech, English, Finnish, German, Hungarian, Irish, Polish, Romanian,
+			 Slovak, Slovenian and Sorbian. (Because the German umlauts are on the
+			 same place in Latin 1 and 2, you could use both for printing German
+			 mails.) Moreover the Cyrillic-based languages Macedonian and
+       Serbian have one-to-one transliterations to Latin 2.</para>
+			 
+			<para>It is not possible to print characters from both charsets in
+				one mail. To do this, Unicode is needed -- but there's no Unicode
+				support for LaTeX as far as I know.</para>
+				
+		</sect3>
+		<sect3>
+			<title>Translation file</title>
+		
+			<para>The Muttprint translation files are located in the
+				<filename>share</filename> directory and have the name
+				<filename>translation-<replaceable>language</replaceable>.pl</filename>.
+				You could add new files in this directory without any changes
+				on the Muttprint script. Not only the headers mentioned above
+				but also the help message are translated here.</para>
+			
+			<para>For new translations take any file as template, copy it
+				and translate it. If you would like to provide your translation
+				to other users, just send me the new file with a e-mail
+				and I'll add it in the next release.</para>
+		</sect3>
+		
+
+	</sect2>
+</sect1>
+<sect1 id="nots">
+	<title>Notes</title>
+	
+	<sect2>
+		<title>Author, License</title>
+		
+		<para>The script has been written by Bernhard Walle 
+			<email>Bernhard.Walle@gmx.de</email>.</para>
+		
+		<para>This program is free software; you can redistribute it and/or
+			modify it under the terms of the GNU General Public License as
+			published by the Free Software Foundation; either version 2 of the
+			License, or (at your option) any later version.</para>
+			
+		<para>This program is distributed in the hope that it will be useful,
+			but <emphasis>without any warranty</emphasis>; without even the
+			implied warranty of <emphasis>merchantability</emphasis> or
+			<emphasis>fitness for a particular purpose</emphasis>. See the GNU
+			General Public License for more details.</para>
+
+		<para>You have received a copy of the GNU General Public License along
+			with this program (file <filename>COPYING</filename>).</para>
+			
+		<para>Please send notes, comments, improvement proposals etc. via
+			e-mail to me.</para>
+			
+		<para>The translations are copyrighted by the respective
+			translators. Read <filename>README.translations</filename> for
+			the names of the translator.</para>
+	</sect2>
+	<sect2>
+		<title>Download</title>
+		
+		<para>The current version and all old versions could be downloaded from
+			<ulink url="http://muttprint.sourceforge.net"></ulink>.
+			This is the Homepage of Muttprint.</para>
+
+		<para>I announce new versions on <ulink
+			url="http://www.freshmeat.net">Freshmeat</ulink>.</para>
+
+	</sect2>
+	<sect2>
+		<title>Printing of attachments</title>
+		
+		<para>Muttprint is not able to print mail attachments. To reach this,
+			Muttprint would have to parse the raw MIME message and decode it.
+			This is quite difficult. For example Muttprint would have to decrypt
+			PGP-encrypted messages, choose the right alternative in 
+			<literal>multipart/alternative</literal> messages and work recursive
+			for <literal>message/*</literal> -- this are only a few things.
+			Short: Essential parts of a mail client must be integrated and lots of
+			settings (like for PGP) must be done. Moreover, not all mail clients
+			support outputting the raw message for printing.</para>
+			
+		<para>But Mutt has itself a comfortable function to print attachments. You
+			can choose a separate printing command for each MIME type. This could be
+			set in <filename>~/.mailcap</filename>. Read further information
+			in the Mutt manual, section 5.3.3.1.</para>
+
+		<para>I've written a very small script named <literal>imageprint</literal>
+			for printing images (almost every format is supported). You could use it
+			as template for own scripts. Here it is:</para>			
+
+		<programlisting>
+#!/bin/sh
+target=/tmp/imageprint-$$.ps
+convert -page A4 $1 $target
+lpr $target
+rm $target</programlisting>
+		
+		<para>Just press the <keycap>p</keycap>-key in the attachment menu of
+			Mutt.</para>
+		
+		<para>Users of other mail clients should read the documentation for
+			information about how to print attachments.</para>
+
+	</sect2>
+	<sect2>
+		<title>Thanks</title>
+		
+		<para>to all who helped me with their bug reports to improve and
+			enhance Muttprint. Especially I want to thank Roman Beigelbeck for
+			providing additional pictures, Roberto Vallone for the Italian
+			transation, Vincent Bernat for the French translation, Marcelo
+			Ramos for the Spanish tranlation, Dominik Form&aacute;nek for
+			the Czech translation and the Debian maintainers Dr.
+			Guenter Bechly and Chanop Silpa-Anan.</para>
+
+		<para>Finally I would like to thank all people who contributed
+			to free software. Most people did this in their spare time
+			without receiving a penny for this!</para>
+
+	</sect2>
+</sect1>
+</article>
+
+<!-- ViM settings
+vim:tw=80 sw=2 ts=2
+-->

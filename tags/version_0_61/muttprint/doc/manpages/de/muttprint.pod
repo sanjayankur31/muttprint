@@ -1,0 +1,284 @@
+=head1 NAME
+
+muttprint - schöner Ausdruck von Mails mit Mutt
+
+
+=head1 SYNTAX
+
+muttprint [I<Optionen>]... [-f I<Datei>]
+
+
+=head1 BESCHREIBUNG
+
+Diese Manpage enthält eine kurze Beschreibung von B<Muttprint>. Ursprünglich
+wurde sie für die Debian GNU/Linux-Distribution geschrieben, weil das
+Originalprogramm keine Manpage hatte, nun habe ich die Seite in das POD-Format
+konvertiert.
+
+B<HINWEIS:> Der Pfad F</usr/share/doc/packages/muttprint> kann auf Ihrem System
+auch F</usr/doc/packages/muttprint> oder F</usr/share/doc/muttprint>  lauten!
+
+B<Muttprint> ist ein Hilfsprogramm, das den Ausdruck von Mutt und anderen
+Mailprogrammen wie XFMail oder PINE so konvertiert, dass er wie der Ausdruck
+von Netscape Messenger oder KMail aussieht. Es kann einen kleinen Pinguin auf
+die erste Seite sowie eine Kopfzeile auf jede Seite drucken. Außerdem druckt es
+nur die wichtigen Header und nicht alle.
+
+Eine ausfürliche Benutzeranleitung finden Sie in 
+F</usr/share/doc/packages/muttprint/> im PDF- und HTML-Format.
+
+Wie auch immer, Sie müssen folgende Zeile in Ihre F</etc/Muttrc> oder
+F<~/.muttrc> eintragen:
+
+	set print_command="muttprint"
+
+Wenn Sie die Einstellungen von B<Muttprint> anpassen wollen, kopieren Sie
+einfach F</usr/share/doc/packages/muttprint/sample-muttprintrc> nach
+F</etc/Muttprintrc> oder F<~/.muttprintrc> in Abhängigkeit davon, ob Sie die
+Einstellungen für das ganze System oder nur für einen Benutzer ändern möchten.
+
+B<Muttprint> besitzt standardmäßig die englische Spracheinstellung, wenn die
+Umgebungsvariable I<LANG> nicht gesetzt ist. Zum Beispiel können Sie in einer
+deutschen Umgebung folgendes setzen:
+
+	export LANG=de_DE
+
+Dies kann in beispielsweise in Ihrer F<~/.bashrc> vorgenommen werden.
+
+Wenn B<Muttprint> mit der Fehlermeldung C<lpr: unable to print file: ...>,
+abbrechen sollte, können Sie einen anderen Druckernamen als I<lp> probieren, z.
+B. I<lp5> oder I<tp0> (wenn Sie TurboPrint verwenden).
+
+B<CUPS-NUTZER BEACHTEN:> Die Einstellung C<PRINTER="lp"> funktioniert nicht.
+Sie müssen stattdessen den Cups-Druckernamen (z. B. I<LaserJet>) verwenden, der
+einfach durch den Befehl I<lpq> auf der Kommandozeile herausgefunden werden
+kann.
+
+
+=head1 OPTIONEN
+
+B<BITTE BEACHTEN:> Diese Optionen überschreiben die zugehörigen Einstellungen
+in F<~/.muttprintrc> und F</etc/Muttprintrc>.
+
+Hier finden Sie eine Beschreibung aller Kommandozeilenoptionen. Eine
+Beschreibung der Einstellungen in der Konfigurationsdatei finden Sie in
+F<sample-muttprintrc>, welche Sie mit B<Muttprint> erhalten haben.
+
+
+=over 7
+
+=item B<-h, --help>
+
+Gibt eine Liste aller möglichen Optionen aus.
+
+
+=item B<-v, --version>
+
+Gibt die aktuelle Version von B<Muttprint> aus.
+
+
+=item B<-f> I<Datei>B<, --file> I<Datei>
+
+Liest von einer Datei anstelle von STDIN. Nützlich für einige Mailclients wie
+I<XFMail>. Wenn I<Datei> auf I<-> gesetzt ist liest B<Muttprint> von STDIN.
+
+
+=item B<-p> I<Druckername>B<, --printer> I<Druckername>
+
+Verwendet einen anderen Drucker wie die Vorteinstellung I<lp> oder wie die
+Einstellung in der RC-Datei. Sie können auch B<in Datei drucken>, wenn Sie als
+Druckername F<TO_FILE:/Pfad/zu/Datei> eintragen. Wenn Sie den Ausdruck nach
+B<STDOUT> haben möchten, müssen Sie als Druckernamen I<-> angeben.
+
+
+=item B<-i> I<Datei>B<, --penguin> I<Datei>
+
+Druckt F<Datei> als Bild oben rechts auf das Blatt. F<Datei> muss den
+vollständigen Pfad beinhalten. Wenn Sie F<Datei> auf I<off> setzen wird kein
+Bild gedruckt.
+
+=item B<-x, --x-face> | B<-nox, --nox-face>
+
+Schaltet den Druck des im I<X-Face:>-Header übermittelten Bildes
+ein oder aus. Ausführliche Erklärung in der Dokumentation.
+
+
+=item B<-t> I<Zahl>B<, --speed> I<Zahl>
+
+Dies ist die Zeit in ganzen Sekunden, die Ihr Drucker für eine Seite benötigt.
+Die Angabe wird nur beim Duplexdruck ausgewertet. Die Voreinstellung ist 30
+(Sekunden).
+
+
+=item B<-w> I<Zahl>B<, --wait> I<Zahl>
+
+Dauer in Sekunden, die B<Muttprint> zwischen dem Druck der geraden und 
+ungeraden Seiten warten soll.
+
+
+=item B<-F> I<Schriftname>B<, --font> I<Schriftname>
+
+Hier können Sie eine schöne Schriftfamlilie für den Ausdruck auswählen. Möglich
+sind:
+I<Latex>, I<Latex-bright>, I<Times>, I<Utopia>, I<Palatino>, I<Charter> und
+I<Bookman>. Ob alle Schriften verfügbar sind hängt von Ihrer LaTeX-Installation
+ab. Voreinstellung ist I<Latex-bright>.
+
+=item B<-H, --headrule> | B<-noH, --noheadrule>
+
+Hier können Sie einstellen, ob ab Seite 2 nach der Kopfzeile eine Linie
+gedruckt werden soll oder nicht.
+
+=item B<-b, --footrule> | B<-nob, --nofootrule>
+
+Hier können Sie einstellen, ob auf allen Seiten über der Fußzeile eine
+Linie gedruckt werden soll oder nicht.
+
+=item B<-S> I<Stil>B<, --frontstyle> I<Stil>
+
+Wählen Sie einen Stil für den Ausdruck der Mailheader auf der ersten Seite:
+I<plain>, I<boder> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Für eine genauere Beschreibung lesen
+Sie das Handbuch.
+
+=item B<-a> I<Header>B<, --printed-headers> I<Header>
+
+Geben Sie die zu druckenden Header an. Trennen Sie die jeden Header mit
+C<_> ab. Mit I<*> eingeschlossene Header werden fett gedruckt, bei
+I</> erfolgt Kursivdruck. Ist einer der angegebenen Header nicht vorhanden,
+wird er weggelassen. Die Reihenfolge beim Druck ist dieselbe wie hier
+angegeben.
+
+Zwei Beispiele:
+
+	Date_To_From_CC_Newsgroups_*Subject*   (Standard)
+	/Date/_To_From_X-Mailer_*/Subject/*
+
+
+=item B<-P> I<Papierformat>B<, --paper> I<Papierformat>
+
+Wählen Sie ein Papierformat: I<A4> in den meisten Ländern ("DIN A4" in Deutschland)
+und I<letter> in den Vereinigten Staaten.
+
+
+=item B<-l> I<Sprache>B<, --lang> I<Sprache>
+
+Geben Sie hier die Kurzform der gewünschten Sprache an. Zur Zeit unterstützt: 
+I<de> (Deutsch), I<en> (Englisch), I<it> (Italienisch), I<fr> (Französisch),
+I<es> (Spanisch) und I<cs> (Tschechisch).
+Voreinstellung ist die I<LANG>-Umgebung, bei unbekannten Angaben wird
+Englisch benutzt.
+
+
+
+=item B<-D, --debug> | B<-noD, --nodebug>
+
+Wählen Sie, ob B<Muttprint> in eine Logdatei F</tmp/muttprint.log> schreiben
+soll. Dieses Feature ist nützlich, um nach Hilfe zu fragen wenn B<Muttprint>
+nicht funktioniert.
+
+
+=item B<-d, --duplex> | B<-nod, --noduplex>
+
+Aktiviert oder deaktiviert Duplexdruck. Wenn es eingeschaltet ist druckt B<Muttprint>
+zuerst nur ungerade Seiten, wartet einige Zeit und druckt dann die geraden Seiten.
+
+
+=item B<-2> | B<-1>
+
+Druckt zwei Seiten auf ein Blatt wie hier gezeigt.
+	
+	+----------+----------+
+	|          |          |
+	|          |          |
+	|    1     |     2    |
+	|          |          |
+	|          |          |
+	|          |          |	
+	+----------+----------+
+	
+Dieses Feature wird im Manual und in der Konfigurationsdatei als I<Papiersparmodus> 
+bezeichnet.
+
+
+=item B<-s, --rem_sig> | B<-nos, --norem_sig>
+
+Löscht die Signatur (abgetrennt durch C<-- >) im Ausdruck. 
+Dies ist bei sehr langen Signaturen nützlich. Aber immer mehr Menschen
+(oder Mailprogramme) trennen die Signatur nicht korrekt ab, so dass dieses
+Feature nicht immer richtig funktioniert.
+
+
+=item B<-q, --rem_quote> | B<-noq, --norem_quote>
+
+Löscht zitierte Absätze vom Ausdruck. 
+
+B<Muttprint> erkennt die Zitate durch den gleichen regulären Ausdruck wie Mutt, 
+es sollte also korrekt funktionieren.
+
+
+=back
+
+
+=head1 DATEIEN
+
+=over 7
+
+=item F</etc/Muttprintrc>
+
+Systemweite Konfigurationsdatei.
+
+
+=item F<~/.muttprintrc>
+
+Konfigurationsdatei für den jeweiligen Benutzer.
+
+
+=item F</tmp/muttprint-XXXXX>
+
+Temporäre Datei, die von B<Muttprint> erstellt wurde.
+
+
+=item F</usr/share/doc/packages/muttprint/>
+
+B<Muttprint>-Hilfedateien in verschiedenen Sprachen und Formaten.
+
+
+=item F</usr/share/muttprint/>
+
+Einige Bilder, die für den Druck auf der erste Seite der Mail verwendet werden
+können.
+
+=item F</usr/lib/muttprint/>
+
+Die Übersetzungsdateien.
+
+
+=back
+
+
+=head1 SIEHE AUCH
+
+mutt(1)
+
+Homepage: I<http://muttprint.sourceforge.net>
+
+
+=head1 COPYRIGHT
+
+(c) 2000-2001 Bernhard Walle
+
+
+Dies ist freie Software; im Quellcode finden Sie Details über die Kopierbedingungen.
+Es besteht keine Garantie; nicht einmal für MARKTREIFE oder EIGNUNG FÜR EINEN
+BESTIMMTEN ZWECK.
+
+
+
+
+=head1 AUTOR
+
+Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=cut
+
