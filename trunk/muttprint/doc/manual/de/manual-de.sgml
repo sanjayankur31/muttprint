@@ -837,7 +837,7 @@ set print_split
 		<title>Druck von Attachments</title>
 		
 		<para>Muttprint kann keine Anh&auml;nge drucken. Um dies zu erreichen,
-			m&uuml;sste Mutt die rohe MIME-Nachricht einlesen und dekodieren. Dies
+			m&uuml;sste Muttprint die rohe MIME-Nachricht einlesen und dekodieren. Dies
 			ist ziemlich aufw&auml;ndig. Zum Beispiel m&uuml;sste Muttprint  eine
 			eventuelle PGP-Entschl&uuml;sselung selbst vornehmen, die richtige
 			Alternative bei <literal>multipart/alternative</literal> w&auml;hlen und
@@ -907,3 +907,7 @@ rm $target</programlisting>
 	</sect2>
 </sect1>
 </article>
+
+<!-- ViM settings
+vim:tw=80 ts=2 sw=2
+-->

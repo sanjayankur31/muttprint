@@ -824,3 +824,7 @@ rm $target</programlisting>
 	</sect2>
 </sect1>
 </article>
+
+<!-- ViM settings
+vim:tw=80 sw=2 ts=2
+-->
