@@ -88,5 +88,5 @@ $String{"FileNotFound"} = "El archivo especificado no fué hallado.";
 "Grupo de Noticias:");
 
 $LPack = "spanish";
-
+$charset = "latin9";
 

@@ -93,4 +93,4 @@ $String{"FileNotFound"} = "Le fichier spécifié est introuvable.\n";
 ("De:", "À:", "Sujet:", "Copie Carbone:", "Date:", "page", "sur", "Groupe:");
 
 $LPack = "francais";
-$charset = "latin1";
+$charset = "latin9";

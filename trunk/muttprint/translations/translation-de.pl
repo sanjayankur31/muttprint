@@ -99,4 +99,4 @@ EOF
 ("Von:", "An:", "Betreff:", "Kopie an:", "Datum:", "Seite", "von", "Newsgruppen:");
 
 $LPack = "ngerman";
-$charset = "latin1";
+$charset = "latin9";

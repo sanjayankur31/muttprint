@@ -94,4 +94,4 @@ $String{"FileNotFound"} = "Il file specificato non è stato trovato.\n";
 ("Da:", "A:", "Oggetto:", "Copia Carbone:", "Data:", "pagina", "/", "Gruppo:");
 
 $LPack = "italian";
-$charset = "latin1";
+$charset = "latin9";
