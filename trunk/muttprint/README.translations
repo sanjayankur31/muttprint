@@ -37,9 +37,9 @@ it      Italian         Manpage, User's guide,          Roberto Vallone
                         
 es      Spanish         Manpage, User's guide           Marcelo Ramos
                         translation file
+						-- version 0.60 --
 
-cs	Czech           Manpage, User's guide           Dominik Formánek
-                        translation file
+cs		Czech           Manpage, translation file       Dominik Formánek
 
 fr      French          translation file                Vincent Bernat
 

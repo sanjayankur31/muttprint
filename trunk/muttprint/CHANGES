@@ -114,7 +114,7 @@ CHANGES
           the body. This makes it possible to print raw messages
           (without attachments).		  
 				  
-0.61    - full Czech translation
+0.61    - Czech translation
         - fixed $charset-bug in Czech translation
         - printed header can be customized (PRINTED_HEADERS)
         - declaration of global variables now Perl-5.005 compatible
@@ -123,4 +123,5 @@ CHANGES
         - Polish translation 
         - CDE printer configuration is recognized (~/.printers)
         - better code for deletion of temporary files
+	- fixed bug with reading configuration files
 
