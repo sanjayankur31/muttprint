@@ -232,7 +232,7 @@ if ($print[0]) {
 	outputstd "\n".$String{Usage}."\n\n".$String{Bugs}."\n\n";
 	exit 0;
 } elsif ($print[1]) {
-	outputstd "\n"."Muttprint $VERSION"."\n\n".$String{Lizenz}."\n\n";
+	outputstd "\n"."Muttprint $VERSION"."\n\n".$String{License}."\n\n";
 	exit 0;
 } elsif ($print[2]) {
 	outputstd "Encoding ......: ".getLocaleInformation(CHARSET)."\n";
@@ -2087,7 +2087,7 @@ PLEASE NOTICE: These options override the corresponding settings in
 
 EOF
 
-$String{"Lizenz"} = "This program is distributed under the terms of the
+$String{"License"} = "This program is distributed under the terms of the
 GPL and can be freely copied.
 ";
 
