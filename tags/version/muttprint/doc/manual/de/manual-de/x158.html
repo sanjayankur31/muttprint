@@ -1,0 +1,1061 @@
+<HTML
+><HEAD
+><TITLE
+>Konfiguration</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.64
+"><LINK
+REL="HOME"
+HREF="muttprint.html"><LINK
+REL="PREVIOUS"
+TITLE="Installation"
+HREF="x23.html"><LINK
+REL="NEXT"
+TITLE="Hinweise"
+HREF="x408.html"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+></TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x23.html"
+>Zurück</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x408.html"
+>Vor</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONFIG"
+>3. Konfiguration</A
+></H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN160"
+>3.1. Die Konfigurationsdatei</A
+></H2
+><P
+>Einige Dinge k&ouml;nnen an dem Programm konfiguriert werden.
+			Dies geschieht dauerhaft &uuml;ber die Konfigurationsdatei
+			<TT
+CLASS="FILENAME"
+>$HOME/.muttprintrc</TT
+> oder systemweit
+			<TT
+CLASS="FILENAME"
+>/etc/Muttprintrc</TT
+>. Benutzereinstellungen
+			&uuml;berschreiben systemweite Einstellungen.</P
+><P
+>Die Konfigurationsdatei ist so aufgebaut, dass verschiedenen
+			Variablen  Werte zugewiesen werden -- etwas anders als bei der
+			<TT
+CLASS="FILENAME"
+>.muttrc</TT
+>.  Zuerst steht der Name der Variablen.
+			Es wird zwischen Gro&szlig;- und Kleinschreibung unterschieden;
+			&uuml;bernehmen Sie die Namen genauso wie in der Dokumentation
+			geschrieben. Dann folgt ohne Leerzeichen das Gleichheitszeichen 
+			(=) und dann der Wert. Anf&uuml;hrungszeichen (<TT
+CLASS="LITERAL"
+>'</TT
+>
+			oder <TT
+CLASS="LITERAL"
+>"</TT
+>) sind optional.</P
+><P
+>Eine Beispielskonfigurationsdatei
+			(<TT
+CLASS="FILENAME"
+>sample-muttprintrc</TT
+>) wird  mit dem Skript
+			verteilt. Bei der Installtion der RPM oder Debian-Pakete ist sie 
+			bei der Dokumentation, also unter 
+			<TT
+CLASS="FILENAME"
+>/usr/share/doc/packages/muttprint/</TT
+>, zu
+			finden.</P
+><P
+>Ein Beispiel f&uuml;r eine korrekte Zuweisung:</P
+><PRE
+CLASS="PROGRAMLISTING"
+>VARIABLE=Wert</PRE
+><P
+>Grunds&auml;tzlich funktioniert das Skript aber ohne
+			Anpassungen,  es gibt f&uuml;r jeden Wert Standardeinstellungen. Es
+			empfiehlt sich aber,  sich die M&ouml;glichkeiten der Anpassung
+			anzuschauen.</P
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN175"
+>3.1.1. Drucker</A
+></H3
+><P
+>Soll nicht &uuml;ber den Drucker <I
+CLASS="EMPHASIS"
+>lp</I
+>
+				gedruckt werden,  so kann dies &uuml;ber
+				<TT
+CLASS="LITERAL"
+>PRINTER</TT
+> eingestellt werden.</P
+><P
+>Um in eine Datei zu drucken, benutzen Sie folgenden Eintrag,
+				wobei die  Datei frei gew&auml;hlt werden kann:</P
+><PRE
+CLASS="PROGRAMLISTING"
+>PRINTER="TO_FILE:/foo/bar/test.ps"</PRE
+><P
+>Beim Duplexdruck wird zus&auml;tzlich eine zweite Datei mit dem 
+				Zusatz <TT
+CLASS="FILENAME"
+>2</TT
+> angelegt, also z.&nbsp;B. 
+				<TT
+CLASS="FILENAME"
+>test.ps2</TT
+>.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN185"
+>3.1.2. Pinguin</A
+></H3
+><P
+>Standardm&auml;&szlig;ig wird oben rechts ein kleiner
+				Pinguin  gedruckt. Soll ein anderes Bild gedrockt werden  oder
+				soll sich der Pinguin bei einer lokalen Installation an einem 
+				anderen Ort befinden, so kann dies &uuml;ber
+				<TT
+CLASS="LITERAL"
+>PENGUIN</TT
+> konfiguriert werden. Das Bild muss
+				als Encapsulated PostScript vorliegen  (ein geeignetes
+				Umwandlungsprogramm w&auml;re <B
+CLASS="COMMAND"
+>convert</B
+> aus
+				dem <SPAN
+CLASS="APPLICATION"
+>Image Magick</SPAN
+>-Paket) und wird auf
+				2&nbsp;cm H&ouml;he skaliert. Die Breite darf dabei dann  nicht
+				gr&ouml;&szlig;er als 2&nbsp;cm sein.</P
+><P
+>Mit dem Wert <TT
+CLASS="LITERAL"
+>on</TT
+> versucht Muttprint, den
+				Ort des Pinguins selbst herauszufinden. (Lesen Sie den
+				Quellcode, wenn es  Sie interessiert, wo Muttprint sucht.) Dies
+				ist die Standardeinstellung. </P
+><P
+>Soll der Druck der Grafik ganz ausgeschaltet werden, so kann
+				<TT
+CLASS="LITERAL"
+>PENGUIN</TT
+> auf den Wert <TT
+CLASS="LITERAL"
+>off</TT
+> 
+				gesetzt werden.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN196"
+>3.1.3. Duplexdruck</A
+></H3
+><P
+>Muttprint erm&ouml;glicht manuellen Duplexdruck, indem es
+				zuerst die ungeraden Seiten und dann die geraden Seiten druckt.
+				Dazwischen wird eine kurze Pause eingelegt.</P
+><P
+>Um den Zeitpunkt zu berechnen, nachdem der Druck der  geraden
+				Seiten beginnen soll, muss Muttprint die  Druckgeschwindigkeit
+				kennen, siehe  <A
+HREF="x158.html#SPEED"
+>Abschnitt 3.1.5</A
+>.</P
+><P
+>Um den Duplexdruck zu aktivieren, muss
+				<TT
+CLASS="LITERAL"
+>DUPLEX</TT
+> auf <TT
+CLASS="LITERAL"
+>on</TT
+> gesetzt
+				werden.</P
+><P
+>Wenn Sie einen echten Postscript-Drucker besitzen und dieser 
+				Duplexf&auml;higkeiten besitzt, sollten Sie
+				<TT
+CLASS="LITERAL"
+>DUPLEX</TT
+>  auf <TT
+CLASS="LITERAL"
+>printer</TT
+>
+				setzen. Dadurch wird der Postscriptcode ver&auml;ndert, so dass
+				der Drucker angewiesen wird,  die Duplexf&auml;higkeit zu
+				benutzen.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN207"
+>3.1.4. Papiersparmodus</A
+></H3
+><P
+>Es ist m&ouml;glich, zwei Seiten auf ein Blatt Papier im
+				Querformat zu drucken, um Papier und Tinte einzusparen sowie
+				die Druckgeschwindigkeit zu erh&ouml;hen. Dies ist eigentlich
+				nur beim Papierformat DIN A4 sinnvoll, da dann genau zwei
+				verkleinerte Seiten auf ein Blatt passen.</P
+><P
+>Um Papier zu sparen, wird die Variable
+				<TT
+CLASS="LITERAL"
+>PAPERSAVE</TT
+> auf <TT
+CLASS="LITERAL"
+>on</TT
+>
+				gesetzt.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="SPEED"
+>3.1.5. Druckgeschwindigkeit</A
+></H3
+><P
+>Wie vorher schon erw&auml;hnt wurde, ben&ouml;tigt Muttprint 
+				die Dauer, die der Drucker f&uuml;r eine Seite ben&ouml;tigt. 
+				Dies erfolgt mit &uuml;ber <TT
+CLASS="LITERAL"
+>SPEED</TT
+>. Als Werte
+				sind ganzzahlige Werte in Sekunden erlaubt (ohne Angabe der
+				Einheit). Vorgabewert sind 30&nbsp;Sekunden, also 
+				<TT
+CLASS="LITERAL"
+>SPEED="30"</TT
+>.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN218"
+>3.1.6. Schriftart</A
+></H3
+><P
+>Der Ausdruck kann mit verschiedenen Schriften erfolgen.  Dazu
+				ist <TT
+CLASS="LITERAL"
+>FONT</TT
+> gedacht. Der Wert 
+				<TT
+CLASS="LITERAL"
+>Latex</TT
+> ist dabei der Standard-LaTeX-Font  aus
+				der EC-Familie. Mit <TT
+CLASS="LITERAL"
+>Latex-bright</TT
+>
+				(Standardeinstellung) wird die Schrift  <I
+CLASS="EMPHASIS"
+>Computer
+				Modern Bright</I
+> verwendet. </P
+><P
+>An Postscript-Schriften sind noch auch noch
+				<TT
+CLASS="LITERAL"
+>Times</TT
+>, <TT
+CLASS="LITERAL"
+>Palatino</TT
+>,
+				<TT
+CLASS="LITERAL"
+>Utopia</TT
+>, <TT
+CLASS="LITERAL"
+>Charter</TT
+> und 
+				<TT
+CLASS="LITERAL"
+>Bookman</TT
+> m&ouml;glich.</P
+><P
+>Nat&uuml;rlich m&uuml;ssen die Schriften auch auf Ihrem
+				System  installiert sein. Da aber auf Linux-Systemen die
+				LaTeX-Distribution  <I
+CLASS="EMPHASIS"
+>teTeX</I
+> Standard ist,
+				d&uuml;rfte dies kein  gro&szlig;es Problem sein.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN233"
+>3.1.7. Linien unter/&uuml;ber Kopf- und Fu&szlig;zeile</A
+></H3
+><P
+>Unter der Kopfzeile bzw. &uuml;ber der Fu&szlig;zeile
+				k&ouml;nnen auf Wunsch horizontale Linien gedruckt werden.
+				Standardm&auml;&szlig;ig sind diese ausgeschaltet.</P
+><P
+>Setzen Sie die Variablen <TT
+CLASS="LITERAL"
+>HEADRULE</TT
+>
+				bzw. <TT
+CLASS="LITERAL"
+>FOOTRULE</TT
+> auf <TT
+CLASS="LITERAL"
+>on</TT
+>
+				oder <TT
+CLASS="LITERAL"
+>off</TT
+>.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN241"
+>3.1.8. Aussehen der ersten Seite</A
+></H3
+><P
+>Es existieren verschiedene M&ouml;glichkeiten zur Hervorhebung
+				der Mailheader auf der ersten Seite. Hier eine Auflistung
+				der M&ouml;glichkeiten:</P
+><DIV
+CLASS="INFORMALTABLE"
+><A
+NAME="AEN244"
+></A
+><P
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+>Stil</TH
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+>Beschreibung</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>plain</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>keine Linien</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>border</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Linie nach den Headern 
+					(<I
+CLASS="EMPHASIS"
+>Standardeinstellung</I
+>)
+					</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>fbox</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>einfacher Kasten um die Header</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>shadowbox</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>schattierter Kasten um die Header</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>ovalbox</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Kasten mit abgerundeten Ecken um die Header 
+						(d&uuml;nne Linien)</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>Ovalbox</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>wie <TT
+CLASS="LITERAL"
+>ovalbox</TT
+> nur etwas dickere 
+						Linien</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>doublebox</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>Kasten mit doppelten Linien um die Header</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>grey</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>grau hinterlegte Header</P
+></TD
+></TR
+><TR
+><TD
+WIDTH="144"
+ALIGN="LEFT"
+VALIGN="TOP"
+><TT
+CLASS="LITERAL"
+>greybox</TT
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>wie <TT
+CLASS="LITERAL"
+>grey</TT
+> nur mit zus&auml;tzlichem 
+						Kasten</P
+></TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN300"
+>3.1.9. Papierformat</A
+></H3
+><P
+>Um das Papierformat einzustellen, ist die Variable 
+				<TT
+CLASS="LITERAL"
+>PAPER</TT
+> zu verwenden. Momentan k&ouml;nnen
+				die  Werte <TT
+CLASS="LITERAL"
+>A4</TT
+> und <TT
+CLASS="LITERAL"
+>letter</TT
+>
+				verwendet werden.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN306"
+>3.1.10. Signatur abschneiden</A
+></H3
+><P
+>Oft enth&auml;lt die Sigantur unn&uuml;tze Informationen 
+				oder gar Werbung und soll deshalb nicht ausgedruckt werden. 
+				Muttprint kann die Signatur abschneiden, wenn sie richtig mit
+				<SPAN
+CLASS="QUOTE"
+>&#8222;<TT
+CLASS="LITERAL"
+>&ndash;&ndash; </TT
+>&#8220;</SPAN
+> abgetrennt
+				wurde  -- wichtig ist das Leerzeichen nach den zwei
+				Bindestrichen  (einige Mailprogramme erzeugen keine korrekte 
+				Signaturtrenner).</P
+><P
+>Dazu muss die Option <TT
+CLASS="LITERAL"
+>REM_SIG</TT
+> 
+				(ausgesprochen hei&szlig;t das <SPAN
+CLASS="QUOTE"
+>&#8222;remove
+				signature&#8220;</SPAN
+>) auf <TT
+CLASS="LITERAL"
+>on</TT
+> gesetzt werden.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN315"
+>3.1.11. Quoting nicht mitdrucken</A
+></H3
+><P
+>Oft wird nicht sinnvoll<A
+NAME="AEN318"
+HREF="#FTN.AEN318"
+>[1]</A
+> zitiert sondern die
+				ganze Mail &uuml;ber mehrere Ebenen angeh&auml;ngt, so dass der
+				Ausdruck zu lang und  un&uuml;bersichtlich wird.</P
+><P
+>Ist <TT
+CLASS="LITERAL"
+>REM_QUOTE</TT
+> auf <TT
+CLASS="LITERAL"
+>on</TT
+>
+				gesetzt,  so wird das Quoting nicht mitgedruckt. Zum Erkennen
+				wird der  regul&auml;re Ausdruck von Mutt in der
+				Standardkonfiguration eingesetzt (siehe Mutt-Manual). Es sollte
+				also der von Mutt farblich  hervorgehobene  Text nicht gedruckt
+				werden, was einem <I
+CLASS="EMPHASIS"
+>toggle quote</I
+>
+				(<B
+CLASS="KEYCAP"
+>Shift</B
+>-<B
+CLASS="KEYCAP"
+>t</B
+>)
+				von Mutt auf dem Bildschirm entspricht.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN328"
+>3.1.12. Fehlermeldungen</A
+></H3
+><P
+>Die Ausgaben von <B
+CLASS="COMMAND"
+>latex</B
+> und
+				<B
+CLASS="COMMAND"
+>dvips</B
+> werden nicht angezeigt. Wenn jedoch
+				Probleme bestehen sollten, kann es hilfreich sein, die
+				Fehlermeldungen zu lesen. Daf&uuml;r kann
+				<TT
+CLASS="LITERAL"
+>DEBUG</TT
+> auf  <TT
+CLASS="LITERAL"
+>1</TT
+> gesetzt
+				werden, so dass die Fehlermeldungen in der Datei 
+				<TT
+CLASS="FILENAME"
+>/tmp/muttprint.log</TT
+> protokolliert werden. 
+				Dies kann hilfreich f&uuml;r eine Fehlerbeschreibung bei
+				eventuellen Bugreports sein.</P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN336"
+>3.2. Kommandozeilenparameter</A
+></H2
+><P
+>Die meisten Konfigurationsm&ouml;glichkeiten sind auch &uuml;ber 
+			Kommandozeilenparameter realisierbar. Dies hat den Vorteil, dass 
+			evtl. eine einfachere Integration in das Mailprogramm (z.&nbsp;B.
+			mit eigenen  Makros) m&ouml;glich ist.</P
+><P
+>Eine ausf&uuml;hrliche Beschreibung aller Parameter erhalten Sie
+			mit <B
+CLASS="COMMAND"
+>muttprint</B
+> <TT
+CLASS="OPTION"
+>-h</TT
+>  oder in der
+			<SPAN
+CLASS="CITEREFENTRY"
+><SPAN
+CLASS="REFENTRYTITLE"
+>muttprint</SPAN
+>(1)</SPAN
+>-Manpage.</P
+><P
+>Die Wirkung der Optionen ist analog zu der Konfigurationsdatei,
+			jedoch &uuml;berschreiben Kommandozeilenparameter alle andere
+			Einstellungen.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN346"
+>3.3. Verschiedene Sprachen</A
+></H2
+><P
+>Das Skript unterst&uuml;tzt die Sprachen
+			<I
+CLASS="EMPHASIS"
+>Deutsch</I
+>,  <I
+CLASS="EMPHASIS"
+>Italienisch</I
+>,
+			<I
+CLASS="EMPHASIS"
+>Spanisch</I
+>, 
+			<I
+CLASS="EMPHASIS"
+>Franz&ouml;sisch</I
+> und
+			<I
+CLASS="EMPHASIS"
+>Englisch</I
+>.  Normalerweise wird die
+			Umgebungsvariable <TT
+CLASS="ENVAR"
+>LANG</TT
+> auf den jeweiligen Wert
+			gesetzt: <TT
+CLASS="LITERAL"
+>de</TT
+>, <TT
+CLASS="LITERAL"
+>it</TT
+>, 
+			<TT
+CLASS="LITERAL"
+>fr</TT
+>, <TT
+CLASS="LITERAL"
+>es</TT
+> oder
+			<TT
+CLASS="LITERAL"
+>en</TT
+>.  Es werden nur die ersten beiden Zeichen
+			beachtet, ein  <TT
+CLASS="LITERAL"
+>de_DE.ISO-8859-15</TT
+> f&uuml;hrt also
+			zum gew&uuml;nschten Ergebnis. Wird ein unbekannter Wert verwendet,
+			so ist die Voreinstellung English.</P
+><P
+>Wenn f&uuml;r Muttprint eine andere Sprache als im restlichen
+			System verwendet werden soll, so kann ganz einfach die Variable
+			<TT
+CLASS="LITERAL"
+>LANG</TT
+> in der Konfigurationsdatei
+			<TT
+CLASS="FILENAME"
+>.muttprintrc</TT
+> definiert werden.</P
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN364"
+>3.3.1. Sprachen auf dem Ausdruck</A
+></H3
+><P
+>In Erster Linie betreffen die Sprachanpassungen einige W&ouml;rter
+				auf dem erzeugten Ausdruck, also die Beschriftungen der
+				Mailheader und das Datum.</P
+><P
+>Letzteres wird mit Hilfe des LaTeX-Paketes
+				<TT
+CLASS="FILENAME"
+>babel.sty</TT
+> generiert.
+				Standardm&auml;&szlig;ig wird bei Deutsch die Option 
+				<TT
+CLASS="LITERAL"
+>ngerman</TT
+> mitgegeben. Wollen sie ein 
+				&ouml;sterreichisches Datum, das sich vor allem am Anfang des
+				Jahres  vom deutschen unterscheidet (<SPAN
+CLASS="QUOTE"
+>&#8222;J&auml;nner&#8220;</SPAN
+>
+				statt <SPAN
+CLASS="QUOTE"
+>&#8222;Januar&#8220;</SPAN
+>), so k&ouml;nnen Sie die Variable
+				<TT
+CLASS="LITERAL"
+>LPack</TT
+> auf <TT
+CLASS="LITERAL"
+>austrian</TT
+>
+				setzen. Das gleiche gilt nat&uuml;rlich  auch f&uuml;r andere
+				Sprachen. Lesen Sie <B
+CLASS="COMMAND"
+>texdoc babel</B
+>
+				f&uuml;r eine Liste m&ouml;glicher Werte.</P
+><P
+>Sollen andere Sprachen bzw. einfach andere W&ouml;rter verwendet 
+				werden, so k&ouml;nnen folgende Variablen gesetzt werden:</P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>FROM_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>TO_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>SUBJECT_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>CC_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>DATE_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>PAGE_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>OF_STRING</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="LITERAL"
+>NEWSGROUPS_STRING</TT
+></P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT3"
+><H3
+CLASS="SECT3"
+><A
+NAME="AEN401"
+>3.3.2. &Uuml;bersetzungsdatei</A
+></H3
+><P
+>Die Muttprint-&Uuml;bersetzungdateien befinden sich im
+				<TT
+CLASS="FILENAME"
+>share</TT
+>-Verzeichnis und haben den Namen
+				<TT
+CLASS="FILENAME"
+>translation-<TT
+CLASS="REPLACEABLE"
+><I
+>Sprache</I
+></TT
+>.pl</TT
+>.
+				Es k&ouml;nnen ohne &Auml;nderungen am Skript neue Dateien
+				hinzugef&uuml;gt werden. In der Datei werden nicht nur einige
+				W&ouml;rter aus dem Ausdruck sondern auch der Hilfetext
+				&uuml;bersetzt.</P
+><P
+>F&uuml;r neue &Uuml;bersetzungen nehmen Sie einfach eine alte
+				Datei als Vorlage, kopieren und &uuml;bersetzen Sie sie. Wenn
+				Sie Ihre &Uuml;bersetzung anderen Usern zur Verf&uuml;gung
+				stellen m&ouml;chten, schicken Sie mir die entsprechende Datei
+				per Mail -- ich werde sie in die n&auml;chste Version
+				integrieren.</P
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Fußnoten</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN318"
+HREF="x158.html#AEN318"
+>[1]</A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>siehe  <A
+HREF="http://learn.to/quote/"
+TARGET="_top"
+>http://learn.to/quote/</A
+> f&uuml;r eine Anleitung
+				zum richtigen Zitieren</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x23.html"
+>Zurück</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="muttprint.html"
+>Anfang</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x408.html"
+>Vor</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Hinweise</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

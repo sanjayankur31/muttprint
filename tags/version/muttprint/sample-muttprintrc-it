@@ -1,0 +1,82 @@
+# File di configurazione di MUTTPRINT
+#
+# ~/.muttprintrc o /etc/Muttprintrc
+
+
+#
+# Qui puoi configurare la tua stampante
+# Per stampare in un file usa la seguente sintassi
+# PRINTER="TO_FILE:/home/ciccio/test.ps"
+PRINTER="lp0"
+
+#
+# Qui puoi settare il path per l'immagine del pinguino
+PENGUIN="off"
+
+#
+# Qui puoi impostare ad "on" o ad "off" la stampa fronte - retro
+#
+# Per le stampanti Postscript che possono farlo da sé settare a
+# "printer"
+DUPLEX="off"
+
+#
+# Qui puoi settare a "on" o "off" il paper save mode
+# (stampa di due pagine in una)
+PAPERSAVE="off"
+
+#
+# Qui puoi impostare la velocità della tua stampante in secondi per
+# pagina
+SPEED="30"
+
+#
+# Scegli un font:
+# - Latex (EC-Fonts)
+# - Latex-bright (CM-bright)
+# - Times
+# - Utopia
+# - Palatino
+# - Charter
+# - Bookman
+FONT="Latex-bright"
+
+#
+# Sceglie uno stile per la prima pagina
+# - plain       no righelli
+# - border      righello dopo gli headers
+# - fbox        semplice box attorno agli headers
+# - shadowbox   box ombreggiata attorno agli headers
+# - ovalbox     box con angoli arrotondati attorno agli headers (linee sottili)
+# - Ovalbox     come per "ovalbox" ma con linee più spesse
+# - doublebox   box con doppie linee attorno agli headers
+# - grey        sfondo grigio dietro gli headers
+# - greybox     come per "grey" ma con l'aggiunta di una scatola nera
+FRONTSTYLE="border"
+
+#
+# Indica di porre un righello dopo gli header (non per la prima pagina)
+HEADRULE="off"
+
+#
+# Indica di porre un righello sopra l'ultima riga
+FOOTRULE="off"
+
+#
+# Sceglie un formato pagina:
+# - A4
+# - letter
+PAPER="A4"
+
+#
+# Non stampa la firma separata da "-- "
+REM_SIG="off"
+
+#
+# non stampa il testo riportato (quoting)
+REM_QUOTE="off"
+
+# 
+# Scrive i messaggi di errore di LaTeX e dvips in /tmp/muttprint.log
+DEBUG="0"
+
