@@ -381,8 +381,8 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	close CONTENT;
 
 	# Zeichensatz automatisch erkennen
-	if ($charset eq "auto" and $mail_charset) {
-		$charset = get_charset($mail_charset);
+	if ($charset eq "auto") {
+		$charset = $mail_charset ? get_charset($mail_charset) : "latin1";
 	}
 
 }
