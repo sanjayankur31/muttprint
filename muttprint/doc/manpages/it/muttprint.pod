@@ -412,6 +412,10 @@ particolari condizioni.
 
 Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
 
+=head1 MAINTAINER
+
+Lukas Ruf E<lt>lukas.ruf@lpr.ch<gt>
+
 =cut
 
 =head1 TRADUZIONE

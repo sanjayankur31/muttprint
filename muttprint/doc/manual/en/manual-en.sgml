@@ -37,13 +37,13 @@
 		<application>Netscape</application>.</para>
 
 	<para>Another fact disturbed me: The printing contains all displayed header
-		informations. I've configured Mutt that it displays things like
+		information. I've configured Mutt that it displays things like
 		<quote>X-Mailer</quote>, but I don't want to print this. 
 		<application>XFMail</application> is quite worse: It prints all header
 		information, so the printing is in my opinion unusable.</para>
 
 	<para>Sometime I had the idea to write a script myself, which creates a
-		nice printing. And here's the result. I think it looks quite better als
+		nice printing. And here's the result. I think it looks quite better than
 		plain ASCII text and is comparable with the printing of well-known
 		mail clients under Microsoft Windows.</para>
 
@@ -237,7 +237,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 			</para>
 			
 			<para>All RPM packages are signed with my GnuPG-Key (ID DDAF6454).
-				You get more detailled information about RPM and verification of
+				You get more detailed information about RPM and verification of
 				signatures in  <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
 				RPM</ULink>.</para>
 
@@ -267,7 +267,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 	
 		<title>Integration of Muttprint in mail and news clients</title>
 
-		<para>Muttprint was orginally developed for the use together with Mutt only.
+		<para>Muttprint was originally developed for the use together with Mutt only.
 			However, it could be integrated in following mail programs without problems. 
 			I got some description of users. Muttprint would be work 
 			independently of Mutt in future, too.</para>
@@ -334,7 +334,7 @@ set printer_name "muttprint"
 				<para>If Muttprint should print more headers than this which are
 					displayed on the screen, you have to use instead of the
 					normal printing command <keycap>y</keycap> the combination
-					<keycap>Esc</keycap>, <keycap>1</keycap>, <keycap>y</keycap>
+					<keycap>ESC</keycap>, <keycap>1</keycap>, <keycap>y</keycap>
 					(one after another). This is important for printing the
 					X-Face header, see <xref linkend="xface">.</para>
 
@@ -410,7 +410,7 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Other mail clients</title>
 			
-			<para>Muttprint works with all mail programs theroretically if they
+			<para>Muttprint works with all mail programs theoretically if they
 				comply with following conditions:</para>
 				
 			<ItemizedList spacing="compact">
@@ -459,13 +459,13 @@ set printer_name "muttprint"
 			assigned to different variables -- this is different from
 			<filename>.muttrc</filename>. The name of the variable stands
 			first and is case sensitive; take over them exactly. Then follows a
-			equal sign (<literal>=</literal>) without any whitespace.
+			equal sign (<literal>=</literal>) without any whitespaces.
 			At last, there's the value. Quotes (<literal>'</literal> or
 			<literal>"</literal>) are optional.</para>
 		
 		<para>An example for a configuration file is distributed with
 			Muttprint  (<filename>sample-muttprintrc</filename>). If you've
-			installed a RPM  or debian package, you'll find it in
+			installed a RPM  or Debian package, you'll find it in
 			<filename>##DOCDIR##/muttprint/</filename>.</para>
 			
 		<para>An example for a correct assignment:</para>
@@ -483,7 +483,7 @@ set printer_name "muttprint"
 				this by setting <literal>PRINTER</literal> to the correct value.</para>
 				
 			<para>To print in a file, you could use following syntax, the name
-				(and location) of the file is freely chosable:</para>
+				(and location) of the file is freely chooseable:</para>
 
 			<ProgramListing>PRINTER="TO_FILE:/foo/bar/test.ps"</ProgramListing>
 			
@@ -519,7 +519,7 @@ set printer_name "muttprint"
 				default setting. If you would like to use another printing command,
 				set <literal>PRINT_COMMAND</literal> to the program you would like
 				to use. The string <literal>$PRINTER</literal> is replaced by the
-				choosed printer. The default is <literal>lpr -P$PRINTER</literal>.
+				chosen printer. The default is <literal>lpr -P$PRINTER</literal>.
 			</para>
 
 			<tip>
@@ -561,12 +561,12 @@ set printer_name "muttprint"
 			<title>Printing of X-Faces</title>
 
 			<para>X-Faces are black and white pictures with a size of 48 x 48 pixels,
-				that could be included as mailheader (the <literal>X-Face:</literal>
+				that could be included as mail header (the <literal>X-Face:</literal>
 				header) in each message. This is no <quote>official</quote> standard
 				but it is spread especially in news articles.</para>
 
 			<para>Muttprint supports the printing of this picture instead of the
-				image specified with the <literal>PENGUIN</literal> varaible. To do
+				image specified with the <literal>PENGUIN</literal> variable. To do
 				this, set <literal>XFACE</literal> to <literal>on</literal>. If there's
 				no such header, the <literal>PENGUIN</literal> picture (or nothing)
 				is printed.</para>
@@ -668,7 +668,7 @@ set printer_name "muttprint"
 			<title>Format of printed mail addresses</title>
 
 			<para>There are different ways of writing mail address and realname
-				together in the mailheader. Here're some examples:</para>
+				together in the mail header. Here are some examples:</para>
 		
 			<ItemizedList spacing="compact">
 				<ListItem><para><literal>Bernhard Walle &lt;Bernhard.Walle@gmx.de&gt;
@@ -684,14 +684,14 @@ set printer_name "muttprint"
 				the value <literal>original</literal>, the addresses are printed
 				unchanged.</para>
 
-			<para>If you would like uniform mail heaers, you can assign a format
+			<para>If you would like uniform mail headers, you can assign a format
 				string to this variable. The default setting is <literal>"%r
 				&lt;%a&gt;,\n"</literal>. You can use all characters as format string,
 				<literal>%r</literal> is substituted by the name (<quote>real
 				name</quote>), <literal>%a</literal> by the mail address and
 				<literal>\n</literal> prints a newline. The paling quotes are necessary
 				because of the spaces. A newline at the end means that every address is
-				printed in a seperate line if more than one address is given. Muttprint
+				printed in a separate line if more than one address is given. Muttprint
 				removes newlines and commas after the last address automatically.</para>
 
 			<para>Additionally, particular parts could be printed bold or italic. If a
@@ -764,7 +764,7 @@ set printer_name "muttprint"
 
 			<para>The mail body is split into two parts: text and signature. If there
 				is a signature and it should not be removed (see <xref
-				linkend="remsig">), this two parts can be formated separately.</para>
+				linkend="remsig">), this two parts can be formatted separately.</para>
 
 			<para>Muttprint uses the LaTeX package <filename>fancyvrb.sty</filename>
 				to print the body, which offers lots of formatting options. The options
@@ -778,7 +778,7 @@ set printer_name "muttprint"
 				<command>texdoc fancyvrb</command>. Normally, the signature is printed
 				in Italics. You can print borders, too.</para>
 
-			<para>If you don't want a separate formating of mail body and signature,
+			<para>If you don't want a separate formatting of mail body and signature,
 				just set <literal>VERBATIMSIG</literal> to <literal>raw</literal>.
 				If so, the signature is treated as normal mail text and is printed like
 				this (including the signature separator).</para>
@@ -801,7 +801,7 @@ set printer_name "muttprint"
 				<listitem>
 					<para>	
 						<literal>numbers=left,stepnumber=5</literal>:
-							Line nummering each fifth line
+							Line numbering each fifth line
 					</para>
 				</listitem>
 			</itemizedList>
@@ -810,7 +810,7 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Margin settings</title>
 
-			<para>The margins could be set by modifiying following variables:
+			<para>The margins could be set by modifying following variables:
 				<literal>TOPMARGIN</literal> (top margin),
 				<literal>BOTTOMMARGIN</literal> (bottom margin),
 				<literal>LEFTMARGIN</literal> (left margin) and
@@ -843,7 +843,7 @@ set printer_name "muttprint"
 		<sect3>
 			<title>Design of the first pages</title>
 			
-			<para>There exists different possibilities to highlight the mailheaders
+			<para>There exists different possibilities to highlight the mail headers
 				on the first page. Here is a listing of them:</para>
 			
 			<informaltable frame="topbot">
@@ -877,11 +877,11 @@ set printer_name "muttprint"
 				</row>
 				<row>
 					<entry><literal>shadowbox</literal></entry>
-					<entry><para>shadowbox arount the header</para></entry>
+					<entry><para>shadowbox around the header</para></entry>
 				</row>
 				<row>
 					<entry><literal>ovalbox</literal></entry>
-					<entry><para>box with rounded corners arount the header 
+					<entry><para>box with rounded corners around the header 
 						(thin lines)</para></entry>
 				</row>
 				<row>
@@ -926,7 +926,7 @@ set printer_name "muttprint"
 		<sect3 id="remsig">
 			<title>Cut signature</title>
 			
-			<para>Often the signature contains unseless information or
+			<para>Often the signature contains useless information or
 				advertising and should therefore not be printed. Muttprint is
 				able to cut the signature, if it was separated from the mail by
 				using <quote><literal>&ndash;&ndash; </literal></quote> -- take
@@ -955,9 +955,9 @@ set printer_name "muttprint"
 				<literal>on</literal>, the quoting will not be printed.
 				Muttprint detects the quoting by using the same regular
 				expression that Mutt does in its standard configuration. So the
-				text which is color emphasized from Mutt should omited in the
+				text which is color emphasized from Mutt should omitted in the
 				printing. This corresponds to the <emphasis>toggle
-				quote</emphasis> funktion 
+				quote</emphasis> function 
 				(<keycombo><keycap>Shift</keycap><keycap>t</keycap></keycombo>)
 				on screen.</para>
 		</sect3>
@@ -988,7 +988,7 @@ set printer_name "muttprint"
 			<title>Own LaTeX code</title>
 
 			<para>The variable <literal>LATEXCODE</literal> is for people who are very
-				familar with LaTeX and would like to customize the printing without
+				familiar with LaTeX and would like to customize the printing without
 				changing the source code of Muttprint. For example, it is useful to
 				use own fonts.</para>
 
@@ -1009,7 +1009,7 @@ set printer_name "muttprint"
 			<title>Printing in the background</title>
 
 			<para>Normally Muttprint runs in the foreground and terminates after the
-				print procedure is finished successfully. This simplyfies the output of
+				print procedure is finished successfully. This simplifies the output of
 				error messages. On modern computers, the printing of normal mails takes
 				only a few seconds. (An exception could be the first run of Muttprint
 				because LaTeX has to create lots of font files.)
@@ -1032,7 +1032,7 @@ set printer_name "muttprint"
 				problems, it would be helpful to read this output. Therefore
 				you should set <literal>DEBUG</literal> to <literal>1</literal>
 				in your  <filename>.muttprintrc</filename>. Now Muttprint
-				creates a logfile named <filename>/tmp/muttprint.log</filename>
+				creates a log file named <filename>/tmp/muttprint.log</filename>
 				in the next run so that you can watch the error messages. This
 				could be helpful for all bug reports, too.</para>
 		</sect3>
@@ -1044,9 +1044,9 @@ set printer_name "muttprint"
 			The advantage is a easier integration in the mail client (e.&nbsp;g. with
 			own macros).</para>
 			
-		<para>You find a detailled description of all options with
+		<para>You find a detailed description of all options with
 			<command>muttprint</command> <option>-h</option> 
-			oder or in the <citerefentry><refentrytitle>muttprint</refentrytitle>
+			or or in the <citerefentry><refentrytitle>muttprint</refentrytitle>
 			<manvolnum>1</manvolnum></citerefentry> manpage.</para>
 			
 		<para>The effects of this options are the same as in the configuration file
@@ -1091,13 +1091,13 @@ set printer_name "muttprint"
 			in the printing, which means the labels of the mail header and the
 			date.</para>
 
-		<para>Also the encoding is determined by the locale enviroment of
+		<para>Also the encoding is determined by the locale environment of
 			your system. There's no way to do this manual as in older versions
 			of Muttprint anymore. The number of supported charsets is limited
 			because of the usage of LaTeX. Following encodings are supported:
-			ISO-8859-1 (Western Euroean languages), ISO-8859-2 (Eastern European
+			ISO-8859-1 (Western European languages), ISO-8859-2 (Eastern European
 			languages), ISO-8859-3 (South-Eastern European and other languages), 
-			ISO-8859-4 (Scandinavic and Baltical languages), ISO-8859-9 (Turkish),
+			ISO-8859-4 (Scandinavian and Baltic languages), ISO-8859-9 (Turkish),
 			ISO-8859-15 (ISO-8859-1 with some modifications, especially the
 			Euro sign), KOI8-R (languages with Cyrillic characters, e. g.
 			Russian) and UTF-8.</para>
@@ -1105,7 +1105,7 @@ set printer_name "muttprint"
 		<para>The support of UTF-8 is not complete. LaTeX itself uses 8-bit
 			character sets. This means that it could be only this subset of
 			characters used, which are usual in the current locale environment.
-			So Cyrillic letters could only be printed in a Russian enviroment.
+			So Cyrillic letters could only be printed in a Russian environment.
 			Maybe this changes in future but the main problem is LaTeX. </para>
 
 					
@@ -1126,9 +1126,9 @@ set printer_name "muttprint"
 				release.</para>
 		
 			<para>Important: The encoding of this file must be (independent of the
-				current locale enviroment) UTF-8. Read the file
+				current locale environment) UTF-8. Read the file
 				<filename>README</filename> which is in the
-				<filename>tranlation/</filename> directory of Muttprint (the source code
+				<filename>translation/</filename> directory of Muttprint (the source code
 				distribution).
 			</para>
 		</sect3>
@@ -1264,7 +1264,7 @@ rm $target</programlisting>
 			enhance Muttprint. Especially I want to thank Roman Beigelbeck for
 			providing additional pictures, Roberto Vallone for the Italian
 			transation, Vincent Bernat for the French translation, Marcelo
-			Ramos for the Spanish tranlation, Dominik Form&aacute;nek for
+			Ramos for the Spanish translation, Dominik Form&aacute;nek for
 			the Czech translation and the Debian maintainers Dr.
 			Guenter Bechly and Chanop Silpa-Anan.</para>
 

@@ -30,13 +30,13 @@ XFACE="off"
 # Hier kann der Duplexdruck ein- oder ausgeschaltet
 # werden. Entweder "off" oder "on".
 #
-# Für Postscript-Duplexdrucker auf "printer" setzen
+# Für PostScript-Duplexdrucker auf "printer" setzen
 DUPLEX="off"
 
 #
 # Hier kann der Papiersparmodus (2 Seiten auf 1 Seite)
 # ein- und ausgeschaltet werden.
-# Außerdem kann die Variable auf 'optional' gesetzt werden,
+# Ausserdem kann die Variable auf 'optional' gesetzt werden,
 # um den Papiersparmodus nur bei mehr als einer Seite einzuschalten.
 PAPERSAVE="off"
 
@@ -97,7 +97,7 @@ REM_QUOTE="off"
 
 #
 # Auswahl der gedruckten Header, Trennung mit "_"
-# /Header/ : Kursivdruck
+# /Header/ : Kursivschrift
 # *Header* : Fettdruck
 # Nicht vorhandene Header werden nicht gedruckt
 PRINTED_HEADERS="Date_To_From_CC_Newsgroups_*Subject*"
@@ -111,7 +111,7 @@ DEBUG="0"
 FONTSIZE="10pt"
 
 #
-# Maxmimale Zeilenlänge
+# Maximale Zeilenlänge
 WRAPMARGIN="80"
 
 #

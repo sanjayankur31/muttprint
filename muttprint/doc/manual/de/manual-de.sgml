@@ -47,7 +47,7 @@
 	<para>Irgendwann kam ich dann auf die Idee, selbst ein Skript zu
 		schreiben,  das einen sch&ouml;nen Ausdruck daraus macht. Und das ist
 		das Ergebnis  sieht meiner Meinung nach deutlich besser aus als der
-		reine ASCII-Text  und ist durchaus mit dem Audruck von bekannten
+		reine ASCII-Text  und ist durchaus mit dem Ausdruck von bekannten
 		Mailprogrammen unter Microsoft Windows vergleichbar.</para>
 
 </sect1>
@@ -58,7 +58,7 @@
 		<title>Systemvoraussetzungen</title>
 	
 		<para>Muttprint wurde in der Programmiersprache
-			<emphasis>Perl</emphasis> realisiert,  was einenn funktionierenden
+			<emphasis>Perl</emphasis> realisiert,  was einen funktionierenden
 			Perl-Interpreter der Version 5 auf Ihrem System  voraussetzt. Die
 			sollte standardm&auml;&szlig;ig auf jedem Linuxsystem der  Fall
 			sein. </para>
@@ -70,7 +70,7 @@
 			Ihrem System verf&uuml;gbar sind. Letztere sind nur n&ouml;tig, wenn Sie
 			Duplexdruck und/oder Papiesparmodus nutzen wollen; au&szlig;erdem sind
 			sie nicht n&ouml;tig, wenn Sie CUPS nutzen und Muttprint entsprechend
-			konfiguiert haben, siehe <xref linkend="printcommand">.</para>
+			konfiguriert haben, siehe <xref linkend="printcommand">.</para>
 
 		<para>Wenn Perl 5.6 verwendet wird, muss ein kleines zus&auml;tzliches C-Programm
 			&uuml;bersetzt werden. Es wird ben&ouml;tigt, um Informationen &uuml;ber
@@ -151,14 +151,14 @@
 				Module nachzuinstallieren kann Muttprint auch das externe
 				<Application>iconv</application> (oder sogar <application>
 				recode</application>) verwenden. Dies ist jedoch langsamer und
-				fehleranf&auml;lliger. Setzen Sie zu diesen Zweck die Varable
+				fehleranf&auml;lliger. Setzen Sie zu diesen Zweck die Variable
 				<literal>ICONV_EXTERNAL</literal> auf den Wert <literal>on</literal>,
 				mehr zur Konfigurationsdatei im <xref linkend="configfile">.
 				Dies ist aber wirklich nur als absolute Notl&ouml;sung konzipiert!</para>
 
 			<para>Damit der Unicode-Zeichensatz UTF-8 unterst&uuml;tzt wird
 				muss der LaTeX-Befehl zum Umschalten des Encodings UTF-8
-				unterst&uuml;tzen. Dies ist noramlerweise nicht der Fall!
+				unterst&uuml;tzen. Dies ist normalerweise nicht der Fall!
 				Eine passende Erweiterung finden Sie im CTAN. Laden Sie sich
 				die Datei <ulink 
 					url="ftp://ftp.dante.de/tex-archive/macros/latex/contrib/supported/unicode.tar.gz"></ulink>
@@ -294,7 +294,7 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 			<title>Mutt</title>
 		
 			<para>In der Datei <Filename>$HOME/.muttrc</Filename> oder
-				systemweit  in <Filename>##SYSCONFDIR##/Muttrc</Filename> muss folgende
+				System-weit  in <Filename>##SYSCONFDIR##/Muttrc</Filename> muss folgende
 				Zeile hinzugef&uuml;gt  bzw. ge&auml;ndert werden:</para>
 
 			<ProgramListing>set print_command="muttprint"</ProgramListing>
@@ -497,7 +497,7 @@ set printer_name "muttprint"
 
 		<para>Eine Beispielskonfigurationsdatei
 			(<FileNAme>sample-muttprintrc</FileNAme>) wird  mit dem Skript
-			verteilt. Bei der Installtion der RPM oder Debian-Pakete ist sie 
+			verteilt. Bei der Installation der RPM oder Debian-Pakete ist sie 
 			bei der Dokumentation, also unter 
 			<FileName>##DOCDIR##/muttprint/</FileName>, zu
 			finden.</para>
@@ -564,7 +564,7 @@ set printer_name "muttprint"
 			<title>Pinguin</title>
 			
 			<para>Standardm&auml;&szlig;ig wird oben rechts ein kleiner
-				Pinguin  gedruckt. Soll ein anderes Bild gedrockt werden  oder
+				Pinguin  gedruckt. Soll ein anderes Bild gedruckt werden  oder
 				soll sich der Pinguin bei einer lokalen Installation an einem 
 				anderen Ort befinden, so kann dies &uuml;ber
 				<literal>PENGUIN</literal> konfiguriert werden. Das Bild muss
@@ -649,10 +649,10 @@ set printer_name "muttprint"
 				<literal>DUPLEX</literal> auf <literal>on</literal> gesetzt
 				werden.</para>
 
-			<para>Wenn Sie einen echten Postscript-Drucker besitzen und dieser 
+			<para>Wenn Sie einen echten PostScript-Drucker besitzen und dieser 
 				Duplexf&auml;higkeiten besitzt, sollten Sie
 				<literal>DUPLEX</literal>  auf <literal>printer</literal>
-				setzen. Dadurch wird der Postscriptcode ver&auml;ndert, so dass
+				setzen. Dadurch wird der PostScriptcode ver&auml;ndert, so dass
 				der Drucker angewiesen wird,  die Duplexf&auml;higkeit zu
 				benutzen; bei CUPS wird einfach die entsprechende Option
 				benutzt.</para>
@@ -713,7 +713,7 @@ set printer_name "muttprint"
 				die <emphasis>lmodern</emphasis>-Schriften (auf wenigen Systemen verfügbar).
 			</para>
 
-			<para>An Postscript-Schriften sind noch auch noch
+			<para>An PostScript-Schriften sind noch auch noch
 				<literal>Times</literal>, <literal>Palatino</literal>,
 				<literal>Utopia</literal>, <literal>Charter</literal> 
 				<literal>Bookman</literal>, <literal>CentSchool</literal>
@@ -740,7 +740,7 @@ set printer_name "muttprint"
 			<title>Formatierung des Mailtextes</title>
 
 			<para>Der eigentliche Mailtext wird von Muttprint in Text und Signatur
-				aufgespaltet. Wenn eine Signatur vorhanden ist und sie nicht
+				aufgespalten. Wenn eine Signatur vorhanden ist und sie nicht
 				gel&ouml;scht werden soll (siehe <xref linkend="remsig">),
 				k&ouml;nnen beide Bestandteile getrennt formatiert werden.</para>
 
@@ -967,10 +967,10 @@ set printer_name "muttprint"
 				entfernt.</para>
 
 			<para>Zus&auml;tzlich k&ouml;nnen einzelne Bestandteile durch Fett- oder
-				Kursivdruck hervorgehoben werden. Wird ein Bestandteil in Sternchen
+				Kursivschrift hervorgehoben werden. Wird ein Bestandteil in Sternchen
 				eingeschlossen (<literal>*</literal>), wird der innere Teil fett
 				gedruckt; Schr&auml;gstriche <literal>/</literal> stehen f&uuml;r
-				Kursivdruck; Schachtelung ist m&ouml;glich.</para>
+				Kursivschrift; Schachtelung ist m&ouml;glich.</para>
 
 			<para>Abschlie&szlig;end ein weiteres Beispiel, wie ich meine Mails
 				ausdrucke: <literal>"/%r/ (%a),"</literal>.</para>
@@ -979,7 +979,7 @@ set printer_name "muttprint"
 		<sect3 id="remsig">
 			<title>Signatur abschneiden</title>
 			
-			<para>Oft enth&auml;lt die Sigantur unn&uuml;tze Informationen 
+			<para>Oft enth&auml;lt die Signatur unn&uuml;tze Informationen 
 				oder gar Werbung und soll deshalb nicht ausgedruckt werden. 
 				Muttprint kann die Signatur abschneiden, wenn sie richtig mit
 				<quote><literal>&ndash;&ndash; </literal></quote> abgetrennt
@@ -1000,7 +1000,7 @@ set printer_name "muttprint"
 
 		</sect3>
 		<sect3>
-			<title>Quoting nicht mitdrucken</title>
+			<title>Quoting nicht mit ausdrucken</title>
 			
 			<para>Oft wird nicht sinnvoll<footnote><para>siehe  <ulink
 				url="http://learn.to/quote/"></ulink> f&uuml;r eine Anleitung
@@ -1031,7 +1031,7 @@ set printer_name "muttprint"
 				Gro&szlig;-/Kleinschreibung wird nicht beachtet. In der Mail nicht
 				vorhandene Header werden einfach ignoriert. F&uuml;r Fettdruck
 				schlie&szlig;en Sie den Namen des Headers in Sternchen
-				(<literal>*</literal>), f&uuml;r Kursivdruck in Schr&auml;gstriche
+				(<literal>*</literal>), f&uuml;r Kursivschrift in Schr&auml;gstriche
 				(<literal>/</literal>) ein.</para>
 
 			<para>Die Standardeinstellung lautet:</para>
@@ -1234,7 +1234,7 @@ set printer_name "muttprint"
 		derzeit:</para>
 
 	<para><emphasis role="bold">Problem beim Einlesen der Konfigurationsdatei
-		(RedHat Linux).</emphasis> Aufrund eines Bugs der bei RedHat Linux
+		(RedHat Linux).</emphasis> Aufgrund eines Bugs der bei RedHat Linux
 		9.0 mitgelieferten Perl-Version funktioniert das Einlesen der
 		Konfigurationsdatei in einer UTF-8-Umgebung nicht. Als L&ouml;sung
 		empfiehlt es sich, keine UTF-8-Umgebung zu verwenden
@@ -1313,7 +1313,7 @@ set printer_name "muttprint"
 
 	</sect2>
 	<sect2>
-		<title>Druck von Attachments</title>
+		<title>Druck von Attachements</title>
 		
 		<para>Muttprint kann keine Anh&auml;nge drucken. Um dies zu erreichen,
 			m&uuml;sste Muttprint die rohe MIME-Nachricht einlesen und dekodieren. Dies
@@ -1328,7 +1328,7 @@ set printer_name "muttprint"
 			unterst&uuml;tzen.</para>
 
 		<para>Mutt bietet jedoch selbst eine komfortable Funktion, um einzelne
-			Attachments auszudrucken. F&uuml;r jeden MIME-Typ kann dabei ein eigenes
+			Attachements auszudrucken. F&uuml;r jeden MIME-Typ kann dabei ein eigenes
 			Druckkommando festgelegt werden. Dies kann in der
 			<filename>~/.mailcap</filename> festgelegt werden. N&auml;here
 			Informationen im Mutt-Handbuch, Abschnitt 5.3.3.1.</para>
@@ -1347,10 +1347,10 @@ lpr $target
 
 rm $target</programlisting>
 		
-		<para>Damit kann (fast) jedes Bildformat im Attachmentmen&uuml; ausgedruckt
+		<para>Damit kann (fast) jedes Bildformat im Attachement&uuml; ausgedruckt
 		werden (Taste <keycap>p</keycap>).</para>
 		
-		<para>Benuzter anderer Mailclients lesen bitte die Dokumentation zu ihrem
+		<para>Benutzer anderer Mailclients lesen bitte die Dokumentation zu ihrem
 			Programm &uuml;ber den Druck von Anh&auml;ngen.</para>
 
 	</sect2>

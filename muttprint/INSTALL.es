@@ -48,14 +48,15 @@
 	 "man -Tps muttprint | lpr".
 
    Si algo no funciona como se espera y si has leído toda la 
-	 documentación, escribeme a <Bernhard.Walle@gmx.de>.
+	 documentación, escribeme a <lukas.ruf@lpr.ch>.
 
 
 
 
    Que te diviertas mucho...
 
-   Bernhard Walle
+   Bernhard Walle,
+   Lukas Ruf
    y todos los traductores
 
 ===========================================================================

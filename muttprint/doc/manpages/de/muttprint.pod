@@ -10,15 +10,15 @@ muttprint [I<Optionen>]... [-f I<Datei>]
 
 =head1 BESCHREIBUNG
 
-Diese Manpage enthält eine kurze Beschreibung von B<Muttprint>. Ursprünglich
+Diese Man Page enthält eine kurze Beschreibung von B<Muttprint>. Ursprünglich
 wurde sie für die Debian GNU/Linux-Distribution geschrieben, weil das
-Originalprogramm keine Manpage hatte, nun habe ich die Seite in das POD-Format
+Originalprogramm keine Man Page hatte, nun habe ich die Seite in das POD-Format
 konvertiert.
 
 B<Muttprint> ist ein Hilfsprogramm, das den Ausdruck von Mutt und anderen
 Mailprogrammen wie XFMail oder PINE so konvertiert, dass er wie der Ausdruck
 von Netscape Messenger oder KMail aussieht. Es kann einen kleinen Pinguin auf
-die erste Seite sowie eine Kopfzeile auf jede Seite drucken. Außerdem druckt es
+die erste Seite sowie eine Kopfzeile auf jede Seite drucken. Ausserdem druckt es
 nur die wichtigen Header und nicht alle.
 
 Eine ausfürliche Benutzeranleitung finden Sie in 
@@ -92,7 +92,7 @@ I<XFMail>. Wenn I<Datei> auf I<-> gesetzt ist liest B<Muttprint> von STDIN.
 
 =item B<-p> I<Druckername>B<, --printer> I<Druckername>
 
-Verwendet einen anderen Drucker wie die Vorteinstellung oder wie die
+Verwendet einen anderen Drucker wie die Voreinstellung oder wie die
 Einstellung in der RC-Datei. Sie können auch B<in Datei drucken>, wenn Sie als
 Druckername F<TO_FILE:/Pfad/zu/Datei> eintragen. Wenn Sie den Ausdruck nach
 B<STDOUT> haben möchten, müssen Sie als Druckernamen I<-> angeben.
@@ -132,7 +132,7 @@ ungeraden Seiten warten soll.
 
 =item B<-F> I<Schriftname>B<, --font> I<Schriftname>
 
-Hier können Sie eine schöne Schriftfamlilie für den Ausdruck auswählen. Möglich
+Hier können Sie eine schöne Schriftfamilie für den Ausdruck auswählen. Möglich
 sind: I<Latex>, I<Latex-bright>, I<Latin-Modern>, I<Times>, I<Utopia>,
 I<Palatino>, I<Charter> und I<Bookman>, I<CentSchool>, I<Chancery>,
 I<Helvetica> und I<AvantGarde>. Ob alle Schriften verfügbar sind hängt von
@@ -159,7 +159,7 @@ lesen Sie das Handbuch.
 
 Geben Sie die zu druckenden Header an. Trennen Sie die jeden Header mit
 C<_> ab. Mit I<*> eingeschlossene Header werden fett gedruckt, bei
-I</> erfolgt Kursivdruck. Ist einer der angegebenen Header nicht vorhanden,
+I</> erfolgt Kursivschrift. Ist einer der angegebenen Header nicht vorhanden,
 wird er weggelassen. Die Reihenfolge beim Druck ist dieselbe wie hier
 angegeben.
 
@@ -178,10 +178,10 @@ und I<letter> in den Vereinigten Staaten.
 =item B<-e> I<Zeichenkette>B<, --date> I<Zeichenkette>
 
 Diese Option erlaubt zwei Einstellungen: I<original> und I<local>. Bei
-I<original> wird das Datum unverändert wie im Mailheader gedruckt, d. h. auf English
+I<original> wird das Datum unverändert wie im Mailheader gedruckt, d. h. auf Englisch
 und in der Zeitzone des Absenders. Bei I<local> konvertiert Muttprint
 das Datum und die Uhrzeit in die Systemzeitzone und gibt das Datum in der
-Systemprache aus. Vgl. die Optionen I<--date-format> und I<--lang>.
+Systemsprache aus. Vgl. die Optionen I<--date-format> und I<--lang>.
 
 Beispiele:
 
@@ -191,7 +191,7 @@ Beispiele:
 
 =item B<-E> I<Zeichenkette>B<, --date-format> I<Zeichenkette>
 
-Über diese Option lässt sich das Datumsformat (falls I<local> gewählt
+Über diese Option lässt sich das Datums-format (falls I<local> gewählt
 wurde) genauer definieren. Als Argumente werden Format-Strings
 nach strftime(3) akzeptiert, z. B. 
 	
@@ -211,7 +211,7 @@ ein Formatstring zu übergeben, wobei folgende Ersetzungen vorgenommen werden:
 	\n		Zeilenumbruch
 
 Die Voreinstellung ist I<%r E<lt>%aE<gt>,\n>. Zusätzlich können einzelne Bestandteile
-in Sternchen (C<*>) für Fettdruck oder in Schrägstriche (C</>) für Kursivdruck
+in Sternchen (C<*>) für Fettdruck oder in Schrägstriche (C</>) für Kursivschrift
 eingeschlossen werden.
 
 Beispiel:
@@ -351,7 +351,7 @@ Optionen außer I<-f> anzugeben.)
 
 =item F<##BINDIR##/muttprint>
 
-Das Program B<Muttprint> selbst.
+Das Programm B<Muttprint> selbst.
 
 =item F<##BINDIR##/muttprint-langinfo>
 
@@ -359,7 +359,7 @@ Hilfsprogramm zum Auslesen des Zeichensatzes.
 
 =item F<##SYSCONFDIR##/Muttprintrc>
 
-Systemweite Konfigurationsdatei.
+System-weite Konfigurationsdatei.
 
 
 =item F<~/.muttprintrc>
@@ -411,6 +411,10 @@ BESTIMMTEN ZWECK.
 =head1 AUTOR
 
 Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
+
+=head1 MAINTAINER
+
+Lukas Ruf E<lt>lukas.ruf@lpr.ch<gt>
 
 =cut
 
