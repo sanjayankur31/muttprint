@@ -552,7 +552,7 @@ foreach $type (@headers) {
 				s/\0//g;
 
 				# euro
-				s/¤/$EuroSign/g;
+				s/â‚¬/$EuroSign/g;
 			}
 		}
 
