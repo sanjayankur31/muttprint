@@ -40,12 +40,9 @@ you should set:
 
 	export LANG=de_DE
 
-This can for instance be done in in your local F<~/.bashrc>.
-
-If B<Muttprint> should not print with the message 
-C<lpr: unable to print file: ...>, you should try to use
-another printer than I<lp>, e. g. I<lp5> or I<tp0> (if you
-use TurboPrint).
+This can for instance be done in in your local F<~/.bashrc>. For a more
+detailed information about localization of B<Muttprint> read the
+User's guide.
 
 
 =head1 OPTIONS
@@ -67,6 +64,11 @@ Prints a list of all possible options.
 =item B<-v, --version>
 
 Prints the current version of B<Muttprint>.
+
+
+=item B<--print-locale>
+
+Prints out information about the current locale environment and exits.
 
 
 =item B<-f> I<file>B<, --file> I<file>
@@ -139,10 +141,10 @@ footline or not.
 
 =item B<-S> I<style>B<, --frontstyle> I<style>
 
-Choose a style for the printing of the mailheaders on the first page:
-I<plain>, I<border> (default), I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
-I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailed description
-of this values.
+Choose a style for the printing of the mailheaders on the first page: I<plain>,
+I<border> (default), I<Border>, I<fbox>, I<shadowbox>, I<ovalbox>, I<Ovalbox>,
+I<doublebox>, I<grey>, I<greybox>. Read the manual for a detailed description of
+this values.
 
 =item B<-a> I<headers>B<, --printed-headers> I<headers>
 
@@ -163,39 +165,6 @@ Two examples:
 Choose your paper format: I<A4> in most countries ("DIN A4" in Germany)
 and I<letter> in the U.S.
 
-
-=item B<-l> I<language>B<, --lang> I<language>
-
-Give the short form of your language. Currently are supported: 
-I<de> (German), I<en> (English), I<it> (Italian), I<fr> (French),
-I<es> (Spanish) and I<cs> (Czech).
-Default is the I<LANG> environment, fallback is English.
-
-
-=item B<-c> I<charset>B<, --charset> I<charset>
-
-This option sets the input charset:
-
-	charset		Muttprint option
-	--------------------------------
-	ISO-8859-1      latin1
-	ISO-8859-2      latin2
-	ISO-8859-3      latin3
-	ISO-8859-4      latin4
-	ISO-8859-9      latin5
-	ISO-8859-15     latin9
-	KOI8-R			koi8-r
-	Windows-1252    latin1
-	Windows-1250    latin2
-	UTF-8*          utf8
-	                auto
-	---------------------------------
-
-The I<auto> setting tries to find a mailheader that contains
-the charset of the mail. This works only under specific
-circumstances, so use this carefully.
-
-*only if supported by LaTeX, see the User's guide.
 
 =item B<-e> I<String>B<, --date> I<String>
 
@@ -275,6 +244,15 @@ between normal text and signature.
 
 Choose whether B<Muttprint> writes to a logfile F<##TEMPDIR##/muttprint.log>.
 Useful to ask some other about help if B<Muttprint> doesn't work.
+
+
+=item B<-B, --background> | B<-noB, --nobackground>
+
+After reading from standard input, B<Muttprint> runs in the background.
+The advantage is that the you can use mail client immediately after
+start printing. The disadvantage is that error message could not
+be printed anymore. So use this option only if B<Muttprint> works error-free
+on your system.
 
 
 =item B<-d, --duplex> | B<-nod, --noduplex>
@@ -366,6 +344,16 @@ options despite I<-f> if you use this option.)
 =head1 FILES
 
 =over 7
+
+
+=item F<##BINDIR##/muttprint>
+
+The program B<Muttprint> itself.
+
+=item F<##BINDIR##/muttprint-langinfo>
+
+Helping program for reading the system's default encoding.
+
 
 =item F<##SYSCONFDIR##/Muttprintrc>
 
