@@ -1,19 +1,26 @@
 #!/bin/sh
 
-cd ..
 
 # Version herausfinden
-VERSION=`muttprint -v | head -2 | tail -1 | cut --delimiter=' ' -f 2`
+VERSION=`./muttprint -v | head -2 | tail -1 | cut --delimiter=' ' -f 2`
+
+cd ..
+
+if [ "$VERSION" = "" ]; then
+  echo "version could not be determined"
+  exit 1
+fi
 
 # evtl. Verzeichnis + Dateilöschen
-[ -e muttprint-$VERSION ] && rm -r muttprint-$VERSION/
+[ -e muttprint-$VERSION ] && rm -rf muttprint-$VERSION/
 [ -e muttprint-$VERSION.tar.gz ] && rm muttprint-$VERSION.tar.gz
 
 # Link legen
 ln -s muttprint muttprint-$VERSION
 
 # Tar-gz erzeugen
-tar cvzh --exclude CVS --exclude .cvsignore --exclude *jpg --exclude *png --exclude tags \
+tar cvzh --exclude CVS --exclude .cvsignore --exclude .svn \
+  --exclude *jpg --exclude *png --exclude tags \
 	-f muttprint-$VERSION.tar.gz muttprint-$VERSION
 
 # Link löschen
