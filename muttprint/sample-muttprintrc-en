@@ -12,6 +12,9 @@ PRINTER="lp"
 # Here you can set the print command
 # $PRINTER is substituted by the PRINTER
 # variable
+# CUPS: Either "CUPS" or an arbitrary command which
+# contains $CUPS_OPTIONS which is replaced by the
+# options used for CUPS
 PRINT_COMMAND="lpr -P$PRINTER"
 
 #
@@ -109,7 +112,7 @@ WRAPMARGIN="80"
 
 #
 # Charset
-# latin1, latin2, latin3, latin4, latin5, latin9, auto
+# latin1, latin2, latin3, latin4, latin5, latin9, utf8, auto
 CHARSET="latin1"
 
 #

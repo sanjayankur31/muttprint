@@ -14,6 +14,8 @@ PRINTER="lp"
 # Hier kann das Druckkommando angegeben werden
 # $PRINTER wird automatisch durch die PRINTER-
 # Variable ersetzt
+# CUPS: Entweder "CUPS" oder beliebiges Kommando mit
+# $CUPS_OPTIONS, was dann durch die Optionen ersetzt wird
 PRINT_COMMAND="lpr -P$PRINTER"
 
 #
@@ -111,7 +113,7 @@ WRAPMARGIN="80"
 
 #
 # Zeichensatz
-# latin1, latin2, latin3, latin4, latin5, latin9, auto
+# latin1, latin2, latin3, latin4, latin5, latin9, utf8, auto
 CHARSET="latin1"
 
 #
