@@ -351,9 +351,9 @@ foreach (split (/_/, $Config{'PRINTED_HEADERS'})) {
 	#
 	# wenn die Header nicht ausgelesen werden können: so drucken!		
 	unless ($Header{'From'} || $Header{'To'} || $Header{'Subject'}) { 
-	
-		open (PRINTER, "| lpr -P$Config{'PRINTER'}") 
-			|| die "unable to print with lpr: $!";
+        
+		open (PRINTER, "| $Config{PRINT_COMMAND}") 
+        || die "unable to print with $Config {PRINT_COMMAND}: $!";
 		print PRINTER @KompletteMail;
 		close PRINTER;
 		exit;
