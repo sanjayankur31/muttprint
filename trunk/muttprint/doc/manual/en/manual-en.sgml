@@ -185,14 +185,14 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 				signatures in  <ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum
 				RPM</ULink>.</para>
 
-			<para>The Debian packages are created by Chanop Silpa-Anan 
-				<email>chanop@debian.org</email> and are normally available
+			<para>The Debian packages are created by Ren&eacute; Engelhard 
+				<email>rene@debian.org</email> and are normally available
 				a few days after a new release of Muttprint. The could be
 				installed by</para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>dpkg -i muttprint_[version]-[release]_noarch.deb</UserInput>
+				<UserInput>dpkg -i muttprint_[version]-[release]_all.deb</UserInput>
 			</para>
 			
 			<para>Take a look at the <ulink
@@ -659,7 +659,7 @@ set printer_name "muttprint"
 				(only integers are allowed). Default is 30&nbsp;seconds 
 				(<literal>SPEED=30</literal>).</para>
 		</sect3>
-		<sect3>
+		<sect3 id="font">
 			<title>Font</title>
 			
 			<para>You could use different fonts for the printing. The
@@ -1069,6 +1069,11 @@ set printer_name "muttprint"
 								symbol</entry>
 						</row>
 						<row>
+							<entry>KOI8-R</entry>
+							<entry><literal>koi8-r</literal></entry>
+							<entry>Languages with cyrillic characters such as Russian</entry>
+						</row>
+						<row>
 							<entry>Windows-1252</entry>
 							<entry><literal>latin1</literal></entry>
 							<entry>Latin-1 with some enhancements</entry>
@@ -1117,6 +1122,13 @@ set printer_name "muttprint"
 				place 128 (decimal) because of the wide spread of Windows -- partial
 				declared as ISO-8859-1. Muttprint prints this mails correctly, if the
 				mailclient doesn't change something.</para>
+
+			<para>Since version 0.65 Muttprint supports printing of mails with
+				cyrillic characters. In this case the charset is <literal>koi8-r</literal>.
+				Please recognize that this does not work with all LaTeX systems;
+				I recommend teTeX in version <emphasis>2.0</emphasis> or higher.
+				Morover not all fonts contain the needed characters -- please
+				use the LaTeX standard fonts, see also <xref linkend="font">.</para>
 
 			<para>You find a full overview about the ISO-8859-* charsets
 				on <ulink	url="http://czyborra.com/charsets/iso8859.html"></ulink>.

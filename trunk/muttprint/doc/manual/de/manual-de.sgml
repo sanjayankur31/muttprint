@@ -200,14 +200,14 @@ muttprint-<replaceable>Version</replaceable>-<replaceable>Release</replaceable>.
 				<ULink url="http://www.rpm.org/maximum-rpm.ps.gz">Maximum RPM</ULink>.
 			</para>
 			
-			<para>Die Debian-Pakete werden von Chanop Silpa-Anan 
-				<email>chanop@debian.org</email> erstellt und sind meist wenige Tage 
+			<para>Die Debian-Pakete werden von Ren&eacute; Engelhard
+				<email>rene@debian.org</email> erstellt und sind meist wenige Tage 
 				nach Erscheinen einer neuen Version von Muttprint verf&uuml;gbar. 
 				Die Installation erfolgt mit:</para>
 				
 			<para>
 				<prompt>#  </prompt>
-				<UserInput>dpkg -i muttprint_[version]-[release]_noarch.deb</UserInput>
+				<UserInput>dpkg -i muttprint_[version]-[release]_all.deb</UserInput>
 			</para>
 			
 			<para>Weitere Informationen zu Debian-Paketen in der
@@ -631,7 +631,7 @@ set printer_name "muttprint"
 				<literal>SPEED="30"</literal>.</para>
 		</sect3>
 
-		<sect3>
+		<sect3 id="font">
 			<title>Schriftart</title>
 			
 			<para>Der Ausdruck kann mit verschiedenen Schriften erfolgen.  Dazu
@@ -1144,6 +1144,12 @@ set printer_name "muttprint"
 								das Eurosymbol</entry>
 						</row>
 						<row>
+							<entry>KOI8-R</entry>
+							<entry><literal>koi8-r</literal></entry>
+							<entry>Sprachen mit kyrillisch Schriftzeichen
+								(z. B. Russisch)</entry>
+						</row>
+						<row>
 							<entry>Windows-1252</entry>
 							<entry><literal>latin1</literal></entry>
 							<entry>Latin-1 mit einigen Erweiterungen, u.&nbsp;a.
@@ -1202,6 +1208,15 @@ set printer_name "muttprint"
 				auftauchen -- z.&nbsp;T. f&auml;lschlicherweise als ISO-8859-1
 				deklariert.  Muttprint druckt die Mail trotzdem korrekt, vorausgesetzt
 				der Mailclient &uuml;bergibt die Mail unver&auml;ndert.</para>
+
+			<para>Seit Version 0.65 unterstützt Muttprint auch den Druck von
+				Mails mit kyrillischen Schriftzeichen -- in diesem Fall lautet der
+				Zeichensatz <literal>koi8-r</literal>. Bitte beachten Sie dass dies
+				nicht mit allen LaTeX-Systemen funktioniert, empfohlen wird teTeX
+				ab Version <emphasis>2.0</emphasis>. Au&szlig;erdem d&uuml;rften nur
+				die wenigsten Schriften die ben&ouml;tigten Zeichen enthalten --
+				bitte verwenden Sie in diesem Fall die LaTeX-Standardschriften,
+				siehe auch <xref linkend="font">.</para>
 
 			<para>Eine vollst&auml;ndige &Uuml;bersicht &uuml;ber die
 				Zeichens&auml;tze aus der ISO-8859-Familie mit Zeichentabellen finden
