@@ -32,8 +32,8 @@ INSTALLDIR = install -d
 
 #
 # we will not make 'all' but only the 'standard' by default
-default: pdf html
-all: ps dvi pdf html txt rtf
+default: pdf html sed-clean
+all: ps dvi pdf html txt rtf sed-clean
 ps: manual-$(lang).ps
 pdf: manual-$(lang).pdf
 dvi: manual-$(lang).dvi
@@ -85,5 +85,8 @@ install: *.pdf manual-$(lang)/*
 gzip:
 	$(gzip) *.ps *.txt
 	
+sed-clean:
+	rm -rf *sed*
+
 clean:
 	rm -rf *.dvi *.rtf *.pdf *.ps *.txt *.gz manual-$(lang)/ *sed*
