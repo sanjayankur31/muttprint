@@ -659,7 +659,7 @@ set printer_name "muttprint"
       <para>Ecco un altro esempio di stringa di formattazione (è l'unica che
         uso): <literal>"/%r/ (%a),"</literal>.</para>
 
-    </sect3
+		</sect3>
 
 		
 		<sect3 id="speed">
@@ -808,7 +808,7 @@ set printer_name "muttprint"
 				prima pagina. Ecco la lista delle possibilità:</para>
 			
 			<informaltable frame="topbot">
-				<tgroup cols=2 align=left>
+				<tgroup cols="2" align="left">
 				<colspec colnum="1" colwidth="1.5in"> 
 				<thead>
 				<row>
@@ -1050,7 +1050,7 @@ stampato.
         breve panoramica:</para>
 
       <informaltable frame="topbot">
-        <tgroup cols=3 align=left>
+        <tgroup cols="3" align="left">
         <colspec colnum="1" colwidth="1in">
         <colspec colnum="2" colwidth="0.8in">
           <thead>

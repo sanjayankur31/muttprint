@@ -847,7 +847,7 @@ set printer_name "muttprint"
 				on the first page. Here is a listing of them:</para>
 			
 			<informaltable frame="topbot">
-				<tgroup cols=2 align=left>
+				<tgroup cols="2" align="left">
 				<colspec colnum="1" colwidth="1.5in"> 
 				<thead>
 				<row>

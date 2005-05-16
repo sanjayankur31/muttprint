@@ -830,7 +830,7 @@ set printer_name "muttprint"
 				der M&ouml;glichkeiten:</para>
 			
 			<informaltable frame="topbot">
-				<tgroup cols=2 align=left>
+				<tgroup cols="2" align="left">
 				<colspec colnum="1" colwidth="1.5in"> 
 				<thead>
 				<row>
