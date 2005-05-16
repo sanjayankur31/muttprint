@@ -18,6 +18,8 @@ gzip = gzip -f
 rm = rm
 
 
+.phony: all install uninstall clean
+
 all: muttprint-langinfo
 
 muttprint-langinfo: main.o muttprint-langinfo.o muttprint-langinfo.h

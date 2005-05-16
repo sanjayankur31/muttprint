@@ -7,6 +7,7 @@ INSTALL = install -m 0644
 INSTALLDIR = install -d 
 MAKE = make
 
+.phony: default all install clean
 default: 
 	$(MAKE) -C de
 	$(MAKE) -C es
