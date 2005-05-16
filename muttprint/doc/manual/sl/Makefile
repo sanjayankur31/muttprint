@@ -86,6 +86,7 @@ validate:
 # Vielleicht werde ich das Problem in Zukunft loesen,
 # alte Zeile war:
 ##install: manual-$(lang).pdf manual-$(lang)/muttprint.html
+.phony: install clean
 install: 
 	$(INSTALL) *.pdf $(docdir)/$(docdirname)
 	mkdir -p $(docdir)/$(docdirname)/manual-$(lang)

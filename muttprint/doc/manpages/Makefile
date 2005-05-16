@@ -103,6 +103,7 @@ it/muttprint.1.gz: it/muttprint
 # explation
 ##install: de/muttprint.1.gz en/muttprint.1.gz es/muttprint.1.gz \
 ## 			it/muttprint.1.gz 
+.phony: install uninstall clean
 install:
 	$(INSTALL) en/muttprint.1.gz $(mandir)/man1/
 	$(INSTALL) de/muttprint.1.gz $(mandir)/de/man1/

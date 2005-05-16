@@ -38,9 +38,11 @@ INSTALLBIN = $(install) -m 0755
 INSTALL = $(install) -m 0644 
 
 
+.phony: all
 all:
 	$(MAKE) -C langinfo 
 
+.phony: install
 install: 
 	mkdir -p $(docdir)/$(docdirname) $(bindir) $(sharedir)/muttprint/translations \
 		$(mandir)/man1 $(mandir)/de/man1 $(mandir)/es/man1 \
@@ -55,6 +57,7 @@ install:
 	$(MAKE) -C doc/manpages mandir=$(mandir) install
 
 
+.phony: uninstall
 uninstall:
 	rm $(bindir)/muttprint*
 	rm -r $(sharedir)/muttprint/
@@ -63,12 +66,15 @@ uninstall:
 	rm $(mandir)/es/man1/muttprint*
 	rm -r $(docdir)/$(docdirname)
 
+.phony: muttprint
 tags: muttprint
 	pltags.pl muttprint
 
+.phony: muttprint
 validate: muttprint
 	perl -c muttprint
 
+.phony: clean
 clean:
 	$(MAKE) -C langinfo clean
 
