@@ -255,24 +255,6 @@ if ($print[0]) {
 	exit 1;
 }
 
-if ($Config{MAINT_SEARCH} eq 'on') {
-	
-	open RCFILE, ">>$ENV{HOME}/.muttprintrc" 
-		or fatalError( "Could not open \$HOME/.muttprintrc for writing\n");
-    print RCFILE "\nMAINT_SEARCH=\"off\"\n";
-	close RCFILE;
-
-    printWarning( "Dear Muttprint user,\n\n"
-		       ."Muttprint is looking for a new maintainer. "
-			   ."If you want to takeover Muttprint developement, "
-			   ."contact\n\n"
-			   ."      lukas.ruf\@lpr.ch\n\n"
-			   ."Thanks!\n\n"
-			   ."This message is disabled automatically.\n"
-		   );
-	
-}
-
 # default settings 
 # we need to set this here because we want that configuration file
 # options overwrite language file options but we need to read the
