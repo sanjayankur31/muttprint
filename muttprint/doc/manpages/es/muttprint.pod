@@ -393,7 +393,7 @@ Bernhard Walle E<lt>Bernhard.Walle@gmx.deE<gt>
 
 =head1 MAINTAINER
 
-Lukas Ruf E<lt>lukas.ruf@lpr.ch<gt>
+Lukas Ruf E<lt>lukas.ruf@lpr.chE<gt>
 
 =cut
 
