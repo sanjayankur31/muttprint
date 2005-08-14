@@ -1,6 +1,15 @@
 CHANGES
 =======================================================================
 
+0.73    - 2005-08-14:1521 - Fernando Pereda, Lukas Ruf
+          - added CREDITS
+          - applied patch by Fernando to implement REM_SIG handling:
+            Configuration setting of REM_SIG now enables or
+            disables printing of a signature and subsequent
+            attachements.  This means:
+            If REM_SIG is on and SIG_REGEXP is found, the
+            printing of the remainder of the email is skipped.
+
 0.72d   - 2005-03-04:2011 - Lukas Ruf <lukas.ruf@lpr.ch>
           New Maintainer
 
