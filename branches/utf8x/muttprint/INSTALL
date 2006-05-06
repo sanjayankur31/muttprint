@@ -1,0 +1,60 @@
+===========================================================================
+
+               M U T T P R I N T - I N S T A L L A T I O N
+
+===========================================================================
+
+
+1. Installation
+   ------------
+   
+   To install Muttprint on your system, adjust the locations in the
+   Makefile. 
+
+   The default settings should be OK. (Installation to /usr/local)
+
+   Run "make" to build the small C program ("muttprint-langinfo"). You
+   need this only if your Perl version is less than 5.8.x.  If you have no C
+   compiler and you run Linux then you can skip this step, too.
+
+   Now run "make install" to install the files on your system. Please
+   recognize that you must run this as 'root' if you would like to
+   install Muttprint global on your system.
+
+   If you don't want to change the Makefile, you should run "make
+   prefix=/new/path docdir=/path/for/documentation install" as done by
+   creation of RPM packages. Set /new/path and /path/for/documentation to 
+   your preferred directory.
+
+
+2. Uninstallation
+   --------------
+
+   To uninstall, run "make uninstall" or "make prefix=/new/path
+   docdir=/path/for/documentation uninstall" if you had specified any prefix 
+   in the installation.
+
+
+3. Further Information
+   -------------------
+
+   Just look to doc/manual in the sourcedir or in the specified 'docdir'
+   (default: /usr/share/doc/packages) after installation.
+
+   Muttprint has manpages, too. Run "man muttprint" or use another
+   manpage browser (e. g. Konqueror: "#muttprint") to read it. For
+   printing the manpage, use "man -Tps muttprint | lpr".
+
+   If anything doesn't work as expected and if you read all
+   documetation, write to me <lukas.ruf@lpr.ch>.
+
+
+
+
+   Have a lot of fun ...
+
+   Bernhard Walle,
+   Lukas Ruf
+   and all translators
+
+===========================================================================
