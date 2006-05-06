@@ -24,7 +24,7 @@ Además, sólo imprime las cabeceras más importantes, pero no toda la
 plétora de ellas.
 
 Por intrucciones de como usar B<Muttprint> consulta 
-F<##DOCDIR##/muttprint/muttprint-doc-es.html>.
+F<##DOCDIR##/muttprint-doc-es.html>.
 
 De todos modos, tienes que colocar la siguiente línea en tu
 F<##SYSCONFDIR##/Muttrc> o F<~/.muttrc>:
@@ -33,7 +33,7 @@ F<##SYSCONFDIR##/Muttrc> o F<~/.muttrc>:
 
 Si quieres personalizar la configuración de B<Muttprint>, simplemente
 copia 
-F<##DOCDIR##/muttprint/sample-muttprintrc-es>
+F<##DOCDIR##/sample-muttprintrc-es>
 a F<##SYSCONFDIR##/Muttprintrc> o F<~/.muttprintrc> con confianza si quieres
 cambiar la configuración de todo el sistema o de un usuario.
 
@@ -352,7 +352,7 @@ Archivo de configuración del usuario.
 Archivos temporales creados por B<Muttprint>.
 
 
-=item F<##DOCDIR##/muttprint/>
+=item F<##DOCDIR##/>
 
 Manuales de B<Muttprint> en diferentes idiomas y formatos.
 

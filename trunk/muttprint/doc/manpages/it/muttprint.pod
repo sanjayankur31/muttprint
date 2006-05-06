@@ -32,7 +32,7 @@ F</etc/Muttrc> o F<~/.muttrc>:
 	set print_command="muttprint"
 
 Se vuoi personalizzare le impostazioni di B<Muttprint>, copia
-semplicemente F<##DOCDIR##/packages/muttprint/sample-muttprintrc>
+semplicemente F<##DOCDIR##/sample-muttprintrc>
 in F<##SYSCONFDIR##/Muttprintrc> o in F<~/.muttprintrc> se vuoi cambiare le
 impostazioni solamente per un utente.
 
@@ -373,7 +373,7 @@ File di configurazione per il singolo utente.
 Files temporanei creati da B<Muttprint>.
 
 
-=item F<##DOCDIR##/muttprint/>
+=item F<##DOCDIR##/>
 
 Manuali di B<Muttprint> in diversi formati e lingue.
 
