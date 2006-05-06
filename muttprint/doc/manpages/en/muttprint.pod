@@ -22,7 +22,7 @@ page. Furthermore, it only prints the most important headers, but not the
 whole plethora of them.
 
 For detailed information about Muttprint look read the User's guide in PDF 
-and HTML format at F<##DOCDIR##/muttprint/>.
+and HTML format at F<##DOCDIR##/>.
 
 Anyway, you have to put the following line in your F<##SYSCONFDIR##/Muttrc> or 
 F<~/.muttrc>:
@@ -30,7 +30,7 @@ F<~/.muttrc>:
 	set print_command="muttprint"
 
 If you want to customize the settings of B<Muttprint>, just copy
-F<##DOCDIR##/muttprint/sample-muttprintrc-en>
+F<##DOCDIR##/sample-muttprintrc-en>
 to F<##SYSCONFDIR##/Muttprintrc> or F<~/.muttprintrc> in reliance
 if you want change the settings for the whole system or one user.
 
@@ -370,7 +370,7 @@ User configuration file.
 Temporary files created by B<Muttprint>.
 
 
-=item F<##DOCDIR##/muttprint/>
+=item F<##DOCDIR##/>
 
 B<Muttprint> manual files in different languages and formats.
 

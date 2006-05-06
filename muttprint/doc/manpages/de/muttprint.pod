@@ -22,7 +22,7 @@ die erste Seite sowie eine Kopfzeile auf jede Seite drucken. Ausserdem druckt es
 nur die wichtigen Header und nicht alle.
 
 Eine ausfürliche Benutzeranleitung finden Sie in 
-F<##DOCDIR##/muttprint/> im PDF- und HTML-Format.
+F<##DOCDIR##/> im PDF- und HTML-Format.
 
 Wie auch immer, Sie müssen folgende Zeile in Ihre F<##SYSCONFDIR##/Muttrc> oder
 F<~/.muttrc> eintragen:
@@ -30,7 +30,7 @@ F<~/.muttrc> eintragen:
 	set print_command="muttprint"
 
 Wenn Sie die Einstellungen von B<Muttprint> anpassen wollen, kopieren Sie
-einfach F<##DOCDIR##/muttprint/sample-muttprintrc-de> nach
+einfach F<##DOCDIR##/sample-muttprintrc-de> nach
 F<##SYSCONFDIR##/Muttprintrc> oder F<~/.muttprintrc> in Abhängigkeit davon, ob Sie die
 Einstellungen für das ganze System oder nur für einen Benutzer ändern möchten.
 
@@ -372,7 +372,7 @@ Konfigurationsdatei für den jeweiligen Benutzer.
 Temporäre Datei, die von B<Muttprint> erstellt wurde.
 
 
-=item F<##DOCDIR##/muttprint/>
+=item F<##DOCDIR##/>
 
 Dokumentation in verschiedenen Sprachen und Formaten.
 
