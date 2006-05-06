@@ -1,0 +1,16 @@
+For translators:
+
+If you want to translate Muttprint just take the translation-example.pl file, 
+rename it to translation-XX.pl where XX is you language code according to 
+ISO 639-1 and translate. Save the file in UTF-8 encoding (that's important). If 
+your text editor hasn't this feature built-in, save it in any encoding and use
+
+$ recode iso-8859-1..utf-8 translation-XX.pl
+
+where iso-8859-1 is your native encoding. If you are unsure, you can use
+the command "locale charmap" on Linux (or "muttprint-langinfo -c" if you
+have installed Muttprint already) to find out the charset of your current
+locale environment.
+
+Thanks for tranlating, the users will thank you!
+
