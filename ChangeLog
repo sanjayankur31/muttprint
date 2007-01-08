@@ -1,3 +1,41 @@
+2007-01-08 Amarendra Godbole
+	* fix removal of tempdir()'d print-files
+	Problem Description
+	1. muttprint never printed back-to-back on my printer,
+	and always gave an error at line 819 of the script
+	(function printDuplexCups()).
+	2. On checking this function, the logic tells that the
+	child prints odd pages, while the parent prints even
+	pages. This .ps email is put under /tmp/muttprint-XXXXXX
+	directory, which was removed by tempdir(), even before
+	the parent gets the chance to print the even pages. Hence
+	the error.
+	
+	This behavior can be tuned by the the SPEED variable,
+	which is set to 30 (seconds) by default. This is highly
+	unpredictable, as networks can get very slow at times -
+	this is what I experienced here. Tweaking the code,
+	I found out that there is no need to fork at all
+	(unless there is a good reason for the parent-child
+	processes printing the odd-even pages). This also does
+	not ensure the printing would happen on the same page -
+	we could not print back-to-back.
+	
+	To fix this, the fork() and the sleep() [in parent] have been removed
+	from printDuplexCups(). This has been tested at my end, and works
+	perfectly fine. Similar thing can be done in the other function
+	printDuplexNoCups(), but I haven't tested it.
+	
+
+2005-08-14 Fernando Pereda, Lukas Ruf
+	* added CREDITS
+	* applied patch by Fernando to implement REM_SIG handling:
+	Configuration setting of REM_SIG now enables or
+	disables printing of a signature and subsequent
+	attachements.  This means:
+	If REM_SIG is on and SIG_REGEXP is found, the
+	printing of the remainder of the email is skipped.
+
 2006-02-05  Magnus Therning <magnus@therning.org>
 
 	* Many files: autoconfiscation
