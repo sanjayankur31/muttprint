@@ -7,7 +7,7 @@
 #                                                                      #
 #    Muttprint - pretty printing of mails with Mutt                    #
 #    Copyright (c) 2000-04, Bernhard Walle <bernhard.walle@gmx.de>     #
-#    Copyright (c) 2005,    Lukas Ruf <lukas.ruf@lpr.ch>               #
+#    Copyright (c) 2005-07  Lukas Ruf <lukas.ruf@lpr.ch>               #
 #                                                                      #
 #    This program is free software; you can redistribute it and/or     #
 #    modify it under the terms of the GNU General Public License as    #
@@ -70,7 +70,7 @@ sub getShortFrom($$);
 sub getNumberOfPages ($);
 sub copyFile ($$);
 sub printDuplexNoCups ($$$$);
-sub printDuplexCups ($$$);
+sub printDuplexCups ($$);
 sub modifyPS ($);
 sub createTemp ();
 sub setStrings ();
@@ -724,7 +724,7 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 		$sleepTime = $Config{SPEED} * $numberOfPages + $Config{WAIT};
 
 		if ($useCups) {
-			printDuplexCups($Config{PRINT_COMMAND}, $Temp{ps}, $sleepTime);
+			printDuplexCups($Config{PRINT_COMMAND}, $Temp{ps});
 		} else {
 			printDuplexNoCups($Config{PRINT_COMMAND}, $Temp{ps1}, $Temp{ps2}, $sleepTime);
 		}
@@ -758,25 +758,14 @@ sub printDuplexNoCups ($$$$) {
 
 ##############################################################################
 
-sub printDuplexCups ($$$) {
+sub printDuplexCups ($$) {
 
 	my $printCommand = shift;
 	my $file = shift;
-	my $timeBetween = shift;
 
-	if (!defined($childPid = fork())) {
-		fatalError "Couldn't fork:\n$!";
-	} elsif ($childPid) {
-		$printCommand =~ s/oddeven/odd/;
-		system ("cat $file | $printCommand >> $errorRedirection 2>&1")
-			and fatalError "Error while running lpr: $!";
-	} else {
-		$printCommand =~ s/oddeven/even/;
-		sleep ($timeBetween);
-		system ("cat $file | $printCommand >> $errorRedirection 2>&1")
-			and fatalError "Error while running lpr: $!";
-		exit;
-	}
+	system ("cat $file | $printCommand >> $errorRedirection 2>&1")
+		and fatalError "Error while running lpr: $!";
+	exit;
 }
 
 ##############################################################################
