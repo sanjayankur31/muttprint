@@ -5,3 +5,10 @@ Maintainer:   Lukas Ruf, <lukas.ruf@lpr.ch>, <http://www.lpr.ch>
 
 2005-08-14 :  Fernando J. Pereda, added and documented by Lukas Ruf
   - fix signature printing in muttprint
+
+2008-11-27 :  Lukas Ruf
+  Applied patch by Martin F Krafft to expand ~.
+  - closes Debian Bug #480853
+  - please test
+  Check to see whether temporary logfile is defined before opening
+
