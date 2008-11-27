@@ -1,3 +1,9 @@
+2008-11-27 Lukas Ruf 	<lukas.ruf@lpr.ch>
+
+	* Applied patch by Martin F Krafft to expand ~.
+	*  - closes Debian Bug #480853
+	* Check to see whether temporary logfile is defined before opening
+
 2006-02-05  Magnus Therning <magnus@therning.org>
 
 	* Many files: autoconfiscation

@@ -949,7 +949,7 @@ sub getPaperConfig () {
 			/iso[_\-]8859[_\-]9/i		&& return "latin5";
 			/(cp|windows)[_\-]?1252/i	&& return "latin1";
 			/(cp|windows)[_\-]?1250/i	&& return "latin2";
-			/utf[-_]8/i					&& return "utf8";
+			/utf[-_]8/i					&& return "utf8x";
 			/koi8[-_]r/i				&& return "koi8-r";
 			/us[-_]ascii/i				&& return "latin1";
 
@@ -1621,7 +1621,9 @@ sub writeFormated ($*$) {
 
 sub copyFile ($$) {
 	my $src = shift;
+	$src = glob($src);
 	my $dst = shift;
+	$dst = glob($dst);
 
 	open (SRC, "<$src") or fatalError "Could not open $src for reading:\n$!";
 	open (DST, ">$dst") or fatalError "Could not open $dst for writing:\n$!";
@@ -1705,10 +1707,13 @@ EOF
 ##############################################################################
 
 sub printLog ($) {
-	my $string = shift;
-	open (LFILE, ">>$Temp{logf}") or die "Could not open $Temp{logf}";
-	print LFILE $string;
-	close LFILE or die "Could not close $Temp{logf}";
+    my $string = shift;
+    ## 2008-11-27 according to perldoc, open .... '>>' append or create 
+    ##            a file for writing -- check if the logfile is defined.
+		die "logfile not correctly defined" if (not defined($Temp{logf}));
+    open (LFILE, ">>$Temp{logf}") or die "Could not open or create $Temp{logf}";
+    print LFILE $string;
+    close LFILE or die "Could not close $Temp{logf}";
 }
 
 sub fatalError ($) {
@@ -1795,7 +1800,7 @@ sub printWarning ($) {
 	sub convert_init () {
 		
 		$charset = getLocaleInformation(CHARSET);
-		if ($charset =~ /utf[-_]8/) {
+		if ($charset =~ /utf[-_]8/i) {
 			$needs_conversion = FALSE;
 			return;
 		} else {
@@ -2137,4 +2142,4 @@ $Config{'NEWSGROUPS_STRING'} = $Config{'NEWSGROUP_STRING'}
 __END__
 
 #######################################################################################
-# vim:sw=4 ts=4
+# vim:sw=2 ts=2 noet
