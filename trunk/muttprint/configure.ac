@@ -1,4 +1,4 @@
-AC_INIT(muttprint, 0.72d, bugs@muttprint.org)
+AC_INIT(muttprint, 0.73, bugs@muttprint.org)
 AM_INIT_AUTOMAKE
 
 dnl Information on the package
