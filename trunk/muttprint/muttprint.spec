@@ -5,7 +5,7 @@
 #
 # Tab =^= 8 characters
 
-%define			version		0.73-rc0
+%define			version		0.73
 
 Summary: 		pretty printing of mails with Mutt
 Summary(de):		schöner Ausdruck von Mails mit Mutt
@@ -100,6 +100,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Dec 25 2008 Lukas Ruf <lukas.ruf@lpr.ch>
+- Release version 0.73, see Changelog
 * Fri Mar 04 2005 Lukas Ruf <lukas.ruf@lpr.ch>
 - Set current Maintainer with bug reports 
 * Mon Apr 05 2004 Bernhard Walle <bernhard.walle@gmx.de>
