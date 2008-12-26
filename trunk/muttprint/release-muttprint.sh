@@ -21,6 +21,7 @@ ln -s muttprint muttprint-$VERSION
 # Tar-gz erzeugen
 tar cvzh --exclude CVS --exclude .cvsignore --exclude .svn \
   --exclude *jpg --exclude *png --exclude tags \
+  --exclude *.swp --exclude release-muttprint.sh \
 	-f muttprint-$VERSION.tar.gz muttprint-$VERSION
 
 # Link löschen

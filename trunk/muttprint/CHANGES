@@ -1,7 +1,13 @@
 CHANGES
 =======================================================================
 
-0.73    - 2005-08-14:1521 - Fernando Pereda, Lukas Ruf
+0.73    - 2008-12-25 - Lukas Ruf et al.
+          - Magnus Therning: autoconfiscation
+          - Michel Kjorling: utf8x 
+          - Martin F Krafft: close Debian Bug #480853 (expand ~)
+          - Lukas Ruf: close CVE-2008-5368 (symlink attack vulnerability)
+
+0.72e   - 2005-08-14:1521 - Fernando Pereda, Lukas Ruf
           - added CREDITS
           - applied patch by Fernando to implement REM_SIG handling:
             Configuration setting of REM_SIG now enables or
@@ -9,6 +15,7 @@ CHANGES
             attachements.  This means:
             If REM_SIG is on and SIG_REGEXP is found, the
             printing of the remainder of the email is skipped.
+          - never released publicy
 
 0.72d   - 2005-03-04:2011 - Lukas Ruf <lukas.ruf@lpr.ch>
           New Maintainer
@@ -223,4 +230,4 @@ CHANGES
 0.10    - First release
 
 _______________
-vim:ts=8 et
+vim:ts=8 et sw=8
