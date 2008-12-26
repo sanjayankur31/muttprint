@@ -1,7 +1,7 @@
 CHANGES
 =======================================================================
 
-0.73    - 2008-12-25 - Lukas Ruf et al.
+0.73    - 2008-12-26 - Lukas Ruf et al.
           - Magnus Therning: autoconfiscation
           - Michel Kjorling: utf8x 
           - Martin F Krafft: close Debian Bug #480853 (expand ~)
