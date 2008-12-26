@@ -1,6 +1,7 @@
-2008-12-24 Lukas Ruf 	<lukas.ruf@lpr.ch>
+2008-12-26 Lukas Ruf 	<lukas.ruf@lpr.ch>
 
-	* Verify logfile-handling to avoid symlink attacks
+	* Verify logfile-handling to avoid symlink attacks 
+	  (close CVE-2008-5368)
 	* create release 0.73
 
 2008-11-27 Lukas Ruf 	<lukas.ruf@lpr.ch>
