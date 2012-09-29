@@ -1,0 +1,34 @@
+2008-12-26 Lukas Ruf 	<lukas.ruf@lpr.ch>
+
+	* Verify logfile-handling to avoid symlink attacks 
+	  (close CVE-2008-5368)
+	* create release 0.73
+
+2008-11-27 Lukas Ruf 	<lukas.ruf@lpr.ch>
+
+	* Applied patch by Martin F Krafft to expand ~.
+	*  - closes Debian Bug #480853
+	* Verify existence of logfile
+
+2006-04-27  Michel Kjorling <michael@kjorling.com>
+	* UTF-8 encoding fixups:
+
+	"I was having some trouble getting Muttprint to work on
+	my system, which uses UTF-8 throughout. Apparently,
+	LaTeX refers to UTF-8 as "utf8x" instead of "utf8"
+	which is used in the code (specifically, on line 970
+	in the main program file). I'm attaching a patch for
+	this against the 0.72d release; you may want to, if not
+	include this in the mainstream code, at least mention
+	it in the readme or installation instructions to save
+	others the frustration."
+
+
+2006-02-05  Magnus Therning <magnus@therning.org>
+
+	* Many files: autoconfiscation
+
+2005-08-14 :  Fernando J. Pewreda
+
+	* Fix signature printing in muttprint
+
