@@ -1,3 +1,8 @@
+2012-09-29 Lukas Ruf 	<lukas.ruf@lpr.ch>
+
+	* Close #3511377 (auto remove temp dir)
+	* Change temp-dir mask from 'muttprint-XXXXXX' to 'muttprint_XXXXXX'
+
 2008-12-26 Lukas Ruf 	<lukas.ruf@lpr.ch>
 
 	* Verify logfile-handling to avoid symlink attacks 

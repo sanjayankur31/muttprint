@@ -7,7 +7,7 @@
 #* Author: Lukas Ruf <lukas.ruf@consecom.com>
 #*
 #* Create: long-time-ago by Bernhard Walle
-#* Modify: 2008-12-24:1621
+#* Modify: 2012-09-29:1028
 #* Commit: $Id$
 #*
 
@@ -740,6 +740,9 @@ if ($Config{'PRINTER'} =~ /^(TO_FILE|file):[^-]+/i) {
 	}
 }
 
+# 2012-09-29 : Change to root to enable the auto removal of the temp-dir
+chdir("/");
+
 ################################### ENDE ####################################
 
 
@@ -1153,7 +1156,8 @@ sub createTemp ()
 		if (!$is_owner || !$is_regfile)
 		{ ## create a temporary logfile ##
 			my $logfh = 0;
-			($logfh, $logf) = tempfile("muttprint-XXXXXX", UNLINK => 0, SUFFIX => ".log");
+			# 2012-09-29 : Change mask of tempfile
+			($logfh, $logf) = tempfile("muttprint_XXXXXX", UNLINK => 0, SUFFIX => ".log");
 
 			my $logd = File::Spec->tmpdir();
 			$logf = "$logd"."/"."$logf";
@@ -1161,7 +1165,8 @@ sub createTemp ()
 		}
 	}
 
-	$Temp{dir} 			= tempdir("muttprint-XXXXXX", TMPDIR => 1, CLEANUP => 1);
+	# 2012-09-29 : Change mask of tempdir
+	$Temp{dir} 			= tempdir("muttprint_XXXXXX", TMPDIR => 1, CLEANUP => 1);
 	$Temp{content} 	= "$Temp{dir}/content";
 	$Temp{latex} 		= "$Temp{dir}/mail.tex";
 	$Temp{logf} 		= "$logf";
